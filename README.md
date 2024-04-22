@@ -16,7 +16,7 @@ In order to build and run this code, you need the following tools installed on y
 
 ### Build and Run
 
-1. Create a build folder and enter it:
+1. Create a `build` directory and enter it:
 
    `mkdir build && cd build`
 
@@ -28,4 +28,4 @@ In order to build and run this code, you need the following tools installed on y
 
 3. Run the code:
 
-   `./MolSim`
+   `./MolSim ../input/eingabe-sonne.txt`
