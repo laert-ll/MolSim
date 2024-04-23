@@ -51,8 +51,7 @@ int main(int argc, char *argsv[]) {
   int iteration = 0;
 
   // for this loop, we assume: current x, current f and current v are known
-  // while (current_time < end_time) { TODO: change
-  while (iteration < 10) { // for debugging
+    while (current_time < end_time) {
     // calculate new x
     calculateX();
     // calculate new f
