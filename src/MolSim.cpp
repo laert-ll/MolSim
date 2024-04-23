@@ -51,7 +51,8 @@ int main(int argc, char *argsv[]) {
   int iteration = 0;
 
   // for this loop, we assume: current x, current f and current v are known
-  while (current_time < end_time) {
+  // while (current_time < end_time) { TODO: change
+  while (iteration < 10) { // for debugging
     // calculate new x
     calculateX();
     // calculate new f
@@ -85,13 +86,43 @@ void calculateF() {
 
 void calculateX() {
   for (auto &p : particles) {
-    // @TODO: insert calculation of position updates here!
+    // Get the current position, velocity, and force of the particle
+    std::array<double, 3> x = p.getX();
+    std::array<double, 3> v = p.getV();
+    std::array<double, 3> f = p.getF();
+    double m = p.getM();
+
+    // Calculate the acceleration
+    std::array<double, 3> a = {f[0] / m, f[1] / m, f[2] / m};
+
+  // Update the position using the Velocity-Störmer-Verlet algorithm
+  x[0] += delta_t * v[0] + (delta_t * delta_t / 2) * a[0];
+  x[1] += delta_t * v[1] + (delta_t * delta_t / 2) * a[1];
+  x[2] += delta_t * v[2] + (delta_t * delta_t / 2) * a[2];
+
+  // Update the particle's position
+  p.setX(x);
   }
 }
 
 void calculateV() {
   for (auto &p : particles) {
-    // @TODO: insert calculation of veclocity updates here!
+      // Get the current velocity and force of the particle
+      std::array<double, 3> v = p.getV();
+      std::array<double, 3> f = p.getF();
+      std::array<double, 3> old_f = p.getOldF();
+      double m = p.getM();
+
+      // Calculate the average force
+      std::array<double, 3> avg_f = {(f[0] + old_f[0]) / 2, (f[1] + old_f[1]) / 2, (f[2] + old_f[2]) / 2};
+
+      // Update the velocity using the Velocity-Störmer-Verlet algorithm
+      v[0] += delta_t * avg_f[0] / m;
+      v[1] += delta_t * avg_f[1] / m;
+      v[2] += delta_t * avg_f[2] / m;
+
+      // Update the particle's velocity
+      p.setV(v);
   }
 }
 
