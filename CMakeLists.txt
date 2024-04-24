@@ -19,10 +19,8 @@ file(GLOB_RECURSE MY_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
 )
 
-# add the executable
-add_executable(MolSim ${MY_SRC}
-        src/test/CalculatorTest.cpp
-)
+# create make target
+add_executable(MolSim ${MY_SRC})
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim

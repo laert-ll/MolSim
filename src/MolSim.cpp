@@ -29,7 +29,7 @@ int main(int argc, char *argsv[]) {
   int iteration = 0;
 
   // for this loop, we assume: current x, current f and current v are known
-    while (current_time < current_time + 1.0) {
+    while (current_time < end_time) {
         // calculate new x
         calculator.calculateX(particles, delta_t);
         // calculate new f
