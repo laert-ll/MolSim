@@ -26,6 +26,10 @@ In order to build and run this code, you need the following tools installed on y
    
    `make -j $(nproc)`
 
+   If you also wish to build the documentation, run:
+
+   `make doc_doxygen`
+
 3. Run the code:
 
    `./MolSim ../input/eingabe-sonne.txt`
