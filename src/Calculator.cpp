@@ -7,7 +7,10 @@
 #include "outputWriter/XYZWriter.h"
 #include <list>
 
-void calculateF(std::list<Particle> &particles) {
+Calculator::Calculator() {
+}
+
+void Calculator::calculateF(std::list<Particle> &particles) {
     // Iterate over all unique pairs of particles
     for (auto iter1 = particles.begin(); iter1 != particles.end(); ++iter1) {
 
@@ -41,7 +44,7 @@ void calculateF(std::list<Particle> &particles) {
 
 }
 
-void calculateX(std::list<Particle> &particles, double delta_t) {
+void Calculator::calculateX(std::list<Particle> &particles, double delta_t) {
     for (auto &p : particles) {
         // Get the current position, velocity, and force of the particle
         std::array<double, 3> x = p.getX();
@@ -62,7 +65,7 @@ void calculateX(std::list<Particle> &particles, double delta_t) {
     }
 }
 
-void calculateV(std::list<Particle> &particles, double delta_t) {
+void Calculator::calculateV(std::list<Particle> &particles, double delta_t) {
     for (auto &p : particles) {
         // Get the current velocity and force of the particle
         std::array<double, 3> v = p.getV();
@@ -83,7 +86,7 @@ void calculateV(std::list<Particle> &particles, double delta_t) {
     }
 }
 
-void plotParticles(int iteration, std::list<Particle> &particles) {
+void Calculator::plotParticles(int iteration, std::list<Particle> &particles) {
 
     std::string out_name("MD_vtk");
 

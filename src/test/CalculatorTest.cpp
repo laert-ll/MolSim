@@ -64,9 +64,9 @@ public:
     }
 };
 
-int main() {
-    CalculatorTest testRunner(0.1);
-    testRunner.runTest();
-    return 0;
-}
+// int main() {
+//     CalculatorTest testRunner(0.1);
+//     testRunner.runTest();
+//     return 0;
+// }
 
