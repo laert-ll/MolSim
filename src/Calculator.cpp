@@ -4,7 +4,7 @@
 
 #include "Calculator.h"
 #include <cmath>
-#include "outputWriter/XYZWriter.h"
+#include "outputWriter/VTKWriter.h"
 #include <list>
 
 Calculator::Calculator() {
@@ -88,9 +88,11 @@ void Calculator::calculateV(std::list<Particle> &particles, double delta_t) {
 }
 
 void Calculator::plotParticles(int iteration, std::list<Particle> &particles) {
-
     std::string out_name("MD_vtk");
-
-    outputWriter::XYZWriter writer;
-    writer.plotParticles(particles, out_name, iteration);
+    outputWriter::VTKWriter writer;
+    writer.initializeOutput(particles.size());
+    for (auto iter = particles.begin(); iter != particles.end(); ++iter) {
+        writer.plotParticle(*iter);
+    }
+    writer.writeFile(out_name, iteration);
 }
