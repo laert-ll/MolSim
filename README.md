@@ -32,4 +32,6 @@ In order to build and run this code, you need the following tools installed on y
 
 3. Run the code:
 
-   `./MolSim ../input/eingabe-sonne.txt`
+   `./MolSim ../input/eingabe-sonne.txt {DELTA_T} {END_TIME}`
+
+   Example call: `./MolSim ./input/eingabe-sonne.txt 0.01 1` 
