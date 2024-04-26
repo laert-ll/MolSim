@@ -29,16 +29,23 @@ void CalculatorTest::runSimulation(double endTime, double delta_t) {
         calculator.calculateX(particles, delta_t);
         calculator.calculateF(particles);
         calculator.calculateV(particles, delta_t);
+
+        int i = 0;
+        for (auto it = particles.begin(); it != particles.end(); ++it, ++i) {
+            std::cout << "Particle " << i << ": " << std::endl;
+            std::cout << *it << std::endl;
+        }
+
         currentTime += delta_t;
-        iteration += iteration;
+        iteration++;
     }
 }
 
 bool CalculatorTest::checkPositions() {
     bool result = true;
     std::vector<std::array<double, 3>> expectedPositions = {
-            {0.951887,  0.951887,  0.951887},
-            {-0.951887, -0.951887, -0.951887}
+            {0.0478651,  0.0478651,  0.0478651},
+            {-0.0478651, -0.0478651, -0.0478651}
     };
 
     auto it = particles.begin();
@@ -65,7 +72,7 @@ bool CalculatorTest::checkPositions() {
 void CalculatorTest::runTest() {
     std::cout << "Running calculation test with " << std::endl;
     initializeParticlesForTest();
-    runSimulation(2.0, 1.0);
+    runSimulation(5.0, 0.1);
     if (checkPositions()) {
         std::cout << "PASS: Calculation ran as expected." << std::endl;
     } else {
