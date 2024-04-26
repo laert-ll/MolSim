@@ -64,7 +64,7 @@ bool CalculatorTest::checkPositions() {
 void CalculatorTest::runTest() {
     std::cout << "Running calculation test with " << std::endl;
     initializeParticlesForTest();
-    runSimulation(2.0, this->timeStep);
+    runSimulation(2.0, 1.0);
     if (checkPositions()) {
         std::cout << "PASS: Calculation ran as expected." << std::endl;
     } else {
