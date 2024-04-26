@@ -10,8 +10,8 @@
 #include <cmath>
 #include <iterator>
 
-template <typename T, std::size_t N>
-std::ostream& operator<<(std::ostream& os, const std::array<T, N>& arr) {
+template<typename T, std::size_t N>
+std::ostream &operator<<(std::ostream &os, const std::array<T, N> &arr) {
     std::copy(arr.cbegin(), arr.cend(), std::ostream_iterator<T>(os, " "));
     return os;
 }
@@ -37,7 +37,7 @@ void CalculatorTest::runSimulation(double endTime, double delta_t) {
 bool CalculatorTest::checkPositions() {
     bool result = true;
     std::vector<std::array<double, 3>> expectedPositions = {
-            {0.951887, 0.951887, 0.951887},
+            {0.951887,  0.951887,  0.951887},
             {-0.951887, -0.951887, -0.951887}
     };
 

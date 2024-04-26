@@ -17,7 +17,7 @@ bool parseArguments(int argc, char *argv[], double &delta_t, double &end_time) {
         return false;
     }
 
-    char* endptr;
+    char *endptr;
     if (argc >= 3) {
         delta_t = std::strtod(argv[2], &endptr);
         if (*endptr != '\0' || delta_t <= 0.0) {
