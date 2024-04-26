@@ -36,13 +36,12 @@ void Calculator::calculateF(std::list<Particle> &particles) {
                                            (m1 * m2 / std::pow(distance, 3)) * dx[2]};
 
             // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
-            std::array<double, 3> f1 = iter1->getOldF();
-            std::array<double, 3> f2 = iter2->getOldF();
+            std::array<double, 3> f1 = iter1->getF();
+            std::array<double, 3> f2 = iter2->getF();
             iter1->setF({f1[0] + force[0], f1[1] + force[1], f1[2] + force[2]});
             iter2->setF({f2[0] - force[0], f2[1] - force[1], f2[2] - force[2]});
         }
     }
-
 }
 
 void Calculator::calculateX(std::list<Particle> &particles, double delta_t) {
@@ -78,9 +77,9 @@ void Calculator::calculateV(std::list<Particle> &particles, double delta_t) {
         std::array<double, 3> avg_f = {(f[0] + old_f[0]) / 2, (f[1] + old_f[1]) / 2, (f[2] + old_f[2]) / 2};
 
         // Update the velocity using the Velocity-Störmer-Verlet algorithm
-        v[0] += delta_t * avg_f[0] / m;
-        v[1] += delta_t * avg_f[1] / m;
-        v[2] += delta_t * avg_f[2] / m;
+        v[0] += (delta_t * avg_f[0]) / m;
+        v[1] += (delta_t * avg_f[1]) / m;
+        v[2] += (delta_t * avg_f[2]) / m;
 
         // Update the particle's velocity
         p.setV(v);
