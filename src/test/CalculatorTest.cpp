@@ -17,9 +17,8 @@ std::ostream& operator<<(std::ostream& os, const std::array<T, N>& arr) {
 }
 
 void CalculatorTest::initializeParticlesForTest() {
-    // Initialize particles with positions, velocities, and masses
-    particles.push_back(Particle({0, 0, 0}, {1, 0, 0}, 1.0));
-    particles.push_back(Particle({1, 0, 0}, {0, 0, 0}, 1.0));
+    particles.push_back(Particle({1, 1, 1}, {0, 0, 0}, 1.0));
+    particles.push_back(Particle({-1, -1, -1}, {0, 0, 0}, 1.0));
 }
 
 void CalculatorTest::runSimulation(double endTime, double delta_t) {
@@ -35,9 +34,10 @@ void CalculatorTest::runSimulation(double endTime, double delta_t) {
 }
 
 bool CalculatorTest::checkPositions() {
+    bool result = true;
     std::vector<std::array<double, 3>> expectedPositions = {
-            {1, 0, 0},
-            {1, 0, 0}
+            {0.951887, 0.951887, 0.951887},
+            {-0.951887, -0.951887, -0.951887}
     };
 
     auto it = particles.begin();
@@ -48,20 +48,23 @@ bool CalculatorTest::checkPositions() {
         std::cout << "Expected X[" << i << "]: " << expectedX << std::endl;
         std::cout << "Actual X[" << i << "]: " << actualX << std::endl;
 
+        std::cout << "Particle " << i << ": " << std::endl;
+        std::cout << *it << std::endl;
+
         if (std::abs(expectedX[0] - actualX[0]) > 1e-6 ||
             std::abs(expectedX[1] - actualX[1]) > 1e-6 ||
             std::abs(expectedX[2] - actualX[2]) > 1e-6) {
-            return false;
+            result = false;
         }
         ++it;
     }
-    return true;
+    return result;
 }
 
 void CalculatorTest::runTest() {
     std::cout << "Running calculation test with " << std::endl;
     initializeParticlesForTest();
-    runSimulation(1.0, this->timeStep);
+    runSimulation(2.0, this->timeStep);
     if (checkPositions()) {
         std::cout << "PASS: Calculation ran as expected." << std::endl;
     } else {
