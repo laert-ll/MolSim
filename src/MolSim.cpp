@@ -1,6 +1,7 @@
 
 #include "FileReader.h"
 #include "Calculator.h"
+#include "./test/CalculatorTest.h"
 
 #include <iostream>
 #include <list>
@@ -64,6 +65,7 @@ bool performSimulation(std::list<Particle> &particles, double &delta_t, double &
 }
 
 int main(int argc, char *argsv[]) {
+    // Example call: ./MolSim ./input/eingabe-sonne.txt 0.01 1
     std::cout << "Hello from MolSim for PSE!" << std::endl;
 
     double delta_t = default_delta_t;
@@ -85,5 +87,10 @@ int main(int argc, char *argsv[]) {
         return 1;
     }
     std::cout << "Simulation completed successfully" << std::endl;
+
+    // Run Test
+    CalculatorTest calculatorTest(delta_t);
+    calculatorTest.runTest();
+
     return 0;
 }

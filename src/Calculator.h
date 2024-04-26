@@ -1,7 +1,8 @@
 //
 // Created by kimj2 on 24.04.2024.
 //
-
+#ifndef CALCULATOR_H
+#define CALCULATOR_H
 #pragma once
 
 #include "Particle.h"
@@ -32,3 +33,5 @@ public:
      */
     void plotParticles(int iteration, std::list<Particle> &particles);
 };
+
+#endif
