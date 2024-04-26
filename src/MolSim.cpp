@@ -1,104 +1,96 @@
 
 #include "FileReader.h"
-#include "outputWriter/XYZWriter.h"
-#include "utils/ArrayUtils.h"
+#include "Calculator.h"
+#include "./test/CalculatorTest.h"
 
 #include <iostream>
 #include <list>
 
-/**** forward declaration of the calculation functions ****/
-
-/**
- * calculate the force for all particles
- */
-void calculateF();
-
-/**
- * calculate the position for all particles
- */
-void calculateX();
-
-/**
- * calculate the position for all particles
- */
-void calculateV();
-
-/**
- * plot the particles to a xyz-file
- */
-void plotParticles(int iteration);
-
 constexpr double start_time = 0;
-constexpr double end_time = 1000;
-constexpr double delta_t = 0.014;
+constexpr double default_end_time = 1000;
+constexpr double default_delta_t = 0.014;
 
-// TODO: what data structure to pick?
-std::list<Particle> particles;
+bool parseArguments(int argc, char *argv[], double &delta_t, double &end_time) {
+    if (argc < 2 || argc > 4) {
+        std::cerr << "Erroneous programme call! " << std::endl;
+        std::cerr << "Usage: ./MolSym input_filename [delta_t] [end_time]" << std::endl;
+        return false;
+    }
+
+    char* endptr;
+    if (argc >= 3) {
+        delta_t = std::strtod(argv[2], &endptr);
+        if (*endptr != '\0' || delta_t <= 0.0) {
+            std::cerr << "Invalid number for delta_t: " << argv[2] << std::endl;
+            return false;
+        }
+    }
+    if (argc == 4) {
+        end_time = std::strtod(argv[3], &endptr);
+        if (*endptr != '\0' || end_time <= 0.0) {
+            std::cerr << "Invalid number for end_time: " << argv[3] << std::endl;
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool performSimulation(std::list<Particle> &particles, double &delta_t, double &end_time) {
+    Calculator calculator;
+
+    double current_time = start_time;
+    int iteration = 0;
+
+    while (current_time < end_time) {
+        if (iteration > 1e6) {
+            std::cerr << "Number of iterations exceeded 1 Mio." << std::endl;
+            return false;
+        }
+        calculator.calculateX(particles, delta_t);
+        calculator.calculateF(particles);
+        calculator.calculateV(particles, delta_t);
+
+        iteration++;
+        if (iteration % 10 == 0) {
+            calculator.plotParticles(iteration, particles);
+        }
+        std::cout << "Iteration " << iteration << " finished." << std::endl;
+
+        current_time += delta_t;
+    }
+
+    std::cout << "output written. Terminating..." << std::endl;
+    return true;
+}
 
 int main(int argc, char *argsv[]) {
+    // Example call: ./MolSim ./input/eingabe-sonne.txt 0.01 1
+    std::cout << "Hello from MolSim for PSE!" << std::endl;
 
-  std::cout << "Hello from MolSim for PSE!" << std::endl;
-  if (argc != 2) {
-    std::cout << "Erroneous programme call! " << std::endl;
-    std::cout << "./molsym filename" << std::endl;
-  }
+    double delta_t = default_delta_t;
+    double end_time = default_end_time;
 
-  FileReader fileReader;
-  fileReader.readFile(particles, argsv[1]);
-
-  double current_time = start_time;
-
-  int iteration = 0;
-
-  // for this loop, we assume: current x, current f and current v are known
-  while (current_time < end_time) {
-    // calculate new x
-    calculateX();
-    // calculate new f
-    calculateF();
-    // calculate new v
-    calculateV();
-
-    iteration++;
-    if (iteration % 10 == 0) {
-      plotParticles(iteration);
+    if (!parseArguments(argc, argsv, delta_t, end_time)) {
+        return 1;
     }
-    std::cout << "Iteration " << iteration << " finished." << std::endl;
 
-    current_time += delta_t;
-  }
+    std::list<Particle> particles;
 
-  std::cout << "output written. Terminating..." << std::endl;
-  return 0;
-}
+    FileReader fileReader;
+    fileReader.readFile(particles, argsv[1]);
 
-void calculateF() {
-  std::list<Particle>::iterator iterator;
-  iterator = particles.begin();
-
-  for (auto &p1 : particles) {
-    for (auto &p2 : particles) {
-      // @TODO: insert calculation of forces here!
+    std::cout << "Starting simulation with delta_t: " << delta_t << " and end_time: " << end_time << std::endl;
+    bool success = performSimulation(particles, delta_t, end_time);
+    if (!success) {
+        std::cout << "Error occurred during the simulation." << std::endl;
+        return 1;
     }
-  }
-}
+    std::cout << "Simulation completed successfully" << std::endl;
 
-void calculateX() {
-  for (auto &p : particles) {
-    // @TODO: insert calculation of position updates here!
-  }
-}
+    // Run Test
+    CalculatorTest calculatorTest(delta_t);
+    calculatorTest.runTest();
 
-void calculateV() {
-  for (auto &p : particles) {
-    // @TODO: insert calculation of veclocity updates here!
-  }
-}
-
-void plotParticles(int iteration) {
-
-  std::string out_name("MD_vtk");
-
-  outputWriter::XYZWriter writer;
-  writer.plotParticles(particles, out_name, iteration);
+    return 0;
 }
