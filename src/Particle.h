@@ -65,9 +65,9 @@ public:
 
   const std::array<double, 3> &getOldF() const;
 
-  double getM() const;
+  const double getM() const;
 
-  int getType() const;
+  const int getType() const;
 
   void setX(const std::array<double, 3>& newX);
 
