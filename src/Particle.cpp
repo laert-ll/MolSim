@@ -66,7 +66,7 @@ void Particle::setOldF(const std::array<double, 3> &newOldF) {
 std::string Particle::toString() const {
     std::stringstream stream;
     stream << "Particle: X:" << x << " v: " << v << " f: " << f
-           << " old_f: " << old_f << " type: " << type;
+           << " old_f: " << old_f << " m: " << m << " type: " << type;
     return stream.str();
 }
 
