@@ -29,7 +29,8 @@ void CalculatorTest::runSimulation(double endTime, double delta_t) {
         calculator.calculateX(particles, delta_t);
         calculator.calculateF(particles);
         calculator.calculateV(particles, delta_t);
-        currentTime += timeStep;
+        currentTime += delta_t;
+        iteration += iteration;
     }
 }
 

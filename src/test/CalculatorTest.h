@@ -19,7 +19,7 @@ private:
     Calculator calculator;
 
 public:
-    explicit CalculatorTest(double delta_t) : timeStep(delta_t), calculator(Calculator()) {}
+    explicit CalculatorTest(double delta_t) : particles(), timeStep(delta_t), calculator(Calculator()) {}
 
     void initializeParticlesForTest();
     void runSimulation(double endTime, double delta_t);
