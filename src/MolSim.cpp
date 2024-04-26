@@ -43,7 +43,7 @@ bool performSimulation(std::list<Particle> &particles, double &delta_t, double &
 
     while (current_time < end_time) {
         if (iteration > 1e6) {
-            std::cerr << "Iteration number exceeded 1 Mio." << std::endl;
+            std::cerr << "Number of iterations exceeded 1 Mio." << std::endl;
             return false;
         }
         calculator.calculateX(particles, delta_t);
