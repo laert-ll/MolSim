@@ -90,8 +90,8 @@ void Calculator::plotParticles(int iteration, std::list<Particle> &particles) {
     std::string out_name("MD_vtk");
     outputWriter::VTKWriter writer;
     writer.initializeOutput(particles.size());
-    for (auto iter = particles.begin(); iter != particles.end(); ++iter) {
-        writer.plotParticle(*iter);
+    for (auto& p : particles) {
+        writer.plotParticle(p);
     }
     writer.writeFile(out_name, iteration);
 }
