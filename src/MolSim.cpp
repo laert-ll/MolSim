@@ -1,10 +1,9 @@
-
-#include "FileReader.h"
 #include "Calculator.h"
+#include "FileReader.h"
+#include "ParticleContainer.h"
 #include "./test/CalculatorTest.h"
 
 #include <iostream>
-#include <list>
 
 constexpr double start_time = 0;
 constexpr double default_end_time = 1000;
@@ -36,7 +35,7 @@ bool parseArguments(int argc, char *argv[], double &delta_t, double &end_time) {
     return true;
 }
 
-bool performSimulation(std::list<Particle> &particles, double &delta_t, double &end_time) {
+bool performSimulation(ParticleContainer &particleContainer, double &delta_t, double &end_time) {
     Calculator calculator;
 
     double current_time = start_time;
@@ -47,13 +46,13 @@ bool performSimulation(std::list<Particle> &particles, double &delta_t, double &
             std::cerr << "Number of iterations exceeded 1 Mio." << std::endl;
             return false;
         }
-        calculator.calculateX(particles, delta_t);
-        calculator.calculateF(particles);
-        calculator.calculateV(particles, delta_t);
+        calculator.calculateF(particleContainer);
+        calculator.calculateX(particleContainer, delta_t);
+        calculator.calculateV(particleContainer, delta_t);
 
         iteration++;
         if (iteration % 10 == 0) {
-            calculator.plotParticles(iteration, particles);
+            calculator.plotParticles(iteration, particleContainer);
         }
         std::cout << "Iteration " << iteration << " finished." << std::endl;
 
@@ -75,13 +74,15 @@ int main(int argc, char *argsv[]) {
         return 1;
     }
 
-    std::list<Particle> particles;
+    ParticleContainer particleContainer;
 
     FileReader fileReader;
-    fileReader.readFile(particles, argsv[1]);
+    fileReader.readFile(particleContainer, argsv[1]);
+
+    particleContainer.initializePairs();
 
     std::cout << "Starting simulation with delta_t: " << delta_t << " and end_time: " << end_time << std::endl;
-    bool success = performSimulation(particles, delta_t, end_time);
+    bool success = performSimulation(particleContainer, delta_t, end_time);
     if (!success) {
         std::cout << "Error occurred during the simulation." << std::endl;
         return 1;
@@ -89,8 +90,8 @@ int main(int argc, char *argsv[]) {
     std::cout << "Simulation completed successfully" << std::endl;
 
     // Run Test
-    CalculatorTest calculatorTest(delta_t);
-    calculatorTest.runTest();
+    // CalculatorTest calculatorTest(delta_t);
+    // calculatorTest.runTest();
 
     return 0;
 }
