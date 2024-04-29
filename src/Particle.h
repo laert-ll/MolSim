@@ -39,6 +39,11 @@ private:
     double m;
 
     /**
+     * Paraview volume of this particle
+     */
+    double volume;
+
+    /**
      * Type of the particle. Use it for whatever you want (e.g. to separate
      * molecules belonging to different bodies, matters, and so on)
      */
@@ -52,8 +57,8 @@ public:
     Particle(
             // for visualization, we need always 3 coordinates
             // -> in case of 2d, we use only the first and the second
-            std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg,
-            int type = 0);
+            std::array<double, 3> x_arg, std::array<double, 3> v_arg, 
+            double m_arg, double volume_arg, int type = 0);
 
     virtual ~Particle();
 
@@ -67,6 +72,8 @@ public:
 
     const double getM() const;
 
+    const double getVolume() const;
+
     const int getType() const;
 
     void setX(const std::array<double, 3> &newX);
@@ -76,6 +83,8 @@ public:
     void setF(const std::array<double, 3> &newF);
 
     void setOldF(const std::array<double, 3> &newOldF);
+
+    void setVolume(const double volume);
 
     bool operator==(Particle &other);
 

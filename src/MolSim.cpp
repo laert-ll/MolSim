@@ -46,8 +46,8 @@ bool performSimulation(ParticleContainer &particleContainer, double &delta_t, do
             std::cerr << "Number of iterations exceeded 1 Mio." << std::endl;
             return false;
         }
-        calculator.calculateF(particleContainer);
         calculator.calculateX(particleContainer, delta_t);
+        calculator.calculateF(particleContainer);
         calculator.calculateV(particleContainer, delta_t);
 
         iteration++;
@@ -74,12 +74,8 @@ int main(int argc, char *argsv[]) {
         return 1;
     }
 
-    ParticleContainer particleContainer;
-
     FileReader fileReader;
-    fileReader.readFile(particleContainer, argsv[1]);
-
-    particleContainer.initializePairs();
+    auto particleContainer = fileReader.readFile(argsv[1]);
 
     std::cout << "Starting simulation with delta_t: " << delta_t << " and end_time: " << end_time << std::endl;
     bool success = performSimulation(particleContainer, delta_t, end_time);

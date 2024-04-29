@@ -16,7 +16,8 @@ FileReader::FileReader() = default;
 
 FileReader::~FileReader() = default;
 
-void FileReader::readFile(ParticleContainer &particleContainer, char *filename) {
+ParticleContainer FileReader::readFile(char *filename) {
+    ParticleContainer particleContainer;
     std::array<double, 3> x;
     std::array<double, 3> v;
     double m;
@@ -56,13 +57,16 @@ void FileReader::readFile(ParticleContainer &particleContainer, char *filename) 
                 exit(-1);
             }
             datastream >> m;
-            particleContainer.addParticle(Particle(x, v, m));
+            particleContainer.addParticle(Particle(x, v, m, 0));
 
             getline(input_file, tmp_string);
             std::cout << "Read line: " << tmp_string << std::endl;
         }
+        particleContainer.initializePairs();
+        particleContainer.setVolumes();
     } else {
         std::cout << "Error: could not open file " << filename << std::endl;
         exit(-1);
     }
+    return particleContainer;
 }

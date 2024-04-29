@@ -36,6 +36,11 @@ public:
     void initializePairs();
 
     /**
+     * Method to set volumes to particles for paraview visualization purposes.
+     */
+    void setVolumes();
+
+    /**
      * Begin iterator for the particles.
      */
     std::vector<Particle>::iterator begin();
