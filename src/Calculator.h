@@ -2,28 +2,59 @@
 
 #include "ParticleContainer.h"
 
+/**
+ * @class Calculator
+ * @brief A class responsible for performing calculations related to particles.
+ *
+ * This class provides methods to calculate the new position, force, and velocity of particles,
+ * as well as to plot the particles to a VTK file. It uses the Stoermer-Verlet method for the calculations.
+ */
 class Calculator {
 
 public:
+    /**
+     * Default constructor for the Calculator class.
+     *
+     * Initializes the Calculator object.
+     */
     Calculator();
 
     /**
-     * Calculate the new position for all particles using the Störmer-Verlet method
+     * Calls methods to calculate positions, forces, and velocities of particles in the right order.
+     *
+     * @param particleContainer The ParticleContainer containing the particles to update.
+     * @param delta_t The time step used in the calculations.
+     */
+    void calculate(ParticleContainer &particleContainer, double delta_t);
+
+    /**
+     * Calculates the new position for all particles using the Stoermer-Verlet method.
+     *
+     * @param particleContainer The ParticleContainer containing the particles to update.
+     * @param delta_t The time step used in the calculations.
      */
     void calculateX(ParticleContainer &particleContainer, double delta_t);
 
     /**
-     * Calculate the force between all pairs of unique particles
+     * Calculates the force between all pairs of unique particles.
+     *
+     * @param particleContainer The ParticleContainer containing the particles to calculate the forces for.
      */
     void calculateF(ParticleContainer &particleContainer);
 
     /**
-     * Calculate the velocity for all particles using the Störmer-Verlet method
+     * Calculates the velocity for all particles using the Stoermer-Verlet method.
+     *
+     * @param particleContainer The ParticleContainer containing the particles to update.
+     * @param delta_t The time step used in the calculations.
      */
     void calculateV(ParticleContainer &particleContainer, double delta_t);
 
     /**
-     *  Plot the particles to a VTK-file
+     * Plots the particles to a VTK file.
+     *
+     * @param iteration The current iteration number, used for naming the VTK file.
+     * @param particleContainer The ParticleContainer containing the particles to plot.
      */
     void plotParticles(int iteration, ParticleContainer &particleContainer);
 };

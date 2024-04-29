@@ -9,6 +9,10 @@
 
 #include "ParticleContainer.h"
 
+/**
+ * @class FileReader
+ * A class responsible for reading particle data from a file.
+ */
 class FileReader {
 
 public:
@@ -16,5 +20,11 @@ public:
 
     virtual ~FileReader();
 
-    ParticleContainer readFile(char *filename);
+    /**
+     * Reads particle data from a file and returns a ParticleContainer.
+     *
+     * @param filepath The path to the file to read particle data from.
+     * @return A ParticleContainer containing the particles read from the file.
+     */
+    ParticleContainer readFile(char *filepath);
 };

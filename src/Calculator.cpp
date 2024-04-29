@@ -6,6 +6,12 @@
 Calculator::Calculator() {
 }
 
+void Calculator::calculate(ParticleContainer &particleContainer, double delta_t) {
+    calculateX(particleContainer, delta_t);
+    calculateF(particleContainer);
+    calculateV(particleContainer, delta_t);
+}
+
 void Calculator::calculateF(ParticleContainer &particleContainer) {
     for (auto p = particleContainer.begin(); p != particleContainer.end(); ++p) {
         p->setOldF(p->getF());  // Update oldF with currentF
@@ -90,3 +96,4 @@ void Calculator::plotParticles(int iteration, ParticleContainer &particleContain
 
     writer.writeFile(out_name, iteration);
 }
+
