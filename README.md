@@ -23,7 +23,11 @@ In order to build and run this code, you need the following tools installed on y
 2. Build the code:
 
    `cmake ../CMakeLists.txt`
-   
+3. Move to the project directory:
+
+   `cd ..`
+4. Make:
+
    `make -j $(nproc)`
 
    If you also wish to build the documentation, run:
