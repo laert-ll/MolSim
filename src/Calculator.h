@@ -1,12 +1,6 @@
-//
-// Created by kimj2 on 24.04.2024.
-//
-#ifndef CALCULATOR_H
-#define CALCULATOR_H
 #pragma once
 
-#include "Particle.h"
-#include "list"
+#include "ParticleContainer.h"
 
 class Calculator {
 
@@ -14,24 +8,22 @@ public:
     Calculator();
 
     /**
-     * calculate the force for all particles
+     * Calculate the new position for all particles using the Störmer-Verlet method
      */
-    void calculateF(std::list<Particle> &particles);
+    void calculateX(ParticleContainer &particleContainer, double delta_t);
 
     /**
-     * calculate the position for all particles
+     * Calculate the force between all pairs of unique particles
      */
-    void calculateX(std::list<Particle> &particles, double delta_t);
+    void calculateF(ParticleContainer &particleContainer);
 
     /**
-     * calculate the position for all particles
+     * Calculate the velocity for all particles using the Störmer-Verlet method
      */
-    void calculateV(std::list<Particle> &particles, double delta_t);
+    void calculateV(ParticleContainer &particleContainer, double delta_t);
 
     /**
-     *  plot particles to a xyz-file
+     *  Plot the particles to a VTK-file
      */
-    void plotParticles(int iteration, std::list<Particle> &particles);
+    void plotParticles(int iteration, ParticleContainer &particleContainer);
 };
-
-#endif
