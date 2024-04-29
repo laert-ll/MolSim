@@ -57,7 +57,7 @@ bool performSimulation(ParticleContainer &particleContainer, double &delta_t, do
 
     while (current_time < end_time) {
         if (iteration > 1e6) {
-            std::cerr << "Number of iterations exceeded 1 Mio." << std::endl;
+            std::cerr << "Timeout. Number of iterations exceeded 1 Mio." << std::endl;
             return false;
         }
         calculator.calculate(particleContainer, delta_t);
