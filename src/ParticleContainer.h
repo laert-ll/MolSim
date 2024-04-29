@@ -36,7 +36,7 @@ public:
     void initializePairs();
 
     /**
-     * Method to set volumes to particles for paraview visualization purposes.
+     * Method to set volumes to particles proportional to their masses for paraview visualization purposes.
      */
     void setVolumes();
 

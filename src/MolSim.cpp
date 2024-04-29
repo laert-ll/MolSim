@@ -9,10 +9,10 @@ constexpr double start_time = 0;
 constexpr double default_end_time = 1000;
 constexpr double default_delta_t = 0.014;
 
-bool parseArguments(int argc, char *argv[], double &delta_t, double &end_time) {
-    if (argc < 2 || argc > 4) {
+bool parseArguments(int argc, char *argv[], double &delta_t, double &end_time, bool &testEnabled) {
+    if (argc < 2 || argc > 5) {
         std::cerr << "Erroneous programme call! " << std::endl;
-        std::cerr << "Usage: ./MolSym input_filename [delta_t] [end_time]" << std::endl;
+        std::cerr << "Usage: ./MolSym input_filename [delta_t] [end_time] [true]" << std::endl;
         return false;
     }
 
@@ -24,10 +24,24 @@ bool parseArguments(int argc, char *argv[], double &delta_t, double &end_time) {
             return false;
         }
     }
-    if (argc == 4) {
+    if (argc >= 4) {
         end_time = std::strtod(argv[3], &endptr);
         if (*endptr != '\0' || end_time <= 0.0) {
             std::cerr << "Invalid number for end_time: " << argv[3] << std::endl;
+            return false;
+        }
+    }
+
+    if (argc == 5) {
+        std::string testArg = argv[4];
+        std::transform(testArg.begin(), testArg.end(), testArg.begin(), ::tolower);
+        if (testArg == "true") {
+            testEnabled = true;
+        } else if (testArg == "false") {
+            testEnabled = false;
+        } else {
+            std::cerr << "Invalid option for testEnabled: " << argv[4] << std::endl;
+            std::cerr << "Only 'true' or 'false' are allowed." << std::endl;
             return false;
         }
     }
@@ -64,18 +78,20 @@ bool performSimulation(ParticleContainer &particleContainer, double &delta_t, do
 }
 
 int main(int argc, char *argsv[]) {
-    // Example call: ./MolSim ./input/eingabe-sonne.txt 0.01 1
+    // Example call: ./MolSim ./input/eingabe-sonne.txt 0.01 1 true
+
     std::cout << "Hello from MolSim for PSE!" << std::endl;
 
+    FileReader fileReader;
     double delta_t = default_delta_t;
     double end_time = default_end_time;
+    bool testEnabled = false;
 
-    if (!parseArguments(argc, argsv, delta_t, end_time)) {
+    if (!parseArguments(argc, argsv, delta_t, end_time, testEnabled)) {
         return 1;
     }
 
-    FileReader fileReader;
-    auto particleContainer = fileReader.readFile(argsv[1]);
+    ParticleContainer particleContainer = fileReader.readFile(argsv[1]);
 
     std::cout << "Starting simulation with delta_t: " << delta_t << " and end_time: " << end_time << std::endl;
     bool success = performSimulation(particleContainer, delta_t, end_time);
@@ -86,8 +102,10 @@ int main(int argc, char *argsv[]) {
     std::cout << "Simulation completed successfully" << std::endl;
 
     // Run Test
-    // CalculatorTest calculatorTest(delta_t);
-    // calculatorTest.runTest();
+    if (testEnabled) {
+        CalculatorTest calculatorTest(delta_t);
+        calculatorTest.runTest();
+    }
 
     return 0;
 }

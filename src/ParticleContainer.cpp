@@ -1,6 +1,8 @@
 #include "ParticleContainer.h"
 #include <algorithm>
-#include <cmath>
+
+const double VOLUME_MIN = 0.5;
+const double VOLUME_MAX = 1.0;
 
 ParticleContainer::ParticleContainer() {}
 
@@ -18,22 +20,22 @@ void ParticleContainer::initializePairs() {
 
 void ParticleContainer::setVolumes() {
     // Find the particle with the highest and lowest masses
-    auto mass_range = std::minmax_element(particles.begin(), particles.end(),
+    auto mass_minmax = std::minmax_element(particles.begin(), particles.end(),
         [](const Particle& a, const Particle& b) {
             return a.getM() < b.getM();
         });
 
-    double min_mass = (*mass_range.first).getM();
-    double max_mass = (*mass_range.second).getM();
+    double min_mass = (*mass_minmax.first).getM();
+    double max_mass = (*mass_minmax.second).getM();
 
     // Calculate scaling factors
-    double mass_range_diff = max_mass - min_mass;
-    double volume_range_diff = 1.0 - 0.5; // New volume range
-    double scaling_factor = volume_range_diff / mass_range_diff;
+    double mass_range = max_mass - min_mass;
+    double volume_range = VOLUME_MAX - VOLUME_MIN; // New volume range
+    double scaling_factor = volume_range / mass_range;
 
     // Set volumes for all particles
     for (auto& p : particles) {
-        double volume = 0.5 + scaling_factor * (p.getM() - min_mass); // Adjusted volume calculation
+        double volume = VOLUME_MIN + scaling_factor * (p.getM() - min_mass); // Adjusted volume calculation
         p.setVolume(volume);
     }
 }
