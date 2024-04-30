@@ -7,8 +7,8 @@ Calculator::Calculator() {
 }
 
 void Calculator::calculate(ParticleContainer &particleContainer, double delta_t) {
-    calculateX(particleContainer, delta_t);
     calculateF(particleContainer);
+    calculateX(particleContainer, delta_t);
     calculateV(particleContainer, delta_t);
 }
 

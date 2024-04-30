@@ -44,8 +44,8 @@
  bool CalculatorTest::checkPositions() {
      bool result = true;
      std::vector<std::array<double, 3>> expectedPositions = {
-             {0.0478651,  0.0478651,  0.0478651},
-             {-0.0478651, -0.0478651, -0.0478651}
+             {0.124733,  0.124733,  0.124733},
+             {-0.124733, -0.124733, -0.124733}
      };
 
      auto it = particleContainer.begin();
