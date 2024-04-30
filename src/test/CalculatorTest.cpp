@@ -28,9 +28,7 @@
      int iteration = 0;
      while (currentTime < endTime) {
          std::cout << "Running Test iteration " << iteration << std::endl;
-         calculator.calculateX(particleContainer, delta_t);
-         calculator.calculateF(particleContainer);
-         calculator.calculateV(particleContainer, delta_t);
+         calculator.calculate(particleContainer, delta_t);
 
          int i = 0;
          for (auto it = particleContainer.begin(); it != particleContainer.end(); ++it, ++i) {
