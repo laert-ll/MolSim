@@ -3,7 +3,7 @@
  //
 
  #include "../Particle.h"
- #include "../Calculator.h"
+ #include "../calculators/SVCalculator.h"
  #include "CalculatorTest.h"
  #include <iostream>
  #include <vector>
@@ -28,7 +28,7 @@
      int iteration = 0;
      while (currentTime < endTime) {
          std::cout << "Running Test iteration " << iteration << std::endl;
-         calculator.calculate(particleContainer, delta_t);
+         calculator->calculate(particleContainer, delta_t);
 
          int i = 0;
          for (auto it = particleContainer.begin(); it != particleContainer.end(); ++it, ++i) {
