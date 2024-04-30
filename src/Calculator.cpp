@@ -1,5 +1,5 @@
 #include "Calculator.h"
-#include "outputWriter/VTKWriter.h"
+#include "outputWriters/VTKWriter.h"
 
 #include <cmath>
 
@@ -85,15 +85,4 @@ void Calculator::calculateV(ParticleContainer &particleContainer, double delta_t
     }
 }
 
-void Calculator::plotParticles(int iteration, ParticleContainer &particleContainer) {
-    std::string out_name("MD_vtk");
-    outputWriter::VTKWriter writer;
-    writer.initializeOutput(particleContainer.getSize());
-
-    for (auto p = particleContainer.begin(); p != particleContainer.end(); ++p) {
-        writer.plotParticle(*p);
-    }
-
-    writer.writeFile(out_name, iteration);
-}
 

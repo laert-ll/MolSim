@@ -50,12 +50,4 @@ public:
      */
     void calculate(ParticleContainer &particleContainer, double delta_t);
 
-    /**
-     * Plots the particles to a VTK file.
-     *
-     * @param iteration The current iteration number, used for naming the VTK file.
-     * @param particleContainer The ParticleContainer containing the particles to plot.
-     */
-    void plotParticles(int iteration, ParticleContainer &particleContainer);
-
 };
