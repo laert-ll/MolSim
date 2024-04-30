@@ -56,8 +56,10 @@ bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
         std::transform(outputWriterArg.begin(), outputWriterArg.end(), outputWriterArg.begin(), ::tolower);
         if (outputWriterArg == "vtk") {
             outputWriter = std::make_unique<outputWriters::VTKWriter>();
+            std::cout << "Selected output writer: vtk" << std::endl;
         } else if (outputWriterArg == "xyz") {
             outputWriter = std::make_unique<outputWriters::XYZWriter>();
+            std::cout << "Selected output writer: xyz" << std::endl;
         } else {
             std::cerr << "Invalid option for output writer: " << argv[4] << std::endl;
             std::cerr << "Only 'vtk' or 'xyz' are allowed." << std::endl;
@@ -109,12 +111,11 @@ int main(int argc, char *argsv[]) {
     double end_time = default_end_time;
     bool testEnabled = false;
     std::unique_ptr<outputWriters::OutputWriter> outputWriter;
+    ParticleContainer particleContainer = fileReader.readFile(argsv[1]);
 
     if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter)) {
         return 1;
     }
-
-    ParticleContainer particleContainer = fileReader.readFile(argsv[1]);
 
     std::cout << "Starting simulation with delta_t: " << delta_t << " and end_time: " << end_time << std::endl;
     bool success = performSimulation(particleContainer, delta_t, end_time, outputWriter);
