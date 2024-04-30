@@ -36,16 +36,6 @@
      */
      Calculator calculator;
 
- public:
-
-     /**
-     * @brief Constructor for CalculatorTest.
-     * @param delta_t The time step for the simulation.
-     *
-     * Initializes the particle container, time step, and calculator with the provided time step.
-     */
-     explicit CalculatorTest(double delta_t) : particleContainer(ParticleContainer()), timeStep(delta_t), calculator(Calculator()) {}
-
      /**
      * @brief Initializes the particles for the test.
      *
@@ -69,6 +59,16 @@
       * This function should check the positions of the particles after the simulation and compare them to the expected values.
       */
      bool checkPositions();
+
+ public:
+
+     /**
+     * @brief Constructor for CalculatorTest.
+     * @param delta_t The time step for the simulation.
+     *
+     * Initializes the particle container, time step, and calculator with the provided time step.
+     */
+     explicit CalculatorTest(double delta_t) : particleContainer(ParticleContainer()), timeStep(delta_t), calculator(Calculator()) {}
 
      /**
      * @brief Runs the test.

@@ -10,23 +10,7 @@
  * as well as to plot the particles to a VTK file. It uses the Stoermer-Verlet method for the calculations.
  */
 class Calculator {
-
-public:
-    /**
-     * Default constructor for the Calculator class.
-     *
-     * Initializes the Calculator object.
-     */
-    Calculator();
-
-    /**
-     * Calls methods to calculate positions, forces, and velocities of particles in the right order.
-     *
-     * @param particleContainer The ParticleContainer containing the particles to update.
-     * @param delta_t The time step used in the calculations.
-     */
-    void calculate(ParticleContainer &particleContainer, double delta_t);
-
+private:
     /**
      * Calculates the new position for all particles using the Stoermer-Verlet method.
      *
@@ -50,6 +34,22 @@ public:
      */
     void calculateV(ParticleContainer &particleContainer, double delta_t);
 
+public:
+    /**
+     * Default constructor for the Calculator class.
+     *
+     * Initializes the Calculator object.
+     */
+    Calculator();
+
+    /**
+     * Calls methods to calculate positions, forces, and velocities of particles in the right order.
+     *
+     * @param particleContainer The ParticleContainer containing the particles to update.
+     * @param delta_t The time step used in the calculations.
+     */
+    void calculate(ParticleContainer &particleContainer, double delta_t);
+
     /**
      * Plots the particles to a VTK file.
      *
@@ -57,4 +57,5 @@ public:
      * @param particleContainer The ParticleContainer containing the particles to plot.
      */
     void plotParticles(int iteration, ParticleContainer &particleContainer);
+
 };
