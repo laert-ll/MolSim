@@ -4,8 +4,6 @@
 
 ## Installation Instructions
 
-This is the program frame for the Molecular Dynamics teaching code from Group C.
-
 ### Prerequisites
 
 In order to build and run this code, you need the following tools installed on your PC:
