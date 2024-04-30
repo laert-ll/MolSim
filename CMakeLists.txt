@@ -26,7 +26,10 @@ file(GLOB_RECURSE MY_SRC
 # create make target
 add_executable(MolSim ${MY_SRC}
         src/test/CalculatorTest.h
-        src/outputWriters/OutputWriter.h)
+        src/outputWriters/OutputWriter.h
+        src/calculators/Calculator.h
+        src/calculators/DummyCalculator.h
+        src/calculators/DummyCalculator.cpp)
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim

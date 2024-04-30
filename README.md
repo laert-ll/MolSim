@@ -34,6 +34,17 @@ In order to build and run this code, you need the following tools installed on y
 
 3. Run the code:
 
-   `./MolSim ../input/eingabe-sonne.txt {DELTA_T} {END_TIME} {TEST_ENABLED}`
+   `./MolSim ../input/eingabe-sonne.txt {DELTA_T} {END_TIME} {TEST_ENABLED} {OUTPUT_WRITER} {CALCULATOR}`
 
-   Example call: `./MolSim ./input/eingabe-sonne.txt 0.01 1 false` 
+   Example call: `./MolSim ./input/eingabe-sonne.txt 0.01 1 false vtk sv`
+4. Available options for arguments:
+
+   `{DELTA_T}`: The time step for the simulation. It should be a positive number.
+
+   `{END_TIME}`: The end time of the simulation. It should be a positive number.
+
+   `{TEST_ENABLED}`: Whether to run tests. Available options are true or false.
+
+   `{OUTPUT_WRITER}`: The output writer to use. Available options are vtk or xyz.
+
+   `{CALCULATOR}`: The calculator to use. Available options are sv or dummy.
