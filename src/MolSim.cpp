@@ -83,9 +83,16 @@ bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
             std::cerr << "Only 'sv' and 'dummy' are allowed." << std::endl;
             return false;
         }
-    } else {
-        // Default to SVCalculator if no argument is provided
+    }
+
+    if (!outputWriter) {
+        outputWriter = std::make_unique<outputWriters::VTKWriter>();
+        std::cout << "Selected output writer: vtk (default)" << std::endl;
+    }
+
+    if (!calculator) {
         calculator = std::make_unique<calculators::SVCalculator>();
+        std::cout << "Selected calculator: sv (default)" << std::endl;
     }
 
     return true;
