@@ -1,9 +1,7 @@
 //
 // Created by kimj2 on 26.04.2024.
 //
-
-#ifndef CALCULATORTEST_H
-#define CALCULATORTEST_H
+#pragma once
 
 #include "../objects/Particle.h"
 #include "../calculators/SVCalculator.h"
@@ -96,5 +94,3 @@ public:
         calculator = std::move(calc);
     }
 };
-
-#endif

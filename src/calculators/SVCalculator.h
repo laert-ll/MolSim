@@ -22,7 +22,7 @@ namespace calculators {
         void calculateX(ParticleContainer &particleContainer, double delta_t);
 
         /**
-         * Calculates the force between all pairs of unique particles.
+         * Calculates the force between all pairs of unique particles considering the third Newton's law.
          *
          * @param particleContainer The ParticleContainer containing the particles to calculate the forces for.
          */
