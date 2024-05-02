@@ -2,7 +2,7 @@
  // Created by kimj2 on 24.04.2024.
  //
 
- #include "../Particle.h"
+ #include "../objects/Particle.h"
  #include "../calculators/SVCalculator.h"
  #include "CalculatorTest.h"
  #include <iostream>

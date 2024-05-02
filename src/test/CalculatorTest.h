@@ -5,7 +5,7 @@
 #ifndef CALCULATORTEST_H
 #define CALCULATORTEST_H
 
-#include "../Particle.h"
+#include "../objects/Particle.h"
 #include "../calculators/SVCalculator.h"
 #include "../calculators/Calculator.h"
 #include <iostream>
