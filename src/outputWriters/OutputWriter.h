@@ -8,13 +8,21 @@
 
 namespace outputWriters {
 
+    /**
+     * Abstract base class for output writers.
+     */
     class OutputWriter {
     public:
         OutputWriter() = default;
 
         virtual ~OutputWriter() = default;
 
-        virtual void plotParticles(int iteration, ParticleContainer &particleContainer, const std::string &filename) {}
-
+        /**
+         * Method to plot the particles.
+         * @param iteration the current iteration
+         * @param particleContainer the container of particles
+         * @param filename the filename to write the plot to
+         */
+        virtual void plotParticles(int iteration, ParticleContainer& particleContainer, const std::string& filename) = 0;
     };
 }

@@ -114,7 +114,7 @@ bool performSimulation(ParticleContainer &particleContainer, double &delta_t, do
         calculator->calculate(particleContainer, delta_t);
 
         iteration++;
-        if (iteration % 10 == 0) {
+        if (iteration % 25 == 0) {
             outputWriter->plotParticles(iteration, particleContainer, filename);
         }
         std::cout << "Iteration " << iteration << " finished." << std::endl;
@@ -127,7 +127,7 @@ bool performSimulation(ParticleContainer &particleContainer, double &delta_t, do
 }
 
 int main(int argc, char *argsv[]) {
-    // Example call: ./MolSim ./input/eingabe-sonne.txt 0.01 1 true vtk sv
+    // Example call: ./MolSim ../input/eingabe-sonne.txt 0.01 1 true vtk sv
 
     std::cout << "Hello from MolSim for PSE!" << std::endl;
 

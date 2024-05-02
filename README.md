@@ -21,10 +21,8 @@ In order to build and run this code, you need the following tools installed on y
 2. Build the code:
 
    `cmake ../CMakeLists.txt`
-3. Move to the project directory:
 
-   `cd ..`
-4. Make:
+3. Make:
 
    `make -j $(nproc)`
 
@@ -32,12 +30,12 @@ In order to build and run this code, you need the following tools installed on y
 
    `make doc_doxygen`
 
-3. Run the code:
+4. Run the code:
 
    `./MolSim ../input/eingabe-sonne.txt {DELTA_T} {END_TIME} {TEST_ENABLED} {OUTPUT_WRITER} {CALCULATOR}`
 
-   Example call: `./MolSim ./input/eingabe-sonne.txt 0.01 1 false vtk sv`
-4. Available options for arguments:
+   Example call: `./MolSim ../input/eingabe-sonne.txt 0.01 1 false vtk sv`
+5. Available options for arguments:
 
    `{DELTA_T}`: The time step for the simulation. It should be a positive number.
 

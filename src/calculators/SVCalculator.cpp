@@ -5,8 +5,8 @@
 namespace calculators {
 
     void SVCalculator::calculate(ParticleContainer &particleContainer, double delta_t) {
-        calculateF(particleContainer);
         calculateX(particleContainer, delta_t);
+        calculateF(particleContainer);
         calculateV(particleContainer, delta_t);
     }
 
@@ -47,7 +47,7 @@ namespace calculators {
             // Get the current position, velocity, force and mass of the particle
             std::array<double, 3> x = p->getX();
             std::array<double, 3> v = p->getV();
-            std::array<double, 3> f = p->getF();
+            std::array<double, 3> f = p->getOldF();
 
             double m = p->getM();
 
