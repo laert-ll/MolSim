@@ -30,12 +30,12 @@ void ParticleContainer::setVolumes() {
 
     // Calculate scaling factors
     double mass_range = max_mass - min_mass;
-    double volume_range = VOLUME_MAX - VOLUME_MIN; // New volume range
+    double volume_range = VOLUME_MAX - VOLUME_MIN;
     double scaling_factor = volume_range / mass_range;
 
-    // Set volumes for all particles
+    // Scale volume for each object
     for (auto& p : particles) {
-        double volume = VOLUME_MIN + scaling_factor * (p.getM() - min_mass); // Adjusted volume calculation
+        double volume = VOLUME_MIN + scaling_factor * p.getM();
         p.setVolume(volume);
     }
 }
