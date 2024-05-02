@@ -43,7 +43,6 @@ namespace outputWriters {
 
     private:
 
-
         VTKFile_t *vtkFile;
 
         /**
@@ -67,5 +66,4 @@ namespace outputWriters {
          */
         void writeFile(const std::string &filename, int iteration);
     };
-
 } // namespace outputWriters

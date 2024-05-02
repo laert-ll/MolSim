@@ -4,13 +4,13 @@
 #include "Calculator.h"
 
 namespace calculators {
-/**
- * @class SVCalculator
- * @brief A class responsible for performing calculations related to particles.
- *
- * This class provides methods to calculate the new position, force, and velocity of particles,
- * as well as to plot the particles to a VTK file. It uses the Stoermer-Verlet method for the calculations.
- */
+    /**
+     * @class SVCalculator
+     * @brief A class responsible for performing calculations related to particles.
+     *
+     * This class provides methods to calculate the new position, force, and velocity of particles,
+     * as well as to plot the particles to a VTK file. It uses the Stoermer-Verlet method for the calculations.
+     */
     class SVCalculator : public Calculator {
     private:
         /**
@@ -51,6 +51,5 @@ namespace calculators {
          * @param delta_t The time step used in the calculations.
          */
         void calculate(ParticleContainer &particleContainer, double delta_t);
-
     };
 }

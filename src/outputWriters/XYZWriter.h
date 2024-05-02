@@ -40,6 +40,5 @@ namespace outputWriters {
          * @note The XYZ file will be written to the current working directory.
          */
         void plotParticles(int iteration, ParticleContainer &particleContainer, const std::string &filename);
-
     };
 }// namespace outputWriters
