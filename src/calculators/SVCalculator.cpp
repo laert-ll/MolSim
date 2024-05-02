@@ -47,7 +47,7 @@ namespace calculators {
             // Get the current position, velocity, force and mass of the particle
             std::array<double, 3> x = p->getX();
             std::array<double, 3> v = p->getV();
-            std::array<double, 3> f = p->getOldF();
+            std::array<double, 3> f = p->getF();
 
             double m = p->getM();
 
