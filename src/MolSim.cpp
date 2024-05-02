@@ -114,7 +114,7 @@ bool performSimulation(ParticleContainer &particleContainer, double &delta_t, do
         calculator->calculate(particleContainer, delta_t);
 
         iteration++;
-        if (iteration % 25 == 0) {
+        if (iteration % 10 == 0) {
             outputWriter->plotParticles(iteration, particleContainer, filename);
         }
         std::cout << "Iteration " << iteration << " finished." << std::endl;
