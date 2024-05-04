@@ -45,7 +45,7 @@ namespace calculators {
             // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
 //            std::array<double, 3> f1 = pair->first.get().getF();
 //            std::array<double, 3> f2 = pair->second.get().getF();
-            //TODO: Wird die Force dann ganz neu gesetzt?
+            //TODO: Do u need old force or just set new Force?
             pair->first.get().setF({force[0], force[1], force[2]});
             pair->second.get().setF({-force[0], -force[1], -force[2]});
         }
