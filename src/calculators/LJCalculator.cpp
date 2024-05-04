@@ -26,14 +26,9 @@ namespace calculators {
             std::array<double, 3> x1 = pair->first.get().getX();
             std::array<double, 3> x2 = pair->second.get().getX();
 
-            double m1 = pair->first.get().getM();
-            double m2 = pair->second.get().getM();
-
             // Calculate the distance vector and its norm
             std::array<double, 3> dx = {x2[0] - x1[0], x2[1] - x1[1], x2[2] - x1[2]};
             double distance = std::sqrt(dx[0] * dx[0] + dx[1] * dx[1] + dx[2] * dx[2]);
-            //represents U(x_i, x_j)
-            double potential = 4 * epsilon * (pow(sigma/distance, 6) - 2 * pow(sigma / distance, 12));
 
             // Calculate the force between the two particles
             std::array<double, 3> force = {
