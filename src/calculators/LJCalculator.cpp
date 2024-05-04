@@ -32,17 +32,22 @@ namespace calculators {
             // Calculate the distance vector and its norm
             std::array<double, 3> dx = {x2[0] - x1[0], x2[1] - x1[1], x2[2] - x1[2]};
             double distance = std::sqrt(dx[0] * dx[0] + dx[1] * dx[1] + dx[2] * dx[2]);
+            //represents U(x_i, x_j)
+            double potential = 4 * epsilon * (pow(sigma/distance, 6) - 2 * pow(sigma / distance, 12));
 
             // Calculate the force between the two particles
-            std::array<double, 3> force = {(m1 * m2 / std::pow(distance, 3)) * dx[0],
-                                           (m1 * m2 / std::pow(distance, 3)) * dx[1],
-                                           (m1 * m2 / std::pow(distance, 3)) * dx[2]};
+            std::array<double, 3> force = {
+                    -24 * epsilon / pow(distance, 2) * (pow(sigma/distance, 6) - 2 * pow(sigma / distance, 12)) * (x1[0] - x2[0]),
+                    -24 * epsilon / pow(distance, 2) * (pow(sigma/distance, 6) - 2 * pow(sigma / distance, 12)) * (x1[1] - x2[1]),
+                    -24 * epsilon / pow(distance, 2) * (pow(sigma/distance, 6) - 2 * pow(sigma / distance, 12)) * (x1[2] - x2[2])
+            };
 
             // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
-            std::array<double, 3> f1 = pair->first.get().getF();
-            std::array<double, 3> f2 = pair->second.get().getF();
-            pair->first.get().setF({f1[0] + force[0], f1[1] + force[1], f1[2] + force[2]});
-            pair->second.get().setF({f2[0] - force[0], f2[1] - force[1], f2[2] - force[2]});
+//            std::array<double, 3> f1 = pair->first.get().getF();
+//            std::array<double, 3> f2 = pair->second.get().getF();
+            //TODO: Wird die Force dann ganz neu gesetzt?
+            pair->first.get().setF({force[0], force[1], force[2]});
+            pair->second.get().setF({-force[0], -force[1], -force[2]});
         }
     }
 
