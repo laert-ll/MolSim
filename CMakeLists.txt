@@ -26,7 +26,9 @@ file(GLOB_RECURSE MY_SRC
 # create make target
 add_executable(MolSim ${MY_SRC}
         src/calculators/LJCalculator.cpp
-        src/calculators/LJCalculator.h)
+        src/calculators/LJCalculator.h
+        src/objects/ParticleGenerator.cpp
+        src/objects/ParticleGenerator.h)
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
