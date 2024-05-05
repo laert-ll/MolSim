@@ -2,9 +2,11 @@
 // Created by Ujin on 04.05.2024.
 //
 #include "ParticleContainer.h"
+#include <cmath>
 
 #ifndef PSEMOLDYN_GROUPC_PARTICLEGENERATOR_H
 #define PSEMOLDYN_GROUPC_PARTICLEGENERATOR_H
+
 
 class ParticleGenerator {
 
@@ -21,8 +23,9 @@ public:
  *
  * @return ParticleContainer containing generated particles.
  */
-    //TODO: Check - Is it okay to return by reference?
-    *ParticleContainer generateParticles(std::array<double, 3> x, std::array<double, 3> n, double h, double m, std::array<double, 3> v, double t);
+    ParticleContainer generateParticles(std::array<double, 3> x, std::array<double, 3> n, double h, double m, std::array<double, 3> v,
+                      double k_B, double t);
+
 /**
  * \brief Calculates velocities for particles in a container.
  *
@@ -35,8 +38,8 @@ public:
  * \param t Temperature.
  * \return An std::array<double, 3> containing the velocities.
  */
-    std::array<double, 3> calculateVelocities(*ParticleContainer container, double m, double k_B, double t);
-};
-
-
+    void calculateVelocities(ParticleContainer& container, std::array<double, 3> v, double m, double k_B, double t);
+    }
 #endif //PSEMOLDYN_GROUPC_PARTICLEGENERATOR_H
+
+
