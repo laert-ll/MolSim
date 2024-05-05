@@ -1,12 +1,12 @@
 //
 // Created by Ujin on 04.05.2024.
 //
-#include "ParticleContainer.h"
-#include <cmath>
+
 
 #ifndef PSEMOLDYN_GROUPC_PARTICLEGENERATOR_H
 #define PSEMOLDYN_GROUPC_PARTICLEGENERATOR_H
-
+#include "ParticleContainer.h"
+#include <cmath>
 
 class ParticleGenerator {
 
@@ -38,8 +38,8 @@ public:
  * \param t Temperature.
  * \return An std::array<double, 3> containing the velocities.
  */
-    void calculateVelocities(ParticleContainer& container, std::array<double, 3> v, double m, double k_B, double t);
-    }
+    static void calculateVelocities(ParticleContainer& container, std::array<double, 3> v, double m, double k_B, double t);
+    };
 #endif //PSEMOLDYN_GROUPC_PARTICLEGENERATOR_H
 
 

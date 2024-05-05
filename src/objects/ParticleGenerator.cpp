@@ -4,8 +4,9 @@
 
 #include "ParticleGenerator.h"
 
-
-ParticleContainer ParticleGenerator::generateParticles(std::array<double, 3> x, std::array<double, 3> n, double h, double m, std::array<double, 3> v, double k_B, double t) {    ParticleContainer result;
+//TODO: Which corner of the cuboid is the left lower front-side corner? Eventually change sign of i,j,k
+ParticleContainer ParticleGenerator::generateParticles(std::array<double, 3> x, std::array<double, 3> n, double h, double m, std::array<double, 3> v, double k_B, double t) {
+    ParticleContainer result;
     for (int i = 0; i < n[0]; i++) {
         for (int j = 0; j < n[1]; j++) {
             for (int k = 0; k < n[2]; k++) {
@@ -15,7 +16,7 @@ ParticleContainer ParticleGenerator::generateParticles(std::array<double, 3> x, 
     }
     calculateVelocities(result, v, m ,k_B, t);
     return result;
-};
+}
 
 void ParticleGenerator::calculateVelocities(ParticleContainer& container, std::array<double, 3> v, double m, double k_B, double t) {
     // since it's always the same temperature, mass and velocities, calculate it once and set it for every particle.
