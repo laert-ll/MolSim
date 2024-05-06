@@ -1,5 +1,6 @@
 #include "ParticleContainer.h"
 #include <algorithm>
+#include "utils/MaxwellBoltzmannDistribution.h"
 
 const double VOLUME_MIN = 0.5;
 const double VOLUME_MAX = 1.0;
@@ -64,3 +65,26 @@ std::vector <std::pair<std::reference_wrapper < Particle>, std::reference_wrappe
 size_t ParticleContainer::getSize() const {
     return particles.size();
 }
+
+ParticleContainer ParticleContainer::generateCuboid(std::array<double, 3> x, std::array<double, 3> n, double h, double m, std::array<double, 3> v, double k_B, double t) {
+    ParticleContainer result;
+    for (int i = 0; i < n[0]; i++) {
+        for (int j = 0; j < n[1]; j++) {
+            for (int k = 0; k < n[2]; k++) {
+                result.addParticle(Particle({x[0] + i * h, x[1] + j * h, x[2] + k * h}, v, m, 3));
+            }
+        }
+    }
+    result.calculateVelocities(v, m ,k_B, t);
+    return result;
+}
+
+void ParticleContainer::calculateVelocities(std::array<double, 3> v, double m, double k_B, double t) {
+    // since it's always the same temperature, mass and velocities, calculate it once and set it for every particle.
+    double avgV = pow((v[0] * v[0] + v[1] * v[1] + v[2] * v[2]), 0.5);
+    for (auto it = begin(); it != end(); ++it) {
+        Particle& particle = *it;
+        std::array<double, 3> randomV = maxwellBoltzmannDistributedVelocity(avgV,3);
+        particle.setX(randomV);
+    }
+};

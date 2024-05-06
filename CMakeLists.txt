@@ -27,8 +27,6 @@ file(GLOB_RECURSE MY_SRC
 add_executable(MolSim ${MY_SRC}
         src/calculators/LJCalculator.cpp
         src/calculators/LJCalculator.h
-        src/objects/ParticleGenerator.cpp
-        src/objects/ParticleGenerator.h
         src/test/LJCalculatorTest.cpp
         src/test/LJCalculatorTest.h)
 
