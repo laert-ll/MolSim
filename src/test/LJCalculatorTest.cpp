@@ -43,3 +43,14 @@ bool LJCalculatorTest::checkPositions() {
     }
     return result;
 }
+//ParticleContainer ParticleContainer::generateCuboid(std::array<double, 3> x, std::array<double, 3> n, double h, double m, std::array<double, 3> v, double k_B, double t) {
+void LJCalculatorTest::initializeWithParticleGenerator() {
+    std::array<double, 3> x = {0,0,0};
+    std::array<double, 3> n = {1,2,1};
+    double h = 1;
+    double m = 1;
+    std::array<double, 3> v = {1,1,1};
+    double k_B = 1;
+    double t;
+    ParticleContainer container = ParticleContainer::generateCuboid(x, n, h, n, v, k_B, t)
+}

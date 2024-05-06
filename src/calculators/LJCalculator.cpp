@@ -26,13 +26,13 @@ namespace calculators {
             std::array<double, 3> x1 = pair->first.get().getX();
             std::array<double, 3> x2 = pair->second.get().getX();
 
-            // Calculate the distance vector and its norm
+            // Calculate the distance vector and its norm TODO distance -> euclidian norm?
             std::array<double, 3> dx = {x2[0] - x1[0], x2[1] - x1[1], x2[2] - x1[2]};
             double distance = std::sqrt(dx[0] * dx[0] + dx[1] * dx[1] + dx[2] * dx[2]);
 
-            // Calculate the force between the two particles
+            // Calculate the force between the two particles TODO - For loop
             std::array<double, 3> force = {
-                    -24 * epsilon / pow(distance, 2) * (pow(sigma/distance, 6) - 2 * pow(sigma / distance, 12)) * (x1[0] - x2[0]),
+                    -24 * epsilon / pow(distance, 2) * (pow(sigma/distance, 6) - 2 * pow(sigma / distance, 12)) * (-dx[0]),
                     -24 * epsilon / pow(distance, 2) * (pow(sigma/distance, 6) - 2 * pow(sigma / distance, 12)) * (x1[1] - x2[1]),
                     -24 * epsilon / pow(distance, 2) * (pow(sigma/distance, 6) - 2 * pow(sigma / distance, 12)) * (x1[2] - x2[2])
             };
@@ -40,7 +40,7 @@ namespace calculators {
             // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
 //            std::array<double, 3> f1 = pair->first.get().getF();
 //            std::array<double, 3> f2 = pair->second.get().getF();
-            //TODO: Do u need old force or just set new Force?
+            //TODO: Do u need old force or just set new Force? Adding
             pair->first.get().setF({force[0], force[1], force[2]});
             pair->second.get().setF({-force[0], -force[1], -force[2]});
         }

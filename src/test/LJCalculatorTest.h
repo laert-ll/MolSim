@@ -1,15 +1,13 @@
 //
 // Created by Ujin on 05.05.2024.
 //
-
-#ifndef MOLSIM_LJCALCULATORTEST_H
-#define MOLSIM_LJCALCULATORTEST_H
+#pragma once
 
 #include <memory>
 #include "calculators/Calculator.h"
 #include <iterator>
 #include <iostream>
-//#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 class LJCalculatorTest {
     private:
@@ -42,7 +40,8 @@ class LJCalculatorTest {
  * This function should check the positions of the particles after the simulation and compare them to the expected values.
  */
     bool checkPositions();
+
+    void initializeWithParticleGenerator();
 };
 
 
-#endif //MOLSIM_LJCALCULATORTEST_H
