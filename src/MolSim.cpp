@@ -1,6 +1,6 @@
 #include "calculators/SVCalculator.h"
 #include "calculators/DummyCalculator.h"
-#include "io/FileReader.h"
+#include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"
 #include "test/CalculatorTest.h"
 #include "outputWriters/OutputWriter.h"
@@ -137,7 +137,7 @@ int main(int argc, char *argsv[]) {
     bool testEnabled = false;
     std::unique_ptr<outputWriters::OutputWriter> outputWriter;
     std::unique_ptr<calculators::Calculator> calculator;
-    ParticleContainer particleContainer = fileReader.readFile(argsv[1]);
+    ParticleContainer particleContainer = fileReader.readParticleData(argsv[1]);
 
     if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter, calculator)) {
         return 1;

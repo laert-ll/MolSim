@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include "../objects/ParticleContainer.h"
+#include "../../objects/ParticleContainer.h"
+#include "CuboidParameters.h"
 
 /**
  * @class FileReader
@@ -26,5 +27,7 @@ public:
      * @param filepath The path to the file to read particle data from.
      * @return A ParticleContainer containing the particles read from the file.
      */
-    ParticleContainer readFile(char *filepath);
+    ParticleContainer readParticleData(const std::string& filepath, const ParticleGenerator &generator);
+
+    CuboidParameters readCuboidParameters(const std::string& filepath, const ParticleGenerator &generator);
 };

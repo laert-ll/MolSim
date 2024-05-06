@@ -14,27 +14,11 @@ namespace calculators {
     class SVCalculator : public Calculator {
     private:
         /**
-         * Calculates the new position for all particles using the Stoermer-Verlet method.
-         *
-         * @param particleContainer The ParticleContainer containing the particles to update.
-         * @param delta_t The time step used in the calculations.
-         */
-        void calculateX(ParticleContainer &particleContainer, double delta_t);
-
-        /**
          * Calculates the force between all pairs of unique particles considering the third Newton's law.
          *
          * @param particleContainer The ParticleContainer containing the particles to calculate the forces for.
          */
-        void calculateF(ParticleContainer &particleContainer);
-
-        /**
-         * Calculates the velocity for all particles using the Stoermer-Verlet method.
-         *
-         * @param particleContainer The ParticleContainer containing the particles to update.
-         * @param delta_t The time step used in the calculations.
-         */
-        void calculateV(ParticleContainer &particleContainer, double delta_t);
+        void calculateF(ParticleContainer &particleContainer) override;
 
     public:
         /**
@@ -50,6 +34,6 @@ namespace calculators {
          * @param particleContainer The ParticleContainer containing the particles to update.
          * @param delta_t The time step used in the calculations.
          */
-        void calculate(ParticleContainer &particleContainer, double delta_t);
+        void calculate(ParticleContainer &particleContainer, double delta_t) override;
     };
 }

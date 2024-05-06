@@ -16,7 +16,7 @@ FileReader::FileReader() = default;
 
 FileReader::~FileReader() = default;
 
-ParticleContainer FileReader::readFile(char *filename) {
+ParticleContainer FileReader::readParticleData(const std::string& filename) {
     ParticleContainer particleContainer;
 
     std::array<double, 3> x;
@@ -70,4 +70,8 @@ ParticleContainer FileReader::readFile(char *filename) {
         exit(-1);
     }
     return particleContainer;
+}
+
+// TODO
+CuboidParameters FileReader::readCuboidParameters(const std::string& filepath) {
 }

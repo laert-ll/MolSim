@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../objects/ParticleContainer.h"
+#include "../../objects/ParticleContainer.h"
 
 namespace outputWriters {
 

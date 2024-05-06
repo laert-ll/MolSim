@@ -1,6 +1,6 @@
 #include "ParticleContainer.h"
 #include <algorithm>
-#include "utils/MaxwellBoltzmannDistribution.h"
+#include "../utils/MaxwellBoltzmannDistribution.h"
 
 const double VOLUME_MIN = 0.5;
 const double VOLUME_MAX = 1.0;
@@ -66,7 +66,7 @@ size_t ParticleContainer::getSize() const {
     return particles.size();
 }
 
-//TODO: Rename variables in for-loop x-> corner, n
+/**
 ParticleContainer ParticleContainer::generateCuboid(std::array<double, 3> x, std::array<double, 3> n, double h, double m, std::array<double, 3> v, double k_B, double t) {
     ParticleContainer result;
     for (int i = 0; i < n[0]; i++) {
@@ -89,3 +89,4 @@ void ParticleContainer::calculateVelocities(std::array<double, 3> v, double m, d
         particle.setV(randomV);
     }
 };
+ **/
