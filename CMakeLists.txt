@@ -43,6 +43,11 @@ target_include_directories(MolSim
             ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+target_include_directories(MolSimTests 
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/test
+)
+
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
