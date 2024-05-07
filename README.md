@@ -32,7 +32,7 @@ In order to build and run this code, you need the following tools installed on y
 
 4. Run the code:
 
-   `./MolSim ../resources/input-sun.txt {DELTA_T} {END_TIME} {TEST_ENABLED} {OUTPUT_WRITER} {CALCULATOR}`
+   `./MolSim ./resources/input-sun.txt {DELTA_T} {END_TIME} {TEST_ENABLED} {OUTPUT_WRITER} {CALCULATOR}`
 
    Example call: `./MolSim ../input/eingabe-sonne.txt 0.01 1 false vtk sv`
 5. Available options for arguments:
