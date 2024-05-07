@@ -1,6 +1,7 @@
 //
 // Created by kimj2 on 07.05.2024.
 //
+#pragma once
 
 #include <array>
 
@@ -22,27 +23,23 @@ struct CuboidParameters {
     /**
      * @brief Distance between particles (mesh width of the grid).
      */
-    double particleDistance;
+    double distance;
 
     /**
      * @brief Mass of one particle.
      */
-    double particleMass;
+    double m;
 
     /**
      * @brief Initial velocity of the particles in each dimension.
      */
-    std::array<double, 3> initialVelocity;
+    std::array<double, 3> startV;
 
     /**
      * @brief Mean-value of the velocity of the Brownian Motion.
      */
-    double meanVelocity;
+    double meanV;
 
-    /**
-     * @brief Temperature for the Maxwell-Boltzmann distribution.
-     */
-    double temperature;
 
     /**
      * @brief Constructor to initialize the parameters.
@@ -55,11 +52,10 @@ struct CuboidParameters {
      * @param pMass The mass of one particle.
      * @param startV The initial velocity of the particles in each dimension.
      * @param meanV The mean-value of the velocity of the Brownian Motion.
-     * @param temp The temperature for the Maxwell-Boltzmann distribution.
      */
     CuboidParameters(std::array<double, 3> llfCorner, std::array<std::size_t, 3> numParticles, double pDistance,
                      double pMass,
-                     std::array<double, 3> startV, double meanV, double temp)
-            : lowerLeftFrontCorner(llfCorner), numParticlesPerDimension(numParticles), particleDistance(pDistance),
-              particleMass(pMass), initialVelocity(startV), meanVelocity(meanV), temperature(temp) {}
+                     std::array<double, 3> startV, double meanV)
+            : lowerLeftFrontCorner(llfCorner), numParticlesPerDimension(numParticles), distance(pDistance),
+              m(pMass), startV(startV), meanV(meanV){}
 };

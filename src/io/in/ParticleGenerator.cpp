@@ -11,6 +11,6 @@ Particle ParticleGenerator::generateParticle(const ParticleParameters &parameter
                     parameters.getType());
 }
 
-ParticleContainer ParticleGenerator::readCuboidParameters(const CuboidParameters &parameters) {
-    return ParticleContainer();
+ParticleContainer ParticleGenerator::generateCuboid(const CuboidParameters &parameters) {
+    return ParticleContainer(); // TODO
 }

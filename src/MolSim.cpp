@@ -3,9 +3,9 @@
 #include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"
 #include "test/CalculatorTest.h"
-#include "outputWriters/OutputWriter.h"
-#include "outputWriters/VTKWriter.h"
-#include "outputWriters/XYZWriter.h"
+#include "io/out/FileWriter.h"
+#include "io/out/VTKWriter.h"
+#include "io/out/XYZWriter.h"
 
 #include <iostream>
 #include <memory>
@@ -127,17 +127,18 @@ bool performSimulation(ParticleContainer &particleContainer, double &delta_t, do
 }
 
 int main(int argc, char *argsv[]) {
-    // Example call: ./MolSim ../input/eingabe-sonne.txt 0.01 1 true vtk sv
+    // Example call: ./MolSim ./resources/input-sun.txt 0.01 1 true vtk sv
 
     std::cout << "Hello from MolSim for PSE!" << std::endl;
 
-    FileReader fileReader;
+    ParticleGenerator particleGenerator;
+    FileReader fileReader(particleGenerator);
     double delta_t = default_delta_t;
     double end_time = default_end_time;
     bool testEnabled = false;
     std::unique_ptr<outputWriters::OutputWriter> outputWriter;
     std::unique_ptr<calculators::Calculator> calculator;
-    ParticleContainer particleContainer = fileReader.readParticleData(argsv[1]);
+    ParticleContainer particleContainer = fileReader.loadParticles(argsv[1]);
 
     if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter, calculator)) {
         return 1;

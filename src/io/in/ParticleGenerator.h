@@ -16,5 +16,5 @@ public:
 
     Particle generateParticle(const ParticleParameters &parameters);
 
-    ParticleContainer readCuboidParameters(const CuboidParameters &parameters);
+    ParticleContainer generateCuboid(const CuboidParameters &parameters);
 };
