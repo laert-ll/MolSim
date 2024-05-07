@@ -9,6 +9,7 @@
 
 #include "../../objects/ParticleContainer.h"
 #include "CuboidParameters.h"
+#include "ParticleGenerator.h"
 
 /**
  * @class FileReader
@@ -16,10 +17,19 @@
  */
 class FileReader {
 
-public:
-    FileReader();
+private:
+    ParticleGenerator particleGenerator;
 
-    virtual ~FileReader();
+public:
+    /**
+     * Constructor that initializes the particleGenerator.
+     *
+     * @param generator The ParticleGenerator to use for particle data.
+     */
+    explicit FileReader(const ParticleGenerator& generator) : particleGenerator(generator) {}
+
+
+    ~FileReader() = default;
 
     /**
      * Reads particle data from a file and returns a ParticleContainer.
@@ -27,7 +37,7 @@ public:
      * @param filepath The path to the file to read particle data from.
      * @return A ParticleContainer containing the particles read from the file.
      */
-    ParticleContainer readParticleData(const std::string& filepath, const ParticleGenerator &generator);
+    ParticleContainer loadParticles(const std::string& filepath);
 
-    CuboidParameters readCuboidParameters(const std::string& filepath, const ParticleGenerator &generator);
+    ParticleContainer loadCuboid(const std::string& filepath);
 };

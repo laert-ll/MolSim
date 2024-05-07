@@ -12,11 +12,7 @@
 #include <iostream>
 #include <sstream>
 
-FileReader::FileReader() = default;
-
-FileReader::~FileReader() = default;
-
-ParticleContainer FileReader::readParticleData(const std::string& filename) {
+ParticleContainer FileReader::loadParticles(const std::string &filepath) {
     ParticleContainer particleContainer;
 
     std::array<double, 3> x;
@@ -24,7 +20,7 @@ ParticleContainer FileReader::readParticleData(const std::string& filename) {
     double m;
     int num_particles = 0;
 
-    std::ifstream input_file(filename);
+    std::ifstream input_file(filepath);
     std::string tmp_string;
 
     if (input_file.is_open()) {
@@ -58,7 +54,9 @@ ParticleContainer FileReader::readParticleData(const std::string& filename) {
                 exit(-1);
             }
             datastream >> m;
-            particleContainer.addParticle(Particle(x, v, m, 0));
+            ParticleParameters parameters(x, v, m, 0, 0);
+            Particle newParticle = particleGenerator.generateParticle(parameters);
+            particleContainer.addParticle(newParticle);
 
             getline(input_file, tmp_string);
             std::cout << "Read line: " << tmp_string << std::endl;
@@ -66,12 +64,12 @@ ParticleContainer FileReader::readParticleData(const std::string& filename) {
         particleContainer.initializePairs();
         particleContainer.setVolumes();
     } else {
-        std::cout << "Error: could not open file " << filename << std::endl;
+        std::cout << "Error: could not open file " << filepath << std::endl;
         exit(-1);
     }
     return particleContainer;
 }
 
-// TODO
-CuboidParameters FileReader::readCuboidParameters(const std::string& filepath) {
+ParticleContainer FileReader::loadCuboid(const std::string &filepath) {
+    return ParticleContainer();
 }
