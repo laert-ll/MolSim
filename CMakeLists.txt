@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # define project name, version
-project(PSEMolDyn VERSION 0.0.1)
+project(PSEMolDyn_GroupC VERSION 0.0.1)
 
 # let ccmake and cmake-gui offer the default build type options
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;RelWithDebInfo;MinSizeRel")
@@ -17,6 +17,10 @@ file(GLOB_RECURSE MY_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
     # header don't need to be included but this might be necessary for some IDEs
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+
+    # collect tests
+    "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/test/*.h"
 )
 
 # create make target
