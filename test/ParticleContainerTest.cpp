@@ -13,10 +13,11 @@ TEST(ParticleContainerTest, AddParticle) {
 
 TEST(ParticleContainerTest, GetSize) {
     ParticleContainer pc;
-    Particle p1, p2;
+    Particle p1, p2, p3;
     pc.addParticle(p1);
     pc.addParticle(p2);
-    EXPECT_EQ(pc.getSize(), 2);
+    pc.addParticle(p3);
+    EXPECT_EQ(pc.getSize(), 3);
 }
 
 int main(int argc, char **argv) {
