@@ -1,5 +1,5 @@
-#include "../src/objects/ParticleContainer.h"
-#include "../src/objects/Particle.h"
+#include "../../src/objects/ParticleContainer.h"
+#include "../../src/objects/Particle.h"
 #include "gtest/gtest.h"
 
 TEST(ParticleContainerTest, AddParticleGetSize) {

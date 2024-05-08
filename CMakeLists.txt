@@ -21,8 +21,8 @@ file(GLOB_RECURSE MY_SRC
 )
 
 file(GLOB_RECURSE TEST_SOURCES
-    "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/test/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/test/**/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/test/**/*.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
 )
