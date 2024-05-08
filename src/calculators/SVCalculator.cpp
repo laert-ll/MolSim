@@ -1,4 +1,5 @@
 #include "SVCalculator.h"
+#include "../utils/ArrayUtils.h"
 
 #include <cmath>
 
@@ -18,27 +19,31 @@ namespace calculators {
 
         // Iterate over all unique pairs of particles
         for (auto pair = particleContainer.pair_begin(); pair != particleContainer.pair_end(); ++pair) {
-            // Get the positions and masses of the two particles
-            std::array<double, 3> x1 = pair->first.get().getX();
-            std::array<double, 3> x2 = pair->second.get().getX();
+            // Get both particles
+            Particle& particle1 = pair->first.get();
+            Particle& particle2 = pair->second.get();
 
-            double m1 = pair->first.get().getM();
-            double m2 = pair->second.get().getM();
+            // Get the positions and masses of the two particles
+            const std::array<double, 3> x1 = particle1.getX();
+            const std::array<double, 3> x2 = particle2.getX();
+
+            const double m1 = particle1.getM();
+            const double m2 = particle2.getM();
 
             // Calculate the distance vector and its norm
-            std::array<double, 3> dx = {x2[0] - x1[0], x2[1] - x1[1], x2[2] - x1[2]};
-            double distance = std::sqrt(dx[0] * dx[0] + dx[1] * dx[1] + dx[2] * dx[2]);
+            const std::array<double, 3> dx = ArrayUtils::elementWisePairOp(x2, x1, std::minus<double>());
+            const double distance = ArrayUtils::L2Norm(dx);
 
             // Calculate the force between the two particles
-            std::array<double, 3> force = {(m1 * m2 / std::pow(distance, 3)) * dx[0],
-                                           (m1 * m2 / std::pow(distance, 3)) * dx[1],
-                                           (m1 * m2 / std::pow(distance, 3)) * dx[2]};
+            const double scalar = (m1 * m2) / std::pow(distance, 3);
+            const std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(scalar, dx, std::multiplies<double>());
+
 
             // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
-            std::array<double, 3> f1 = pair->first.get().getF();
-            std::array<double, 3> f2 = pair->second.get().getF();
-            pair->first.get().setF({f1[0] + force[0], f1[1] + force[1], f1[2] + force[2]});
-            pair->second.get().setF({f2[0] - force[0], f2[1] - force[1], f2[2] - force[2]});
+            const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(particle1.getF(), force, std::plus<double>());
+            const std::array<double, 3> newF2 = ArrayUtils::elementWisePairOp(particle2.getF(), force, std::minus<double>());
+            particle1.setF(newF1);
+            particle2.setF(newF2);
         }
     }
 
@@ -46,18 +51,22 @@ namespace calculators {
         for (auto p = particleContainer.begin(); p != particleContainer.end(); ++p) {
             // Get the current position, velocity, force and mass of the particle
             std::array<double, 3> x = p->getX();
-            std::array<double, 3> v = p->getV();
-            std::array<double, 3> f = p->getF();
+            const std::array<double, 3> v = p->getV();
+            const std::array<double, 3> f = p->getF();
 
-            double m = p->getM();
+            const double m = p->getM();
 
             // Calculate the acceleration
-            std::array<double, 3> a = {f[0] / m, f[1] / m, f[2] / m};
+            const std::array<double, 3> a = ArrayUtils::elementWiseScalarOp(1.0 / m, f, std::multiplies<double>());
+
 
             // Update the particles new position using the Velocity-Störmer-Verlet method
-            x[0] += delta_t * v[0] + (delta_t * delta_t / 2) * a[0];
-            x[1] += delta_t * v[1] + (delta_t * delta_t / 2) * a[1];
-            x[2] += delta_t * v[2] + (delta_t * delta_t / 2) * a[2];
+            const std::array<double, 3> v_summand = ArrayUtils::elementWiseScalarOp(delta_t, v, std::multiplies<double>());
+            const std::array<double, 3> a_summand = ArrayUtils::elementWiseScalarOp((delta_t * delta_t / 2), a, std::multiplies<double>());
+            // Combine v_summand and a_summand into a single summand
+            const std::array<double, 3> summand = ArrayUtils::elementWisePairOp(v_summand, a_summand, std::plus<double>());
+
+            x = ArrayUtils::elementWisePairOp(x, summand, std::plus<double>());
 
             p->setX(x);
         }
@@ -67,18 +76,19 @@ namespace calculators {
         for (auto p = particleContainer.begin(); p != particleContainer.end(); ++p) {
             // Get the current position, velocity, force and mass of the particle
             std::array<double, 3> v = p->getV();
-            std::array<double, 3> f = p->getF();
-            std::array<double, 3> old_f = p->getOldF();
-            double m = p->getM();
+            const std::array<double, 3> f = p->getF();
+            const std::array<double, 3> old_f = p->getOldF();
+            const double m = p->getM();
 
             // Calculate the average force
-            std::array<double, 3> avg_f = {(f[0] + old_f[0]) / 2, (f[1] + old_f[1]) / 2, (f[2] + old_f[2]) / 2};
+            std::array<double, 3> avg_f = ArrayUtils::elementWisePairOp(
+                    f, old_f,
+                    [](double a, double b) { return (a + b) / 2.0; } // Lambda function to calculate average
+            );
 
             // Update the particles new velocity using the Velocity-Störmer-Verlet method
-            v[0] += (delta_t * avg_f[0]) / m;
-            v[1] += (delta_t * avg_f[1]) / m;
-            v[2] += (delta_t * avg_f[2]) / m;
-
+            const std::array<double, 3> delta_v = ArrayUtils::elementWiseScalarOp(delta_t / m, avg_f, std::multiplies<double>());
+            v = ArrayUtils::elementWisePairOp(v, delta_v, std::plus<double>());
             p->setV(v);
         }
     }
