@@ -56,12 +56,12 @@ namespace calculators {
          * @param delta_t The time step used for the calculations.
          */
         virtual void calculateV(ParticleContainer &particleContainer, double delta_t) {
-            for (auto p = particleContainer.begin(); p != particleContainer.end(); ++p) {
+            for (auto & p : particleContainer) {
                 // Get the current position, velocity, force and mass of the particle
-                std::array<double, 3> v = p->getV();
-                const std::array<double, 3> f = p->getF();
-                const std::array<double, 3> old_f = p->getOldF();
-                const double m = p->getM();
+                std::array<double, 3> v = p.getV();
+                const std::array<double, 3> f = p.getF();
+                const std::array<double, 3> old_f = p.getOldF();
+                const double m = p.getM();
 
                 // Calculate the average force
                 std::array<double, 3> avg_f = ArrayUtils::elementWisePairOp(
@@ -73,7 +73,7 @@ namespace calculators {
                 const std::array<double, 3> delta_v = ArrayUtils::elementWiseScalarOp(delta_t / m, avg_f,
                                                                                       std::multiplies<>());
                 v = ArrayUtils::elementWisePairOp(v, delta_v, std::plus<>());
-                p->setV(v);
+                p.setV(v);
             }
         }
 
@@ -86,13 +86,13 @@ namespace calculators {
          * @param delta_t The time step used for the calculations.
          */
         virtual void calculateX(ParticleContainer &particleContainer, double delta_t) {
-            for (auto p = particleContainer.begin(); p != particleContainer.end(); ++p) {
+            for (auto & p : particleContainer) {
                 // Get the current position, velocity, force and mass of the particle
-                std::array<double, 3> x = p->getX();
-                const std::array<double, 3> v = p->getV();
-                const std::array<double, 3> f = p->getF();
+                std::array<double, 3> x = p.getX();
+                const std::array<double, 3> v = p.getV();
+                const std::array<double, 3> f = p.getF();
 
-                const double m = p->getM();
+                const double m = p.getM();
 
                 // Calculate the acceleration
                 const std::array<double, 3> a = ArrayUtils::elementWiseScalarOp(1.0 / m, f, std::multiplies<>());
@@ -109,7 +109,7 @@ namespace calculators {
 
                 x = ArrayUtils::elementWisePairOp(x, summand, std::plus<>());
 
-                p->setX(x);
+                p.setX(x);
             }
         }
     };

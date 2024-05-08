@@ -17,8 +17,8 @@ namespace calculators {
         // Iterate over all unique pairs of particles
         for (auto pair = particleContainer.pair_begin(); pair != particleContainer.pair_end(); ++pair) {
             // Get both particles
-            Particle& particle1 = pair->first.get();
-            Particle& particle2 = pair->second.get();
+            Particle &particle1 = pair->first.get();
+            Particle &particle2 = pair->second.get();
 
             // Get the positions and masses of the two particles
             const std::array<double, 3> x1 = particle1.getX();
@@ -29,12 +29,16 @@ namespace calculators {
             const double distance = ArrayUtils::L2Norm(dx);
 
             // Calculate the force between the two particles
-            const double forceMagnitude = - (24 * epsilon / (distance * distance)) * ((pow(sigma / distance, 6) - 2 * pow(sigma / distance, 12)));
-            std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(forceMagnitude, dx, std::multiplies<double>());
+            const double forceMagnitude = -(24 * epsilon / (distance * distance)) *
+                                          ((pow(sigma / distance, 6) - 2 * pow(sigma / distance, 12)));
+            std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(forceMagnitude, dx,
+                                                                          std::multiplies<double>());
 
             // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
-            const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(particle1.getF(), force, std::plus<double>());
-            const std::array<double, 3> newF2 = ArrayUtils::elementWisePairOp(particle2.getF(), force, std::minus<double>());
+            const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(particle1.getF(), force,
+                                                                              std::plus<double>());
+            const std::array<double, 3> newF2 = ArrayUtils::elementWisePairOp(particle2.getF(), force,
+                                                                              std::minus<double>());
             particle1.setF(newF1);
             particle2.setF(newF2);
         }
