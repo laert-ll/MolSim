@@ -37,4 +37,4 @@ void XYZWriter::plotParticles(int iteration, ParticleContainer &particleContaine
   file.close();
 }
 
-} // namespace outputWriters
+} // namespace out

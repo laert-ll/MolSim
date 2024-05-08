@@ -1,11 +1,11 @@
 #include "calculators/SVCalculator.h"
 #include "calculators/DummyCalculator.h"
-#include "io/FileReader.h"
+#include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"
 #include "test/CalculatorTest.h"
-#include "outputWriters/OutputWriter.h"
-#include "outputWriters/VTKWriter.h"
-#include "outputWriters/XYZWriter.h"
+#include "io/out/FileWriter.h"
+#include "io/out/VTKWriter.h"
+#include "io/out/XYZWriter.h"
 
 #include <iostream>
 #include <memory>
@@ -157,17 +157,18 @@ void performSimulation(ParticleContainer &particleContainer, double &delta_t, do
  * @return The exit status of the program.
  */
 int main(int argc, char *argsv[]) {
-    // Example call: ./MolSim ../input/eingabe-sonne.txt 0.01 1 true vtk sv
+    // Example call: ./MolSim ./resources/input-sun.txt 0.01 1 true vtk sv
 
     std::cout << "Hello from MolSim for PSE!" << std::endl;
 
-    FileReader fileReader;
+    ParticleGenerator particleGenerator;
+    FileReader fileReader(particleGenerator);
     double delta_t = 0.014; // default-delte_t
     double end_time = 1000; // default_end_time
     bool testEnabled = false;
     std::unique_ptr<outputWriters::OutputWriter> outputWriter;
     std::unique_ptr<calculators::Calculator> calculator;
-    ParticleContainer particleContainer = fileReader.readFile(argsv[1]);
+    ParticleContainer particleContainer = fileReader.loadParticles(argsv[1]);
 
     if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter, calculator)) {
         return 1;

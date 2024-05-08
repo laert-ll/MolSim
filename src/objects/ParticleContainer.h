@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <functional>
+#include <cmath>
 
 /**
  * Container to store particles and provide iterators for them.
@@ -28,7 +29,7 @@ public:
      * Method to add a particle to the container.
      * @param particle the particle to add
      */
-    void addParticle(const Particle& particle);
+    void addParticle(const Particle &particle);
 
     /**
      * Method to fill the vector of unique pairs with the references to particles.
@@ -69,4 +70,6 @@ public:
      * @return the number of particles
      */
     size_t getSize() const;
+
+    
 };
