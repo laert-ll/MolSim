@@ -16,24 +16,27 @@ namespace calculators {
 
         // Iterate over all unique pairs of particles
         for (auto pair = particleContainer.pair_begin(); pair != particleContainer.pair_end(); ++pair) {
+            // Get both particles
+            Particle& particle1 = pair->first.get();
+            Particle& particle2 = pair->second.get();
+
             // Get the positions and masses of the two particles
-            std::array<double, 3> x1 = pair->first.get().getX();
-            std::array<double, 3> x2 = pair->second.get().getX();
+            const std::array<double, 3> x1 = particle1.getX();
+            const std::array<double, 3> x2 = particle2.getX();
 
             // Calculate the distance vector and its norm
-            std::array<double, 3> dx = {x2[0] - x1[0], x2[1] - x1[1], x2[2] - x1[2]};
-            double distance = std::sqrt(dx[0] * dx[0] + dx[1] * dx[1] + dx[2] * dx[2]);
+            const std::array<double, 3> dx = ArrayUtils::elementWisePairOp(x2, x1, std::minus<double>());
+            const double distance = ArrayUtils::L2Norm(dx);
 
             // Calculate the force between the two particles
-            double distanceSquared = distance * distance;
-            double forceMagnitude = -24 * epsilon / distanceSquared * (pow(sigma / distance, 6) - 2 * pow(sigma / distance, 12));
-            std::array<double, 3> force = {forceMagnitude * dx[0], forceMagnitude * dx[1], forceMagnitude * dx[2]};
+            const double forceMagnitude = - (24 * epsilon / (distance * distance)) * ((pow(sigma / distance, 6) - 2 * pow(sigma / distance, 12)));
+            std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(forceMagnitude, dx, std::multiplies<double>());
 
             // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
-            std::array<double, 3> f1 = pair->first.get().getF();
-            std::array<double, 3> f2 = pair->second.get().getF();
-            pair->first.get().setF({f1[0] + force[0], f1[1] + force[1], f1[2] + force[2]});
-            pair->second.get().setF({f2[0] - force[0], f2[1] - force[1], f2[2] - force[2]});
+            const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(particle1.getF(), force, std::plus<double>());
+            const std::array<double, 3> newF2 = ArrayUtils::elementWisePairOp(particle2.getF(), force, std::minus<double>());
+            particle1.setF(newF1);
+            particle2.setF(newF2);
         }
     }
 }

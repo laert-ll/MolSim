@@ -1,5 +1,6 @@
 #include "calculators/SVCalculator.h"
 #include "calculators/DummyCalculator.h"
+#include "calculators/LJCalculator.h"
 #include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"
 #include "test/CalculatorTest.h"
@@ -158,32 +159,28 @@ void performSimulation(ParticleContainer &particleContainer, double &delta_t, do
  */
 int main(int argc, char *argsv[]) {
     // Example call: ./MolSim ./resources/input-sun.txt 0.01 1 true vtk sv
+    // Example call 2: ./MolSim ./resources/input-cuboid.txt
 
     std::cout << "Hello from MolSim for PSE!" << std::endl;
 
     ParticleGenerator particleGenerator;
     FileReader fileReader(particleGenerator);
-    double delta_t = 0.014; // default-delte_t
-    double end_time = 1000; // default_end_time
-    bool testEnabled = false;
-    std::unique_ptr<outputWriters::OutputWriter> outputWriter;
-    std::unique_ptr<calculators::Calculator> calculator;
-    ParticleContainer particleContainer = fileReader.loadParticles(argsv[1]);
+    double delta_t = 0.1; // default-delte_t
+    double end_time = 100; // default_end_time
+    std::unique_ptr<outputWriters::OutputWriter> outputWriter = std::make_unique<outputWriters::VTKWriter>();;
+//    std::unique_ptr<calculators::Calculator> calculator;
+    std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5);
+//    ParticleContainer particleContainer = fileReader.loadParticles(argsv[1]);
+    ParticleContainer particleContainer = fileReader.loadCuboid(argsv[1]);
 
-    if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter, calculator)) {
-        return 1;
-    }
+//    if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter, calculator)) {
+//        return 1;
+//    }
 
     std::cout << "Starting simulation with delta_t: " << delta_t << " and end_time: " << end_time << std::endl;
     performSimulation(particleContainer, delta_t, end_time, outputWriter, calculator);
     std::cout << "Simulation completed." << std::endl;
 
-    // Run Test
-    if (testEnabled) {
-        CalculatorTest calculatorTest(delta_t);
-        calculatorTest.setCalculator(std::move(calculator));
-        calculatorTest.runTest();
-    }
 
     return 0;
 }

@@ -38,7 +38,6 @@ namespace calculators {
             const double scalar = (m1 * m2) / std::pow(distance, 3);
             const std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(scalar, dx, std::multiplies<double>());
 
-
             // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
             const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(particle1.getF(), force, std::plus<double>());
             const std::array<double, 3> newF2 = ArrayUtils::elementWisePairOp(particle2.getF(), force, std::minus<double>());

@@ -16,8 +16,8 @@ namespace calculators {
      */
     class LJCalculator : public Calculator {
     private:
-        double sigma = 1;
-        double epsilon = 5;
+        const double sigma;
+        const double epsilon;
 
         /**
          * Calculates the force between all pairs of unique particles considering the third Newton's law.

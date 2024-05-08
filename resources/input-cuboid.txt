@@ -13,7 +13,8 @@
 # * initial velocities of particles per dimension (3 double value)
 # * mean velocity of the Brownian Motion (1 double value)
 #
-# llf-coord      numParticles        distance       mass        startV          meanV
-1
-0.0 0.0 0.0      10 10 10            1.0            1.0         1.0 1.0 1.0     1.0
+# llf-coord      numParticles     distance       mass        startV          meanV
+2
+0.0 0.0 0.0      40 8 1           1.1225         1.0         0.0 0.0 0.0     0.1
+15.0 15.0 0.0    8 8 1            1.1225         1.0         0.0 -10.0 0.0   0.1
 

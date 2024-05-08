@@ -49,6 +49,7 @@ ParticleContainer FileReader::loadCuboid(const std::string &filepath) {
 
     auto lines = readFileLines(filepath);
     int num_cuboids = std::stoi(lines[0]);
+    std::cout << "num_cuboids: " << num_cuboids << std::endl;
 
     for (int i = 1; i < num_cuboids + 1; ++i) {
         std::istringstream datastream(lines[i]);
@@ -64,7 +65,9 @@ ParticleContainer FileReader::loadCuboid(const std::string &filepath) {
         }
 
         CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV);
-        particleContainer = particleGenerator.generateCuboid(cuboidParams);
+        std::cout << "Generating cuboid with particle number: " << numParticles[0] << ", " << numParticles[1] << ", " << numParticles[2] << std::endl;
+        particleGenerator.generateCuboid(cuboidParams, particleContainer);
+        std::cout << "Generating cuboid completed" << std::endl;
     }
 
     return particleContainer;
