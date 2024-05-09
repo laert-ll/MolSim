@@ -60,7 +60,7 @@ void VTKWriter::writeFile(const std::string &filename, int iteration) {
 
 void VTKWriter::plotParticle(Particle &p) {
     if (vtkFile->UnstructuredGrid().present()) {
-        std::cout << "UnstructuredGrid is present" << std::endl;
+//        std::cout << "UnstructuredGrid is present" << std::endl;
     } else {
         std::cout << "ERROR: No UnstructuredGrid present" << std::endl;
     }
@@ -109,4 +109,4 @@ void VTKWriter::plotParticles(int iteration, ParticleContainer &particleContaine
     writer.writeFile(filename, iteration);
 }
 
-} // namespace outputWriters
+} // namespace out

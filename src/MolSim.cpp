@@ -1,19 +1,32 @@
 #include "calculators/SVCalculator.h"
 #include "calculators/DummyCalculator.h"
-#include "io/FileReader.h"
+#include "calculators/LJCalculator.h"
+#include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"
 #include "test/CalculatorTest.h"
-#include "outputWriters/OutputWriter.h"
-#include "outputWriters/VTKWriter.h"
-#include "outputWriters/XYZWriter.h"
+#include "io/out/FileWriter.h"
+#include "io/out/VTKWriter.h"
+#include "io/out/XYZWriter.h"
 
 #include <iostream>
 #include <memory>
 
-constexpr double start_time = 0;
-constexpr double default_end_time = 1000;
-constexpr double default_delta_t = 0.014;
-
+/**
+ * @brief Processes the command line arguments and sets the corresponding variables.
+ *
+ * This function processes the command line arguments and sets the delta_t, end_time, testEnabled,
+ * outputWriter, and calculator variables based on the provided arguments.
+ *
+ * @param argc The number of command line arguments.
+ * @param argv The array of command line arguments.
+ * @param delta_t Reference to the delta_t variable to be set.
+ * @param end_time Reference to the end_time variable to be set.
+ * @param testEnabled Reference to the testEnabled variable to be set.
+ * @param outputWriter Reference to the outputWriter unique pointer to be set.
+ * @param calculator Reference to the calculator unique pointer to be set.
+ *
+ * @return True if the arguments were processed successfully, false otherwise.
+ */
 bool processArguments(int argc, char *argv[], double &delta_t, double &end_time, bool &testEnabled,
                       std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
                       std::unique_ptr<calculators::Calculator> &calculator) {
@@ -98,65 +111,78 @@ bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
     return true;
 }
 
-bool performSimulation(ParticleContainer &particleContainer, double &delta_t, double &end_time,
+/**
+ * @brief Performs the simulation.
+ *
+ * This function performs the simulation by calling the calculate method of the calculator for each
+ * time step and writing the particle positions to the output file at regular intervals.
+ *
+ * @param particleContainer The particle container containing the particles.
+ * @param delta_t The time step size.
+ * @param end_time The end time of the simulation.
+ * @param outputWriter The output writer to be used.
+ * @param calculator The calculator to be used.
+ */
+void performSimulation(ParticleContainer &particleContainer, double &delta_t, double &end_time,
                        std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
                        std::unique_ptr<calculators::Calculator> &calculator) {
     const std::string &filename = "MD";
 
-    double current_time = start_time;
+    double current_time = 0; // start_time
     int iteration = 0;
 
     while (current_time < end_time) {
-        if (iteration > 1e6) {
-            std::cerr << "Timeout. Number of iterations exceeded 1 Mio." << std::endl;
-            return false;
-        }
         calculator->calculate(particleContainer, delta_t);
 
         iteration++;
         if (iteration % 10 == 0) {
             outputWriter->plotParticles(iteration, particleContainer, filename);
         }
-        std::cout << "Iteration " << iteration << " finished." << std::endl;
+
+        if (iteration % 100 == 0) {
+            std::cout << "Iteration " << iteration << " finished." << std::endl;
+        }
 
         current_time += delta_t;
     }
 
     std::cout << "output written. Terminating..." << std::endl;
-    return true;
 }
 
+/**
+ * @brief The main function of the program.
+ *
+ * This function is the entry point of the program. It reads the command line arguments, processes
+ * them, reads the input file, performs the simulation, and optionally runs the test.
+ *
+ * @param argc The number of command line arguments.
+ * @param argsv The array of command line arguments.
+ *
+ * @return The exit status of the program.
+ */
 int main(int argc, char *argsv[]) {
-    // Example call: ./MolSim ../input/eingabe-sonne.txt 0.01 1 true vtk sv
+    // Example call: ./MolSim ./resources/input-sun.txt 0.01 1 true vtk sv
+    // Example call 2: ./MolSim ./resources/input-cuboid.txt
 
     std::cout << "Hello from MolSim for PSE!" << std::endl;
 
-    FileReader fileReader;
-    double delta_t = default_delta_t;
-    double end_time = default_end_time;
-    bool testEnabled = false;
-    std::unique_ptr<outputWriters::OutputWriter> outputWriter;
-    std::unique_ptr<calculators::Calculator> calculator;
-    ParticleContainer particleContainer = fileReader.readFile(argsv[1]);
+    ParticleGenerator particleGenerator;
+    FileReader fileReader(particleGenerator);
+    double delta_t = 0.0002; // default-delte_t
+    double end_time = 5; // default_end_time
+    std::unique_ptr<outputWriters::OutputWriter> outputWriter = std::make_unique<outputWriters::VTKWriter>();;
+//    std::unique_ptr<calculators::Calculator> calculator;
+    std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5);
+//    ParticleContainer particleContainer = fileReader.loadParticles(argsv[1]);
+    ParticleContainer particleContainer = fileReader.loadCuboid(argsv[1]);
 
-    if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter, calculator)) {
-        return 1;
-    }
+//    if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter, calculator)) {
+//        return 1;
+//    }
 
     std::cout << "Starting simulation with delta_t: " << delta_t << " and end_time: " << end_time << std::endl;
-    bool success = performSimulation(particleContainer, delta_t, end_time, outputWriter, calculator);
-    if (!success) {
-        std::cout << "Error occurred during the simulation." << std::endl;
-        return 1;
-    }
-    std::cout << "Simulation completed successfully" << std::endl;
-
-    // Run Test
-    if (testEnabled) {
-        CalculatorTest calculatorTest(delta_t);
-        calculatorTest.setCalculator(std::move(calculator));
-        calculatorTest.runTest();
-    }
+    performSimulation(particleContainer, delta_t, end_time, outputWriter, calculator);
+    std::cout << "Simulation completed." << std::endl;
 
     return 0;
 }
