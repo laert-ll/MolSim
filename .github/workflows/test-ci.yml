@@ -1,0 +1,29 @@
+name: CI testing pipeline
+
+on:
+  push:
+    branches: [ "main", "Assignment2" ]
+  pull_request:
+    branches: [ "main", "Assignment2" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Dependencies
+      run: sudo apt install libxerces-c-dev
+
+    - name: Create build directory
+      run: mkdir build
+
+    - name: CMake
+      run: cmake -D CMAKE_CXX_FLAGS="-fsanitize=address" -B ${{github.workspace}}/build
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build
+
+    - name: Test
+      run: ctest -V ${{github.workspace}}/build
