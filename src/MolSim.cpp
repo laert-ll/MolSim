@@ -3,7 +3,6 @@
 #include "calculators/LJCalculator.h"
 #include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"
-#include "test/CalculatorTest.h"
 #include "io/out/FileWriter.h"
 #include "io/out/VTKWriter.h"
 #include "io/out/XYZWriter.h"
@@ -14,20 +13,19 @@
 /**
  * @brief Processes the command line arguments and sets the corresponding variables.
  *
- * This function processes the command line arguments and sets the delta_t, end_time, testEnabled,
+ * This function processes the command line arguments and sets the delta_t, end_time,
  * outputWriter, and calculator variables based on the provided arguments.
  *
  * @param argc The number of command line arguments.
  * @param argv The array of command line arguments.
  * @param delta_t Reference to the delta_t variable to be set.
  * @param end_time Reference to the end_time variable to be set.
- * @param testEnabled Reference to the testEnabled variable to be set.
  * @param outputWriter Reference to the outputWriter unique pointer to be set.
  * @param calculator Reference to the calculator unique pointer to be set.
  *
  * @return True if the arguments were processed successfully, false otherwise.
  */
-bool processArguments(int argc, char *argv[], double &delta_t, double &end_time, bool &testEnabled,
+bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
                       std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
                       std::unique_ptr<calculators::Calculator> &calculator) {
     if (argc < 2 || argc > 6) {
@@ -68,8 +66,8 @@ bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
         }
     }
 
-    if (argc == 7) {
-        std::string calculatorArg = argv[6];
+    if (argc == 6) {
+        std::string calculatorArg = argv[5];
         std::transform(calculatorArg.begin(), calculatorArg.end(), calculatorArg.begin(), ::tolower);
         if (calculatorArg == "sv") {
             calculator = std::make_unique<calculators::SVCalculator>();
@@ -139,7 +137,7 @@ void performSimulation(ParticleContainer &particleContainer, double &delta_t, do
  * @brief The main function of the program.
  *
  * This function is the entry point of the program. It reads the command line arguments, processes
- * them, reads the input file, performs the simulation, and optionally runs the test.
+ * them, reads the input file and performs the simulation.
  *
  * @param argc The number of command line arguments.
  * @param argsv The array of command line arguments.
@@ -162,7 +160,7 @@ int main(int argc, char *argsv[]) {
 //    ParticleContainer particleContainer = fileReader.loadParticles(argsv[1]);
     ParticleContainer particleContainer = fileReader.loadCuboid(argsv[1]);
 
-//    if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter, calculator)) {
+//    if (!processArguments(argc, argsv, delta_t, end_time, outputWriter, calculator)) {
 //        return 1;
 //    }
 
