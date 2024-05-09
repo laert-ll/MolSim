@@ -30,7 +30,7 @@
 bool processArguments(int argc, char *argv[], double &delta_t, double &end_time, bool &testEnabled,
                       std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
                       std::unique_ptr<calculators::Calculator> &calculator) {
-    if (argc < 2 || argc > 7) {
+    if (argc < 2 || argc > 6) {
         std::cerr << "Erroneous programme call! " << std::endl;
         std::cerr << "Usage: ./MolSym input_filename [delta_t] [end_time] [true]" << std::endl;
         return false;
@@ -53,21 +53,7 @@ bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
     }
 
     if (argc >= 5) {
-        std::string testEnabledArg = argv[4];
-        std::transform(testEnabledArg.begin(), testEnabledArg.end(), testEnabledArg.begin(), ::tolower);
-        if (testEnabledArg == "true") {
-            testEnabled = true;
-        } else if (testEnabledArg == "false") {
-            testEnabled = false;
-        } else {
-            std::cerr << "Invalid option for testEnabled: " << argv[4] << std::endl;
-            std::cerr << "Only 'true' or 'false' are allowed." << std::endl;
-            return false;
-        }
-    }
-
-    if (argc >= 6) {
-        std::string outputWriterArg = argv[5];
+        std::string outputWriterArg = argv[4];
         std::transform(outputWriterArg.begin(), outputWriterArg.end(), outputWriterArg.begin(), ::tolower);
         if (outputWriterArg == "vtk") {
             outputWriter = std::make_unique<outputWriters::VTKWriter>();
