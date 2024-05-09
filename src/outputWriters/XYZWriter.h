@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "../../objects/Particle.h"
-#include "FileWriter.h"
+#include "../objects/Particle.h"
+#include "OutputWriter.h"
 
 #include <fstream>
 #include <list>
@@ -41,4 +41,4 @@ namespace outputWriters {
          */
         void plotParticles(int iteration, ParticleContainer &particleContainer, const std::string &filename);
     };
-}// namespace out
+}// namespace outputWriters
