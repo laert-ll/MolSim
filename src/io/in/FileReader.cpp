@@ -19,7 +19,7 @@ std::vector<std::string> readFileLines(const std::string &filepath);
 
 ParticleContainer FileReader::loadParticles(const std::string &filepath) {
     ParticleContainer particleContainer;
-    std::array<double, 3> x, v;
+    std::array<double, 3> x{}, v{};
     double m;
 
     auto lines = readFileLines(filepath);
@@ -68,6 +68,7 @@ ParticleContainer FileReader::loadCuboid(const std::string &filepath) {
         std::cout << "Generating cuboid with particle number: " << numParticles[0] << ", " << numParticles[1] << ", " << numParticles[2] << std::endl;
         particleGenerator.generateCuboid(cuboidParams, particleContainer);
         std::cout << "Generating cuboid completed" << std::endl;
+        particleContainer.initializePairs();
     }
 
     return particleContainer;

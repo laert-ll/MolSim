@@ -138,7 +138,10 @@ void performSimulation(ParticleContainer &particleContainer, double &delta_t, do
         if (iteration % 10 == 0) {
             outputWriter->plotParticles(iteration, particleContainer, filename);
         }
-        std::cout << "Iteration " << iteration << " finished." << std::endl;
+
+        if (iteration % 100 == 0) {
+            std::cout << "Iteration " << iteration << " finished." << std::endl;
+        }
 
         current_time += delta_t;
     }
@@ -165,8 +168,8 @@ int main(int argc, char *argsv[]) {
 
     ParticleGenerator particleGenerator;
     FileReader fileReader(particleGenerator);
-    double delta_t = 0.1; // default-delte_t
-    double end_time = 100; // default_end_time
+    double delta_t = 0.0002; // default-delte_t
+    double end_time = 5; // default_end_time
     std::unique_ptr<outputWriters::OutputWriter> outputWriter = std::make_unique<outputWriters::VTKWriter>();;
 //    std::unique_ptr<calculators::Calculator> calculator;
     std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5);
@@ -180,7 +183,6 @@ int main(int argc, char *argsv[]) {
     std::cout << "Starting simulation with delta_t: " << delta_t << " and end_time: " << end_time << std::endl;
     performSimulation(particleContainer, delta_t, end_time, outputWriter, calculator);
     std::cout << "Simulation completed." << std::endl;
-
 
     return 0;
 }

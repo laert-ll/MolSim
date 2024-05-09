@@ -56,6 +56,5 @@ namespace calculators {
          * @param delta_t The time step used for the calculations.
          */
         void calculateV(ParticleContainer &particleContainer, double delta_t);
-
     };
 }
