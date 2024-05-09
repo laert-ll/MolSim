@@ -68,6 +68,10 @@ void Particle::setOldF(const std::array<double, 3> &newOldF) {
     old_f = newOldF;
 }
 
+void Particle::setM(const double newMass) {
+    m = newMass;
+}
+
 void Particle::setVolume(const double newVolume) {
     volume = newVolume;
 }

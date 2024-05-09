@@ -12,19 +12,25 @@ if(NOT CMAKE_BUILD_TYPE)
             "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
+add_subdirectory(gtest)
+
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-    # header don't need to be included but this might be necessary for some IDEs
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+)
 
-    # collect tests
-    "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/test/*.h"
+file(GLOB_RECURSE TEST_SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/test/**/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/test/**/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
 )
 
 # create make target
 add_executable(MolSim ${MY_SRC})
+
+add_executable(MolSimTests ${TEST_SOURCES})
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
@@ -39,11 +45,24 @@ target_include_directories(MolSim
             ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+target_include_directories(MolSimTests 
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/test
+)
+
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
 )
+
+target_link_libraries(MolSimTests 
+        PRIVATE 
+            gtest 
+            gtest_main
+)
+
+add_test(NAME MolSimTests COMMAND MolSimTests)
 
 # activate all compiler warnings. Clean up your code :P
 # depending on the compiler different flags are used
@@ -57,3 +76,4 @@ target_compile_options(MolSim
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
 include(doxygen)
+include(CTest)
