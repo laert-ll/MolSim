@@ -7,7 +7,7 @@
 #include "io/out/FileWriter.h"
 #include "io/out/VTKWriter.h"
 #include "io/out/XYZWriter.h"
-
+#include "spdlog/spdlog.h"
 #include <iostream>
 #include <memory>
 
@@ -140,13 +140,13 @@ void performSimulation(ParticleContainer &particleContainer, double &delta_t, do
         }
 
         if (iteration % 100 == 0) {
-            std::cout << "Iteration " << iteration << " finished." << std::endl;
+            spdlog::info("Iteration {} finished.", iteration);
         }
 
         current_time += delta_t;
     }
 
-    std::cout << "output written. Terminating..." << std::endl;
+    spdlog::info("Output written. Terminating...");
 }
 
 /**
@@ -163,12 +163,12 @@ void performSimulation(ParticleContainer &particleContainer, double &delta_t, do
 int main(int argc, char *argsv[]) {
     // Example call: ./MolSim ./resources/input-sun.txt 0.01 1 true vtk sv
     // Example call 2: ./MolSim ./resources/input-cuboid.txt
-
-    std::cout << "Hello from MolSim for PSE!" << std::endl;
+    spdlog::set_level(spdlog::level::info); // replace with command line option tool
+    spdlog::info("Hello, {}!", "World");
 
     ParticleGenerator particleGenerator;
     FileReader fileReader(particleGenerator);
-    double delta_t = 0.0002; // default-delte_t
+    double delta_t = 5; // default-delte_t
     double end_time = 5; // default_end_time
     std::unique_ptr<outputWriters::OutputWriter> outputWriter = std::make_unique<outputWriters::VTKWriter>();;
 //    std::unique_ptr<calculators::Calculator> calculator;
@@ -179,10 +179,9 @@ int main(int argc, char *argsv[]) {
 //    if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter, calculator)) {
 //        return 1;
 //    }
-
-    std::cout << "Starting simulation with delta_t: " << delta_t << " and end_time: " << end_time << std::endl;
+    spdlog::info("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
     performSimulation(particleContainer, delta_t, end_time, outputWriter, calculator);
-    std::cout << "Simulation completed." << std::endl;
+    spdlog::info("Simulation completed.");
 
     return 0;
 }

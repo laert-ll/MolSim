@@ -7,6 +7,7 @@
 
 #include "VTKWriter.h"
 
+#include "spdlog/spdlog.h"
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>
@@ -60,9 +61,9 @@ void VTKWriter::writeFile(const std::string &filename, int iteration) {
 
 void VTKWriter::plotParticle(Particle &p) {
     if (vtkFile->UnstructuredGrid().present()) {
-//        std::cout << "UnstructuredGrid is present" << std::endl;
+        spdlog::trace("UnstructuredGrid is present");
     } else {
-        std::cout << "ERROR: No UnstructuredGrid present" << std::endl;
+        spdlog::error("ERROR: No UnstructuredGrid present");
     }
 
     PointData::DataArray_sequence &pointDataSequence =

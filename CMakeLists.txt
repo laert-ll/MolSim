@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
+# Enable the FetchContent module
+include(FetchContent)
+
 # define project name, version
 project(PSEMolDyn_GroupC VERSION 0.0.1)
 
@@ -12,6 +15,15 @@ if(NOT CMAKE_BUILD_TYPE)
             "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
+# ----------------------------------------Fetching Libraries-------------------------------------------------
+# Fetch spdlog from GitHub
+FetchContent_Declare(
+        spdlog
+        GIT_REPOSITORY https://github.com/gabime/spdlog.git
+        GIT_TAG        v1.x.x  # Replace with the version you want to use
+)
+# ------------------------------------------------------------------------------------------------------------
+
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
@@ -22,6 +34,11 @@ file(GLOB_RECURSE MY_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/test/*.h"
 )
+
+if(NOT TARGET spdlog)
+    # Stand-alone build
+    find_package(spdlog REQUIRED)
+endif()
 
 # create make target
 add_executable(MolSim ${MY_SRC})
@@ -43,6 +60,8 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
+        PRIVATE
+            spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
 
 # activate all compiler warnings. Clean up your code :P
