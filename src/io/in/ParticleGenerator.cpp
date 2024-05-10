@@ -6,11 +6,11 @@
 #include "../../utils/ArrayUtils.h"
 
 Particle ParticleGenerator::generateParticle(const ParticleParameters &parameters) {
-    return Particle(parameters.getPosition(),
+    return {parameters.getPosition(),
                     parameters.getVelocity(),
                     parameters.getMass(),
                     parameters.getVolume(),
-                    parameters.getType());
+                    parameters.getType()};
 }
 
 void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, ParticleContainer& particleContainer) {

@@ -14,7 +14,7 @@ public:
 
     ~ParticleGenerator() = default;
 
-    Particle generateParticle(const ParticleParameters &parameters);
+    static Particle generateParticle(const ParticleParameters &parameters);
 
-    void generateCuboid(const CuboidParameters &parameters, ParticleContainer& particleContainer);
+    static void generateCuboid(const CuboidParameters &parameters, ParticleContainer& particleContainer);
 };
