@@ -150,15 +150,13 @@ int main(int argc, char *argsv[]) {
 
     std::cout << "Hello from MolSim for PSE!" << std::endl;
 
-    ParticleGenerator particleGenerator;
-    FileReader fileReader(particleGenerator);
     double delta_t = 0.0002; // default-delte_t
     double end_time = 5; // default_end_time
     std::unique_ptr<outputWriters::OutputWriter> outputWriter = std::make_unique<outputWriters::VTKWriter>();;
 //    std::unique_ptr<calculators::Calculator> calculator;
     std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5);
 //    ParticleContainer particleContainer = fileReader.loadParticles(argsv[1]);
-    ParticleContainer particleContainer = fileReader.loadCuboid(argsv[1]);
+    ParticleContainer particleContainer = FileReader::loadCuboid(argsv[1]);
 
 //    if (!processArguments(argc, argsv, delta_t, end_time, outputWriter, calculator)) {
 //        return 1;
