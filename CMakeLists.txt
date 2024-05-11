@@ -20,9 +20,10 @@ add_subdirectory(libs/gtest)
 # Fetch spdlog from GitHub
 FetchContent_Declare(
         spdlog
-        GIT_REPOSITORY https://github.com/gabime/spdlog.git
-        GIT_TAG        v1.x.x  # Replace with the version you want to use
+        GIT_REPOSITORY https://github.com/gabime/spdlog
+        GIT_TAG        v1.x
 )
+FetchContent_MakeAvailable(spdlog)
 # ------------------------------------------------------------------------------------------------------------
 
 # collect all cpp files
@@ -37,11 +38,6 @@ file(GLOB_RECURSE TEST_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
 )
-
-if(NOT TARGET spdlog)
-    # Stand-alone build
-    find_package(spdlog REQUIRED)
-endif()
 
 #------------------------------------------LOGGING---------------------------------------------------------
 # get the log level from the command line
@@ -89,6 +85,7 @@ target_link_libraries(MolSim
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
 
+find_package(fmt REQUIRED)
 target_link_libraries(MolSimTests 
         PRIVATE 
             gtest 
