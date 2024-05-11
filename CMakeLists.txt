@@ -25,8 +25,6 @@ FetchContent_Declare(
 )
 # ------------------------------------------------------------------------------------------------------------
 
-add_subdirectory(gtest)
-
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
