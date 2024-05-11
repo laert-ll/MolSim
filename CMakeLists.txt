@@ -16,7 +16,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 add_subdirectory(libs/gtest)
-# ----------------------------------------Fetching Libraries-------------------------------------------------
+# ----------------------------------------Adding Libraries-------------------------------------------------
 # Fetch spdlog from GitHub
 FetchContent_Declare(
         spdlog
@@ -24,6 +24,24 @@ FetchContent_Declare(
         GIT_TAG        v1.x
 )
 FetchContent_MakeAvailable(spdlog)
+
+# Add ExternalProject_Add for fmt
+include(ExternalProject)
+ExternalProject_Add(
+        fmt_external
+        GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+        GIT_TAG 10.x
+        PREFIX ${CMAKE_BINARY_DIR}/external/fmt
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+)
+
+# Specify include directory
+ExternalProject_Get_Property(fmt_external INSTALL_DIR)
+include_directories(${INSTALL_DIR}/include)
+
+# Specify fmt library
+add_library(fmt INTERFACE IMPORTED)
+add_dependencies(fmt fmt_external)
 # ------------------------------------------------------------------------------------------------------------
 
 # collect all cpp files
@@ -85,12 +103,12 @@ target_link_libraries(MolSim
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
 
-find_package(fmt REQUIRED)
 target_link_libraries(MolSimTests 
         PRIVATE 
             gtest 
             gtest_main
-            fmt::fmt
+            spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
+            fmt
 )
 
 add_test(NAME MolSimTests COMMAND MolSimTests)
