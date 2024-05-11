@@ -12,7 +12,7 @@ if(NOT CMAKE_BUILD_TYPE)
             "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-add_subdirectory(gtest)
+add_subdirectory(libs/gtest)
 
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
