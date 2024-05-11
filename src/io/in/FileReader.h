@@ -17,16 +17,13 @@
  */
 class FileReader {
 
-private:
-    ParticleGenerator particleGenerator;
-
 public:
     /**
      * Constructor that initializes the particleGenerator.
      *
      * @param generator The ParticleGenerator to use for particle data.
      */
-    explicit FileReader(const ParticleGenerator& generator) : particleGenerator(generator) {}
+    FileReader() = default;
 
 
     ~FileReader() = default;
@@ -37,7 +34,7 @@ public:
      * @param filepath The path to the file to read particle data from.
      * @return A ParticleContainer containing the particles read from the file.
      */
-    ParticleContainer loadParticles(const std::string& filepath);
+    static ParticleContainer loadParticles(const std::string& filepath);
 
-    ParticleContainer loadCuboid(const std::string& filepath);
+    static ParticleContainer loadCuboid(const std::string& filepath);
 };

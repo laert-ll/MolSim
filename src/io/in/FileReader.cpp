@@ -32,7 +32,7 @@ ParticleContainer FileReader::loadParticles(const std::string &filepath) {
         datastream >> m;
 
         ParticleParameters parameters(x, v, m, 0, 0);
-        Particle newParticle = particleGenerator.generateParticle(parameters);
+        Particle newParticle = ParticleGenerator::generateParticle(parameters);
         particleContainer.addParticle(newParticle);
     }
 
@@ -43,8 +43,8 @@ ParticleContainer FileReader::loadParticles(const std::string &filepath) {
 
 ParticleContainer FileReader::loadCuboid(const std::string &filepath) {
     ParticleContainer particleContainer;
-    std::array<double, 3> llf, startV;
-    std::array<size_t, 3> numParticles;
+    std::array<double, 3> llf{}, startV{};
+    std::array<size_t, 3> numParticles{};
     double distance, mass, meanV;
 
     auto lines = readFileLines(filepath);
@@ -67,7 +67,7 @@ ParticleContainer FileReader::loadCuboid(const std::string &filepath) {
         CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV);
         SPDLOG_INFO("Generating cuboid with particle number: {}, {}, {}", numParticles[0], numParticles[1],
                     numParticles[2]);
-        particleGenerator.generateCuboid(cuboidParams, particleContainer);
+        ParticleGenerator::generateCuboid(cuboidParams, particleContainer);
         SPDLOG_INFO("Generating cuboid completed");
         particleContainer.initializePairs();
     }

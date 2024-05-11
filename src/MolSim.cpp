@@ -3,7 +3,6 @@
 #include "calculators/LJCalculator.h"
 #include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"
-#include "test/CalculatorTest.h"
 #include "io/out/FileWriter.h"
 #include "io/out/VTKWriter.h"
 #include "io/out/XYZWriter.h"
@@ -14,23 +13,22 @@
 /**
  * @brief Processes the command line arguments and sets the corresponding variables.
  *
- * This function processes the command line arguments and sets the delta_t, end_time, testEnabled,
+ * This function processes the command line arguments and sets the delta_t, end_time,
  * outputWriter, and calculator variables based on the provided arguments.
  *
  * @param argc The number of command line arguments.
  * @param argv The array of command line arguments.
  * @param delta_t Reference to the delta_t variable to be set.
  * @param end_time Reference to the end_time variable to be set.
- * @param testEnabled Reference to the testEnabled variable to be set.
  * @param outputWriter Reference to the outputWriter unique pointer to be set.
  * @param calculator Reference to the calculator unique pointer to be set.
  *
  * @return True if the arguments were processed successfully, false otherwise.
  */
-bool processArguments(int argc, char *argv[], double &delta_t, double &end_time, bool &testEnabled,
+bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
                       std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
                       std::unique_ptr<calculators::Calculator> &calculator) {
-    if (argc < 2 || argc > 7) {
+    if (argc < 2 || argc > 6) {
         std::cerr << "Erroneous programme call! " << std::endl;
         std::cerr << "Usage: ./MolSym input_filename [delta_t] [end_time] [true]" << std::endl;
         return false;
@@ -53,21 +51,7 @@ bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
     }
 
     if (argc >= 5) {
-        std::string testEnabledArg = argv[4];
-        std::transform(testEnabledArg.begin(), testEnabledArg.end(), testEnabledArg.begin(), ::tolower);
-        if (testEnabledArg == "true") {
-            testEnabled = true;
-        } else if (testEnabledArg == "false") {
-            testEnabled = false;
-        } else {
-            std::cerr << "Invalid option for testEnabled: " << argv[4] << std::endl;
-            std::cerr << "Only 'true' or 'false' are allowed." << std::endl;
-            return false;
-        }
-    }
-
-    if (argc >= 6) {
-        std::string outputWriterArg = argv[5];
+        std::string outputWriterArg = argv[4];
         std::transform(outputWriterArg.begin(), outputWriterArg.end(), outputWriterArg.begin(), ::tolower);
         if (outputWriterArg == "vtk") {
             outputWriter = std::make_unique<outputWriters::VTKWriter>();
@@ -82,8 +66,8 @@ bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
         }
     }
 
-    if (argc == 7) {
-        std::string calculatorArg = argv[6];
+    if (argc == 6) {
+        std::string calculatorArg = argv[5];
         std::transform(calculatorArg.begin(), calculatorArg.end(), calculatorArg.begin(), ::tolower);
         if (calculatorArg == "sv") {
             calculator = std::make_unique<calculators::SVCalculator>();
@@ -153,7 +137,7 @@ void performSimulation(ParticleContainer &particleContainer, double &delta_t, do
  * @brief The main function of the program.
  *
  * This function is the entry point of the program. It reads the command line arguments, processes
- * them, reads the input file, performs the simulation, and optionally runs the test.
+ * them, reads the input file and performs the simulation.
  *
  * @param argc The number of command line arguments.
  * @param argsv The array of command line arguments.
@@ -166,17 +150,15 @@ int main(int argc, char *argsv[]) {
     spdlog::set_level(spdlog::level::debug); // TODO: this should be changed to the wanted loglevel
     SPDLOG_DEBUG("Test debug statement");
 
-    ParticleGenerator particleGenerator;
-    FileReader fileReader(particleGenerator);
-    double delta_t = 5; // default-delte_t
+    double delta_t = 0.0002; // default-delte_t
     double end_time = 5; // default_end_time
     std::unique_ptr<outputWriters::OutputWriter> outputWriter = std::make_unique<outputWriters::VTKWriter>();;
 //    std::unique_ptr<calculators::Calculator> calculator;
     std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5);
 //    ParticleContainer particleContainer = fileReader.loadParticles(argsv[1]);
-    ParticleContainer particleContainer = fileReader.loadCuboid(argsv[1]);
+    ParticleContainer particleContainer = FileReader::loadCuboid(argsv[1]);
 
-//    if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter, calculator)) {
+//    if (!processArguments(argc, argsv, delta_t, end_time, outputWriter, calculator)) {
 //        return 1;
 //    }
     SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);

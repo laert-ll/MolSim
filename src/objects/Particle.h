@@ -84,6 +84,8 @@ public:
 
     void setOldF(const std::array<double, 3> &newOldF);
 
+    void setM(const double mass);
+
     void setVolume(const double volume);
 
     bool operator==(Particle &other);
