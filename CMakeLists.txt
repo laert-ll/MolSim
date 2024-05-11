@@ -40,6 +40,21 @@ if(NOT TARGET spdlog)
     find_package(spdlog REQUIRED)
 endif()
 
+#------------------------------------------LOGGING---------------------------------------------------------
+# get the log level from the command line
+set(log_level "INFO" CACHE STRING "Log level")
+
+# define the valid log levels
+set(valid_log_levels "TRACE" "DEBUG" "INFO" "WARN" "ERROR" "CRITICAL")
+
+# check if the log level is valid
+if(NOT log_level IN_LIST valid_log_levels)
+    message(FATAL_ERROR "Invalid log level: ${log_level}. Valid log levels are: ${valid_log_levels}")
+endif()
+
+# define the SPDLOG_ACTIVE_LEVEL macro
+add_definitions(-DSPDLOG_ACTIVE_LEVEL=${log_level})
+#-----------------------------------------------------------------------------------------------------------
 # create make target
 add_executable(MolSim ${MY_SRC})
 

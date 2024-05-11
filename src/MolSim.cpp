@@ -163,8 +163,8 @@ void performSimulation(ParticleContainer &particleContainer, double &delta_t, do
 int main(int argc, char *argsv[]) {
     // Example call: ./MolSim ./resources/input-sun.txt 0.01 1 true vtk sv
     // Example call 2: ./MolSim ./resources/input-cuboid.txt
-    spdlog::set_level(spdlog::level::info); // replace with command line option tool
-    spdlog::info("Hello, {}!", "World");
+    spdlog::set_level(spdlog::level::debug); // TODO: this should be changed to the wanted loglevel
+    SPDLOG_DEBUG("Test debug statement");
 
     ParticleGenerator particleGenerator;
     FileReader fileReader(particleGenerator);
@@ -179,9 +179,9 @@ int main(int argc, char *argsv[]) {
 //    if (!processArguments(argc, argsv, delta_t, end_time, testEnabled, outputWriter, calculator)) {
 //        return 1;
 //    }
-    spdlog::info("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
+    SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
     performSimulation(particleContainer, delta_t, end_time, outputWriter, calculator);
-    spdlog::info("Simulation completed.");
+    SPDLOG_INFO("Simulation completed.");
 
     return 0;
 }

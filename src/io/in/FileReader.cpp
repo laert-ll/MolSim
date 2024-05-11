@@ -6,7 +6,7 @@
  */
 
 #include "FileReader.h"
-
+#include "spdlog/spdlog.h"
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -49,7 +49,7 @@ ParticleContainer FileReader::loadCuboid(const std::string &filepath) {
 
     auto lines = readFileLines(filepath);
     int num_cuboids = std::stoi(lines[0]);
-    std::cout << "num_cuboids: " << num_cuboids << std::endl;
+    SPDLOG_INFO("num_cuboids: {}", num_cuboids);
 
     for (int i = 1; i < num_cuboids + 1; ++i) {
         std::istringstream datastream(lines[i]);
@@ -60,14 +60,15 @@ ParticleContainer FileReader::loadCuboid(const std::string &filepath) {
         datastream >> meanV;
 
         if (datastream.fail()) {
-            std::cout << "Error reading file: unexpected data format on line " << i + 1 << std::endl;
+            SPDLOG_ERROR("Error reading file: unexpected data format on line {}", i + 1);
             exit(-1);
         }
 
         CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV);
-        std::cout << "Generating cuboid with particle number: " << numParticles[0] << ", " << numParticles[1] << ", " << numParticles[2] << std::endl;
+        SPDLOG_INFO("Generating cuboid with particle number: {}, {}, {}", numParticles[0], numParticles[1],
+                    numParticles[2]);
         particleGenerator.generateCuboid(cuboidParams, particleContainer);
-        std::cout << "Generating cuboid completed" << std::endl;
+        SPDLOG_INFO("Generating cuboid completed");
         particleContainer.initializePairs();
     }
 
@@ -90,7 +91,7 @@ void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data) {
         datastream >> value;
     }
     if (datastream.fail()) {
-        std::cout << "Error reading file: unexpected data format" << std::endl;
+        SPDLOG_ERROR("Error reading file: unexpected data format");
         exit(-1);
     }
 }
@@ -116,7 +117,7 @@ std::vector<std::string> readFileLines(const std::string &filepath) {
                 if (!num_data_read) {
                     int num_data = std::stoi(tmp_string);
                     if (num_data < 0) {
-                        std::cerr << "Error: Number of data sets cannot be negative." << std::endl;
+                        SPDLOG_ERROR("Error: Number of data sets cannot be negative.");
                         exit(-1);
                     }
 
@@ -129,7 +130,7 @@ std::vector<std::string> readFileLines(const std::string &filepath) {
             }
         }
     } else {
-        std::cout << "Error: could not open file " << filepath << std::endl;
+        SPDLOG_ERROR("Error: could not open file {}", filepath);
         exit(-1);
     }
     return lines;
