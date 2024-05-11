@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
+# Enable the FetchContent module
+include(FetchContent)
+
 # define project name, version
 project(PSEMolDyn_GroupC VERSION 0.0.1)
 
@@ -13,6 +16,33 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 add_subdirectory(libs/gtest)
+# ----------------------------------------Adding Libraries-------------------------------------------------
+# Fetch spdlog from GitHub
+FetchContent_Declare(
+        spdlog
+        GIT_REPOSITORY https://github.com/gabime/spdlog
+        GIT_TAG        v1.x
+)
+FetchContent_MakeAvailable(spdlog)
+
+# Add ExternalProject_Add for fmt
+include(ExternalProject)
+ExternalProject_Add(
+        fmt_external
+        GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+        GIT_TAG 10.x
+        PREFIX ${CMAKE_BINARY_DIR}/external/fmt
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+)
+
+# Specify include directory
+ExternalProject_Get_Property(fmt_external INSTALL_DIR)
+include_directories(${INSTALL_DIR}/include)
+
+# Specify fmt library
+add_library(fmt INTERFACE IMPORTED)
+add_dependencies(fmt fmt_external)
+# ------------------------------------------------------------------------------------------------------------
 
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
@@ -27,9 +57,24 @@ file(GLOB_RECURSE TEST_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
 )
 
+#------------------------------------------LOGGING---------------------------------------------------------
+# get the log level from the command line
+set(log_level "INFO" CACHE STRING "Log level")
+
+# define the valid log levels
+set(valid_log_levels "TRACE" "DEBUG" "INFO" "WARN" "ERROR" "CRITICAL")
+
+# check if the log level is valid
+if(NOT log_level IN_LIST valid_log_levels)
+    message(FATAL_ERROR "Invalid log level: ${log_level}. Valid log levels are: ${valid_log_levels}")
+endif()
+
+# define the SPDLOG_ACTIVE_LEVEL macro
+add_compile_definitions(SPDLOG_ACTIVE_LEVEL=${log_level})
+message(STATUS "Log level: ${log_level}")
+#-----------------------------------------------------------------------------------------------------------
 # create make target
 add_executable(MolSim ${MY_SRC})
-
 add_executable(MolSimTests ${TEST_SOURCES})
 
 # set cxx standard. You may raise this if you want.
@@ -54,12 +99,16 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
+        PRIVATE
+            spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
 
 target_link_libraries(MolSimTests 
         PRIVATE 
             gtest 
             gtest_main
+            spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
+            fmt
 )
 
 add_test(NAME MolSimTests COMMAND MolSimTests)
