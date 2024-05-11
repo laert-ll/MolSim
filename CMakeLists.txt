@@ -58,11 +58,11 @@ if(NOT log_level IN_LIST valid_log_levels)
 endif()
 
 # define the SPDLOG_ACTIVE_LEVEL macro
-add_definitions(-DSPDLOG_ACTIVE_LEVEL=${log_level})
+add_compile_definitions(SPDLOG_ACTIVE_LEVEL=${log_level})
+message(STATUS "Log level: ${log_level}")
 #-----------------------------------------------------------------------------------------------------------
 # create make target
 add_executable(MolSim ${MY_SRC})
-
 add_executable(MolSimTests ${TEST_SOURCES})
 
 # set cxx standard. You may raise this if you want.
@@ -95,6 +95,7 @@ target_link_libraries(MolSimTests
         PRIVATE
             gtest
             gtest_main
+            fmt::fmt
 )
 
 add_test(NAME MolSimTests COMMAND MolSimTests)

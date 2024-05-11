@@ -17,12 +17,52 @@ void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data);
 
 std::vector<std::string> readFileLines(const std::string &filepath);
 
-ParticleContainer FileReader::loadParticles(const std::string &filepath) {
+ParticleContainer FileReader::readFile(const std::string &filepath) {
+    auto lines = readFileLines(filepath);
+
+    // Check if there are lines in the file
+    if (lines.empty()) {
+        throw std::runtime_error("File is empty: " + filepath);
+    }
+
+    // Parse the data code
+    int dataCode;
+    try {
+        dataCode = std::stoi(lines[0]);
+        // Remove the first element of lines
+        lines.erase(lines.begin());
+    } catch (const std::invalid_argument &e) {
+        throw std::runtime_error(
+                "Invalid data code in file '" + filepath + "': " + e.what() + ". Data code must be an integer.");
+    } catch (const std::out_of_range &e) {
+        throw std::runtime_error(
+                "Data code out of range in file '" + filepath + "': " + e.what() + ". Data code must be an integer.");
+    }
+
+    // Log the data code
+    SPDLOG_INFO("Data Code of file '{}': {}", filepath, dataCode);
+    // Load particles or cuboid based on data code
     ParticleContainer particleContainer;
+    switch (dataCode) {
+        case 0:
+            loadParticles(lines, particleContainer);
+            break;
+        case 1:
+            loadCuboids(lines, particleContainer);
+            break;
+        default:
+            throw std::runtime_error(
+                    "Invalid data code in file '" + filepath + "': Only data codes 0 and 1 are supported.");
+
+    }
+
+    return particleContainer;
+}
+
+void FileReader::loadParticles(const std::vector<std::string> &lines, ParticleContainer &particleContainer) {
     std::array<double, 3> x{}, v{};
     double m;
 
-    auto lines = readFileLines(filepath);
     int num_particles = std::stoi(lines[0]);
 
     for (int i = 1; i < num_particles + 1; ++i) {
@@ -38,16 +78,13 @@ ParticleContainer FileReader::loadParticles(const std::string &filepath) {
 
     particleContainer.initializePairs();
     particleContainer.setVolumes();
-    return particleContainer;
 }
 
-ParticleContainer FileReader::loadCuboid(const std::string &filepath) {
-    ParticleContainer particleContainer;
+void FileReader::loadCuboids(const std::vector<std::string> &lines, ParticleContainer &particles) {
     std::array<double, 3> llf{}, startV{};
     std::array<size_t, 3> numParticles{};
     double distance, mass, meanV;
 
-    auto lines = readFileLines(filepath);
     int num_cuboids = std::stoi(lines[0]);
     SPDLOG_INFO("num_cuboids: {}", num_cuboids);
 
@@ -67,14 +104,11 @@ ParticleContainer FileReader::loadCuboid(const std::string &filepath) {
         CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV);
         SPDLOG_INFO("Generating cuboid with particle number: {}, {}, {}", numParticles[0], numParticles[1],
                     numParticles[2]);
-        ParticleGenerator::generateCuboid(cuboidParams, particleContainer);
+        ParticleGenerator::generateCuboid(cuboidParams, particles);
         SPDLOG_INFO("Generating cuboid completed");
-        particleContainer.initializePairs();
+        particles.initializePairs();
     }
-
-    return particleContainer;
 }
-
 // ------------------------------------------- Helper methods --------------------------------------------------
 /**
  * This method parses an array of values from a single line (string)

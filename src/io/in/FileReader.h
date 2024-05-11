@@ -28,13 +28,16 @@ public:
 
     ~FileReader() = default;
 
+    static ParticleContainer readFile(const std::string& filepath);
+
+private:
     /**
      * Reads particle data from a file and returns a ParticleContainer.
      *
      * @param filepath The path to the file to read particle data from.
      * @return A ParticleContainer containing the particles read from the file.
      */
-    static ParticleContainer loadParticles(const std::string& filepath);
+    static void loadParticles(const std::vector<std::string>& lines, ParticleContainer& particles);
 
-    static ParticleContainer loadCuboid(const std::string& filepath);
+    static void loadCuboids(const std::vector<std::string>& lines, ParticleContainer& particles);
 };

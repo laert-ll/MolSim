@@ -147,16 +147,21 @@ void performSimulation(ParticleContainer &particleContainer, double &delta_t, do
 int main(int argc, char *argsv[]) {
     // Example call: ./MolSim ./resources/input-sun.txt 0.01 1 true vtk sv
     // Example call 2: ./MolSim ./resources/input-cuboid.txt
-    spdlog::set_level(spdlog::level::debug); // TODO: this should be changed to the wanted loglevel
-    SPDLOG_DEBUG("Test debug statement");
 
-    double delta_t = 0.0002; // default-delte_t
+
+    // Set the log level to the wanted level
+    spdlog::set_level(spdlog::level::debug); // TODO: make it changable using command line argument (boost)
+
+    if (argc < 1) {
+        SPDLOG_ERROR("Input file should be passed as command line argument!");
+        return 1;
+    }
+
+    double delta_t = 5; // default-delte_t
     double end_time = 5; // default_end_time
     std::unique_ptr<outputWriters::OutputWriter> outputWriter = std::make_unique<outputWriters::VTKWriter>();;
-//    std::unique_ptr<calculators::Calculator> calculator;
     std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5);
-//    ParticleContainer particleContainer = fileReader.loadParticles(argsv[1]);
-    ParticleContainer particleContainer = FileReader::loadCuboid(argsv[1]);
+    ParticleContainer particleContainer = FileReader::readFile(argsv[1]);
 
 //    if (!processArguments(argc, argsv, delta_t, end_time, outputWriter, calculator)) {
 //        return 1;
