@@ -15,6 +15,7 @@ if(NOT CMAKE_BUILD_TYPE)
             "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
+add_subdirectory(libs/gtest)
 # ----------------------------------------Fetching Libraries-------------------------------------------------
 # Fetch spdlog from GitHub
 FetchContent_Declare(
@@ -29,7 +30,6 @@ add_subdirectory(gtest)
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-    # header don't need to be included but this might be necessary for some IDEs
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
 )
 
@@ -78,7 +78,7 @@ target_include_directories(MolSim
             ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_include_directories(MolSimTests
+target_include_directories(MolSimTests 
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/test
 )
@@ -91,9 +91,9 @@ target_link_libraries(MolSim
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
 
-target_link_libraries(MolSimTests
-        PRIVATE
-            gtest
+target_link_libraries(MolSimTests 
+        PRIVATE 
+            gtest 
             gtest_main
             fmt::fmt
 )

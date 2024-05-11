@@ -4,10 +4,6 @@
 const double VOLUME_MIN = 0.5;
 const double VOLUME_MAX = 1.0;
 
-ParticleContainer::ParticleContainer() {}
-
-ParticleContainer::~ParticleContainer() {}
-
 void ParticleContainer::addParticle(const Particle &particle) {
     particles.push_back(particle);
 }
