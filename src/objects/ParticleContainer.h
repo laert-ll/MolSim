@@ -21,9 +21,9 @@ private:
     std::vector<std::pair<std::reference_wrapper<Particle>, std::reference_wrapper<Particle>>> particlePairs;
 
 public:
-    ParticleContainer();
+    ParticleContainer() = default;
 
-    ~ParticleContainer();
+    ~ParticleContainer() = default;
 
     /**
      * Method to add a particle to the container.

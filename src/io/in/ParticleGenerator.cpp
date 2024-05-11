@@ -37,7 +37,7 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Parti
                 const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 3);
 
                 // Add deltaV to v
-                const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<double>());
+                const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<>());
 
                 // Create a new particle and add it to the container
                 Particle newParticle(x, v, m, 0, 0); // Set volume and type to zero for now
