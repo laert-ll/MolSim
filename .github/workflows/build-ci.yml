@@ -20,7 +20,7 @@ jobs:
       run: mkdir -p ${{github.workspace}}/build
 
     - name: CMake Configure
-      run: cmake -D CMAKE_CXX_FLAGS="-fsanitize=address" -DBOOST_ROOT=/usr/lib -DBoost_USE_STATIC_LIBS=ON -DBOOST_PROGRAM_OPTIONS_FOUND=ON -B ${{github.workspace}}/build ${{github.workspace}}
+      run: cmake -D CMAKE_CXX_FLAGS="-fsanitize=address" -DBoost_USE_STATIC_LIBS=ON -DBOOST_PROGRAM_OPTIONS_FOUND=ON -B ${{github.workspace}}/build ${{github.workspace}}
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build
