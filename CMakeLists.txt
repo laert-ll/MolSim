@@ -42,6 +42,8 @@ include_directories(${INSTALL_DIR}/include)
 # Specify fmt library
 add_library(fmt INTERFACE IMPORTED)
 add_dependencies(fmt fmt_external)
+
+find_package(Boost REQUIRED COMPONENTS program_options)
 # ------------------------------------------------------------------------------------------------------------
 
 # collect all cpp files
@@ -99,6 +101,7 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
+            Boost::program_options
         PRIVATE
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
