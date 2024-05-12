@@ -11,19 +11,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      uses: actions/checkout@v4
 
     - name: Dependencies
       run: sudo apt install libxerces-c-dev
 
     - name: Create build directory
-      run: mkdir build
+      run: mkdir -p ${{github.workspace}}/build
 
-    - name: CMake
-      run: cmake -D CMAKE_CXX_FLAGS="-fsanitize=address" -B build
+    - name: CMake Configure
+      run: cmake -D CMAKE_CXX_FLAGS="-fsanitize=address" -B ${{github.workspace}}/build ${{github.workspace}}
 
     - name: Build
-      run: cmake --build build
+      run: cmake --build ${{github.workspace}}/build
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      uses: actions/checkout@v4
 
     - name: Test
+      working-directory: ${{github.workspace}}/build
       run: ctest -V
