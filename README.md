@@ -34,10 +34,16 @@ In order to build and run this code, you need the following tools installed on y
 
 4. Run the code:
 
-   `./MolSim ./resources/input-sun.txt {DELTA_T} {END_TIME} {OUTPUT_WRITER} {CALCULATOR}`
+   `./MolSim {INPUT} {DELTA_T} {END_TIME} {OUTPUT_WRITER} {CALCULATOR}`
 
-   Example call: `./MolSim ../input/eingabe-sonne.txt 0.01 1 false vtk sv`
+   Example calls: 
+      - `./MolSim --help`
+      - `./MolSim ../resources/input-sun.txt --delta_t=0.001 --end_time=5 --output=vtk --calculator=sv`
+      - `./MolSim ../resources/input-cuboid.txt --delta_t=0.001 --end_time=5 --output=vtk --calculator=lj`
+
 5. Available options for arguments:
+
+   `{INPUT}`: The txt file to be read as input for the file reader.
 
    `{DELTA_T}`: The time step for the simulation. It should be a positive number.
 
