@@ -26,14 +26,13 @@ jobs:
       run: cmake --build ${{github.workspace}}/build
 
     - name: Save build environment
-        uses: actions/upload-artifact@v4
-        with:
-          name: built
-          path: ${{github.workspace}}/build
+      uses: actions/upload-artifact@v4
+      with:
+        name: built
+        path: ${{github.workspace}}/build
 
   test:
     needs: build
-
     runs-on: ubuntu-latest
 
     steps:
@@ -41,9 +40,9 @@ jobs:
 
     - name: Reload build environment
       uses: actions/download-artifact@v4
-        with:
-          name: built
-          path: ${{github.workspace}}/build
+      with:
+        name: built
+        path: ${{github.workspace}}/build
 
     - name: Tests
       run: ctest -V
