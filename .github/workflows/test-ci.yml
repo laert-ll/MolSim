@@ -1,4 +1,4 @@
-name: CI testing pipeline
+name: CI Testing Pipeline
 
 on:
   push:
@@ -25,5 +25,13 @@ jobs:
     - name: Build
       run: cmake --build ${{github.workspace}}/build
 
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
     - name: Test
-      run: ctest -V ${{github.workspace}}/build
+      working-directory: ${{github.workspace}}/build
+      run: ctest -V
