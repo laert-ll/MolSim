@@ -31,7 +31,7 @@ bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
 
     if (vm.count("help")) {
         std::cout << desc << "\n";
-        return false;
+        exit(0);
     }
 
     if (vm.count("output")) {
@@ -45,7 +45,7 @@ bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
         } else {
             std::cerr << "Invalid option for output writer: " << outputWriterArg << std::endl;
             std::cerr << "Only 'vtk' or 'xyz' are allowed." << std::endl;
-            return false;
+            exit(0);
         }
     }
 
@@ -63,7 +63,7 @@ bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
         } else {
             std::cerr << "Invalid option for calculator: " << calculatorArg << std::endl;
             std::cerr << "Only 'sv' and 'dummy' are allowed." << std::endl;
-            return false;
+            exit(0);
         }
     }
 
@@ -74,7 +74,7 @@ bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
 
     if (!calculator) {
         std::cout << "Invalid input; please select a calculator." << std::endl;
-        return false;
+        exit(0);
     }
 
     return true;
@@ -147,10 +147,7 @@ int main(int argc, char *argsv[]) {
     double end_time;
     std::unique_ptr<outputWriters::OutputWriter> outputWriter;
     std::unique_ptr<calculators::Calculator> calculator;
-
-    if (!processArguments(argc, argsv, delta_t, end_time, outputWriter, calculator)) {
-        return 1;
-    }
+    processArguments(argc, argsv, delta_t, end_time, outputWriter, calculator);
 
     ParticleContainer particleContainer = FileReader::readFile(argsv[1]);
 
