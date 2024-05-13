@@ -18,6 +18,7 @@ namespace calculators {
     private:
         const double sigma;
         const double epsilon;
+        const double threshold;
 
     public:
         /**
@@ -25,7 +26,7 @@ namespace calculators {
          *
          * Initializes the SVCalculator object.
          */
-        LJCalculator(double sigma, double epsilon) : sigma(sigma), epsilon(epsilon) {}
+        LJCalculator(double sigma, double epsilon, double threshold) : sigma(sigma), epsilon(epsilon), threshold(threshold) {}
 
         /**
              * Calculates the force between all pairs of unique particles considering the third Newton's law.
