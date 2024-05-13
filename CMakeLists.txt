@@ -26,6 +26,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(spdlog)
 
 find_package(Boost REQUIRED COMPONENTS program_options timer)
+
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
 # ------------------------------------------------------------------------------------------------------------
 
 # collect all cpp files
@@ -102,9 +109,7 @@ add_test(NAME MolSimTests COMMAND MolSimTests)
 # depending on the compiler different flags are used
 target_compile_options(MolSim
         PRIVATE
-            $<$<CXX_COMPILER_ID:GNU>:-Wall>
-            # disable some spam warnings for icpc...
-            $<$<CXX_COMPILER_ID:Intel>:-w3 -wd383,981,1418,1572,2259>
+            $<$<CXX_COMPILER_ID:Clang>:-Wall -fopenmp>
 )
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)

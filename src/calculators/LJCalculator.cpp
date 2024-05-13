@@ -5,6 +5,7 @@
 #include "LJCalculator.h"
 
 #include <cmath>
+#include <omp.h>
 
 namespace calculators {
 
@@ -15,6 +16,7 @@ namespace calculators {
         }
 
         // Iterate over all unique pairs of particles
+        #pragma omp parallel for
         for (auto pair = particleContainer.pair_begin(); pair != particleContainer.pair_end(); ++pair) {
             // Get both particles
             Particle &particle1 = pair->first.get();
@@ -44,5 +46,3 @@ namespace calculators {
         }
     }
 }
-
-
