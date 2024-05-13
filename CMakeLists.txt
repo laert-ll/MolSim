@@ -16,6 +16,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 add_subdirectory(libs/gtest)
+add_subdirectory(libs/benchmark)
 # ----------------------------------------Adding Libraries-------------------------------------------------
 # Fetch spdlog from GitHub
 FetchContent_Declare(
@@ -41,6 +42,15 @@ file(GLOB_RECURSE TEST_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
 )
 
+file(GLOB_RECURSE BENCHMARK_SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/benchmark/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/benchmark/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.h"
+)
+
 #------------------------------------------LOGGING---------------------------------------------------------
 # get the log level from the command line
 set(log_level "INFO" CACHE STRING "Log level")
@@ -60,6 +70,7 @@ message(STATUS "Log level: ${log_level}")
 # create make target
 add_executable(MolSim ${MY_SRC})
 add_executable(MolSimTests ${TEST_SOURCES})
+add_executable(MolSimBenchmark ${BENCHMARK_SOURCES})
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
@@ -79,6 +90,11 @@ target_include_directories(MolSimTests
         ${CMAKE_CURRENT_SOURCE_DIR}/test
 )
 
+target_include_directories(MolSimBenchmark 
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/benchmark
+)
+
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
@@ -88,11 +104,18 @@ target_link_libraries(MolSim
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
 
-target_link_libraries(MolSimTests 
+target_link_libraries(MolSimTests
         PRIVATE 
             gtest 
             gtest_main
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
+)
+
+target_link_libraries(MolSimBenchmark
+        PRIVATE 
+            benchmark
+            spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
+            Boost::program_options
 )
 
 add_test(NAME MolSimTests COMMAND MolSimTests)
