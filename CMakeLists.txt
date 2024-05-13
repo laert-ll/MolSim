@@ -25,24 +25,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(spdlog)
 
-# Add ExternalProject_Add for fmt
-include(ExternalProject)
-ExternalProject_Add(
-        fmt_external
-        GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-        GIT_TAG 10.x
-        PREFIX ${CMAKE_BINARY_DIR}/external/fmt
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
-)
-
-# Specify include directory
-ExternalProject_Get_Property(fmt_external INSTALL_DIR)
-include_directories(${INSTALL_DIR}/include)
-
-# Specify fmt library
-add_library(fmt INTERFACE IMPORTED)
-add_dependencies(fmt fmt_external)
-
 find_package(Boost REQUIRED COMPONENTS program_options)
 # ------------------------------------------------------------------------------------------------------------
 
@@ -111,7 +93,6 @@ target_link_libraries(MolSimTests
             gtest 
             gtest_main
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
-            fmt
 )
 
 add_test(NAME MolSimTests COMMAND MolSimTests)
