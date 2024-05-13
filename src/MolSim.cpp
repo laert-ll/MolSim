@@ -138,11 +138,6 @@ int main(int argc, char *argsv[]) {
     // Set the log level to the wanted level
     spdlog::set_level(spdlog::level::debug); // TODO: make it changable using command line argument (boost)
 
-    if (argc < 1) {
-        SPDLOG_ERROR("Input file should be passed as command line argument!");
-        return 1;
-    }
-
     double delta_t;
     double end_time;
     std::unique_ptr<outputWriters::OutputWriter> outputWriter;
