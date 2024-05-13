@@ -10,6 +10,7 @@
 #include <iostream>
 #include <memory>
 #include <boost/program_options.hpp>
+#include <boost/timer/timer.hpp>
 
 namespace po = boost::program_options;
 
@@ -154,8 +155,13 @@ int main(int argc, char *argsv[]) {
     ParticleContainer particleContainer = FileReader::readFile(argsv[1]);
 
     SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
+    boost::timer::cpu_timer timer;
+
     performSimulation(particleContainer, delta_t, end_time, outputWriter, calculator);
+
+    timer.stop();
     SPDLOG_INFO("Simulation completed.");
+    SPDLOG_INFO("Elapsed time: {}", timer.format(2, "%w seconds"));
 
     return 0;
 }
