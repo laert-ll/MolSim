@@ -112,5 +112,12 @@ namespace calculators {
          */
         virtual void calculateF(ParticleContainer &particleContainer) = 0;
 
+        virtual bool isFar(const std::array<double, 3>& x1, const std::array<double, 3>& x2, double threshold) {
+
+            if (abs(x2[0] - x1[0]) + abs(x2[1] - x1[1]) + abs(x2[2] - x1[2]) > threshold)
+                return true;
+            else
+                return abs(x2[0] - x1[0]) + abs(x2[1] - x1[1]) + abs(x2[2] - x1[2]) > threshold;
+        }
     };
 }
