@@ -117,7 +117,7 @@ namespace calculators {
             if (abs(x2[0] - x1[0]) + abs(x2[1] - x1[1]) + abs(x2[2] - x1[2]) > threshold)
                 return true;
             else
-                return abs(x2[0] - x1[0]) + abs(x2[1] - x1[1]) + abs(x2[2] - x1[2]) > threshold;
+                return sqrt(pow(x2[0] - x1[0], 2) + pow(x2[1] - x1[1], 2) + pow(x2[2] - x1[2], 2)) > threshold;
         }
     };
 }
