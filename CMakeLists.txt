@@ -53,7 +53,7 @@ file(GLOB_RECURSE TEST_SOURCES
 set(log_level "INFO" CACHE STRING "Log level")
 
 # define the valid log levels
-set(valid_log_levels "TRACE" "DEBUG" "INFO" "WARN" "ERROR" "CRITICAL")
+set(valid_log_levels "TRACE" "DEBUG" "INFO" "WARN" "ERROR" "CRITICAL" "OFF")
 
 # check if the log level is valid
 if(NOT log_level IN_LIST valid_log_levels)

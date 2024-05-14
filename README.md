@@ -22,7 +22,7 @@ In order to build and run this code, you need the following tools installed on y
 
    `cmake -Dlog_level={WANTED_LOG_LEVEL} ..`
 
-   Valid log levels are: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `CRITICAL`
+   Valid log levels are: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `CRITICAL`, `OFF`.
 
 3. Make:
 
