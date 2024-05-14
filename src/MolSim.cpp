@@ -118,6 +118,25 @@ void performSimulation(ParticleContainer &particleContainer, double &delta_t, do
     spdlog::info("Output written. Terminating...");
 }
 
+void setLogLevel(const std::string& log_level) {
+    if (log_level == "TRACE") {
+        spdlog::set_level(spdlog::level::trace);
+    } else if (log_level == "DEBUG") {
+        spdlog::set_level(spdlog::level::debug);
+    } else if (log_level == "INFO") {
+        spdlog::set_level(spdlog::level::info);
+    } else if (log_level == "WARN") {
+        spdlog::set_level(spdlog::level::warn);
+    } else if (log_level == "ERROR") {
+        spdlog::set_level(spdlog::level::err);
+    } else if (log_level == "CRITICAL") {
+        spdlog::set_level(spdlog::level::critical);
+    } else {
+        spdlog::warn("Invalid log level: {}. Defaulting to INFO.", log_level);
+        spdlog::set_level(spdlog::level::info);
+    }
+}
+
 /**
  * @brief The main function of the program.
  *
@@ -136,7 +155,8 @@ int main(int argc, char *argsv[]) {
     // ./MolSim ../resources/input-cuboid.txt --delta_t=0.001 --end_time=5 --output=vtk --calculator=lj
 
     // Set the log level to the wanted level
-    spdlog::set_level(spdlog::level::debug); // TODO: make it changable using command line argument (boost)
+    std::string log_level = LOG_LEVEL;
+    setLogLevel(log_level);
 
     double delta_t;
     double end_time;

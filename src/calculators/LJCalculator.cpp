@@ -10,13 +10,14 @@
 namespace calculators {
 
     void LJCalculator::calculateF(ParticleContainer &particleContainer) {
+//        #pragma omp parallel for
         for (auto & p : particleContainer) {
             p.setOldF(p.getF());  // Update oldF with currentF
             p.setF({0, 0, 0});     // Reset F to zeros
         }
 
         // Iterate over all unique pairs of particles
-        #pragma omp parallel for
+//        #pragma omp parallel for
         for (auto pair = particleContainer.pair_begin(); pair != particleContainer.pair_end(); ++pair) {
             // Get both particles
             Particle &particle1 = pair->first.get();

@@ -36,25 +36,14 @@ namespace calculators {
             calculateV(particleContainer, delta_t);
         }
 
-    private:
         /**
-         * @brief Calculates the forces acting on particles.
-         *
-         * This method is responsible for calculating the forces acting on all particles in the provided particle container.
-         *
-         * @param particleContainer The container of particles to calculate the forces for.
-         */
-        virtual void calculateF(ParticleContainer &particleContainer) = 0;
-
-    protected:
-        /**
-         * @brief Calculates the new velocities of particles.
-         *
-         * This method is responsible for updating the velocities of all particles in the provided particle container.
-         *
-         * @param particleContainer The container of particles to update the velocities of.
-         * @param delta_t The time step used for the calculations.
-         */
+             * @brief Calculates the new velocities of particles.
+             *
+             * This method is responsible for updating the velocities of all particles in the provided particle container.
+             *
+             * @param particleContainer The container of particles to update the velocities of.
+             * @param delta_t The time step used for the calculations.
+             */
         virtual void calculateV(ParticleContainer &particleContainer, double delta_t) {
             for (auto & p : particleContainer) {
                 // Get the current position, velocity, force and mass of the particle
@@ -78,13 +67,13 @@ namespace calculators {
         }
 
         /**
-         * @brief Calculates the new positions of particles.
-         *
-         * This method is responsible for updating the positions of all particles in the provided particle container.
-         *
-         * @param particleContainer The container of particles to update the positions of.
-         * @param delta_t The time step used for the calculations.
-         */
+             * @brief Calculates the new positions of particles.
+             *
+             * This method is responsible for updating the positions of all particles in the provided particle container.
+             *
+             * @param particleContainer The container of particles to update the positions of.
+             * @param delta_t The time step used for the calculations.
+             */
         virtual void calculateX(ParticleContainer &particleContainer, double delta_t) {
             for (auto & p : particleContainer) {
                 // Get the current position, velocity, force and mass of the particle
@@ -112,5 +101,16 @@ namespace calculators {
                 p.setX(x);
             }
         }
+
+    private:
+        /**
+         * @brief Calculates the forces acting on particles.
+         *
+         * This method is responsible for calculating the forces acting on all particles in the provided particle container.
+         *
+         * @param particleContainer The container of particles to calculate the forces for.
+         */
+        virtual void calculateF(ParticleContainer &particleContainer) = 0;
+
     };
 }

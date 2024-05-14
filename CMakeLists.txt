@@ -42,8 +42,8 @@ file(GLOB_RECURSE MY_SRC
 )
 
 file(GLOB_RECURSE TEST_SOURCES
-    "${CMAKE_CURRENT_SOURCE_DIR}/test/**/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/test/**/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/**/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/**/*.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
 )
@@ -62,6 +62,7 @@ endif()
 
 # define the SPDLOG_ACTIVE_LEVEL macro
 add_compile_definitions(SPDLOG_ACTIVE_LEVEL=${log_level})
+add_compile_definitions(LOG_LEVEL="${log_level}")
 message(STATUS "Log level: ${log_level}")
 #-----------------------------------------------------------------------------------------------------------
 # create make target
@@ -83,7 +84,7 @@ target_include_directories(MolSim
 
 target_include_directories(MolSimTests 
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/test
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests
 )
 
 target_link_libraries(MolSim

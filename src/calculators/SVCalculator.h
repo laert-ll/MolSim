@@ -12,13 +12,6 @@ namespace calculators {
      * as well as to plot the particles to a VTK file. It uses the Stoermer-Verlet method for the calculations.
      */
     class SVCalculator : public Calculator {
-    private:
-        /**
-         * Calculates the force between all pairs of unique particles considering the third Newton's law.
-         *
-         * @param particleContainer The ParticleContainer containing the particles to calculate the forces for.
-         */
-        void calculateF(ParticleContainer &particleContainer) override;
 
     public:
         /**
@@ -35,5 +28,12 @@ namespace calculators {
          * @param delta_t The time step used in the calculations.
          */
         void calculate(ParticleContainer &particleContainer, double delta_t) override;
+
+        /**
+             * Calculates the force between all pairs of unique particles considering the third Newton's law.
+             *
+             * @param particleContainer The ParticleContainer containing the particles to calculate the forces for.
+             */
+        void calculateF(ParticleContainer &particleContainer) override;
     };
 }

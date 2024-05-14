@@ -19,13 +19,6 @@ namespace calculators {
         const double sigma;
         const double epsilon;
 
-        /**
-         * Calculates the force between all pairs of unique particles considering the third Newton's law.
-         *
-         * @param particleContainer The ParticleContainer containing the particles to calculate the forces for.
-         */
-        void calculateF(ParticleContainer &particleContainer) override;
-
     public:
         /**
          * Default constructor for the SVCalculator class.
@@ -34,5 +27,11 @@ namespace calculators {
          */
         LJCalculator(double sigma, double epsilon) : sigma(sigma), epsilon(epsilon) {}
 
+        /**
+             * Calculates the force between all pairs of unique particles considering the third Newton's law.
+             *
+             * @param particleContainer The ParticleContainer containing the particles to calculate the forces for.
+             */
+        void calculateF(ParticleContainer &particleContainer) override;
     };
 }
