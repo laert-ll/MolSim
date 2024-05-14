@@ -45,7 +45,7 @@ namespace calculators {
              * @param delta_t The time step used for the calculations.
              */
         virtual void calculateV(ParticleContainer &particleContainer, double delta_t) {
-            for (auto & p : particleContainer) {
+            for (auto &p: particleContainer) {
                 // Get the current position, velocity, force and mass of the particle
                 std::array<double, 3> v = p.getV();
                 const std::array<double, 3> f = p.getF();
@@ -75,7 +75,7 @@ namespace calculators {
              * @param delta_t The time step used for the calculations.
              */
         virtual void calculateX(ParticleContainer &particleContainer, double delta_t) {
-            for (auto & p : particleContainer) {
+            for (auto &p: particleContainer) {
                 // Get the current position, velocity, force and mass of the particle
                 std::array<double, 3> x = p.getX();
                 const std::array<double, 3> v = p.getV();
@@ -112,12 +112,26 @@ namespace calculators {
          */
         virtual void calculateF(ParticleContainer &particleContainer) = 0;
 
-        virtual bool isFar(const std::array<double, 3>& x1, const std::array<double, 3>& x2, double threshold) {
+        /**
+         * @brief Determines if two points are far apart based on a given threshold.
+         *
+         * This function calculates the Manhattan  distance
+         * and then checks if it exceeds the given threshold. If the distance is greater than
+         * the threshold, the function returns true, indicating that the points are considered "far".
+         *
+         * @param x1 The first point represented as an array of three doubles.
+         * @param x2 The second point represented as an array of three doubles.
+         * @param threshold The threshold value to compare the Manhattan  distance with.
+         * @return True if the points are considered "far", false otherwise.
+         */
+        virtual bool isFar(const std::array<double, 3> &x1, const std::array<double, 3> &x2, double threshold) {
+            const std::array<double, 3> absDiff = ArrayUtils::elementWisePairOp(x1, x2,
+                                                                                [](double a, double b) {
+                                                                                    return std::abs(a - b);
+                                                                                });
+            const double sum = std::accumulate(absDiff.begin(), absDiff.end(), 0.0);
 
-            if (abs(x2[0] - x1[0]) + abs(x2[1] - x1[1]) + abs(x2[2] - x1[2]) > threshold)
-                return true;
-            else
-                return sqrt(pow(x2[0] - x1[0], 2) + pow(x2[1] - x1[1], 2) + pow(x2[2] - x1[2], 2)) > threshold;
+            return sum > threshold;
         }
     };
 }
