@@ -51,4 +51,4 @@ In order to build and run this code, you need the following tools installed on y
 
    `{OUTPUT_WRITER}`: The output writer to use. Available options are vtk or xyz.
 
-   `{CALCULATOR}`: The calculator to use. Available options are sv or dummy.
+   `{CALCULATOR}`: The calculator to use. Available options are sv, lj or dummy.
