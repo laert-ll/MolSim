@@ -100,6 +100,8 @@ void FileReader::loadCuboids(const std::vector<std::string> &lines, ParticleCont
         }
 
         CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV);
+        SPDLOG_INFO("Generating cuboid with particle number: {}, {}, {}", numParticles[0], numParticles[1],
+                    numParticles[2]);
         ParticleGenerator::generateCuboid(cuboidParams, particles);
         SPDLOG_DEBUG("Completed generating cuboid {}", i);
         particles.initializePairs();
