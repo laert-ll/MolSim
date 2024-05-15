@@ -15,7 +15,6 @@ if(NOT CMAKE_BUILD_TYPE)
             "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-add_subdirectory(libs/gtest)
 # ----------------------------------------Adding Libraries-------------------------------------------------
 # Fetch spdlog from GitHub
 FetchContent_Declare(
@@ -25,7 +24,19 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(spdlog)
 
-find_package(Boost REQUIRED COMPONENTS program_options timer)
+FetchContent_Declare(
+        boost
+        GIT_REPOSITORY https://github.com/boostorg/boost
+        GIT_TAG        master
+)
+FetchContent_MakeAvailable(boost)
+
+FetchContent_Declare(
+        gtest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG        main
+)
+FetchContent_MakeAvailable(gtest)
 
 find_package(OpenMP)
 if (OPENMP_FOUND)
