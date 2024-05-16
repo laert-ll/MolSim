@@ -45,7 +45,7 @@ jobs:
         path: ${{github.workspace}}/build
 
     - name: Set execute permissions for tests
-      run: chmod +x ${{github.workspace}}/build/MolSimTests
+      run: chmod +x ${{github.workspace}}/build/MolSimTests ${{github.workspace}}/build/MolSimBenchmark
 
     - name: Tests
       working-directory: ${{github.workspace}}/build
