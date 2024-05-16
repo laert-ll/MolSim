@@ -72,12 +72,14 @@ public:
      *
      * @return True if the arguments were processed successfully and a valid calculator and output writer were selected, false otherwise.
      */
-    static bool processArguments(int argc, char *argv[], double &delta_t, double &end_time,
-                                 std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
-                                 std::unique_ptr<calculators::Calculator> &calculator) {
+    static bool processArguments(int argc, char *argv[], std::string &inputFilePath,
+                                    double &delta_t, double &end_time,
+                                    std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
+                                    std::unique_ptr<calculators::Calculator> &calculator) {
         boost::program_options::options_description desc("Allowed options");
         desc.add_options()
                 ("help", "produce help message")
+                ("input", boost::program_options::value<std::string>(), "input file path")
                 ("delta_t", boost::program_options::value<double>(&delta_t)->default_value(0.014), "set delta_t")
                 ("end_time", boost::program_options::value<double>(&end_time)->default_value(1000), "set end_time")
                 ("output", boost::program_options::value<std::string>(), "output writer (vtk or xyz)")
@@ -92,6 +94,11 @@ public:
             desc.print(ss);
             SPDLOG_INFO("{}", ss.str());
             return false;
+        }
+
+        if (vm.count("input")) {
+            inputFilePath = vm["input"].as<std::string>();
+            SPDLOG_INFO("Input file path: {}", inputFilePath);
         }
 
         if (vm.count("output")) {
@@ -125,6 +132,11 @@ public:
                 SPDLOG_ERROR("Only 'sv' and 'dummy' are allowed.");
                 return false;
             }
+        }
+
+        if (inputFilePath.empty()) {
+            SPDLOG_ERROR("Invalid input; please insert an input file.");
+            return false;
         }
 
         if (!outputWriter) {
