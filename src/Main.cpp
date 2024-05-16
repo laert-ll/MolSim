@@ -34,16 +34,17 @@ int main(int argc, char *argsv[]) {
     std::string log_level = LOG_LEVEL;
     MolSim::setLogLevel(log_level);
 
+    std::string inputFilePath;
     double delta_t;
     double end_time;
     std::unique_ptr<outputWriters::OutputWriter> outputWriter;
     std::unique_ptr<calculators::Calculator> calculator;
 
-    if (!MolSim::processArguments(argc, argsv, delta_t, end_time, outputWriter, calculator)) {
+    if (!MolSim::processArguments(argc, argsv, inputFilePath, delta_t, end_time, outputWriter, calculator)) {
         return 1;
     }
 
-    ParticleContainer particleContainer = FileReader::readFile(argsv[1]);
+    ParticleContainer particleContainer = FileReader::readFile(inputFilePath);
 
     SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
     boost::timer::cpu_timer timer;
