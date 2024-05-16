@@ -10,7 +10,7 @@
 namespace calculators {
 
     void LJCalculator::calculateF(ParticleContainer &particleContainer) {
-//        #pragma omp parallel for
+       #pragma omp parallel for
         for (auto & p : particleContainer) {
             p.setOldF(p.getF());  // Update oldF with currentF
             p.setF({0, 0, 0});     // Reset F to zeros
