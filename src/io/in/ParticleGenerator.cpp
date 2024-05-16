@@ -4,8 +4,16 @@
 #include "ParticleGenerator.h"
 #include "../../utils/MaxwellBoltzmannDistribution.h"
 #include "../../utils/ArrayUtils.h"
+#include "spdlog/spdlog.h"
 
 Particle ParticleGenerator::generateParticle(const ParticleParameters &parameters) {
+    std::array<double, 3> x = parameters.getPosition();
+    std::array<double, 3> v = parameters.getVelocity();
+    double m = parameters.getMass();
+    double volume = parameters.getVolume();
+    int type = parameters.getType();
+    SPDLOG_DEBUG("Generated particle: [Position: [{}, {}, {}], Velocity: [{}, {}, {}], Mass: {}, Volume: {}, Type: {}]",
+                 x[0], x[1], x[2], v[0], v[1], v[2], m, volume, type);
     return {parameters.getPosition(),
                     parameters.getVelocity(),
                     parameters.getMass(),
@@ -21,6 +29,9 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Parti
     const auto &m = parameters.m;
     const auto &startV = parameters.startV;
     const auto &meanV = parameters.meanV;
+    SPDLOG_DEBUG("Generating cuboid: LLF [{} {} {}], NumParticles [{} {} {}], Distance {}, Mass {}, StartV [{} {} {}], MeanV {}",
+                 lowerLeftFrontCorner[0], lowerLeftFrontCorner[1], lowerLeftFrontCorner[2], numParticlesPerDimension[0], numParticlesPerDimension[1],
+                 numParticlesPerDimension[2], distance, m, startV[0], startV[1], startV[2], meanV);
 
     // Generate particles for the cuboid
     for (std::size_t xIndex = 0; xIndex < numParticlesPerDimension[0]; ++xIndex) {

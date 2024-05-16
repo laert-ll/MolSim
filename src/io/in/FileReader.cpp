@@ -12,16 +12,12 @@
 #include <iostream>
 #include <sstream>
 
-template<typename T, size_t N>
-void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data);
-
-std::vector<std::string> readFileLines(const std::string &filepath);
-
 ParticleContainer FileReader::readFile(const std::string &filepath) {
     auto lines = readFileLines(filepath);
 
     // Check if there are lines in the file
     if (lines.empty()) {
+        SPDLOG_ERROR("File is empty: ", filepath);
         throw std::runtime_error("File is empty: " + filepath);
     }
 
@@ -51,9 +47,9 @@ ParticleContainer FileReader::readFile(const std::string &filepath) {
             loadCuboids(lines, particleContainer);
             break;
         default:
+            SPDLOG_ERROR("Invalid data code in file '", filepath + "': Only data codes 0 and 1 are supported.");
             throw std::runtime_error(
                     "Invalid data code in file '" + filepath + "': Only data codes 0 and 1 are supported.");
-
     }
 
     return particleContainer;
@@ -64,6 +60,7 @@ void FileReader::loadParticles(const std::vector<std::string> &lines, ParticleCo
     double m;
 
     int num_particles = std::stoi(lines[0]);
+    SPDLOG_DEBUG("Number of particles to load: {}", num_particles);
 
     for (int i = 1; i < num_particles + 1; ++i) {
         std::istringstream datastream(lines[i]);
@@ -81,12 +78,13 @@ void FileReader::loadParticles(const std::vector<std::string> &lines, ParticleCo
 }
 
 void FileReader::loadCuboids(const std::vector<std::string> &lines, ParticleContainer &particles) {
+    SPDLOG_INFO("Starting to load cuboids...");
     std::array<double, 3> llf{}, startV{};
     std::array<size_t, 3> numParticles{};
     double distance, mass, meanV;
 
     int num_cuboids = std::stoi(lines[0]);
-    SPDLOG_INFO("num_cuboids: {}", num_cuboids);
+    SPDLOG_DEBUG("Number of cuboids to load: {}", num_cuboids);
 
     for (int i = 1; i < num_cuboids + 1; ++i) {
         std::istringstream datastream(lines[i]);
@@ -102,25 +100,15 @@ void FileReader::loadCuboids(const std::vector<std::string> &lines, ParticleCont
         }
 
         CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV);
-        SPDLOG_INFO("Generating cuboid with particle number: {}, {}, {}", numParticles[0], numParticles[1],
-                    numParticles[2]);
         ParticleGenerator::generateCuboid(cuboidParams, particles);
-        SPDLOG_INFO("Generating cuboid completed");
+        SPDLOG_DEBUG("Completed generating cuboid {}", i);
         particles.initializePairs();
     }
+    SPDLOG_INFO("Finished loading cuboids!");
 }
 // ------------------------------------------- Helper methods --------------------------------------------------
-/**
- * This method parses an array of values from a single line (string)
- * and update the data object, specified as parameter, accordingly.
- *
- * @tparam T type of 'data'
- * @tparam N array size of 'data'
- * @param line current file line
- * @param data data object to update according to the given line
- */
 template<typename T, size_t N>
-void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data) {
+void FileReader::parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data) {
     for (auto &value: data) {
         datastream >> value;
     }
@@ -130,16 +118,7 @@ void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data) {
     }
 }
 
-/**
- * This method reads the file specified by the parameter 'filepath'
- * and returns only relevant lines (that are no comments) in the file as a vector strings.
- *
- * Moreover, this functions checks if the given "number of cuboid" in the input file is non-negative or not.
- *
- * @param filepath
- * @return vector of strings
- */
-std::vector<std::string> readFileLines(const std::string &filepath) {
+std::vector<std::string> FileReader::readFileLines(const std::string &filepath) {
     std::vector<std::string> lines;
     std::ifstream input_file(filepath);
     std::string tmp_string;
@@ -159,7 +138,6 @@ std::vector<std::string> readFileLines(const std::string &filepath) {
                     lines.reserve(num_data + 1);
                     num_data_read = true;
                 }
-
                 lines.push_back(tmp_string);
             }
         }
