@@ -12,11 +12,6 @@
 #include <iostream>
 #include <sstream>
 
-template<typename T, size_t N>
-void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data);
-
-std::vector<std::string> readFileLines(const std::string &filepath);
-
 ParticleContainer FileReader::readFile(const std::string &filepath) {
     auto lines = readFileLines(filepath);
 
@@ -110,17 +105,8 @@ void FileReader::loadCuboids(const std::vector<std::string> &lines, ParticleCont
     }
 }
 // ------------------------------------------- Helper methods --------------------------------------------------
-/**
- * This method parses an array of values from a single line (string)
- * and update the data object, specified as parameter, accordingly.
- *
- * @tparam T type of 'data'
- * @tparam N array size of 'data'
- * @param line current file line
- * @param data data object to update according to the given line
- */
 template<typename T, size_t N>
-void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data) {
+void FileReader::parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data) {
     for (auto &value: data) {
         datastream >> value;
     }
@@ -130,16 +116,7 @@ void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data) {
     }
 }
 
-/**
- * This method reads the file specified by the parameter 'filepath'
- * and returns only relevant lines (that are no comments) in the file as a vector strings.
- *
- * Moreover, this functions checks if the given "number of cuboid" in the input file is non-negative or not.
- *
- * @param filepath
- * @return vector of strings
- */
-std::vector<std::string> readFileLines(const std::string &filepath) {
+std::vector<std::string> FileReader::readFileLines(const std::string &filepath) {
     std::vector<std::string> lines;
     std::ifstream input_file(filepath);
     std::string tmp_string;

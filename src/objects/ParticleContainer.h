@@ -71,5 +71,5 @@ public:
      */
     size_t getSize() const;
 
-    
+    std::vector<Particle> getParticles() const;
 };

@@ -55,6 +55,7 @@ file(GLOB_RECURSE MY_SRC
 file(GLOB_RECURSE TEST_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/**/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/**/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
 )
