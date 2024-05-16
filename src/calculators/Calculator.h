@@ -101,17 +101,8 @@ namespace calculators {
                 p.setX(x);
             }
         }
-
-    private:
-        /**
-         * @brief Calculates the forces acting on particles.
-         *
-         * This method is responsible for calculating the forces acting on all particles in the provided particle container.
-         *
-         * @param particleContainer The container of particles to calculate the forces for.
-         */
-        virtual void calculateF(ParticleContainer &particleContainer) = 0;
-
+    
+    protected:
         /**
          * @brief Determines if two points are far apart based on a given threshold.
          *
@@ -133,5 +124,15 @@ namespace calculators {
 
             return sum > threshold;
         }
+
+    private:
+        /**
+         * @brief Calculates the forces acting on particles.
+         *
+         * This method is responsible for calculating the forces acting on all particles in the provided particle container.
+         *
+         * @param particleContainer The container of particles to calculate the forces for.
+         */
+        virtual void calculateF(ParticleContainer &particleContainer) = 0;
     };
 }

@@ -149,6 +149,8 @@ target_link_libraries(MolSimBenchmark
             benchmark
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
             Boost::program_options
+            gtest
+            gtest_main
 )
 
 add_test(NAME MolSimTests COMMAND MolSimTests)
