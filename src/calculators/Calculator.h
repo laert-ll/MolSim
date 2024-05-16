@@ -6,6 +6,7 @@
 
 #include "../objects/ParticleContainer.h"
 #include "../utils/ArrayUtils.h"
+#include <omp.h>
 
 namespace calculators {
     /**
@@ -45,6 +46,7 @@ namespace calculators {
              * @param delta_t The time step used for the calculations.
              */
         virtual void calculateV(ParticleContainer &particleContainer, double delta_t) {
+            #pragma omp parallel for
             for (auto &p: particleContainer) {
                 // Get the current position, velocity, force and mass of the particle
                 std::array<double, 3> v = p.getV();
@@ -75,6 +77,7 @@ namespace calculators {
              * @param delta_t The time step used for the calculations.
              */
         virtual void calculateX(ParticleContainer &particleContainer, double delta_t) {
+            #pragma omp parallel for
             for (auto &p: particleContainer) {
                 // Get the current position, velocity, force and mass of the particle
                 std::array<double, 3> x = p.getX();
