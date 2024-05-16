@@ -13,18 +13,18 @@ benchmarks <- data.table(
            410, 842, 4452, 10733,
            0, 0, 0, 0,
            147, 329, 2079, 4499),
-  group = rep(c("Original", "Distance Threshold", "Parallization", "Both"), each = 4)
+  group = rep(c("Original", "Distance Threshold", "Parallelization", "Both"), each = 4)
 )
 
 benchmarks[, iterations := time_range / delta_t]
 
-y_range <- range(benchmarks$Time)
+y_range <- range(benchmarks$time)
 
 # Plot
 ggplot(benchmarks, aes(x = iterations, y = time, color = group, group = group)) +
   geom_line(linewidth = 1) + 
-  scale_color_manual(values = c("blue", "red", "green", "purple"),
-                     labels = c("Original", "Distance Threshold", "Parallization", "Both")) + 
+  scale_color_discrete(name = "Groups",
+                       breaks = c("Original", "Distance Threshold", "Parallization", "Both")) +
   labs(x = "Iterations", y = "Time (ms)", color = "Groups",
        title = "Effects of optimizing LJCalculator",
        subtitle = "Plotted benchmark results as average values of 5 test runs.
