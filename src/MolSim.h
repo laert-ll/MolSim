@@ -83,7 +83,7 @@ public:
                 ("delta_t", boost::program_options::value<double>(&delta_t)->default_value(0.014), "set delta_t")
                 ("end_time", boost::program_options::value<double>(&end_time)->default_value(1000), "set end_time")
                 ("output", boost::program_options::value<std::string>(), "output writer (vtk or xyz)")
-                ("calculator", boost::program_options::value<std::string>(), "calculator (sv or dummy)");
+                ("calculator", boost::program_options::value<std::string>(), "calculator (sv, lj or dummy)");
 
         boost::program_options::variables_map vm;
         boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);

@@ -38,10 +38,12 @@ In order to build and run this code, you need the following tools installed on y
 
    Example calls: 
       - `./MolSim --help`
-      - `./MolSim ../resources/input-sun.txt --delta_t=0.001 --end_time=5 --output=vtk --calculator=sv`
-      - `./MolSim ../resources/input-cuboid.txt --delta_t=0.001 --end_time=5 --output=vtk --calculator=lj`
+      - `./MolSim --input=../resources/input-sun.txt --delta_t=0.014 --end_time=1000 --output=vtk --calculator=sv`
+      - `./MolSim --input=../resources/input-cuboid.txt --delta_t=0.0002 --end_time=5 --output=vtk --calculator=lj`
 
 5. Available options for arguments:
+
+   `{HELP}`: Prints out a list of available options for arguments.
 
    `{INPUT}`: The txt file to be read as input for the file reader.
 
@@ -52,3 +54,11 @@ In order to build and run this code, you need the following tools installed on y
    `{OUTPUT_WRITER}`: The output writer to use. Available options are vtk or xyz.
 
    `{CALCULATOR}`: The calculator to use. Available options are sv, lj or dummy.
+
+6. If you wish to execute the tests:
+      - `./MolSimTests`
+      or
+      - `ctest -V -R '.*Test'`
+
+7. If you wish to execute the benchmarks:
+      - `./MolSimBenchmark`
