@@ -37,6 +37,8 @@ FetchContent_Declare(
         GIT_TAG        main
 )
 FetchContent_MakeAvailable(gtest)
+
+FetchContent_Declare(
         benchmark
         GIT_REPOSITORY https://github.com/google/benchmark
         GIT_TAG        main
