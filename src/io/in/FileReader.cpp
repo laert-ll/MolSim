@@ -17,6 +17,7 @@ ParticleContainer FileReader::readFile(const std::string &filepath) {
 
     // Check if there are lines in the file
     if (lines.empty()) {
+        SPDLOG_ERROR("File is empty: ", filepath);
         throw std::runtime_error("File is empty: " + filepath);
     }
 
@@ -46,9 +47,9 @@ ParticleContainer FileReader::readFile(const std::string &filepath) {
             loadCuboids(lines, particleContainer);
             break;
         default:
+            SPDLOG_ERROR("Invalid data code in file '", filepath + "': Only data codes 0 and 1 are supported.");
             throw std::runtime_error(
                     "Invalid data code in file '" + filepath + "': Only data codes 0 and 1 are supported.");
-
     }
 
     return particleContainer;
@@ -59,6 +60,7 @@ void FileReader::loadParticles(const std::vector<std::string> &lines, ParticleCo
     double m;
 
     int num_particles = std::stoi(lines[0]);
+    SPDLOG_DEBUG("Number of particles to load: {}", num_particles);
 
     for (int i = 1; i < num_particles + 1; ++i) {
         std::istringstream datastream(lines[i]);
@@ -76,12 +78,13 @@ void FileReader::loadParticles(const std::vector<std::string> &lines, ParticleCo
 }
 
 void FileReader::loadCuboids(const std::vector<std::string> &lines, ParticleContainer &particles) {
+    SPDLOG_INFO("Starting to load cuboids...");
     std::array<double, 3> llf{}, startV{};
     std::array<size_t, 3> numParticles{};
     double distance, mass, meanV;
 
     int num_cuboids = std::stoi(lines[0]);
-    SPDLOG_INFO("num_cuboids: {}", num_cuboids);
+    SPDLOG_DEBUG("Number of cuboids to load: {}", num_cuboids);
 
     for (int i = 1; i < num_cuboids + 1; ++i) {
         std::istringstream datastream(lines[i]);
@@ -97,12 +100,11 @@ void FileReader::loadCuboids(const std::vector<std::string> &lines, ParticleCont
         }
 
         CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV);
-        SPDLOG_INFO("Generating cuboid with particle number: {}, {}, {}", numParticles[0], numParticles[1],
-                    numParticles[2]);
         ParticleGenerator::generateCuboid(cuboidParams, particles);
-        SPDLOG_INFO("Generating cuboid completed");
+        SPDLOG_DEBUG("Completed generating cuboid {}", i);
         particles.initializePairs();
     }
+    SPDLOG_INFO("Finished loading cuboids!");
 }
 // ------------------------------------------- Helper methods --------------------------------------------------
 template<typename T, size_t N>
@@ -136,7 +138,6 @@ std::vector<std::string> FileReader::readFileLines(const std::string &filepath) 
                     lines.reserve(num_data + 1);
                     num_data_read = true;
                 }
-
                 lines.push_back(tmp_string);
             }
         }
