@@ -107,10 +107,12 @@ target_link_libraries(MolSim
             Boost::timer
         PRIVATE
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
+            gtest
+            gtest_main
 )
 
 target_link_libraries(MolSimTests
-        PRIVATE 
+         PRIVATE
             gtest 
             gtest_main
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
