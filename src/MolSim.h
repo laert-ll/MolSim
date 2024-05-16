@@ -122,7 +122,7 @@ public:
                 calculator = std::make_unique<calculators::SVCalculator>();
                 SPDLOG_INFO("Selected calculator: sv");
             } else if (calculatorArg == "lj") {
-                calculator = std::make_unique<calculators::LJCalculator>(1, 5);
+                calculator = std::make_unique<calculators::LJCalculator>(1, 5, 5.31608);
                 SPDLOG_INFO("Selected calculator: lj");
             } else if (calculatorArg == "dummy") {
                 calculator = std::make_unique<calculators::DummyCalculator>();

@@ -11,7 +11,7 @@ static void BM_LJCalculator(benchmark::State& state) {
                             state.range(0) == 2 ? 0.001 :
                             state.range(0) == 3 ? 0.0005 : 5;
     const double end_time = 5.0;
-    std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5, 4.22399);
+    std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5, 5.31608);
     ParticleContainer particleContainer = FileReader::readFile("../resources/input-cuboid.txt");
 
     for (auto _ : state) {
