@@ -1,12 +1,6 @@
 //
 // Created by kimj2 on 14.05.2024.
 //
-#pragma once
-
-#include <iostream>
-#include <memory>
-#include <boost/program_options.hpp>
-#include <boost/timer/timer.hpp>
 #include "calculators/SVCalculator.h"
 #include "calculators/DummyCalculator.h"
 #include "calculators/LJCalculator.h"
@@ -16,6 +10,7 @@
 #include "io/out/VTKWriter.h"
 #include "io/out/XYZWriter.h"
 #include "spdlog/spdlog.h"
+#include "cxxopts.hpp"
 
 class MolSim {
 public:
@@ -52,7 +47,7 @@ public:
     /**
      * @brief Processes the command line arguments and sets up the simulation parameters.
      *
-     * This function processes the command line arguments using Boost.Program_options. It sets up the
+     * This function processes the command line arguments using cxxopts. It sets up the
      * simulation parameters such as the time step (delta_t), the end time of the simulation, the output
      * writer, and the calculator to be used.
      *
@@ -76,33 +71,33 @@ public:
                                     double &delta_t, double &end_time,
                                     std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
                                     std::unique_ptr<calculators::Calculator> &calculator) {
-        boost::program_options::options_description desc("Allowed options");
-        desc.add_options()
-                ("help", "produce help message")
-                ("input", boost::program_options::value<std::string>(), "input file path")
-                ("delta_t", boost::program_options::value<double>(&delta_t)->default_value(0.014), "set delta_t")
-                ("end_time", boost::program_options::value<double>(&end_time)->default_value(1000), "set end_time")
-                ("output", boost::program_options::value<std::string>(), "output writer (vtk or xyz)")
-                ("calculator", boost::program_options::value<std::string>(), "calculator (sv, lj or dummy)");
+        cxxopts::Options options("MolSim", "Molecular Simulation Program");
 
-        boost::program_options::variables_map vm;
-        boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
-        boost::program_options::notify(vm);
+        options.add_options()
+            ("help", "Produce help message")
+            ("input", "Input file path", cxxopts::value<std::string>())
+            ("delta_t", "Set delta_t", cxxopts::value<double>()->default_value("0.014"))
+            ("end_time", "Set end_time", cxxopts::value<double>()->default_value("1000"))
+            ("output", "Output writer (vtk or xyz)", cxxopts::value<std::string>())
+            ("calculator", "Calculator (sv, lj or dummy)", cxxopts::value<std::string>());
 
-        if (vm.count("help")) {
-            std::stringstream ss;
-            desc.print(ss);
-            SPDLOG_INFO("{}", ss.str());
+        auto result = options.parse(argc, argv);
+
+        if (result.count("help")) {
+            std::cout << options.help() << std::endl;
             return false;
         }
 
-        if (vm.count("input")) {
-            inputFilePath = vm["input"].as<std::string>();
+        if (result.count("input")) {
+            inputFilePath = result["input"].as<std::string>();
             SPDLOG_INFO("Input file path: {}", inputFilePath);
         }
 
-        if (vm.count("output")) {
-            std::string outputWriterArg = vm["output"].as<std::string>();
+        delta_t = result["delta_t"].as<double>();
+        end_time = result["end_time"].as<double>();
+
+        if (result.count("output")) {
+            std::string outputWriterArg = result["output"].as<std::string>();
             if (outputWriterArg == "vtk") {
                 outputWriter = std::make_unique<outputWriters::VTKWriter>();
                 SPDLOG_INFO("Selected output writer: vtk");
@@ -116,8 +111,8 @@ public:
             }
         }
 
-        if (vm.count("calculator")) {
-            std::string calculatorArg = vm["calculator"].as<std::string>();
+        if (result.count("calculator")) {
+            std::string calculatorArg = result["calculator"].as<std::string>();
             if (calculatorArg == "sv") {
                 calculator = std::make_unique<calculators::SVCalculator>();
                 SPDLOG_INFO("Selected calculator: sv");
@@ -129,7 +124,7 @@ public:
                 SPDLOG_INFO("Selected calculator: dummy");
             } else {
                 SPDLOG_ERROR("Invalid option for calculator: {}", calculatorArg);
-                SPDLOG_ERROR("Only 'sv' and 'dummy' are allowed.");
+                SPDLOG_ERROR("Only 'sv', 'lj', or 'dummy' are allowed.");
                 return false;
             }
         }
@@ -190,5 +185,3 @@ public:
         SPDLOG_INFO("Output written. Terminating...");
     }
 };
-
-namespace po = boost::program_options;

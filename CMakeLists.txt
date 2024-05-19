@@ -25,11 +25,11 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(spdlog)
 
 FetchContent_Declare(
-        boost
-        GIT_REPOSITORY https://github.com/boostorg/boost
-        GIT_TAG        master
+    cxxopts
+    GIT_REPOSITORY https://github.com/jarro2783/cxxopts
+    GIT_TAG        master
 )
-FetchContent_MakeAvailable(boost)
+FetchContent_MakeAvailable(cxxopts)
 
 FetchContent_Declare(
         gtest
@@ -44,8 +44,6 @@ FetchContent_Declare(
         GIT_TAG        main
 )
 FetchContent_MakeAvailable(benchmark)
-
-find_package(Boost REQUIRED COMPONENTS program_options timer)
 
 find_package(OpenMP)
 if (OPENMP_FOUND)
@@ -129,12 +127,11 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
-            Boost::program_options
-            Boost::timer
         PRIVATE
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
             gtest
             gtest_main
+            cxxopts
 )
 
 target_link_libraries(MolSimTests
@@ -148,7 +145,6 @@ target_link_libraries(MolSimBenchmark
         PRIVATE 
             benchmark
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
-            Boost::program_options
             gtest
             gtest_main
 )
