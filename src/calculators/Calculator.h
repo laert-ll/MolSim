@@ -33,8 +33,33 @@ namespace calculators {
          */
         virtual void calculate(ParticleContainer &particleContainer, double delta_t) {
             calculateF(particleContainer);
+            calculateReflection(particleContainer);
             calculateX(particleContainer, delta_t);
             calculateV(particleContainer, delta_t);
+        }
+
+        /**
+         * @brief Calculates the force which bounces the particle back from the boundary
+         *
+         * I'll set the boundary to x = 45 and it gets bounced back if x >= 45 - 1.1225 (= 6th root of 2)
+         * @param particleContainer The container of particles to perform the calculations on
+         *
+         */
+        void calculateReflection(ParticleContainer &particleContainer) {
+            double boundary = 45;
+            double tolerance = 1.12246204831;
+            for (auto &p : particleContainer) {
+                double distanceToBoundary = boundary - p.getX().at(0);
+                // only calculate reflection if near boundary
+                if (distanceToBoundary < tolerance) {
+                    Particle ghost{p};
+                    ghost.setX({boundary + distanceToBoundary, p.getX().at(1), p.getX().at(2)});
+                    ParticleContainer pc;
+                    pc.addParticle(p);
+                    pc.addParticle(ghost);
+                    calculateF(pc);
+                }
+            }
         }
 
         /**
