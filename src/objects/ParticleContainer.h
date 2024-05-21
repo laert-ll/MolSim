@@ -32,6 +32,12 @@ public:
     void addParticle(const Particle &particle);
 
     /**
+ * Method to remove a particle from the container.
+ * @param particle the particle to remove
+ */
+    void deleteParticle(const Particle &particle);
+
+    /**
      * Method to fill the vector of unique pairs with the references to particles.
      */
     void initializePairs();

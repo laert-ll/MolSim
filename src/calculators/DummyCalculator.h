@@ -56,5 +56,12 @@ namespace calculators {
          * @param delta_t The time step used for the calculations.
          */
         void calculateV(ParticleContainer &particleContainer, double delta_t);
+
+        /**
+         * @brief Dummy Reflection - does nothing
+         * @param p
+         * @param ghost
+         */
+        void calculateReflection(Particle &p, Particle &ghost) override;
     };
 }

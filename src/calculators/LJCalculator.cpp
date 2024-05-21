@@ -48,4 +48,26 @@ namespace calculators {
             particle2.setF(newF2);
         }
     }
+    
+    void LJCalculator::calculateReflection(Particle &p, Particle &ghost) {
+        // Get the positions and masses of the two particles
+        const std::array<double, 3> x1 = p.getX();
+        const std::array<double, 3> x2 = ghost.getX();
+
+        // Calculate the distance vector and its norm
+        const std::array<double, 3> dx = ArrayUtils::elementWisePairOp(x1, x2, std::minus<>());
+        const double distance = ArrayUtils::L2Norm(dx);
+
+        // Calculate the force between the two particles
+        const double forceMagnitude = -(24 * epsilon / (distance * distance)) *
+                                      ((pow(sigma / distance, 6) - 2 * pow(sigma / distance, 12)));
+        std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(forceMagnitude, dx,
+                                                                      std::multiplies<>());
+
+        // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
+        const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(p.getF(), force,
+                                                                          std::plus<>());
+
+        p.setF(newF1);
+    };
 }

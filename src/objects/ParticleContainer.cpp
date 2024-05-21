@@ -8,6 +8,26 @@ void ParticleContainer::addParticle(const Particle &particle) {
     particles.push_back(particle);
 }
 
+void ParticleContainer::deleteParticle(const Particle &particle) {
+    // Find the particle in the vector
+    auto it = std::find_if(particles.begin(), particles.end(), [&](const Particle &p) {
+        return &p == &particle;
+    });
+
+    // If the particle is found, erase it from the vector
+    if (it != particles.end()) {
+        particles.erase(it);
+
+        // Remove any pairs involving the deleted particle
+        particlePairs.erase(
+                std::remove_if(particlePairs.begin(), particlePairs.end(), [&](const std::pair<std::reference_wrapper<Particle>, std::reference_wrapper<Particle>> &pair) {
+                    return &pair.first.get() == &particle || &pair.second.get() == &particle;
+                }),
+                particlePairs.end()
+        );
+    }
+}
+
 void ParticleContainer::initializePairs() {
     for (auto it1 = particles.begin(); it1 != particles.end(); ++it1)
         for (auto it2 = std::next(it1); it2 != particles.end(); ++it2)

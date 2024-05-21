@@ -16,4 +16,8 @@ namespace calculators {
     void DummyCalculator::calculateX(ParticleContainer &particleContainer, double delta_t) {}
 
     void DummyCalculator::calculateV(ParticleContainer &particleContainer, double delta_t) {}
+
+    void DummyCalculator::calculateReflection(Particle &p, Particle &ghost) {
+
+    }
 }

@@ -45,5 +45,26 @@ namespace calculators {
             particle2.setF(newF2);
         }
     }
+    void SVCalculator::calculateReflection(Particle &p, Particle &ghost) {
+        // Get the positions and masses of the two particles
+        const std::array<double, 3> x1 = p.getX();
+        const std::array<double, 3> x2 = ghost.getX();
+
+        const double m1 = p.getM();
+        const double m2 = ghost.getM();
+
+        // Calculate the distance vector and its norm
+        const std::array<double, 3> dx = ArrayUtils::elementWisePairOp(x2, x1, std::minus<double>());
+        const double distance = ArrayUtils::L2Norm(dx);
+
+        // Calculate the force between the two particles
+        const double scalar = (m1 * m2) / std::pow(distance, 3);
+        const std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(scalar, dx, std::multiplies<double>());
+
+        // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
+        const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(p.getF(), force, std::plus<double>());
+        p.setF(newF1);
+    }
+
 }
 
