@@ -73,7 +73,7 @@ public:
      */
     static bool processArguments(int argc, char *argv[], std::string &inputFilePath,
                                     double &delta_t, double &end_time,
-                                    std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
+                                    std::unique_ptr<outputWriters::FileWriter> &outputWriter,
                                     std::unique_ptr<calculators::Calculator> &calculator) {
         boost::program_options::options_description desc("Allowed options");
         desc.add_options()
@@ -157,11 +157,11 @@ public:
     * @param particleContainer The particle container containing the particles.
     * @param delta_t The time step size.
     * @param end_time The end time of the simulation.
-    * @param outputWriter The output writer to be used.
+    * @param outputWriter The file writer to be used.
     * @param calculator The calculator to be used.
     */
     static void performSimulation(ParticleContainer &particleContainer, double &delta_t, double &end_time,
-                                  std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
+                                  std::unique_ptr<outputWriters::FileWriter> &outputWriter,
                                   std::unique_ptr<calculators::Calculator> &calculator) {
         const std::string &filename = "MD";
 

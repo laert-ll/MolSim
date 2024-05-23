@@ -36,7 +36,7 @@ int main(int argc, char *argsv[]) {
     std::string inputFilePath;
     double delta_t;
     double end_time;
-    std::unique_ptr<outputWriters::OutputWriter> outputWriter;
+    std::unique_ptr<outputWriters::FileWriter> outputWriter;
     std::unique_ptr<calculators::Calculator> calculator;
 
     if (!MolSim::processArguments(argc, argsv, inputFilePath, delta_t, end_time, outputWriter, calculator)) {
