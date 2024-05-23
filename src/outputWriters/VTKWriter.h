@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "../../objects/Particle.h"
+#include "../objects/Particle.h"
 #include "vtk-unstructured.h"
-#include "FileWriter.h"
+#include "OutputWriter.h"
 
 #include <list>
 
@@ -66,4 +66,4 @@ namespace outputWriters {
          */
         void writeFile(const std::string &filename, int iteration);
     };
-} // namespace out
+} // namespace outputWriters

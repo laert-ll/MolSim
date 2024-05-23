@@ -104,7 +104,7 @@ namespace calculators {
                 p.setX(x);
             }
         }
-    
+
     protected:
         /**
          * @brief Determines if two points are far apart based on a given threshold.
