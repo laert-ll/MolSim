@@ -9,14 +9,18 @@
 #
 # The second line indicates the number of data sets (e.g. number of particles or cuboids).
 #
+# The third line indicates the dimension of the simulation.
+#
 # Particle data consists of
 # * xyz-coordinates (3 double values)
 # * velocities (2 or 3 double values)
 # * mass (1 double value)
 #
-# xyz-coord      velocity        mass
+# Data type
 0
+# Number of data sets
 4
+# xyz-coord      velocity        mass
 0.0 0.0 0.0      0.0 0.0 0.0     1.0
 0.0 1.0 0.0     -1.0 0.0 0.0     3.0e-6
 0.0 5.36 0.0    -0.425 0.0 0.0   9.55e-4

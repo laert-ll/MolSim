@@ -1,5 +1,4 @@
 #include "calculators/SVCalculator.h"
-#include "calculators/DummyCalculator.h"
 #include "calculators/LJCalculator.h"
 #include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"

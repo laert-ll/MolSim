@@ -9,6 +9,7 @@
 
 #include <random>
 #include <array>
+#include <spdlog/spdlog.h>
 
 /**
  * Generate a random velocity vector according to the Maxwell-Boltzmann distribution, with a given average velocity.
@@ -29,5 +30,6 @@ std::array<double, 3> maxwellBoltzmannDistributedVelocity(double averageVelocity
   for (size_t i = 0; i < dimensions; ++i) {
     randomVelocity[i] = averageVelocity * normalDistribution(randomEngine);
   }
+  SPDLOG_TRACE("Generated random velocity: [{}, {}, {}]", randomVelocity[0], randomVelocity[1], randomVelocity[2]);
   return randomVelocity;
 }

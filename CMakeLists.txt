@@ -47,6 +47,8 @@ FetchContent_MakeAvailable(benchmark)
 
 find_package(Boost REQUIRED COMPONENTS program_options timer)
 
+# Find Boost components
+find_package(Boost REQUIRED COMPONENTS program_options timer)
 find_package(OpenMP)
 if (OPENMP_FOUND)
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
@@ -82,7 +84,7 @@ file(GLOB_RECURSE BENCHMARK_SOURCES
 
 #------------------------------------------LOGGING---------------------------------------------------------
 # get the log level from the command line
-set(log_level "INFO" CACHE STRING "Log level")
+set(log_level "INFO" STRING "Log level")
 
 # define the valid log levels
 set(valid_log_levels "TRACE" "DEBUG" "INFO" "WARN" "ERROR" "CRITICAL" "OFF")

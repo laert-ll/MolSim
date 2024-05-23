@@ -11,7 +11,8 @@
 TEST(ParticleContainerTest, GenerateCuboid) {
     double pDistance = 1.0;
     double pMass = 1.0;
-    CuboidParameters parameters{{0.0, 0.0, 0.0}, {2, 2, 1}, pDistance, pMass, {0.0, 0.0, 0.0}, 0.1};
+    int dim = 2;
+    CuboidParameters parameters{{0.0, 0.0, 0.0}, {2, 2, 1}, pDistance, pMass, {0.0, 0.0, 0.0}, 0.1, dim};
     ParticleContainer container{};
     ParticleGenerator::generateCuboid(parameters, container);
     EXPECT_EQ(container.getSize(), 4);
@@ -32,7 +33,8 @@ TEST(ParticleContainerTest, GenerateParticle) {
     double m = 1.5;
     double volume = 2.5;
     int t = 0;
-    ParticleParameters parameters{x, v, m, volume, t};
+    int dim = 2;
+    ParticleParameters parameters{x, v, m, volume, t, dim};
     Particle particle{x, v, m, volume, t};
     Particle copy = ParticleGenerator::generateParticle(parameters);
     EXPECT_EQ(copy, particle);

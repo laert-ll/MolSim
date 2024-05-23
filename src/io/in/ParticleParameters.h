@@ -5,10 +5,13 @@
 #include <array>
 
 /**
- * @struct ParticleParameters
+ * @class ParticleParameters
  * @brief Parameters for a particle.
+ *
+ * This class encapsulates the parameters needed to define a particle.
+ * All attributes are private, const and can only be accessed through getter methods.
  */
-struct ParticleParameters {
+class ParticleParameters {
 public:
     /**
      * @brief Constructor with initializer list.
@@ -17,9 +20,10 @@ public:
      * @param m Initial mass of the particle.
      * @param volume Initial volume of the particle.
      * @param type Initial type of the particle.
+     * @param dimension Dimension of the simulation.
      */
-    ParticleParameters(std::array<double, 3> x, std::array<double, 3> v, double m, double volume, int type)
-            : x(x), v(v), m(m), volume(volume), type(type) {}
+    ParticleParameters(std::array<double, 3> x, std::array<double, 3> v, double m, double volume, int type, int dimension)
+            : x(x), v(v), m(m), volume(volume), type(type), dimension(dimension) {}
 
     /**
      * @brief Get the position of the particle.
@@ -36,7 +40,6 @@ public:
     const std::array<double, 3>& getVelocity() const {
         return v;
     }
-
 
     /**
      * @brief Get the mass of the particle.
@@ -62,31 +65,44 @@ public:
         return type;
     }
 
+    /**
+     * @brief Get the dimension of the simulation.
+     * @return The dimension of the simulation.
+     */
+    int getDimension() const {
+        return dimension;
+    }
+
 private:
     /**
      * @brief Position of the particle.
      */
-    std::array<double, 3> x;
+    const std::array<double, 3> x;
 
     /**
      * @brief Velocity of the particle.
      */
-    std::array<double, 3> v;
+    const std::array<double, 3> v;
 
     /**
      * @brief Mass of this particle.
      */
-    double m;
+    const double m;
 
     /**
      * @brief Paraview volume of this particle.
      */
-    double volume;
+    const double volume;
 
     /**
      * @brief Type of the particle.
      * Use it for whatever you want (e.g. to separate
      * molecules belonging to different bodies, matters, and so on).
      */
-    int type;
+    const int type;
+
+    /**
+     * @brief Dimension of the simulation.
+     */
+    const int dimension;
 };

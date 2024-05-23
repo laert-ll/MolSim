@@ -17,6 +17,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <spdlog/spdlog.h>
 
 /**
  * Collection of utility functions and operators for iterable data containers
@@ -132,7 +133,8 @@ inline Container elementWisePairOp(const Container &lhs, const Container &rhs,
        ++lhsIter, ++rhsIter, ++retIter) {
     *retIter = binaryFunction(*lhsIter, *rhsIter);
   }
-
+  SPDLOG_TRACE("Element wise pair operation: {} {} {} = {}", lhs, rhs, binaryFunction,
+               ret);
   return ret;
 }
 
@@ -159,6 +161,8 @@ inline Container elementWiseScalarOp(const Scalar &lhs, const Container &rhs,
     *retIter = binaryFunction(lhs, *rhsIter);
   }
 
+  SPDLOG_TRACE("Element wise scalar operation: {} {} {} = {}", lhs, rhs, binaryFunction,
+               ret);
   return ret;
 }
 

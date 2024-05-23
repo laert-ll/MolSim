@@ -8,7 +8,6 @@
 #include <boost/program_options.hpp>
 #include <boost/timer/timer.hpp>
 #include "calculators/SVCalculator.h"
-#include "calculators/DummyCalculator.h"
 #include "calculators/LJCalculator.h"
 #include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"
@@ -124,12 +123,9 @@ public:
             } else if (calculatorArg == "lj") {
                 calculator = std::make_unique<calculators::LJCalculator>(1, 5, 5.31608);
                 SPDLOG_INFO("Selected calculator: lj");
-            } else if (calculatorArg == "dummy") {
-                calculator = std::make_unique<calculators::DummyCalculator>();
-                SPDLOG_INFO("Selected calculator: dummy");
             } else {
                 SPDLOG_ERROR("Invalid option for calculator: {}", calculatorArg);
-                SPDLOG_ERROR("Only 'sv' and 'dummy' are allowed.");
+                SPDLOG_ERROR("Only 'sv' and 'lj' are allowed.");
                 return false;
             }
         }
