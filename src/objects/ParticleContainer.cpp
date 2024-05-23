@@ -4,10 +4,6 @@
 const double VOLUME_MIN = 0.5;
 const double VOLUME_MAX = 1.0;
 
-ParticleContainer::ParticleContainer() {}
-
-ParticleContainer::~ParticleContainer() {}
-
 void ParticleContainer::addParticle(const Particle &particle) {
     particles.push_back(particle);
 }
@@ -21,9 +17,9 @@ void ParticleContainer::initializePairs() {
 void ParticleContainer::setVolumes() {
     // Find the particle with the highest and lowest masses
     auto mass_minmax = std::minmax_element(particles.begin(), particles.end(),
-        [](const Particle& a, const Particle& b) {
-            return a.getM() < b.getM();
-        });
+                                           [](const Particle& a, const Particle& b) {
+                                               return a.getM() < b.getM();
+                                           });
 
     double min_mass = (*mass_minmax.first).getM();
     double max_mass = (*mass_minmax.second).getM();
@@ -64,3 +60,7 @@ std::vector <std::pair<std::reference_wrapper < Particle>, std::reference_wrappe
 size_t ParticleContainer::getSize() const {
     return particles.size();
 }
+
+std::vector<Particle> ParticleContainer::getParticles() const {
+    return particles;
+};

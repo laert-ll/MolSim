@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "../objects/Particle.h"
-#include "OutputWriter.h"
+#include "objects/Particle.h"
+#include "FileWriter.h"
 
 #include <fstream>
 #include <list>
@@ -21,7 +21,7 @@ namespace outputWriters {
      * This class is a concrete implementation of the `OutputWriter` base class.
      * It provides an implementation for the `plotParticles` method, which writes the positions of particles in the provided particle container to an XYZ file.
      */
-    class XYZWriter : public OutputWriter {
+    class XYZWriter : public FileWriter {
 
     public:
         XYZWriter() = default;

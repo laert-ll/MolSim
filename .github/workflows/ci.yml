@@ -1,0 +1,52 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main", "Assignment2" ]
+  pull_request:
+    branches: [ "main", "Assignment2" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Dependencies
+      run: sudo apt install libxerces-c-dev libboost-program-options-dev libboost-timer-dev
+
+    - name: Create build directory
+      run: mkdir -p ${{github.workspace}}/build
+
+    - name: CMake Configure
+      run: cmake -D CMAKE_CXX_FLAGS="-fsanitize=address" -DBoost_USE_STATIC_LIBS=ON -B ${{github.workspace}}/build ${{github.workspace}}
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build
+
+    - name: Save build environment
+      uses: actions/upload-artifact@v4
+      with:
+        name: built
+        path: ${{github.workspace}}/build
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Reload build environment
+      uses: actions/download-artifact@v4
+      with:
+        name: built
+        path: ${{github.workspace}}/build
+
+    - name: Set execute permissions for tests
+      run: chmod +x ${{github.workspace}}/build/MolSimTests ${{github.workspace}}/build/MolSimBenchmark
+
+    - name: Tests
+      working-directory: ${{github.workspace}}/build
+      run: ctest -V -R '.*Test'

@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "../objects/Particle.h"
+#include "objects/Particle.h"
 #include "vtk-unstructured.h"
-#include "OutputWriter.h"
+#include "FileWriter.h"
 
 #include <list>
 
@@ -19,7 +19,7 @@ namespace outputWriters {
      * This class implements the functionality to generate vtk output from
      * particles.
      */
-    class VTKWriter : public OutputWriter {
+    class VTKWriter : public FileWriter {
 
     public:
         VTKWriter() = default;

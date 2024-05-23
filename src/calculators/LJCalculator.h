@@ -1,3 +1,6 @@
+//
+// Created by Ujin on 04.05.2024.
+//
 #pragma once
 
 #include "../objects/ParticleContainer.h"
@@ -11,7 +14,11 @@ namespace calculators {
      * This class provides methods to calculate the new position, force, and velocity of particles,
      * as well as to plot the particles to a VTK file. It uses the Stoermer-Verlet method for the calculations.
      */
-    class SVCalculator : public Calculator {
+    class LJCalculator : public Calculator {
+    private:
+        const double sigma;
+        const double epsilon;
+        const double threshold;
 
     public:
         /**
@@ -19,15 +26,7 @@ namespace calculators {
          *
          * Initializes the SVCalculator object.
          */
-        SVCalculator() = default;
-
-        /**
-         * Calls methods to calculate positions, forces, and velocities of particles in the right order.
-         *
-         * @param particleContainer The ParticleContainer containing the particles to update.
-         * @param delta_t The time step used in the calculations.
-         */
-        void calculate(ParticleContainer &particleContainer, double delta_t) override;
+        LJCalculator(double sigma, double epsilon, double threshold) : sigma(sigma), epsilon(epsilon), threshold(threshold) {}
 
         /**
              * Calculates the force between all pairs of unique particles considering the third Newton's law.
