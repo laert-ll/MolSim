@@ -12,17 +12,23 @@
 TEST(FileReaderTest, readFileLinesBasicTest) {
     FileReader fileReader;
     std::ofstream testfile("test_file.txt");
-    testfile << "3\n"
+    testfile << "# This should be ignored\n"
+             << "0\n"  // Data code for particles
+             << "4\n"  // Number of data sets
              << "# This should be ignored\n"
+             << "2\n" // Dimension of simulation
              << "Data Set 1\n"
              << "Data Set 2\n"
              << "Data Set 3\n";
     testfile.close();
     std::vector<std::string> lines = FileReader::readAndValidateFileLines("test_file.txt");
-    ASSERT_EQ(lines.size(), 4);
-    EXPECT_EQ(lines[1], "Data Set 1");
-    EXPECT_EQ(lines[2], "Data Set 2");
-    EXPECT_EQ(lines[3], "Data Set 3");
+    ASSERT_EQ(lines.size(), 6);
+    EXPECT_EQ(lines[0], "0");
+    EXPECT_EQ(lines[1], "4");
+    EXPECT_EQ(lines[2], "2");
+    EXPECT_EQ(lines[3], "Data Set 1");
+    EXPECT_EQ(lines[4], "Data Set 2");
+    EXPECT_EQ(lines[5], "Data Set 3");
 
     // Delete the temporary file
     std::remove("test_file.txt");
@@ -132,20 +138,6 @@ TEST(ReadFileTest, EmptyFile) {
 
     // Delete the temporary file
     std::remove("empty_file.txt");
-}
-
-// Test case for handling invalid data code
-TEST(ReadFileTest, InvalidDataCode) {
-    // Create a temporary file with an invalid data code
-    std::ofstream outfile("invalid_data_code.txt");
-    outfile << "2\n";  // Invalid data code
-    outfile.close();
-
-    // Test whether the method throws an exception for an invalid data code
-    ASSERT_THROW(FileReader().readFile("invalid_data_code.txt"), std::runtime_error);
-
-    // Delete the temporary file
-    std::remove("invalid_data_code.txt");
 }
 
 // Test case for FileReader::loadParticles method

@@ -20,6 +20,8 @@
 0
 # Number of data sets
 4
+# Dimension
+3
 # xyz-coord      velocity        mass
 0.0 0.0 0.0      0.0 0.0 0.0     1.0
 0.0 1.0 0.0     -1.0 0.0 0.0     3.0e-6

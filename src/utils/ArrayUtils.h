@@ -133,8 +133,8 @@ inline Container elementWisePairOp(const Container &lhs, const Container &rhs,
        ++lhsIter, ++rhsIter, ++retIter) {
     *retIter = binaryFunction(*lhsIter, *rhsIter);
   }
-  SPDLOG_TRACE("Element wise pair operation: {} {} {} = {}", lhs, rhs, binaryFunction,
-               ret);
+
+  SPDLOG_TRACE("Element wise pair operation: {} {} = {}", to_string(lhs), to_string(rhs), to_string(ret));
   return ret;
 }
 
@@ -161,8 +161,7 @@ inline Container elementWiseScalarOp(const Scalar &lhs, const Container &rhs,
     *retIter = binaryFunction(lhs, *rhsIter);
   }
 
-  SPDLOG_TRACE("Element wise scalar operation: {} {} {} = {}", lhs, rhs, binaryFunction,
-               ret);
+  SPDLOG_TRACE("Element wise scalar operation: {} {} = {}", lhs, to_string(rhs), to_string(ret));
   return ret;
 }
 

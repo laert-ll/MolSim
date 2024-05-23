@@ -138,32 +138,26 @@ std::vector<std::string> FileReader::readAndValidateFileLines(const std::string 
                     exit(-1);
                 }
                 data_code_read = true;
-                continue;
             }
 
             // Read and validate the number of data sets
-            if (!num_data_read) {
+            else if (!num_data_read) {
                 int num_data = std::stoi(tmp_string);
                 if (num_data < 0) {
                     SPDLOG_ERROR("Error: Number of data sets cannot be negative.");
                     exit(-1);
                 }
-
-                // Reserve space in the vector to avoid reallocations
-                lines.reserve(num_data + 1);
                 num_data_read = true;
-                continue;
             }
 
             // Read and validate the dimension
-            if (!dimension_read) {
+            else if (!dimension_read) {
                 int dimension = std::stoi(tmp_string);
                 if (allowedDimensions.find(dimension) == allowedDimensions.end()) {
                     SPDLOG_ERROR("Error: Invalid dimension {}. Only 2 or 3 are allowed.", dimension);
                     exit(-1);
                 }
                 dimension_read = true;
-                continue;
             }
 
             // Add the line to the vector
