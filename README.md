@@ -25,7 +25,7 @@ In order to build and run this code, you need the following tools installed on y
    The default log level is `INFO`.
    
     If you wish to set the log level manually, run:
-   `cmake -Dlog_level={WANTED_LOG_LEVEL} ..`
+   `LOG_LEVEL={WANTED_LOG_LEVEL} cmake ..`
 
    Valid log levels are: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `CRITICAL`, `OFF`.
    

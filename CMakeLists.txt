@@ -25,13 +25,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(spdlog)
 
 FetchContent_Declare(
-        boost
-        GIT_REPOSITORY https://github.com/boostorg/boost
-        GIT_TAG        master
-)
-FetchContent_MakeAvailable(boost)
-
-FetchContent_Declare(
         gtest
         GIT_REPOSITORY https://github.com/google/googletest.git
         GIT_TAG        main
@@ -83,8 +76,12 @@ file(GLOB_RECURSE BENCHMARK_SOURCES
 )
 
 #------------------------------------------LOGGING---------------------------------------------------------
-# get the log level from the command line
-set(log_level "INFO" STRING "Log level")
+# check if the log level is defined in the environment
+if(DEFINED ENV{LOG_LEVEL})
+    set(log_level $ENV{LOG_LEVEL})
+else()
+    set(log_level "INFO")
+endif()
 
 # define the valid log levels
 set(valid_log_levels "TRACE" "DEBUG" "INFO" "WARN" "ERROR" "CRITICAL" "OFF")
