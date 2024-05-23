@@ -110,4 +110,4 @@ void VTKWriter::plotParticles(int iteration, ParticleContainer &particleContaine
     writer.writeFile(filename, iteration);
 }
 
-} // namespace out
+} // namespace outputWriters
