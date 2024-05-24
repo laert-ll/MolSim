@@ -2,7 +2,6 @@
 // Created by kimj2 on 14.05.2024.
 //
 #include "calculators/SVCalculator.h"
-#include "calculators/DummyCalculator.h"
 #include "calculators/LJCalculator.h"
 #include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"
