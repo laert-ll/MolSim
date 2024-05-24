@@ -4,18 +4,18 @@
 
 #pragma once
 
-#include "../../objects/ParticleContainer.h"
+#include "objects/ParticleContainer.h"
 
 namespace outputWriters {
 
     /**
      * Abstract base class for output writers.
      */
-    class OutputWriter {
+    class FileWriter {
     public:
-        OutputWriter() = default;
+        FileWriter() = default;
 
-        virtual ~OutputWriter() = default;
+        virtual ~FileWriter() = default;
 
         /**
          * Method to plot the particles.

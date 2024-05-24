@@ -61,9 +61,9 @@ void VTKWriter::writeFile(const std::string &filename, int iteration) {
 
 void VTKWriter::plotParticle(Particle &p) {
     if (vtkFile->UnstructuredGrid().present()) {
-        SPDLOG_TRACE("UnstructuredGrid is present");
+        SPDLOG_INFO("UnstructuredGrid is present");
     } else {
-        SPDLOG_TRACE("ERROR: No UnstructuredGrid present");
+        SPDLOG_ERROR("ERROR: No UnstructuredGrid present");
     }
 
     PointData::DataArray_sequence &pointDataSequence =
@@ -110,4 +110,4 @@ void VTKWriter::plotParticles(int iteration, ParticleContainer &particleContaine
     writer.writeFile(filename, iteration);
 }
 
-} // namespace out
+} // namespace outputWriters

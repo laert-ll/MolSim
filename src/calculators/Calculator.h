@@ -33,44 +33,8 @@ namespace calculators {
          */
         virtual void calculate(ParticleContainer &particleContainer, double delta_t) {
             calculateF(particleContainer);
-            calculateReflections(particleContainer);
             calculateX(particleContainer, delta_t);
-            calculateOutflow(particleContainer);
             calculateV(particleContainer, delta_t);
-        }
-
-        /**
-         * @brief Calculates the force which bounces the particle back from the boundary
-         *
-         * Boundary is set as x = 45 and it gets bounced back if x >= 45 - 1.1225 (= 6th root of 2)
-         * @param particleContainer The container of particles to perform the calculations on
-         *
-         */
-        void calculateReflections(ParticleContainer &particleContainer) {
-            double boundary = 45;
-            double tolerance = 1.12246204831;
-            for (auto &p : particleContainer) {
-                double distanceToBoundary = boundary - p.getX().at(0);
-                // only calculate reflection if near boundary
-                if (distanceToBoundary < tolerance) {
-                    Particle ghost{p};
-                    ghost.setX({boundary + distanceToBoundary, p.getX().at(1), p.getX().at(2)});
-                    calculateReflection(p, ghost);
-                }
-            }
-        }
-
-        /**
-         * @brief Deletes all the particles below y = -1
-         *
-         * @param particleContainer
-         */
-        void calculateOutflow(ParticleContainer &particleContainer) {
-            double boundary = -1;
-            for (auto &p : particleContainer) {
-                if (p.getX().at(1) <= boundary)
-                    particleContainer.deleteParticle(p);
-            }
         }
 
         /**
@@ -140,7 +104,7 @@ namespace calculators {
                 p.setX(x);
             }
         }
-    
+
     protected:
         /**
          * @brief Determines if two points are far apart based on a given threshold.
@@ -173,14 +137,5 @@ namespace calculators {
          * @param particleContainer The container of particles to calculate the forces for.
          */
         virtual void calculateF(ParticleContainer &particleContainer) = 0;
-
-        /**
-         * @brief Calculates the reflection for a particle p near the boundary with the according calculator
-         *
-         * @param p
-         * @param ghost
-         */
-        virtual void calculateReflection(Particle &p, Particle &ghost) = 0;
     };
-
 }
