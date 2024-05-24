@@ -60,3 +60,33 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Parti
         }
     }
 }
+
+void ParticleGenerator::generateDisc(const DiscParameters &parameters, ParticleContainer& particleContainer) {
+    // Extract parameters for easier access
+    const auto &center = parameters.getCenter();
+    const auto &startV = parameters.getStartV();
+    const int numParticlesAlongRadius = parameters.getNumParticlesAlongRadius();
+    const double distance = parameters.getDistance();
+    const double mass = parameters.getMass();
+
+    SPDLOG_DEBUG("Generating disc: Center [{} {} {}], startV [{} {} {}], numParticlesAlongRadius {}, Distance {}",
+                 center[0], center[1], center[2], startV[0], startV[1], startV[2], numParticlesAlongRadius, distance);
+
+    // Generate particles for the disc
+    for (int i = -numParticlesAlongRadius; i <= numParticlesAlongRadius; ++i) {
+        for (int j = -numParticlesAlongRadius; j <= numParticlesAlongRadius; ++j) {
+            if (i * i + j * j <= numParticlesAlongRadius * numParticlesAlongRadius) {
+                // Calculate the position of the particle
+                const std::array<double, 3> x = {
+                        center[0] + i * distance,
+                        center[1] + j * distance,
+                        center[2]
+                };
+
+                // Create a new particle and add it to the container
+                Particle newParticle(x, startV, mass, 0, 0);
+                particleContainer.addParticle(newParticle);
+            }
+        }
+    }
+}

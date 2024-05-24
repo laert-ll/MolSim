@@ -11,7 +11,7 @@
 #include <gtest/gtest.h>
 
 #include "../../objects/ParticleContainer.h"
-#include "CuboidParameters.h"
+#include "io/in/parameters/CuboidParameters.h"
 #include "ParticleGenerator.h"
 
 
@@ -49,7 +49,7 @@ private:
 
     static void loadCuboids(const std::vector<std::string>& lines, ParticleContainer& particles);
 
-
+    static void loadDiscs(const std::vector<std::string>& lines, ParticleContainer& particles);
 
     /**
      * This method parses an array of values from a single line (string)

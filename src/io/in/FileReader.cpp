@@ -36,6 +36,9 @@ ParticleContainer FileReader::readFile(const std::string &filepath) {
         case 1:
             loadCuboids(lines, particleContainer);
             break;
+        case 2:
+            loadDiscs(lines, particleContainer);
+            break;
         default:
             SPDLOG_ERROR("Invalid data code in file '", filepath + "': Only data codes 0 and 1 are supported.");
             throw std::runtime_error(
@@ -100,8 +103,40 @@ void FileReader::loadCuboids(const std::vector<std::string> &lines, ParticleCont
     }
     SPDLOG_INFO("Finished loading cuboids!");
 }
+
+
+void FileReader::loadDiscs(const std::vector<std::string> &lines, ParticleContainer &particles) {
+    SPDLOG_INFO("Starting to load discs...");
+    std::array<double, 3> center{}, startV{};
+    int numParticlesAlongRadius;
+    double distance, mass;
+
+    int num_discs = std::stoi(lines[0]);
+    int dimension = std::stoi(lines[1]);
+    SPDLOG_DEBUG("Number of discs to load: {}", num_discs);
+    SPDLOG_DEBUG("Dimension of simulation: {}", dimension);
+
+    for (int i = 2; i < num_discs + 2; ++i) {
+        std::istringstream datastream(lines[i]);
+        parseDataFromLine(datastream, center);
+        parseDataFromLine(datastream, startV);
+        datastream >> numParticlesAlongRadius >> distance >> mass;
+
+        if (datastream.fail()) {
+            SPDLOG_ERROR("Error reading file: unexpected data format on line {}", i + 1);
+            exit(-1);
+        }
+
+        DiscParameters discParams(center, startV, numParticlesAlongRadius, distance, mass, dimension);
+        ParticleGenerator::generateDisc(discParams, particles);
+        SPDLOG_DEBUG("Completed generating disc {}", i);
+        particles.initializePairs();
+    }
+    SPDLOG_INFO("Finished loading discs!");
+}
+
 // ------------------------------------------- Helper methods --------------------------------------------------
-const std::set<int> FileReader::allowedDataCodes = {0, 1};
+const std::set<int> FileReader::allowedDataCodes = {0, 1, 2};
 const std::set<int> FileReader::allowedDimensions = {2, 3};
 
 template<typename T, size_t N>
