@@ -79,8 +79,12 @@ file(GLOB_RECURSE BENCHMARK_SOURCES
 )
 
 #------------------------------------------LOGGING---------------------------------------------------------
-# get the log level from the command line
-set(log_level "INFO" CACHE STRING "Log level")
+# check if the log level is defined in the environment
+if(DEFINED ENV{LOG_LEVEL})
+    set(log_level $ENV{LOG_LEVEL})
+else()
+    set(log_level "INFO")
+endif()
 
 # define the valid log levels
 set(valid_log_levels "TRACE" "DEBUG" "INFO" "WARN" "ERROR" "CRITICAL" "OFF")

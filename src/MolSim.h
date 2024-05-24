@@ -69,7 +69,7 @@ public:
      */
     static bool processArguments(int argc, char *argv[], std::string &inputFilePath,
                                     double &delta_t, double &end_time,
-                                    std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
+                                    std::unique_ptr<outputWriters::FileWriter> &outputWriter,
                                     std::unique_ptr<calculators::Calculator> &calculator) {
         cxxopts::Options options("MolSim", "Molecular Simulation Program");
 
@@ -119,12 +119,9 @@ public:
             } else if (calculatorArg == "lj") {
                 calculator = std::make_unique<calculators::LJCalculator>(1, 5, 5.31608);
                 SPDLOG_INFO("Selected calculator: lj");
-            } else if (calculatorArg == "dummy") {
-                calculator = std::make_unique<calculators::DummyCalculator>();
-                SPDLOG_INFO("Selected calculator: dummy");
             } else {
                 SPDLOG_ERROR("Invalid option for calculator: {}", calculatorArg);
-                SPDLOG_ERROR("Only 'sv', 'lj', or 'dummy' are allowed.");
+                SPDLOG_ERROR("Only 'sv' and 'lj' are allowed.");
                 return false;
             }
         }
@@ -156,11 +153,11 @@ public:
     * @param particleContainer The particle container containing the particles.
     * @param delta_t The time step size.
     * @param end_time The end time of the simulation.
-    * @param outputWriter The output writer to be used.
+    * @param outputWriter The file writer to be used.
     * @param calculator The calculator to be used.
     */
     static void performSimulation(ParticleContainer &particleContainer, double &delta_t, double &end_time,
-                                  std::unique_ptr<outputWriters::OutputWriter> &outputWriter,
+                                  std::unique_ptr<outputWriters::FileWriter> &outputWriter,
                                   std::unique_ptr<calculators::Calculator> &calculator) {
         const std::string &filename = "MD";
 

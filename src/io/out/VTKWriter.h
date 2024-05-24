@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "../../objects/Particle.h"
+#include "objects/Particle.h"
 #include "vtk-unstructured.h"
 #include "FileWriter.h"
 
@@ -19,7 +19,7 @@ namespace outputWriters {
      * This class implements the functionality to generate vtk output from
      * particles.
      */
-    class VTKWriter : public OutputWriter {
+    class VTKWriter : public FileWriter {
 
     public:
         VTKWriter() = default;
@@ -66,4 +66,4 @@ namespace outputWriters {
          */
         void writeFile(const std::string &filename, int iteration);
     };
-} // namespace out
+} // namespace outputWriters

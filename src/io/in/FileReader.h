@@ -35,6 +35,10 @@ public:
     static ParticleContainer readFile(const std::string& filepath);
 
 private:
+
+    static const std::set<int> allowedDataCodes;
+    static const std::set<int> allowedDimensions;
+
     /**
      * Reads particle data from a file and returns a ParticleContainer.
      *
@@ -68,7 +72,7 @@ private:
      * @param filepath
      * @return vector of strings
      */
-    static std::vector<std::string> readFileLines(const std::string &filepath);
+    static std::vector<std::string> readAndValidateFileLines(const std::string &filepath);
 
 
 /**
