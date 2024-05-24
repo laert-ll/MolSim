@@ -21,7 +21,7 @@ TEST(FileReaderTest, readFileLinesBasicTest) {
              << "Data Set 2\n"
              << "Data Set 3\n";
     testfile.close();
-    std::vector<std::string> lines = FileReader::readAndValidateFileLines("test_file.txt");
+    std::vector<std::string> lines = FileReader::readFileLines("test_file.txt");
     ASSERT_EQ(lines.size(), 6);
     EXPECT_EQ(lines[0], "0");
     EXPECT_EQ(lines[1], "4");

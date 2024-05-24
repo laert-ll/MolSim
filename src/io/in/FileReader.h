@@ -11,7 +11,6 @@
 #include <gtest/gtest.h>
 
 #include "../../objects/ParticleContainer.h"
-#include "io/in/parameters/CuboidParameters.h"
 #include "ParticleGenerator.h"
 
 
@@ -72,8 +71,17 @@ private:
      * @param filepath
      * @return vector of strings
      */
-    static std::vector<std::string> readAndValidateFileLines(const std::string &filepath);
+    static std::vector<std::string> readFileLines(const std::string &filepath);
 
+    /**
+     * This method validates the header lines of the input file.
+     * The header lines should contain the data code, number of data sets, and the dimension of the simulation.
+     *
+     * This method checks if the header data are allowed and returns error exitcode, if not.
+     *
+     * @param lines
+     */
+    static void validateHeaderLines(const std::vector<std::string>& lines);
 
 /**
  * Class section end

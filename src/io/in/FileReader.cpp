@@ -13,13 +13,16 @@
 #include <sstream>
 
 ParticleContainer FileReader::readFile(const std::string &filepath) {
-    auto lines = readAndValidateFileLines(filepath);
+    auto lines = readFileLines(filepath);
 
     // Check if there are lines in the file
     if (lines.empty()) {
         SPDLOG_ERROR("File is empty: ", filepath);
         throw std::runtime_error("File is empty: " + filepath);
     }
+
+    // Validate the header lines
+    validateHeaderLines(lines);
 
     // Parse the data code
     int dataCode = std::stoi(lines[0]);
@@ -150,7 +153,7 @@ void FileReader::parseDataFromLine(std::istringstream &datastream, std::array<T,
     }
 }
 
-std::vector<std::string> FileReader::readAndValidateFileLines(const std::string &filepath) {
+std::vector<std::string> FileReader::readFileLines(const std::string &filepath) {
     std::vector<std::string> lines;
     std::ifstream input_file(filepath);
     std::string tmp_string;
@@ -175,7 +178,7 @@ std::vector<std::string> FileReader::readAndValidateFileLines(const std::string 
                 data_code_read = true;
             }
 
-            // Read and validate the number of data sets
+                // Read and validate the number of data sets
             else if (!num_data_read) {
                 int num_data = std::stoi(tmp_string);
                 if (num_data < 0) {
@@ -185,7 +188,7 @@ std::vector<std::string> FileReader::readAndValidateFileLines(const std::string 
                 num_data_read = true;
             }
 
-            // Read and validate the dimension
+                // Read and validate the dimension
             else if (!dimension_read) {
                 int dimension = std::stoi(tmp_string);
                 if (allowedDimensions.find(dimension) == allowedDimensions.end()) {
@@ -203,4 +206,47 @@ std::vector<std::string> FileReader::readAndValidateFileLines(const std::string 
         exit(-1);
     }
     return lines;
+}
+
+void FileReader::validateHeaderLines(const std::vector<std::string> &lines) {
+    bool data_code_read = false;
+    bool num_datasets_read = false;
+
+    if (lines.size() < 3) {
+        SPDLOG_ERROR("Error: File does not contain enough header lines. Expected 3 header lines, but found {}.",
+                     lines.size());
+        exit(-1);
+    }
+
+    for (const auto &line: lines) {
+        // Read and validate the data code
+        if (!data_code_read) {
+            int data_code = std::stoi(line);
+            if (allowedDataCodes.find(data_code) == allowedDataCodes.end()) {
+                SPDLOG_ERROR("Error: Invalid data code {}. Only 0 and 1 are allowed.", data_code);
+                exit(-1);
+            }
+            data_code_read = true;
+        }
+
+            // Read and validate the number of data sets
+        else if (!num_datasets_read) {
+            int num_data = std::stoi(line);
+            if (num_data < 0) {
+                SPDLOG_ERROR("Error: Number of data sets cannot be negative.");
+                exit(-1);
+            }
+            num_datasets_read = true;
+        }
+
+            // Read and validate the dimension
+        else {
+            int dimension = std::stoi(line);
+            if (allowedDimensions.find(dimension) == allowedDimensions.end()) {
+                SPDLOG_ERROR("Error: Invalid dimension {}. Only 2 or 3 are allowed.", dimension);
+                exit(-1);
+            }
+            return;
+        }
+    }
 }
