@@ -93,5 +93,6 @@ private:
  */
     FRIEND_TEST(FileReaderTest, LoadParticles);
     FRIEND_TEST(FileReaderTest, LoadCuboids);
+    FRIEND_TEST(FileReaderTest, LoadDiscs);
     FRIEND_TEST(FileReaderTest, readFileLinesBasicTest);
 };
