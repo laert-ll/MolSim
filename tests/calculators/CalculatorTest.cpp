@@ -11,11 +11,8 @@
 namespace calculators {
     class TestCalculator : public calculators::Calculator {
     private:
-        void calculateF(ParticleContainer &particleContainer) override {}
-    public:
-        void calculateReflection(Particle &p, Particle &ghost) override {
-
-        }
+//        void calculateF(ParticleContainer &particleContainer) override {};
+        void calculateFpair(Particle &particle1, Particle &particle2) override{};
     };
 }
 

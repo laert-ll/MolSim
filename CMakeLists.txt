@@ -25,6 +25,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(spdlog)
 
 FetchContent_Declare(
+        cxxopts
+        GIT_REPOSITORY https://github.com/jarro2783/cxxopts
+        GIT_TAG        master
+)
+FetchContent_MakeAvailable(cxxopts)
+
+FetchContent_Declare(
         gtest
         GIT_REPOSITORY https://github.com/google/googletest.git
         GIT_TAG        main
@@ -38,10 +45,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(benchmark)
 
-find_package(Boost REQUIRED COMPONENTS program_options timer)
-
-# Find Boost components
-find_package(Boost REQUIRED COMPONENTS program_options timer)
 find_package(OpenMP)
 if (OPENMP_FOUND)
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
@@ -97,7 +100,12 @@ add_compile_definitions(LOG_LEVEL="${log_level}")
 message(STATUS "Log level: ${log_level}")
 #-----------------------------------------------------------------------------------------------------------
 # create make target
-add_executable(MolSim ${MY_SRC})
+add_executable(MolSim ${MY_SRC}
+        src/Boundaries/BoundaryController.cpp
+        src/Boundaries/BoundaryController.h
+        src/Boundaries/BoundaryEnums.h
+        src/Boundaries/BoundaryHandler2D.cpp
+        src/Boundaries/BoundaryHandler2D.h)
 add_executable(MolSimTests ${TEST_SOURCES})
 add_executable(MolSimBenchmark ${BENCHMARK_SOURCES})
 
@@ -128,12 +136,11 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
-            Boost::program_options
-            Boost::timer
         PRIVATE
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
             gtest
             gtest_main
+            cxxopts
 )
 
 target_link_libraries(MolSimTests
@@ -147,7 +154,6 @@ target_link_libraries(MolSimBenchmark
         PRIVATE 
             benchmark
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
-            Boost::program_options
             gtest
             gtest_main
 )

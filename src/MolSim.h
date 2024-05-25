@@ -10,6 +10,7 @@
 #include "io/out/XYZWriter.h"
 #include "spdlog/spdlog.h"
 #include "cxxopts.hpp"
+#include "Boundaries/BoundaryController.h"
 
 class MolSim {
 public:
@@ -162,9 +163,17 @@ public:
 
         double current_time = 0; // start_time
         int iteration = 0;
+        std::vector<boundaries::BoundaryType> standardBoundaries = {boundaries::BoundaryType::OFF,
+                                                                    boundaries::BoundaryType::REFLECTED,
+                                                                    boundaries::BoundaryType::OFF,
+                                                                    boundaries::BoundaryType::OFF};
+        std::vector<double> boundaryPositions = {0, 45, 0, 0};
+
+        boundaries::BoundaryController controller{standardBoundaries, boundaryPositions, calculator};
 
         while (current_time < end_time) {
             calculator->calculate(particleContainer, delta_t);
+
 
             iteration++;
             if (iteration % 10 == 0) {

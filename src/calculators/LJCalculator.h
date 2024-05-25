@@ -33,8 +33,10 @@ namespace calculators {
              *
              * @param particleContainer The ParticleContainer containing the particles to calculate the forces for.
              */
-        void calculateF(ParticleContainer &particleContainer) override;
+//        void calculateF(ParticleContainer &particleContainer) override;
 
-        void calculateReflection(Particle &p, Particle &ghost) override;
+        void calculateFpair(Particle &particle1, Particle &particle2) override;
+
+//        void calculateReflection(Particle &p, Particle &ghost) override;
     };
 }

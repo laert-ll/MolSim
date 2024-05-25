@@ -38,6 +38,27 @@ namespace calculators {
         }
 
         /**
+         * @brief Calculates the forces acting on particles.
+         *
+         * This method is responsible for calculating the forces acting on all particles in the provided particle container.
+         *
+         * @param particleContainer The container of particles to calculate the forces for.
+         */
+        virtual void calculateF(ParticleContainer &particleContainer) {
+            for (auto &p: particleContainer) {
+                p.setOldF(p.getF());  // Update oldF with currentF
+                p.setF({0, 0, 0});     // Reset F to zeros
+            }
+
+            // Iterate over all unique pairs of particles
+            for (auto pair = particleContainer.pair_begin(); pair != particleContainer.pair_end(); ++pair) {
+                Particle &particle1 = pair->first.get();
+                Particle &particle2 = pair->second.get();
+                calculateFpair(particle1, particle2);
+            }
+        }
+
+        /**
              * @brief Calculates the new velocities of particles.
              *
              * This method is responsible for updating the velocities of all particles in the provided particle container.
@@ -105,6 +126,8 @@ namespace calculators {
             }
         }
 
+        virtual void calculateFpair(Particle &particle1, Particle &particle2) = 0;
+
     protected:
         /**
          * @brief Determines if two points are far apart based on a given threshold.
@@ -129,13 +152,5 @@ namespace calculators {
         }
 
     private:
-        /**
-         * @brief Calculates the forces acting on particles.
-         *
-         * This method is responsible for calculating the forces acting on all particles in the provided particle container.
-         *
-         * @param particleContainer The container of particles to calculate the forces for.
-         */
-        virtual void calculateF(ParticleContainer &particleContainer) = 0;
+        };
     };
-}
