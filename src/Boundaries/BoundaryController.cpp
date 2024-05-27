@@ -5,10 +5,13 @@
 #include "BoundaryController.h"
 
 namespace boundaries {
-    BoundaryController::BoundaryController(std::vector<BoundaryType> boundaryTypes, std::vector<double> boundaryPositions, std::unique_ptr<calculators::Calculator> &calculator)
-    : handler(std::move(boundaryTypes), std::move(boundaryPositions), calculator) {}
+    BoundaryController::BoundaryController(const std::map<BoundaryDirection, BoundaryType>& boundaryMap,
+                       std::unique_ptr<calculators::Calculator>& calculator,
+                       std::array<double, 2> domain,
+                       double sigma)
+            : handler(BoundaryProperties(domain, boundaryMap), calculator, sigma) {};
 
     void BoundaryController::handleBoundaries(ParticleContainer &container) {
         handler.handleBoundary(container);
-    }
+        }
 }//boundaries

@@ -105,7 +105,8 @@ add_executable(MolSim ${MY_SRC}
         src/Boundaries/BoundaryController.h
         src/Boundaries/BoundaryEnums.h
         src/Boundaries/BoundaryHandler2D.cpp
-        src/Boundaries/BoundaryHandler2D.h)
+        src/Boundaries/BoundaryHandler2D.h
+        src/Boundaries/BoundaryProperties.h)
 add_executable(MolSimTests ${TEST_SOURCES})
 add_executable(MolSimBenchmark ${BENCHMARK_SOURCES})
 

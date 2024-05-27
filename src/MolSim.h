@@ -68,18 +68,18 @@ public:
      * @return True if the arguments were processed successfully and a valid calculator and output writer were selected, false otherwise.
      */
     static bool processArguments(int argc, char *argv[], std::string &inputFilePath,
-                                    double &delta_t, double &end_time,
-                                    std::unique_ptr<outputWriters::FileWriter> &outputWriter,
-                                    std::unique_ptr<calculators::Calculator> &calculator) {
+                                 double &delta_t, double &end_time,
+                                 std::unique_ptr<outputWriters::FileWriter> &outputWriter,
+                                 std::unique_ptr<calculators::Calculator> &calculator) {
         cxxopts::Options options("MolSim", "Molecular Simulation Program");
 
         options.add_options()
-            ("help", "Produce help message")
-            ("input", "Input file path", cxxopts::value<std::string>())
-            ("delta_t", "Set delta_t", cxxopts::value<double>()->default_value("0.014"))
-            ("end_time", "Set end_time", cxxopts::value<double>()->default_value("1000"))
-            ("output", "Output writer (vtk or xyz)", cxxopts::value<std::string>())
-            ("calculator", "Calculator (sv, lj or dummy)", cxxopts::value<std::string>());
+                ("help", "Produce help message")
+                ("input", "Input file path", cxxopts::value<std::string>())
+                ("delta_t", "Set delta_t", cxxopts::value<double>()->default_value("0.014"))
+                ("end_time", "Set end_time", cxxopts::value<double>()->default_value("1000"))
+                ("output", "Output writer (vtk or xyz)", cxxopts::value<std::string>())
+                ("calculator", "Calculator (sv, lj or dummy)", cxxopts::value<std::string>());
 
         auto result = options.parse(argc, argv);
 
@@ -163,16 +163,17 @@ public:
 
         double current_time = 0; // start_time
         int iteration = 0;
-        std::vector<boundaries::BoundaryType> standardBoundaries = {boundaries::BoundaryType::OFF,
-                                                                    boundaries::BoundaryType::REFLECTED,
-                                                                    boundaries::BoundaryType::OFF,
-                                                                    boundaries::BoundaryType::OFF};
-        std::vector<double> boundaryPositions = {0, 45, 0, 0};
 
-        boundaries::BoundaryController controller{standardBoundaries, boundaryPositions, calculator};
+//        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
+//        boundaryMap.insert(std::make_pair(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::REFLECTED));
+//        boundaryMap.insert(std::make_pair(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::REFLECTED));
+//        std::array<double, 2> domain = {45.0, 23};
+//
+//        boundaries::BoundaryController controller{boundaryMap, calculator, domain, 1.0};
 
         while (current_time < end_time) {
             calculator->calculate(particleContainer, delta_t);
+//            controller.handleBoundaries(particleContainer);
 
 
             iteration++;
@@ -183,10 +184,9 @@ public:
             if (iteration % 100 == 0) {
                 SPDLOG_INFO("Iteration {} finished.", iteration);
             }
-
             current_time += delta_t;
         }
 
         SPDLOG_INFO("Output written. Terminating...");
-    }
+        }
 };

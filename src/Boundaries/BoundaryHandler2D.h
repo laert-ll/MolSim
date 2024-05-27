@@ -6,36 +6,34 @@
 
 #include <vector>
 #include "BoundaryEnums.h"
+#include "BoundaryProperties.h"
 #include "../objects/ParticleContainer.h"
 #include "calculators/Calculator.h"
 
 namespace boundaries {
     class BoundaryHandler2D{
     public:
-        BoundaryHandler2D() = default;
+//        BoundaryHandler2D() = default;
 
-        BoundaryHandler2D(std::vector<BoundaryType> boundaryTypes, std::vector<double>, std::unique_ptr<calculators::Calculator> &calculator);
+        BoundaryHandler2D(BoundaryProperties properties, std::unique_ptr<calculators::Calculator> &calculator, double sigma);
 
-        void setBoundary(BoundaryDirection direction, BoundaryType type);
+        void handleBoundary(ParticleContainer &container) const;
 
-        BoundaryType getBoundary(BoundaryDirection direction) const;
+        void handleReflection(ParticleContainer &container, BoundaryDirection direction) const;
 
-        void handleBoundary(ParticleContainer &container);
+        void handleOutflow(ParticleContainer &container, BoundaryDirection direction) const;
 
-        void handleReflection(ParticleContainer &container, int index);
+//        const BoundaryProperties &getProperties() const;
+//
+//        const double getSigma() const;
+//
+//        const std::unique_ptr<calculators::Calculator> &getCalculator() const;
 
     private:
-        // This vector should have the size of 4, storing the boundaries in the following order:
-        // [0] = top, [1] = right, [2] = bottom, [3] = left
-        // possible values: BoundaryDirection:: REFLECTED, OUTFLOW, OFF
-        std::vector<BoundaryType> boundaryTypes;
-        // This vector contains the boundaryPositions in the following order:
-        // lowerX, lowerY, lowerZ, higherX, higherY, higherZ
-        std::vector<double> boundaryPositions;
+        const BoundaryProperties properties;
 
-        double sigma=1;
+        const double sigma=1;
 
-        std::unique_ptr<calculators::Calculator> calculator;
-    };
-
+        const std::unique_ptr<calculators::Calculator> calculator;
+        };
 };

@@ -3,6 +3,8 @@
 //
 #pragma once
 
+#include <array>
+
 namespace boundaries {
     enum class BoundaryType {
         REFLECTED,
@@ -13,6 +15,18 @@ namespace boundaries {
         TOP,
         RIGHT,
         BOTTOM,
-        LEFT
+        LEFT,
+        FRONT,
+        BACK
         };
+
+    // to iterate through all directions
+    // Here - The order is: LowerX, Y, Z, HigherX, Y, Z
+    const std::array<BoundaryDirection, 6> directions = {BoundaryDirection::BOTTOM,
+                                                            BoundaryDirection::LEFT,
+                                                            BoundaryDirection::FRONT,
+                                                            BoundaryDirection::TOP,
+                                                            BoundaryDirection::RIGHT,
+                                                            BoundaryDirection::BACK};
+
 }

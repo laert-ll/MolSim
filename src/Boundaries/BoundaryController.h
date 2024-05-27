@@ -9,12 +9,14 @@
 namespace boundaries {
     class BoundaryController {
     public:
-        BoundaryController() = default;
-        BoundaryController(std::vector<BoundaryType> boundaryTypes, std::vector<double> boundaryPositions, std::unique_ptr<calculators::Calculator> &calculator);
+//        BoundaryController() = default;
+
+        BoundaryController(const std::map<BoundaryDirection, BoundaryType>& boundaryMap,
+                           std::unique_ptr<calculators::Calculator> &calculator, std::array<double, 2> domain, double sigma);
+
         void handleBoundaries(ParticleContainer &container);
     private:
-        BoundaryHandler2D handler{};
-
+        const BoundaryHandler2D handler;
     };
     //Konstruktor mit Grenze-Parameter
 
