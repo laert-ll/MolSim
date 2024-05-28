@@ -14,8 +14,8 @@ namespace calculators {
         const std::array<double, 3> x1 = particle1.getX();
         const std::array<double, 3> x2 = particle2.getX();
 
-        if (!isFar(x1, x2, threshold))
-            return;
+//        if (isFar(x1, x2, threshold))
+//            return;
 
         // Calculate the distance vector and its norm
         const std::array<double, 3> dx = ArrayUtils::elementWisePairOp(x1, x2, std::minus<>());

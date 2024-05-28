@@ -10,7 +10,7 @@
 #include "io/out/XYZWriter.h"
 #include "spdlog/spdlog.h"
 #include "cxxopts.hpp"
-#include "Boundaries/BoundaryController.h"
+//#include "Boundaries/BoundaryController.h"
 
 class MolSim {
 public:
@@ -164,14 +164,15 @@ public:
         double current_time = 0; // start_time
         int iteration = 0;
 
-//        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
-//        boundaryMap.insert(std::make_pair(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::REFLECTED));
-//        boundaryMap.insert(std::make_pair(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::REFLECTED));
-//        std::array<double, 2> domain = {45.0, 23};
+//        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
+//        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::REFLECTED);
+//        boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::REFLECTED);
+//        std::array<double, 2> domain = {45.0, 23.0};
 //
-//        boundaries::BoundaryController controller{boundaryMap, calculator, domain, 1.0};
+//        const boundaries::BoundaryController controller{boundaryMap, *calculator, domain, 1.0};
 
         while (current_time < end_time) {
+
             calculator->calculate(particleContainer, delta_t);
 //            controller.handleBoundaries(particleContainer);
 

@@ -40,7 +40,7 @@ namespace boundaries {
                         ghost.setX({p.getX().at(0), -distanceToBoundary, p.getX().at(2)});
                     else
                         ghost.setX({p.getX().at(0), p.getX().at(1), -distanceToBoundary});
-                    calculator->calculateFpair(p, ghost);
+//                    calculator->calculateFpair(p, ghost);
                 }
             }
             return;
@@ -65,7 +65,7 @@ namespace boundaries {
                         ghost.setX({p.getX().at(0), boundary - distanceToBoundary, p.getX().at(2)});
                     else
                         ghost.setX({p.getX().at(0), p.getX().at(1), boundary - distanceToBoundary});
-                    calculator->calculateFpair(p, ghost);
+//                    calculator->calculateFpair(p, ghost);
                 }
             }
         }
@@ -75,9 +75,11 @@ namespace boundaries {
         return;
     }
 
-    BoundaryHandler2D::BoundaryHandler2D(BoundaryProperties properties, std::unique_ptr<calculators::Calculator>& calculator, double sigma)
-    : properties(std::move(properties)), calculator(std::move(calculator)), sigma(sigma) {
-    }
+    BoundaryHandler2D::BoundaryHandler2D(BoundaryProperties properties, calculators::Calculator& calculator, double sigma)
+    : properties(std::move(properties)), sigma(sigma) {
+//        if (!calculator) {
+//            spdlog::error("Calculator pointer is null");
+//    }
 
 //    const BoundaryProperties &BoundaryHandler2D::getProperties() const {
 //        return properties;
@@ -92,4 +94,5 @@ namespace boundaries {
 //    }
 
 
+}
 }

@@ -12,9 +12,9 @@ namespace boundaries {
 //        BoundaryController() = default;
 
         BoundaryController(const std::map<BoundaryDirection, BoundaryType>& boundaryMap,
-                           std::unique_ptr<calculators::Calculator> &calculator, std::array<double, 2> domain, double sigma);
+                           calculators::Calculator& calculator, std::array<double, 2> domain, double sigma);
 
-        void handleBoundaries(ParticleContainer &container);
+        void handleBoundaries(ParticleContainer &container) const;
     private:
         const BoundaryHandler2D handler;
     };

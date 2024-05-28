@@ -51,6 +51,7 @@ if (OPENMP_FOUND)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
     set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
+
 # ------------------------------------------------------------------------------------------------------------
 
 # collect all cpp files
@@ -100,13 +101,7 @@ add_compile_definitions(LOG_LEVEL="${log_level}")
 message(STATUS "Log level: ${log_level}")
 #-----------------------------------------------------------------------------------------------------------
 # create make target
-add_executable(MolSim ${MY_SRC}
-        src/Boundaries/BoundaryController.cpp
-        src/Boundaries/BoundaryController.h
-        src/Boundaries/BoundaryEnums.h
-        src/Boundaries/BoundaryHandler2D.cpp
-        src/Boundaries/BoundaryHandler2D.h
-        src/Boundaries/BoundaryProperties.h)
+add_executable(MolSim ${MY_SRC})
 add_executable(MolSimTests ${TEST_SOURCES})
 add_executable(MolSimBenchmark ${BENCHMARK_SOURCES})
 
@@ -165,6 +160,7 @@ add_test(NAME MolSimTests COMMAND MolSimTests)
 # depending on the compiler different flags are used
 target_compile_options(MolSim
         PRIVATE
+            -g
             $<$<CXX_COMPILER_ID:Clang>:-Wall -fopenmp>
 )
 

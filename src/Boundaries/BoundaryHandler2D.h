@@ -15,7 +15,7 @@ namespace boundaries {
     public:
 //        BoundaryHandler2D() = default;
 
-        BoundaryHandler2D(BoundaryProperties properties, std::unique_ptr<calculators::Calculator> &calculator, double sigma);
+        BoundaryHandler2D(BoundaryProperties properties, calculators::Calculator& calculator, double sigma);
 
         void handleBoundary(ParticleContainer &container) const;
 
