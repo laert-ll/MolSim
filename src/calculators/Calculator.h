@@ -6,7 +6,7 @@
 
 #include "../objects/ParticleContainer.h"
 #include "../utils/ArrayUtils.h"
-#include <omp.h>
+#include "/opt/homebrew/opt/libomp/include/omp.h"
 
 namespace calculators {
     /**
@@ -45,14 +45,14 @@ namespace calculators {
          * @param particleContainer The container of particles to calculate the forces for.
          */
         virtual void calculateF(ParticleContainer &particleContainer) {
-            #pragma omp parallel for
+            // #pragma omp parallel for
             for (auto &p: particleContainer) {
                 p.setOldF(p.getF());  // Update oldF with currentF
                 p.setF({0, 0, 0});     // Reset F to zeros
             }
 
             // Iterate over all unique pairs of particles
-            #pragma omp parallel for
+            // #pragma omp parallel for
             for (auto pair = particleContainer.pair_begin(); pair != particleContainer.pair_end(); ++pair) {
                 Particle &particle1 = pair->first.get();
                 Particle &particle2 = pair->second.get();
@@ -128,7 +128,7 @@ namespace calculators {
             }
         }
 
-        virtual void calculateFpair(Particle &particle1, Particle &particle2) = 0;
+        virtual void calculateFpair(Particle &particle1, Particle &particle2) const {};
 
     protected:
         /**

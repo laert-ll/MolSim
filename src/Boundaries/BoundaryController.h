@@ -12,7 +12,7 @@ namespace boundaries {
 //        BoundaryController() = default;
 
         BoundaryController(const std::map<BoundaryDirection, BoundaryType>& boundaryMap,
-                           calculators::Calculator& calculator, std::array<double, 2> domain, double sigma);
+                           std::unique_ptr<calculators::Calculator> calculator, std::array<double, 2> domain, double sigma);
 
         void handleBoundaries(ParticleContainer &container) const;
     private:

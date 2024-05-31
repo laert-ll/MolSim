@@ -7,10 +7,10 @@
 
 namespace boundaries {
     BoundaryController::BoundaryController(const std::map<BoundaryDirection, BoundaryType>& boundaryMap,
-                                           calculators::Calculator& calculator,
+                                           std::unique_ptr<calculators::Calculator> calculator,
                                            std::array<double, 2> domain,
                                            double sigma)
-            : handler(BoundaryProperties(domain, boundaryMap), calculator, sigma) {
+            : handler(BoundaryProperties(domain, boundaryMap), std::move(calculator), sigma) {
         spdlog::info("BoundaryController constructor called with the following parameters:");
         spdlog::info("Boundary map size: {}", boundaryMap.size());
         spdlog::info("Domain: [{}, {}]", domain[0], domain[1]);

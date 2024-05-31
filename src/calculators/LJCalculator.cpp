@@ -5,11 +5,11 @@
 #include "LJCalculator.h"
 
 #include <cmath>
-#include <omp.h>
+#include "/opt/homebrew/opt/libomp/include/omp.h"
 
 namespace calculators {
 
-    void LJCalculator::calculateFpair(Particle &particle1, Particle &particle2) {
+    void LJCalculator::calculateFpair(Particle &particle1, Particle &particle2) const {
         // Get the positions and masses of the two particles
         const std::array<double, 3> x1 = particle1.getX();
         const std::array<double, 3> x2 = particle2.getX();
