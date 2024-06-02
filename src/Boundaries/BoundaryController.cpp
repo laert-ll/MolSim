@@ -7,7 +7,7 @@
 
 namespace boundaries {
     BoundaryController::BoundaryController(const std::map<BoundaryDirection, BoundaryType>& boundaryMap,
-                                           std::unique_ptr<calculators::Calculator> calculator,
+                                           calculators::Calculator *calculator,
                                            std::array<double, 2> domain,
                                            double sigma)
             : handler(BoundaryProperties(domain, boundaryMap), std::move(calculator), sigma) {

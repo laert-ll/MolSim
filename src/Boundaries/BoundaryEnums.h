@@ -7,7 +7,7 @@
 
 namespace boundaries {
     enum class BoundaryType {
-        REFLECTED,
+        REFLECTING,
         OUTFLOW,
         OFF
     };

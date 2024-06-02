@@ -165,16 +165,16 @@ public:
         int iteration = 0;
 
         std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
-        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::REFLECTED);
-        boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::REFLECTED);
+        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::REFLECTING);
+        boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::REFLECTING);
         std::array<double, 2> domain = {45.0, 23.0};
 
-        const boundaries::BoundaryController controller{boundaryMap, std::make_unique<calculators::Calculator>(*calculator), domain, 1.0};
+        const boundaries::BoundaryController controller{boundaryMap, calculator.get(), domain, 1.0};
 
         while (current_time < end_time) {
 
             calculator->calculate(particleContainer, delta_t);
-//            controller.handleBoundaries(particleContainer);
+            controller.handleBoundaries(particleContainer);
 
 
             iteration++;

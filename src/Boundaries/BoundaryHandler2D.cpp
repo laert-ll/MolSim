@@ -10,7 +10,7 @@ namespace boundaries {
 
         for (int i = 0; i < 6; i++) {
             BoundaryType type = properties.getBoundaryMap().at(directions[i]);
-            if (type == BoundaryType::REFLECTED)
+            if (type == BoundaryType::REFLECTING)
                 handleReflection(container, directions[i]);
             if (type == BoundaryType::OUTFLOW)
                 handleOutflow(container, directions[i]);
@@ -23,9 +23,9 @@ namespace boundaries {
             double tolerance = 1.12246204831 * sigma;
             // for indexing x, y, z coordinate
             int index;
-            if (direction == BoundaryDirection::BOTTOM)
+            if (direction == BoundaryDirection::LEFT)
                 index = 0;
-            else if (direction == BoundaryDirection::LEFT)
+            else if (direction == BoundaryDirection::BOTTOM)
                 index = 1;
             else
                 index = 2;
@@ -46,9 +46,9 @@ namespace boundaries {
             return;
         }
         int index;
-        if (direction == BoundaryDirection::TOP)
+        if (direction == BoundaryDirection::RIGHT)
             index = 0;
-        else if (direction == BoundaryDirection::RIGHT)
+        else if (direction == BoundaryDirection::TOP)
             index = 1;
         else
             index = 2;
@@ -75,8 +75,8 @@ namespace boundaries {
         return;
     }
 
-    BoundaryHandler2D:: BoundaryHandler2D(BoundaryProperties properties, std::unique_ptr<calculators::Calculator> calculator, double sigma)
-            : properties(std::move(properties)), sigma(sigma), calculator(std::move(calculator)) {}
+    BoundaryHandler2D:: BoundaryHandler2D(BoundaryProperties properties, calculators::Calculator *calculator, double sigma)
+            : properties(std::move(properties)), sigma(sigma), calculator(calculator) {}
 //        if (!calculator) {
 //            spdlog::error("Calculator pointer is null");
 //    }
