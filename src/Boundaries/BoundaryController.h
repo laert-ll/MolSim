@@ -7,17 +7,39 @@
 #include "calculators/Calculator.h"
 
 namespace boundaries {
+    /**
+     * @class BoundaryController
+     * @brief Controls the boundary handling for particles in a simulation domain.
+     */
     class BoundaryController {
     public:
-//        BoundaryController() = default;
-
+        /**
+         * @brief Constructor for BoundaryController with 2D domain parameter.
+         *
+         * @param boundaryMap A map defining the boundary types for each direction.
+         * @param calculator Pointer to the calculator used for force calculations.
+         * @param domain The 2D domain size.
+         * @param sigma The interaction distance parameter.
+         */
         BoundaryController(const std::map<BoundaryDirection, BoundaryType>& boundaryMap,
-                           std::unique_ptr<calculators::Calculator> calculator, std::array<double, 2> domain, double sigma);
+                           calculators::Calculator *calculator, std::array<double, 2> domain, double sigma);
 
-        void handleBoundaries(ParticleContainer &container) const;
+        /**
+          * @brief Processes boundaries before the main particle calculations.
+          *
+          * @param container The particle container holding all particles.
+          */
+        void preProcessBoundaries(ParticleContainer &container) const;
+
+        /**
+         * @brief Processes boundaries after the main particle calculations.
+         *
+         * @param container The particle container holding all particles.
+         */
+        void postProcessBoundaries(ParticleContainer &container) const;
+
     private:
         const BoundaryHandler2D handler;
     };
-    //Konstruktor mit Grenze-Parameter
 
 }//boundaries

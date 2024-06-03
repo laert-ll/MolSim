@@ -165,16 +165,20 @@ public:
         int iteration = 0;
 
         std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
-        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::REFLECTED);
-        boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::REFLECTED);
+        boundaryMap.emplace(boundaries::BoundaryDirection::TOP, boundaries::BoundaryType::OUTFLOW);
+//        boundaryMap.emplace(boundaries::BoundaryDirection::LEFT, boundaries::BoundaryType::OUTFLOW);
+        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
+
         std::array<double, 2> domain = {45.0, 23.0};
 
-        const boundaries::BoundaryController controller{boundaryMap, std::make_unique<calculators::Calculator>(*calculator), domain, 1.0};
+        const boundaries::BoundaryController controller{boundaryMap, calculator.get(), domain, 1.0};
 
         while (current_time < end_time) {
 
+            //TODO: Zuerst calculate, dann handleBoundaries?
+            controller.preProcessBoundaries(particleContainer);
             calculator->calculate(particleContainer, delta_t);
-//            controller.handleBoundaries(particleContainer);
+            controller.postProcessBoundaries(particleContainer);
 
 
             iteration++;
@@ -185,6 +189,12 @@ public:
             if (iteration % 100 == 0) {
                 SPDLOG_INFO("Iteration {} finished.", iteration);
             }
+//            if (iteration % 100 == 0) {
+//                for (const auto &particle: particleContainer.getParticles()) {
+//                    const auto &forces = particle.getF();
+//                    SPDLOG_INFO("Forces (x, y, z): {}, {}, {}", forces[0], forces[1], forces[2]);
+//                }
+//            }
             current_time += delta_t;
         }
 

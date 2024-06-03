@@ -6,27 +6,38 @@
 #include <array>
 
 namespace boundaries {
+    /**
+     * @enum BoundaryType
+     * @brief Defines the types of boundary conditions for the simulation.
+     */
     enum class BoundaryType {
-        REFLECTED,
-        OUTFLOW,
-        OFF
+        REFLECTING, /**< Boundary reflects particles. */
+        OUTFLOW,    /**< Boundary allows particles to flow out. */
+        OFF         /**< Boundary is turned off. */
     };
+
+    /**
+     * @enum BoundaryDirection
+     * @brief Defines the possible directions for boundaries in the simulation.
+     */
     enum class BoundaryDirection {
-        TOP,
-        RIGHT,
-        BOTTOM,
-        LEFT,
-        FRONT,
-        BACK
-        };
+        TOP,    /**< Upper boundary (Y-axis positive). */
+        RIGHT,  /**< Right boundary (X-axis positive). */
+        BOTTOM, /**< Lower boundary (Y-axis negative). */
+        LEFT,   /**< Left boundary (X-axis negative). */
+        FRONT,  /**< Front boundary (Z-axis positive). */
+        BACK    /**< Back boundary (Z-axis negative). */
+    };
 
-    // to iterate through all directions
-    // Here - The order is: LowerX, Y, Z, HigherX, Y, Z
-    const std::array<BoundaryDirection, 6> directions = {BoundaryDirection::BOTTOM,
-                                                            BoundaryDirection::LEFT,
-                                                            BoundaryDirection::FRONT,
-                                                            BoundaryDirection::TOP,
-                                                            BoundaryDirection::RIGHT,
-                                                            BoundaryDirection::BACK};
-
+    /**
+     * @brief Array of all boundary directions for easy iteration.
+     */
+    const std::array<BoundaryDirection, 6> directions = {
+            BoundaryDirection::LEFT,
+            BoundaryDirection::BOTTOM,
+            BoundaryDirection::FRONT,
+            BoundaryDirection::RIGHT,
+            BoundaryDirection::TOP,
+            BoundaryDirection::BACK
+    };
 }

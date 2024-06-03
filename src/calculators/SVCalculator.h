@@ -37,6 +37,6 @@ namespace calculators {
 //        void calculateF(ParticleContainer &particleContainer) override;
 
 //        void calculateReflection(Particle &p, Particle &ghost) override;
-        void calculateFpair(Particle &particle1, Particle &particle2) const override;
+        void calculateFPairwise(Particle &particle1, Particle &particle2) const override;
     };
 }

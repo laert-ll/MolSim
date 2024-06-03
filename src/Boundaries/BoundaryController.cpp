@@ -7,17 +7,20 @@
 
 namespace boundaries {
     BoundaryController::BoundaryController(const std::map<BoundaryDirection, BoundaryType>& boundaryMap,
-                                           std::unique_ptr<calculators::Calculator> calculator,
+                                           calculators::Calculator *calculator,
                                            std::array<double, 2> domain,
                                            double sigma)
-            : handler(BoundaryProperties(domain, boundaryMap), std::move(calculator), sigma) {
-        spdlog::info("BoundaryController constructor called with the following parameters:");
-        spdlog::info("Boundary map size: {}", boundaryMap.size());
-        spdlog::info("Domain: [{}, {}]", domain[0], domain[1]);
-        spdlog::info("Sigma: {}", sigma);
+            : handler(BoundaryProperties(domain, boundaryMap), calculator, sigma) {
+        SPDLOG_INFO("BoundaryController constructor called with the following parameters:");
+        SPDLOG_INFO("Boundary map size: {}", boundaryMap.size());
+        SPDLOG_INFO("Domain: [{}, {}]", domain[0], domain[1]);
+        SPDLOG_INFO("Sigma: {}", sigma);
     };
 
-    void BoundaryController::handleBoundaries(ParticleContainer &container) const {
-        handler.handleBoundary(container);
+    void BoundaryController::preProcessBoundaries(ParticleContainer &container) const {
+        handler.preProcessBoundaries(container);
         }
+    void BoundaryController::postProcessBoundaries(ParticleContainer &container) const {
+        handler.postProcessBoundaries(container);
+    }
 }//boundaries

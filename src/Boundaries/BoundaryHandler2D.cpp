@@ -3,32 +3,39 @@
 //
 
 #include "BoundaryHandler2D.h"
+#include <omp.h>
 
 namespace boundaries {
 
-    void BoundaryHandler2D::handleBoundary(ParticleContainer &container) const{
-
+    void BoundaryHandler2D::preProcessBoundaries(ParticleContainer &container) const {
         for (int i = 0; i < 6; i++) {
             BoundaryType type = properties.getBoundaryMap().at(directions[i]);
-            if (type == BoundaryType::REFLECTED)
+            if (type == BoundaryType::REFLECTING)
                 handleReflection(container, directions[i]);
+        }
+    }
+
+    void BoundaryHandler2D::postProcessBoundaries(ParticleContainer &container) const {
+        for (int i = 0; i < 6; i++) {
+            BoundaryType type = properties.getBoundaryMap().at(directions[i]);
             if (type == BoundaryType::OUTFLOW)
                 handleOutflow(container, directions[i]);
         }
     }
-
-    void BoundaryHandler2D::handleReflection(ParticleContainer &container, BoundaryDirection direction) const{
+    void BoundaryHandler2D::handleReflection(ParticleContainer &container, BoundaryDirection direction) const {
         // If selected index is lower boundary (lowerX, lowerY, lowerZ)
-        if (direction == BoundaryDirection::BOTTOM || direction == BoundaryDirection::LEFT || direction == BoundaryDirection::FRONT) {
-            double tolerance = 1.12246204831 * sigma;
+        if (direction == BoundaryDirection::BOTTOM || direction == BoundaryDirection::LEFT ||
+            direction == BoundaryDirection::FRONT) {
+            double tolerance = pow(2, 1/6) * sigma;
             // for indexing x, y, z coordinate
             int index;
-            if (direction == BoundaryDirection::BOTTOM)
+            if (direction == BoundaryDirection::LEFT)
                 index = 0;
-            else if (direction == BoundaryDirection::LEFT)
+            else if (direction == BoundaryDirection::BOTTOM)
                 index = 1;
             else
                 index = 2;
+#pragma omp parallel for
             for (auto &p: container) {
                 double distanceToBoundary = p.getX().at(index);
                 // only calculate reflection if near boundary
@@ -40,57 +47,74 @@ namespace boundaries {
                         ghost.setX({p.getX().at(0), -distanceToBoundary, p.getX().at(2)});
                     else
                         ghost.setX({p.getX().at(0), p.getX().at(1), -distanceToBoundary});
-                    calculator->calculateFpair(p, ghost);
+                    calculator->calculateFPairwise(p, ghost);
                 }
             }
             return;
         }
         int index;
-        if (direction == BoundaryDirection::TOP)
+        if (direction == BoundaryDirection::RIGHT)
             index = 0;
-        else if (direction == BoundaryDirection::RIGHT)
+        else if (direction == BoundaryDirection::TOP)
             index = 1;
         else
             index = 2;
         double boundary = properties.getDomain()[index];
         double tolerance = 1.12246204831 * sigma;
-            for (auto &p: container) {
-                double distanceToBoundary = p.getX().at(index) - boundary;
-                // only calculate reflection if near boundary
-                if (distanceToBoundary < tolerance) {
-                    Particle ghost{p};
-                    if (index == 0)
-                        ghost.setX({boundary - distanceToBoundary, p.getX().at(1), p.getX().at(2)});
-                    else if (index == 1)
-                        ghost.setX({p.getX().at(0), boundary - distanceToBoundary, p.getX().at(2)});
-                    else
-                        ghost.setX({p.getX().at(0), p.getX().at(1), boundary - distanceToBoundary});
-                    calculator->calculateFpair(p, ghost);
-                }
+#pragma omp parallel for
+        for (auto &p: container) {
+            double distanceToBoundary = p.getX().at(index) - boundary;
+            // only calculate reflection if near boundary
+            if (distanceToBoundary < tolerance) {
+                Particle ghost{p};
+                if (index == 0)
+                    ghost.setX({boundary - distanceToBoundary, p.getX().at(1), p.getX().at(2)});
+                else if (index == 1)
+                    ghost.setX({p.getX().at(0), boundary - distanceToBoundary, p.getX().at(2)});
+                else
+                    ghost.setX({p.getX().at(0), p.getX().at(1), boundary - distanceToBoundary});
+                calculator->calculateFPairwise(p, ghost);
             }
         }
-
-    void BoundaryHandler2D::handleOutflow(ParticleContainer &container, BoundaryDirection direction) const{
-        // Outflow Handling
-        return;
     }
 
-    BoundaryHandler2D:: BoundaryHandler2D(BoundaryProperties properties, std::unique_ptr<calculators::Calculator> calculator, double sigma)
-            : properties(std::move(properties)), sigma(sigma), calculator(std::move(calculator)) {}
-//        if (!calculator) {
-//            spdlog::error("Calculator pointer is null");
-//    }
+    void BoundaryHandler2D::handleOutflow(ParticleContainer &container, BoundaryDirection direction) const {
+        int index;
+        bool checkLowerBound = false;
+        switch (direction) {
+            case BoundaryDirection::LEFT:
+                index = 0;
+                checkLowerBound = true;
+                break;
+            case BoundaryDirection::RIGHT:
+                index = 0;
+                break;
+            case BoundaryDirection::BOTTOM:
+                index = 1;
+                checkLowerBound = true;
+                break;
+            case BoundaryDirection::TOP:
+                index = 1;
+                break;
+            case BoundaryDirection::FRONT:
+                index = 2;
+                checkLowerBound = true;
+                break;
+            case BoundaryDirection::BACK:
+                index = 2;
+                break;
+        }
+        for (auto &p: container) {
+            auto &el = p.getX().at(index);
+            if (el > 23)
+                int i = 0;
+            if ((checkLowerBound && el <= 0) || (!checkLowerBound && el >= properties.getDomain()[index])) {
+                container.deleteParticle(p);
+            }
+        }
+    }
 
-//    const BoundaryProperties &BoundaryHandler2D::getProperties() const {
-//        return properties;
-//    }
-
-//    const double BoundaryHandler2D::getSigma() const {
-//        return sigma;
-//    }
-//
-//    const std::unique_ptr<calculators::Calculator> &BoundaryHandler2D::getCalculator() const {
-//        return calculator;
-//    }
-
+    BoundaryHandler2D::BoundaryHandler2D(BoundaryProperties properties, calculators::Calculator *calculator,
+                                         double sigma)
+            : properties(std::move(properties)), sigma(sigma), calculator(calculator) {}
 }

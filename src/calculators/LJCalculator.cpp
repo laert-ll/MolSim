@@ -5,21 +5,24 @@
 #include "LJCalculator.h"
 
 #include <cmath>
-#include "/opt/homebrew/opt/libomp/include/omp.h"
+#include <omp.h>
 
 namespace calculators {
 
-    void LJCalculator::calculateFpair(Particle &particle1, Particle &particle2) const {
+    void LJCalculator::calculateFPairwise(Particle &particle1, Particle &particle2) const {
         // Get the positions and masses of the two particles
         const std::array<double, 3> x1 = particle1.getX();
         const std::array<double, 3> x2 = particle2.getX();
 
-//        if (isFar(x1, x2, threshold))
-//            return;
+        if (isFar(x1, x2, threshold))
+            return;
+
 
         // Calculate the distance vector and its norm
         const std::array<double, 3> dx = ArrayUtils::elementWisePairOp(x1, x2, std::minus<>());
         const double distance = ArrayUtils::L2Norm(dx);
+        if (distance == 0.0)
+            return;
 
         // Calculate the force between the two particles
         const double forceMagnitude = -(24 * epsilon / (distance * distance)) *

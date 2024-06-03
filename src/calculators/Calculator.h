@@ -6,7 +6,7 @@
 
 #include "../objects/ParticleContainer.h"
 #include "../utils/ArrayUtils.h"
-#include "/opt/homebrew/opt/libomp/include/omp.h"
+#include <omp.h>
 
 namespace calculators {
     /**
@@ -45,18 +45,18 @@ namespace calculators {
          * @param particleContainer The container of particles to calculate the forces for.
          */
         virtual void calculateF(ParticleContainer &particleContainer) {
-            // #pragma omp parallel for
+            #pragma omp parallel for
             for (auto &p: particleContainer) {
                 p.setOldF(p.getF());  // Update oldF with currentF
                 p.setF({0, 0, 0});     // Reset F to zeros
             }
 
             // Iterate over all unique pairs of particles
-            // #pragma omp parallel for
+            #pragma omp parallel for
             for (auto pair = particleContainer.pair_begin(); pair != particleContainer.pair_end(); ++pair) {
                 Particle &particle1 = pair->first.get();
                 Particle &particle2 = pair->second.get();
-                calculateFpair(particle1, particle2);
+                calculateFPairwise(particle1, particle2);
             }
         }
 
@@ -71,6 +71,7 @@ namespace calculators {
         virtual void calculateV(ParticleContainer &particleContainer, double delta_t) {
             #pragma omp parallel for
             for (auto &p: particleContainer) {
+//                SPDLOG_INFO("Now Calculate V");
                 // Get the current position, velocity, force and mass of the particle
                 std::array<double, 3> v = p.getV();
                 const std::array<double, 3> f = p.getF();
@@ -127,8 +128,8 @@ namespace calculators {
                 p.setX(x);
             }
         }
-
-        virtual void calculateFpair(Particle &particle1, Particle &particle2) const {};
+        //here a small doxygen comment
+        virtual void calculateFPairwise(Particle &particle1, Particle &particle2) const {};
 
     protected:
         /**
@@ -143,7 +144,7 @@ namespace calculators {
          * @param threshold The threshold value to compare the Manhattan  distance with.
          * @return True if the points are considered "far", false otherwise.
          */
-        virtual bool isFar(const std::array<double, 3> &x1, const std::array<double, 3> &x2, double threshold) {
+        virtual bool isFar(const std::array<double, 3> &x1, const std::array<double, 3> &x2, double threshold) const {
             const std::array<double, 3> absDiff = ArrayUtils::elementWisePairOp(x1, x2,
                                                                                 [](double a, double b) {
                                                                                     return std::abs(a - b);

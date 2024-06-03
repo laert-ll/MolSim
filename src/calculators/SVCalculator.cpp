@@ -5,7 +5,7 @@
 
 namespace calculators {
 
-    void SVCalculator::calculateFpair(Particle &particle1, Particle &particle2) const {
+    void SVCalculator::calculateFPairwise(Particle &particle1, Particle &particle2) const {
         // Get the positions and masses of the two particles
         const std::array<double, 3> x1 = particle1.getX();
         const std::array<double, 3> x2 = particle2.getX();
