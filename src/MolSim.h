@@ -3,7 +3,7 @@
 //
 #include "calculators/SVCalculator.h"
 #include "calculators/LJCalculator.h"
-#include "io/in/FileReader.h"
+#include "io/in/TXTReader.h"
 #include "objects/ParticleContainer.h"
 #include "io/out/FileWriter.h"
 #include "io/out/VTKWriter.h"

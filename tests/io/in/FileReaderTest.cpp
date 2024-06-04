@@ -6,11 +6,11 @@
 #include <fstream>
 #include <sstream>
 
-#include "../../../src/io/in/FileReader.h"
+#include "../../../src/io/in/TXTReader.h"
 
 //Check if the lines are read correctly and wrong lines are ignored
 TEST(FileReaderTest, readFileLinesBasicTest) {
-    FileReader fileReader;
+    fileReaders::TXTReader fileReader;
     std::ofstream testfile("test_file.txt");
     testfile << "# This should be ignored\n"
              << "0\n"  // Data code for particles
@@ -21,7 +21,7 @@ TEST(FileReaderTest, readFileLinesBasicTest) {
              << "Data Set 2\n"
              << "Data Set 3\n";
     testfile.close();
-    std::vector<std::string> lines = FileReader::readFileLines("test_file.txt");
+    std::vector<std::string> lines = fileReaders::TXTReader::readFileLines("test_file.txt");
     ASSERT_EQ(lines.size(), 6);
     EXPECT_EQ(lines[0], "0");
     EXPECT_EQ(lines[1], "4");
@@ -46,7 +46,8 @@ TEST(ReadFileTest, ReadParticlesFromFile) {
             << "34.75 0.0 0.0    0.0 0.0296 0.0  1.0e-14\n";
     outfile.close();
 
-    ParticleContainer particleContainer = FileReader::readFile("test_particles.txt");
+    fileReaders::TXTReader fileReader;
+    ParticleContainer particleContainer = fileReader.readFile("test_particles.txt");
 
     ASSERT_EQ(particleContainer.getSize(), 4);
     std::vector<Particle> container = particleContainer.getParticles();
@@ -86,7 +87,8 @@ TEST(ReadFileTest, ReadCuboidsFromFile) {
             << "-10.0 -10.0 0.0     3 3 1           1.0         1.0         0.0 -10.0 0.0   0.1\n";
     outfile.close();
 
-    ParticleContainer particleContainer = FileReader::readFile("test_cuboids.txt");
+    fileReaders::TXTReader fileReader;
+    ParticleContainer particleContainer = fileReader.readFile("test_cuboids.txt");
 
     ASSERT_EQ(particleContainer.getSize(), 13);
     std::vector<Particle> particles = particleContainer.getParticles();
@@ -121,7 +123,8 @@ TEST(ReadFileTest, EmptyFile) {
     std::ofstream outfile("empty_file.txt");
     outfile.close();
 
-    ASSERT_THROW(FileReader().readFile("empty_file.txt"), std::runtime_error);
+    fileReaders::TXTReader fileReader;
+    ASSERT_THROW(fileReader.readFile("empty_file.txt"), std::runtime_error);
 
     std::remove("empty_file.txt");
 }
@@ -137,9 +140,8 @@ TEST(FileReaderTest, LoadParticles) {
             "34.75 0.0 0.0 0.0 0.0296 0.0 1.0e-14"
     };
 
-    FileReader fileReader;
     ParticleContainer particleContainer;
-    FileReader::loadParticles(lines, particleContainer);
+    fileReaders::TXTReader::loadParticles(lines, particleContainer);
 
     ASSERT_EQ(particleContainer.getSize(), 4);
     std::vector<Particle> particles = particleContainer.getParticles();
@@ -181,9 +183,8 @@ TEST(FileReaderTest, LoadCuboids) {
             "-10.0 -10.0 0.0   3 3 1   1.0 1.0   0.0 -10.0 0.0   0.1"
     };
 
-    FileReader fileReader;
     ParticleContainer particleContainer;
-    FileReader::loadCuboids(lines, particleContainer);
+    fileReaders::TXTReader::loadCuboids(lines, particleContainer);
 
     ASSERT_EQ(particleContainer.getSize(), 13);
     std::vector<Particle> particles = particleContainer.getParticles();
@@ -222,9 +223,8 @@ TEST(FileReaderTest, LoadDiscs) {
             "0.0 0.0 0.0   0.0 0.0 0.0   2   1.0   1.0   2" // Disc parameters
     };
 
-    FileReader fileReader;
     ParticleContainer particleContainer;
-    FileReader::loadDiscs(lines, particleContainer);
+    fileReaders::TXTReader::loadDiscs(lines, particleContainer);
 
     ASSERT_EQ(particleContainer.getSize(), 13); // 13 particles for a disc with radius 2 in 2D
     std::vector<Particle> particles = particleContainer.getParticles();
