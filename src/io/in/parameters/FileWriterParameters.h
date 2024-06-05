@@ -9,10 +9,10 @@
 
 class FileWriterParameters {
 public:
-    FileWriterParameters() : baseName(""), outputWriteFrequency(-1) {} // default constructor
+    FileWriterParameters() : baseName(""), writeFrequency(-1) {} // default constructor
 
     FileWriterParameters(std::string baseName, int outputWriteFrequency)
-            : baseName(std::move(baseName)), outputWriteFrequency(outputWriteFrequency) {}
+            : baseName(std::move(baseName)), writeFrequency(outputWriteFrequency) {}
 
 
     [[nodiscard]] const std::string &getBaseName() const {
@@ -20,9 +20,9 @@ public:
     }
 
     [[nodiscard]] int getOutputWriteFrequency() const {
-        return outputWriteFrequency;
+        return writeFrequency;
     }
 private:
     const std::string baseName;
-    const int outputWriteFrequency; // How often to write output (every n-th step)
+    const int writeFrequency; // How often to write output (every n-th step)
 };

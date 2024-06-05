@@ -12,7 +12,7 @@ namespace fileReaders {
     public:
         XMLReader() = default;
 
-         ~XMLReader() = default;
+        ~XMLReader() = default;
 
         ParticleContainer readFile(const std::string &filepath) override;
     };

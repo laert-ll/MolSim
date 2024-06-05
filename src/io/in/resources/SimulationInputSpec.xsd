@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="SimulationInput">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="OutputFiles" type="OutputFilesType"/>
+                <xs:element name="SimulationParameters" type="SimulationParametersType"/>
+                <xs:element name="Cuboids" type="CuboidsType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="OutputFilesType">
+        <xs:sequence>
+            <xs:element name="BaseName" type="xs:string"/>
+            <xs:element name="WriteFrequency" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SimulationParametersType">
+        <xs:sequence>
+            <xs:element name="EndT" type="xs:decimal"/>
+            <xs:element name="DeltaT" type="xs:decimal"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CuboidsType">
+        <xs:sequence>
+            <xs:element name="Cuboid" type="CuboidType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CuboidType">
+        <xs:sequence>
+            <xs:element name="LowerLeftFrontCorner" type="ArrayFloat3"/>
+            <xs:element name="NumParticlesPerDimension" type="ArrayInt3"/>
+            <xs:element name="Distance" type="xs:decimal"/>
+            <xs:element name="Mass" type="xs:decimal"/>
+            <xs:element name="StartV" type="ArrayFloat3"/>
+            <xs:element name="MeanV" type="xs:decimal"/>
+            <xs:element name="Dimension" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ArrayFloat3">
+        <xs:sequence>
+            <xs:element name="X" type="xs:decimal"/>
+            <xs:element name="Y" type="xs:decimal"/>
+            <xs:element name="Z" type="xs:decimal"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ArrayInt3">
+        <xs:sequence>
+            <xs:element name="X" type="xs:int"/>
+            <xs:element name="Y" type="xs:int"/>
+            <xs:element name="Z" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
