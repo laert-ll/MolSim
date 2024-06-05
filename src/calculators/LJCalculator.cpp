@@ -17,7 +17,6 @@ namespace calculators {
         if (isFar(x1, x2, threshold))
             return;
 
-
         // Calculate the distance vector and its norm
         const std::array<double, 3> dx = ArrayUtils::elementWisePairOp(x1, x2, std::minus<>());
         const double distance = ArrayUtils::L2Norm(dx);
@@ -29,7 +28,14 @@ namespace calculators {
                                       ((pow(sigma / distance, 6) - 2 * pow(sigma / distance, 12)));
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(forceMagnitude, dx,
                                                                       std::multiplies<>());
-
+        // Limitation of Force so they don't move too quickly
+        for (int i = 0; i < 3; i++) {
+            double f = force[i];
+            if (f > 20000)
+                force[i] = 20000;
+            if (f < -20000)
+                force[i] = -20000;
+        }
         // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
         const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(particle1.getF(), force,
                                                                           std::plus<>());
@@ -39,4 +45,3 @@ namespace calculators {
         particle2.setF(newF2);
     }
 }
-

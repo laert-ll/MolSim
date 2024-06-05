@@ -2,27 +2,26 @@
 // Created by houj on 5/23/24.
 //
 
-#include "BoundaryHandler2D.h"
+#include "BoundaryHandler.h"
 #include <omp.h>
 
 namespace boundaries {
 
-    void BoundaryHandler2D::preProcessBoundaries(ParticleContainer &container) const {
-        for (int i = 0; i < 6; i++) {
-            BoundaryType type = properties.getBoundaryMap().at(directions[i]);
-            if (type == BoundaryType::REFLECTING)
-                handleReflection(container, directions[i]);
+    void BoundaryHandler::preProcessBoundaries(ParticleContainer &container) const {
+        for (auto it = properties.getBoundaryMap().begin(); it != properties.getBoundaryMap().end(); ++it) {
+            if (it->second == BoundaryType::REFLECTING) {
+                handleReflection(container, it->first);
+            }
         }
     }
 
-    void BoundaryHandler2D::postProcessBoundaries(ParticleContainer &container) const {
-        for (int i = 0; i < 6; i++) {
-            BoundaryType type = properties.getBoundaryMap().at(directions[i]);
-            if (type == BoundaryType::OUTFLOW)
-                handleOutflow(container, directions[i]);
-        }
+        void BoundaryHandler::postProcessBoundaries(ParticleContainer &container) const {
+            for (auto it = properties.getBoundaryMap().begin(); it != properties.getBoundaryMap().end(); ++it) {
+                if (it->second == BoundaryType::OUTFLOW)
+                    handleOutflow(container, it->first);
+            }
     }
-    void BoundaryHandler2D::handleReflection(ParticleContainer &container, BoundaryDirection direction) const {
+    void BoundaryHandler::handleReflection(ParticleContainer &container, BoundaryDirection direction) const {
         // If selected index is lower boundary (lowerX, lowerY, lowerZ)
         if (direction == BoundaryDirection::BOTTOM || direction == BoundaryDirection::LEFT ||
             direction == BoundaryDirection::FRONT) {
@@ -60,7 +59,7 @@ namespace boundaries {
         else
             index = 2;
         double boundary = properties.getDomain()[index];
-        double tolerance = 1.12246204831 * sigma;
+        double tolerance = pow(2, 1/6) * sigma;
 #pragma omp parallel for
         for (auto &p: container) {
             double distanceToBoundary = p.getX().at(index) - boundary;
@@ -78,7 +77,7 @@ namespace boundaries {
         }
     }
 
-    void BoundaryHandler2D::handleOutflow(ParticleContainer &container, BoundaryDirection direction) const {
+    void BoundaryHandler::handleOutflow(ParticleContainer &container, BoundaryDirection direction) const {
         int index;
         bool checkLowerBound = false;
         switch (direction) {
@@ -106,15 +105,13 @@ namespace boundaries {
         }
         for (auto &p: container) {
             auto &el = p.getX().at(index);
-            if (el > 23)
-                int i = 0;
             if ((checkLowerBound && el <= 0) || (!checkLowerBound && el >= properties.getDomain()[index])) {
                 container.deleteParticle(p);
             }
         }
     }
 
-    BoundaryHandler2D::BoundaryHandler2D(BoundaryProperties properties, calculators::Calculator *calculator,
-                                         double sigma)
+    BoundaryHandler::BoundaryHandler(BoundaryProperties properties, calculators::Calculator *calculator,
+                                     double sigma)
             : properties(std::move(properties)), sigma(sigma), calculator(calculator) {}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Particle.h"
+
 #include <vector>
 #include <functional>
 #include <cmath>
@@ -10,10 +11,9 @@
  */
 class ParticleContainer {
 private:
-//    /**
-//     * BoundaryController
-//     */
-//     boundaries::BoundaryController controller;
+    /**
+     * Boundary
+     */
     /**
      * A vector to store the particles.
      */
@@ -36,21 +36,20 @@ public:
     void addParticle(const Particle &particle);
 
     /**
- * Method to remove a particle from the container.
- * @param particle the particle to remove
- */
+     * Method to remove a particle from the container.
+     * @param particle the particle to remove
+     */
     void deleteParticle(const Particle &particle);
 
     /**
      * Method to check if pair in ParticlePairs already exists
      */
     bool pairExists(const Particle &particle1, const Particle &particle2) const;
+
     /**
      * Method to fill the vector of unique pairs with the references to particles.
      */
     void initializePairs();
-
-
 
     /**
      * Method to set volumes to particles proportional to their masses for paraview visualization purposes.

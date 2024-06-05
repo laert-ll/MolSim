@@ -12,19 +12,19 @@
 
 namespace boundaries {
     /**
-     * @class BoundaryHandler2D
+     * @class BoundaryHandler
      * @brief Handles boundary conditions for a 2D simulation domain.
      */
-    class BoundaryHandler2D{
+    class BoundaryHandler{
     public:
         /**
-         * @brief Constructor for BoundaryHandler2D.
+         * @brief Constructor for BoundaryHandler.
          *
          * @param properties The boundary properties.
          * @param calculator Pointer to the calculator used for force calculations.
          * @param sigma The interaction distance parameter.
          */
-        BoundaryHandler2D(BoundaryProperties properties, calculators::Calculator *calculator, double sigma);
+        BoundaryHandler(BoundaryProperties properties, calculators::Calculator *calculator, double sigma);
 
         /**
          * @brief Pre-processes boundaries before the main particle calculations.

@@ -57,8 +57,8 @@ set(SOURCES
         src/io/out/XYZWriter.cpp
         src/objects/Particle.cpp
         src/objects/ParticleContainer.cpp
-        src/Boundaries/BoundaryHandler2D.cpp
-        src/Boundaries/BoundaryController.cpp
+        src/boundaries/BoundaryHandler.cpp
+        src/boundaries/BoundaryController.cpp
 )
 set(TEST_SOURCES
         tests/calculators/CalculatorTest.cpp
@@ -67,10 +67,12 @@ set(TEST_SOURCES
         tests/io/in/FileReaderTest.cpp
         tests/io/in/ParticleGeneratorTest.cpp
         tests/objects/ParticleContainerTest.cpp
+        tests/boundaries/BoundaryHandlerTest.cpp
 )
 
 set(BENCHMARK_SOURCES
         benchmark/CalculatorLJBenchmark.cpp
+        tests/boundaries/BoundaryHandlerTest.cpp
 )
 
 #------------------------------------------LOGGING---------------------------------------------------------
@@ -121,6 +123,7 @@ target_link_libraries(MolSimBenchmark
 )
 
 add_test(NAME MolSimTests COMMAND MolSimTests)
+
 
 # activate all compiler warnings. Clean up your code :P
 # depending on the compiler different flags are used

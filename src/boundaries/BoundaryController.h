@@ -3,7 +3,7 @@
 //
 #pragma once
 
-#include "BoundaryHandler2D.h"
+#include "BoundaryHandler.h"
 #include "calculators/Calculator.h"
 
 namespace boundaries {
@@ -39,7 +39,7 @@ namespace boundaries {
         void postProcessBoundaries(ParticleContainer &container) const;
 
     private:
-        const BoundaryHandler2D handler;
+        const BoundaryHandler handler;
     };
 
 }//boundaries

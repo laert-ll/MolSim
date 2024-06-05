@@ -88,7 +88,17 @@ namespace calculators {
                 const std::array<double, 3> delta_v = ArrayUtils::elementWiseScalarOp(delta_t / m, avg_f,
                                                                                       std::multiplies<>());
                 v = ArrayUtils::elementWisePairOp(v, delta_v, std::plus<>());
+
                 p.setV(v);
+                if (!warned) {
+                    for (int i = 0; i < 3; i++) {
+                        if (abs(v[i]) > 0.56121 / (2 * delta_t)) {
+                            warned = true;
+                            SPDLOG_WARN("Particles might be too fast and fly out of reflecting boundaries!\n"
+                                        "Maybe try a smaller delta_t");
+                        }
+                    }
+                }
             }
         }
 
@@ -155,5 +165,6 @@ namespace calculators {
         }
 
     private:
+        bool warned = false;
         };
     };

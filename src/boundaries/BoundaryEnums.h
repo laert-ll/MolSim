@@ -29,15 +29,4 @@ namespace boundaries {
         BACK    /**< Back boundary (Z-axis negative). */
     };
 
-    /**
-     * @brief Array of all boundary directions for easy iteration.
-     */
-    const std::array<BoundaryDirection, 6> directions = {
-            BoundaryDirection::LEFT,
-            BoundaryDirection::BOTTOM,
-            BoundaryDirection::FRONT,
-            BoundaryDirection::RIGHT,
-            BoundaryDirection::TOP,
-            BoundaryDirection::BACK
-    };
 }

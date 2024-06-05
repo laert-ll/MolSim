@@ -10,26 +10,12 @@ void ParticleContainer::addParticle(const Particle &particle) {
 
 void ParticleContainer::deleteParticle(const Particle &particle) {
     // Find the particle in the vector
-
     auto it = std::find_if(particles.begin(), particles.end(), [&](const Particle &p) {
-        return &p == &particle;
+        return p == particle;
     });
 
     // If the particle is found, erase it from the vector
     if (it != particles.end()) {
-        // Find pairs involving the deleted particle
-        auto erase_predicate = [&](const std::pair<std::reference_wrapper<Particle>, std::reference_wrapper<Particle>> &pair) {
-            return &pair.first.get() == &particle || &pair.second.get() == &particle;
-        };
-
-        auto erase_begin = std::remove_if(particlePairs.begin(), particlePairs.end(), erase_predicate);
-        particlePairs.erase(erase_begin, particlePairs.end());
-
-        //Iteratoren aktualisieren
-        auto new_end = std::remove_if(particlePairs.begin(), particlePairs.end(), [&](const std::pair<std::reference_wrapper<Particle>, std::reference_wrapper<Particle>> &pair) {
-            return &pair.first.get() == &particle || &pair.second.get() == &particle;
-        });
-        // Erase the particle from the vector
         particles.erase(it);
     }
     particlePairs.clear();
