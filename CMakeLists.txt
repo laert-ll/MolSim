@@ -100,9 +100,7 @@ add_compile_definitions(LOG_LEVEL="${log_level}")
 message(STATUS "Log level: ${log_level}")
 #-----------------------------------------------------------------------------------------------------------
 # create make target
-add_executable(MolSim ${MY_SRC}
-        src/io/in/XMLReader.h
-        src/io/in/XMLReader.cpp)
+add_executable(MolSim ${MY_SRC})
 add_executable(MolSimTests ${TEST_SOURCES})
 add_executable(MolSimBenchmark ${BENCHMARK_SOURCES})
 
