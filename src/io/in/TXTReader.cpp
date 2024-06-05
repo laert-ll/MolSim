@@ -12,7 +12,7 @@
 #include <iostream>
 #include <sstream>
 namespace fileReaders {
-    ParticleContainer TXTReader::readFile(const std::string &filepath) {
+    SimulationDataContainer TXTReader::readFile(const std::string &filepath) {
         auto lines = readFileLines(filepath);
 
         // Check if there are lines in the file
@@ -47,8 +47,10 @@ namespace fileReaders {
                 throw std::runtime_error(
                         "Invalid data code in file '" + filepath + "': Only data codes 0 and 1 are supported.");
         }
-
-        return particleContainer;
+        FileWriterParameters fileWriterParameters; // empty object
+        SimulationParameters simulationParameters; // empty object
+        SimulationDataContainer simulationDataContainer = SimulationDataContainer(particleContainer, fileWriterParameters, simulationParameters);
+        return simulationDataContainer;
     }
 
     void TXTReader::loadParticles(const std::vector<std::string> &lines, ParticleContainer &particleContainer) {

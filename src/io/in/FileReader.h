@@ -5,6 +5,7 @@
 #pragma once
 
 #include "../../objects/ParticleContainer.h"
+#include "parameters/SimulationDataContainer.h"
 
 namespace fileReaders {
     /**
@@ -29,6 +30,6 @@ namespace fileReaders {
          * @param filename The name of the file to read.
          * @param particleContainer The container of particles to populate with the particles from the file.
          */
-        virtual ParticleContainer readFile(const std::string &filepath) = 0;
+        virtual SimulationDataContainer readFile(const std::string &filepath) = 0;
     };
 }// namespace fileReaders

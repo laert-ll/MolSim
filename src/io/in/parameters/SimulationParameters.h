@@ -5,12 +5,12 @@
 #pragma once
 class SimulationParameters {
 public:
-    SimulationParameters() : end_t(-1), delta_t(-1) {} // default constructor
+    SimulationParameters() : t_end(-1), delta_t(-1) {} // default constructor
 
-    SimulationParameters(double t_end, double delta_t) : end_t(t_end), delta_t(delta_t) {}
+    SimulationParameters(double t_end, double delta_t) : t_end(t_end), delta_t(delta_t) {}
 
     [[nodiscard]] double getT_end() const {
-        return end_t;
+        return t_end;
     }
 
     [[nodiscard]] double getDelta_t() const {
@@ -18,6 +18,6 @@ public:
     }
 
 private:
-    const double end_t;
+    const double t_end;
     const double delta_t;
 };

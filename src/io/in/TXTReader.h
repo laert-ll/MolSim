@@ -35,7 +35,7 @@ namespace fileReaders {
 
         ~TXTReader() override = default;
 
-        ParticleContainer readFile(const std::string &filepath) override;
+        SimulationDataContainer readFile(const std::string &filepath) override;
 
         /**
          * Reads particle data from a file and returns a ParticleContainer.
