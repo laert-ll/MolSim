@@ -4,7 +4,7 @@
 #include "XMLReader.h"
 
 namespace fileReaders {
-    ParticleContainer XMLReader::readFile(const std::string &filepath) {
+    SimulationDataContainer XMLReader::readFile(const std::string &filepath) {
         return nullptr;
     }
 }// namespace fileReaders

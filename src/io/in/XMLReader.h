@@ -14,6 +14,6 @@ namespace fileReaders {
 
         ~XMLReader() = default;
 
-        ParticleContainer readFile(const std::string &filepath) override;
+        SimulationDataContainer readFile(const std::string &filepath) override;
     };
 }// namespace fileReaders
