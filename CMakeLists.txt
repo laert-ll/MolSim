@@ -1,138 +1,174 @@
 cmake_minimum_required(VERSION 3.10)
+
+# Enable the FetchContent module
+include(FetchContent)
+
+# define project name, version
 project(PSEMolDyn_GroupC VERSION 0.0.1)
 
-set(CMAKE_CXX_STANDARD 14)
+# let ccmake and cmake-gui offer the default build type options
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;RelWithDebInfo;MinSizeRel")
 
-include(FetchContent)
-# ---------------------------------------- Dependencies -------------------------------------------------
-# spdlog
+# set Release as the default build type if it is not yet set.
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+            "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
+
+# ----------------------------------------Adding Libraries-------------------------------------------------
+# Fetch spdlog from GitHub
 FetchContent_Declare(
         spdlog
         GIT_REPOSITORY https://github.com/gabime/spdlog
-        GIT_TAG v1.x
+        GIT_TAG        v1.x
 )
 FetchContent_MakeAvailable(spdlog)
-# gtest
-FetchContent_Declare(
-        gtest
-        GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG main
-)
-FetchContent_MakeAvailable(gtest)
 
-# google benchmark
-FetchContent_Declare(
-        benchmark
-        GIT_REPOSITORY https://github.com/google/benchmark
-        GIT_TAG main
-)
 FetchContent_Declare(
         cxxopts
         GIT_REPOSITORY https://github.com/jarro2783/cxxopts
         GIT_TAG        master
 )
 FetchContent_MakeAvailable(cxxopts)
-include_directories(${cxxopts_SOURCE_DIR}/include)
 
+FetchContent_Declare(
+        gtest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG        main
+)
+FetchContent_MakeAvailable(gtest)
+
+FetchContent_Declare(
+        benchmark
+        GIT_REPOSITORY https://github.com/google/benchmark
+        GIT_TAG        main
+)
 FetchContent_MakeAvailable(benchmark)
 
-# openmp (https://cliutils.gitlab.io/modern-cmake/chapters/packages/OpenMP.html)
-find_package(OpenMP REQUIRED)
-add_compile_options(-fopenmp)
-# xerces-c
-find_package(XercesC REQUIRED)
-# libxsd (local)
-include_directories(libs/libxsd)
-# cxxopts(local)
-include_directories(libs/cxxopts/include)
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
 # ------------------------------------------------------------------------------------------------------------
-include_directories(src)
-set(SOURCES
-        src/calculators/LJCalculator.cpp
-        src/calculators/SVCalculator.cpp
-        src/io/in/FileReader.cpp
-        src/io/in/ParticleGenerator.cpp
-        src/io/out/vtk-unstructured.cpp
-        src/io/out/VTKWriter.cpp
-        src/io/out/XYZWriter.cpp
-        src/objects/Particle.cpp
-        src/objects/ParticleContainer.cpp
-        src/boundaries/BoundaryHandler.cpp
-        src/boundaries/BoundaryController.cpp
-)
-set(TEST_SOURCES
-        tests/calculators/CalculatorTest.cpp
-        tests/calculators/LJCalculatorTest.cpp
-        tests/calculators/SVCalculatorTest.cpp
-        tests/io/in/FileReaderTest.cpp
-        tests/io/in/ParticleGeneratorTest.cpp
-        tests/objects/ParticleContainerTest.cpp
-        tests/boundaries/BoundaryHandlerTest.cpp
+
+# collect all cpp files
+file(GLOB_RECURSE MY_SRC
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
 )
 
-set(BENCHMARK_SOURCES
-        benchmark/CalculatorLJBenchmark.cpp
-        tests/boundaries/BoundaryHandlerTest.cpp
+file(GLOB_RECURSE TEST_SOURCES
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/**/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/**/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
+)
+
+file(GLOB_RECURSE BENCHMARK_SOURCES
+        "${CMAKE_CURRENT_SOURCE_DIR}/benchmark/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/benchmark/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.h"
+#        "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
+#        "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
+
 )
 
 #------------------------------------------LOGGING---------------------------------------------------------
 # check if the log level is defined in the environment
-if (DEFINED ENV{LOG_LEVEL})
+if(DEFINED ENV{LOG_LEVEL})
     set(log_level $ENV{LOG_LEVEL})
-else ()
+else()
     set(log_level "INFO")
-endif ()
+endif()
+
 # define the valid log levels
 set(valid_log_levels "TRACE" "DEBUG" "INFO" "WARN" "ERROR" "CRITICAL" "OFF")
+
 # check if the log level is valid
-if (NOT log_level IN_LIST valid_log_levels)
+if(NOT log_level IN_LIST valid_log_levels)
     message(FATAL_ERROR "Invalid log level: ${log_level}. Valid log levels are: ${valid_log_levels}")
-endif ()
+endif()
+
 # define the SPDLOG_ACTIVE_LEVEL macro
 add_compile_definitions(SPDLOG_ACTIVE_LEVEL=${log_level})
 add_compile_definitions(LOG_LEVEL="${log_level}")
 message(STATUS "Log level: ${log_level}")
 #-----------------------------------------------------------------------------------------------------------
-add_library(MolSimLib ${SOURCES})
-target_link_libraries(MolSimLib
-        XercesC::XercesC
-        OpenMP::OpenMP_CXX
-        spdlog::spdlog
-        $<$<BOOL:${MINGW}>:ws2_32>
+# create make target
+add_executable(MolSim ${MY_SRC})
+add_executable(MolSimTests ${TEST_SOURCES})
+add_executable(MolSimBenchmark ${BENCHMARK_SOURCES})
+
+# set cxx standard. You may raise this if you want.
+target_compile_features(MolSim
+        PRIVATE
+        cxx_std_17
+)
+
+target_include_directories(MolSim
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_include_directories(MolSimTests
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_include_directories(MolSimBenchmark
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/benchmark
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_link_libraries(MolSim
+        # stuff that is used in headers and source files
+        PUBLIC
+        xerces-c
+        PRIVATE
+        spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
         gtest
+        gtest_main
+        cxxopts
 )
-# main
-add_executable(MolSim src/Main.cpp)
-target_link_libraries(MolSim MolSimLib)
-# tests
-add_executable(MolSimTests
-        ${TEST_SOURCES}
-        tests/MolSimTest.cpp
-)
+
 target_link_libraries(MolSimTests
-        MolSimLib
+        PRIVATE
         gtest
+        gtest_main
+        spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
-# benchmarks
-add_executable(MolSimBenchmark
-        ${BENCHMARK_SOURCES}
-)
+
 target_link_libraries(MolSimBenchmark
-        MolSimLib
+        PRIVATE
         benchmark
+        spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
+        gtest
+        gtest_main
 )
 
 add_test(NAME MolSimTests COMMAND MolSimTests)
 
-
 # activate all compiler warnings. Clean up your code :P
 # depending on the compiler different flags are used
-if(MSVC)
-    add_compile_options(/W4 /WX)
-else()
-    add_compile_options(-Wall -Wextra -Wpedantic -Werror)
-endif()
+target_compile_options(MolSim
+        PRIVATE
+        $<$<CXX_COMPILER_ID:Clang>:-Wall -fopenmp>
+)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
+
 include(doxygen)
 include(CTest)

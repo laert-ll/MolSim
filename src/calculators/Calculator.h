@@ -45,14 +45,14 @@ namespace calculators {
          * @param particleContainer The container of particles to calculate the forces for.
          */
         virtual void calculateF(ParticleContainer &particleContainer) {
-            #pragma omp parallel for
+             #pragma omp parallel for
             for (auto &p: particleContainer) {
                 p.setOldF(p.getF());  // Update oldF with currentF
                 p.setF({0, 0, 0});     // Reset F to zeros
             }
 
             // Iterate over all unique pairs of particles
-            #pragma omp parallel for
+             #pragma omp parallel for
             for (auto pair = particleContainer.pair_begin(); pair != particleContainer.pair_end(); ++pair) {
                 Particle &particle1 = pair->first.get();
                 Particle &particle2 = pair->second.get();
@@ -71,7 +71,6 @@ namespace calculators {
         virtual void calculateV(ParticleContainer &particleContainer, double delta_t) {
             #pragma omp parallel for
             for (auto &p: particleContainer) {
-//                SPDLOG_INFO("Now Calculate V");
                 // Get the current position, velocity, force and mass of the particle
                 std::array<double, 3> v = p.getV();
                 const std::array<double, 3> f = p.getF();
@@ -138,7 +137,7 @@ namespace calculators {
                 p.setX(x);
             }
         }
-        //here a small doxygen comment
+
         virtual void calculateFPairwise(Particle &particle1, Particle &particle2) const {};
 
     protected:

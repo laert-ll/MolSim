@@ -2,7 +2,7 @@
 // Created by U-jin Hong on 04.06.24.
 //
 
-#include <gtest/gtest.h>t
+#include <gtest/gtest.h>
 #include <fstream>
 #include <sstream>
 
@@ -163,7 +163,7 @@ namespace boundaries {
         outfile << "0\n"  // Data code for Particles
                 << "8\n"  // Number of data sets
                 << "2\n"  // Dimension of simulation
-                << "10.0 0.5 0.0     0.0 -500.0 0.0     1.0\n" // Bottom - Slow
+                << "10.0 0.5 0.0     0.0 -300.0 0.0     1.0\n" // Bottom - Slow
                 << "10.0 19.5 0.0    0.0 300.0 0.0      1.0\n" // Top
                 << "0.5 10.0 0.0     -300.0 0.0 0.0     1.0\n" // Left - Slow
                 << "19.5 10.0 0.0    1000.0 0.0 0.0      1.0\n" // Right
@@ -199,10 +199,10 @@ namespace boundaries {
                                                             {0.35, 0.35, 0.0},
                                                             {0.35, 19.65, 0.0}};
         for (int i = 0; i < 5; i++) {
-            ASSERT_ARRAYS_NEAR(particles[i].getF(), expectedForces[i], 1e-6);
+            ASSERT_ARRAYS_NEAR(particles[i].getOldF(), expectedForces[i], 1e-6);
             ASSERT_ARRAYS_NEAR(particles[i].getX(), expectedPositions[i], 1e-6);
         }
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             handler.preProcessBoundaries(container);
             calculator->calculate(container, 0.0005);
             handler.postProcessBoundaries(container);
@@ -219,7 +219,7 @@ namespace boundaries {
                              {-0.09245500000000006, 10.0, 0.0},
                              {-0.09245500000000006, 20.092454999999998, 0.0}};
         for (int i = 0; i < 3; i++) {
-            ASSERT_ARRAYS_NEAR(particles[i].getF(), expectedForces[i], 1e-6);
+            ASSERT_ARRAYS_NEAR(particles[i].getOldF(), expectedForces[i], 1e-6);
             ASSERT_ARRAYS_NEAR(particles[i].getX(), expectedPositions[i], 1e-6);
         }
     }

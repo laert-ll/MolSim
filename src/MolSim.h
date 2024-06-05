@@ -169,7 +169,7 @@ public:
 //        boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::OUTFLOW);
 //        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
 
-        std::array<double, 2> domain = {45.0, 21.0};
+        std::array<double, 2> domain = {50, 30.0};
 
         const boundaries::BoundaryController controller{boundaryMap, calculator.get(), domain, 1.0};
 

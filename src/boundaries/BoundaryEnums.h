@@ -28,5 +28,4 @@ namespace boundaries {
         FRONT,  /**< Front boundary (Z-axis positive). */
         BACK    /**< Back boundary (Z-axis negative). */
     };
-
 }
