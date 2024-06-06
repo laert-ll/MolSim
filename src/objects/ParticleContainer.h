@@ -38,8 +38,7 @@ public:
      */
     void addParticle(const Particle &particle);
 
-    void addCell(const std::array<double, 2>& start_coordinates, 
-                                const std::array<double, 2>& end_coordinates);
+    void addCell(std::array<double, 2>& start_coordinates, std::array<double, 2>& end_coordinates);
 
     void initializeNeighboringCells();
 
