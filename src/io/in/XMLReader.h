@@ -12,7 +12,7 @@ namespace fileReaders {
     public:
         XMLReader() = default;
 
-        ~XMLReader() = default;
+        ~XMLReader() override = default;
 
         SimulationDataContainer readFile(const std::string &filepath) override;
     };
