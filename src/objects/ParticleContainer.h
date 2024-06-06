@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Particle.h"
+#include "Cell.h"
 
 #include <vector>
 #include <functional>
@@ -23,6 +24,8 @@ private:
      */
     std::vector<std::pair<std::reference_wrapper<Particle>, std::reference_wrapper<Particle>>> particlePairs;
 
+    std::vector<Cell> cells;
+
 public:
 
     ParticleContainer() = default;
@@ -34,6 +37,11 @@ public:
      * @param particle the particle to add
      */
     void addParticle(const Particle &particle);
+
+    void addCell(const std::array<double, 2>& start_coordinates, 
+                                const std::array<double, 2>& end_coordinates);
+
+    void initializeNeighboringCells();
 
     /**
      * Method to remove a particle from the container.
@@ -50,6 +58,12 @@ public:
      * Method to fill the vector of unique pairs with the references to particles.
      */
     void initializePairs();
+
+    void arrangeCells();
+
+    std::vector<std::reference_wrapper<Particle>> getNeighboringParticles(const Particle& particle);
+
+    Cell findCell(const Particle& particle);
 
     /**
      * Method to set volumes to particles proportional to their masses for paraview visualization purposes.
@@ -87,4 +101,7 @@ public:
     size_t getSize() const;
 
     std::vector<Particle> getParticles() const;
+
+    void reassign(Particle &particle);
+
 };

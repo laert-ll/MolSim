@@ -50,6 +50,8 @@ private:
 
     static void loadDiscs(const std::vector<std::string>& lines, ParticleContainer& particles);
 
+    static void loadCells(const std::vector<std::string> &lines, ParticleContainer &particles);
+
     /**
      * This method parses an array of values from a single line (string)
      * and update the data object, specified as parameter, accordingly.
