@@ -11,7 +11,6 @@
 #include <gtest/gtest.h>
 
 #include "../../objects/ParticleContainer.h"
-#include "CuboidParameters.h"
 #include "ParticleGenerator.h"
 
 
@@ -49,7 +48,7 @@ private:
 
     static void loadCuboids(const std::vector<std::string>& lines, ParticleContainer& particles);
 
-
+    static void loadDiscs(const std::vector<std::string>& lines, ParticleContainer& particles);
 
     /**
      * This method parses an array of values from a single line (string)
@@ -72,8 +71,17 @@ private:
      * @param filepath
      * @return vector of strings
      */
-    static std::vector<std::string> readAndValidateFileLines(const std::string &filepath);
+    static std::vector<std::string> readFileLines(const std::string &filepath);
 
+    /**
+     * This method validates the header lines of the input file.
+     * The header lines should contain the data code, number of data sets, and the dimension of the simulation.
+     *
+     * This method checks if the header data are allowed and returns error exitcode, if not.
+     *
+     * @param lines
+     */
+    static void validateHeaderLines(const std::vector<std::string>& lines);
 
 /**
  * Class section end
@@ -85,5 +93,6 @@ private:
  */
     FRIEND_TEST(FileReaderTest, LoadParticles);
     FRIEND_TEST(FileReaderTest, LoadCuboids);
+    FRIEND_TEST(FileReaderTest, LoadDiscs);
     FRIEND_TEST(FileReaderTest, readFileLinesBasicTest);
 };

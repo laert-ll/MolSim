@@ -4,8 +4,9 @@
 #pragma once
 
 #include "../../objects/ParticleContainer.h"
-#include "CuboidParameters.h"
-#include "ParticleParameters.h"
+#include "./parameters/CuboidParameters.h"
+#include "./parameters/ParticleParameters.h"
+#include "./parameters/DiscParameters.h"
 
 class ParticleGenerator {
 
@@ -17,4 +18,7 @@ public:
     static Particle generateParticle(const ParticleParameters &parameters);
 
     static void generateCuboid(const CuboidParameters &parameters, ParticleContainer& particleContainer);
+
+    static void generateDisc(const DiscParameters &parameters, ParticleContainer& particleContainer);
+
 };

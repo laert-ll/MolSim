@@ -25,9 +25,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(spdlog)
 
 FetchContent_Declare(
-        cxxopts
-        GIT_REPOSITORY https://github.com/jarro2783/cxxopts
-        GIT_TAG        master
+    cxxopts
+    GIT_REPOSITORY https://github.com/jarro2783/cxxopts
+    GIT_TAG        master
 )
 FetchContent_MakeAvailable(cxxopts)
 
@@ -55,31 +55,28 @@ endif()
 
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
 )
 
 file(GLOB_RECURSE TEST_SOURCES
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/**/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/**/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/**/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/**/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
 )
 
 file(GLOB_RECURSE BENCHMARK_SOURCES
-        "${CMAKE_CURRENT_SOURCE_DIR}/benchmark/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/benchmark/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.h"
-#        "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
-#        "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
-
+    "${CMAKE_CURRENT_SOURCE_DIR}/benchmark/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/benchmark/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.h"
 )
 
 #------------------------------------------LOGGING---------------------------------------------------------
@@ -111,52 +108,50 @@ add_executable(MolSimBenchmark ${BENCHMARK_SOURCES})
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
         PRIVATE
-        cxx_std_17
+            cxx_std_17
 )
 
 target_include_directories(MolSim
         PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
         PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_include_directories(MolSimTests
-        PRIVATE
+target_include_directories(MolSimTests 
+    PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/tests
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_include_directories(MolSimBenchmark
-        PRIVATE
+target_include_directories(MolSimBenchmark 
+    PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/benchmark
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
-        xerces-c
+            xerces-c
         PRIVATE
-        spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
-        gtest
-        gtest_main
-        cxxopts
+            spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
+            gtest
+            gtest_main
+            cxxopts
 )
 
 target_link_libraries(MolSimTests
-        PRIVATE
-        gtest
-        gtest_main
-        spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
+         PRIVATE
+            gtest 
+            gtest_main
+            spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
 
 target_link_libraries(MolSimBenchmark
-        PRIVATE
-        benchmark
-        spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
-        gtest
-        gtest_main
+        PRIVATE 
+            benchmark
+            spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
+            gtest
+            gtest_main
 )
 
 add_test(NAME MolSimTests COMMAND MolSimTests)
@@ -165,7 +160,7 @@ add_test(NAME MolSimTests COMMAND MolSimTests)
 # depending on the compiler different flags are used
 target_compile_options(MolSim
         PRIVATE
-        $<$<CXX_COMPILER_ID:Clang>:-Wall -fopenmp>
+            $<$<CXX_COMPILER_ID:Clang>:-Wall -fopenmp>
 )
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
