@@ -21,11 +21,11 @@ namespace boundaries {
      * @brief Defines the possible directions for boundaries in the simulation.
      */
     enum class BoundaryDirection {
-        TOP,    /**< Upper boundary (Y-axis positive). */
-        RIGHT,  /**< Right boundary (X-axis positive). */
-        BOTTOM, /**< Lower boundary (Y-axis negative). */
-        LEFT,   /**< Left boundary (X-axis negative). */
-        FRONT,  /**< Front boundary (Z-axis positive). */
-        BACK    /**< Back boundary (Z-axis negative). */
+        TOP,    /**< Upper boundary (Y-axis High). */
+        RIGHT,  /**< Right boundary (X-axis High). */
+        BOTTOM, /**< Lower boundary (Y-axis Low). */
+        LEFT,   /**< Left boundary (X-axis Low). */
+        FRONT,  /**< Front boundary (Z-axis High). */
+        BACK    /**< Back boundary (Z-axis Low). */
     };
 }
