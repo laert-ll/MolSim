@@ -3,6 +3,7 @@
 //
 #include "calculators/SVCalculator.h"
 #include "calculators/LJCalculator.h"
+#include "calculators/LCCalculator.h"
 #include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"
 #include "io/out/FileWriter.h"
@@ -121,6 +122,9 @@ public:
             } else if (calculatorArg == "lj") {
                 calculator = std::make_unique<calculators::LJCalculator>(1, 5, 5.31608);
                 SPDLOG_INFO("Selected calculator: lj");
+            } else if (calculatorArg == "lc") {
+                calculator = std::make_unique<calculators::LCCalculator>(1, 5, 5.31608);
+                SPDLOG_INFO("Selected calculator: lc");
             } else {
                 SPDLOG_ERROR("Invalid option for calculator: {}", calculatorArg);
                 SPDLOG_ERROR("Only 'sv' and 'lj' are allowed.");
