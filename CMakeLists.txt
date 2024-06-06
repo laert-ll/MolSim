@@ -25,6 +25,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(spdlog)
 
 FetchContent_Declare(
+    cxxopts
+    GIT_REPOSITORY https://github.com/jarro2783/cxxopts
+    GIT_TAG        master
+)
+FetchContent_MakeAvailable(cxxopts)
+
+FetchContent_Declare(
         gtest
         GIT_REPOSITORY https://github.com/google/googletest.git
         GIT_TAG        main
@@ -38,10 +45,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(benchmark)
 
-find_package(Boost REQUIRED COMPONENTS program_options timer)
-
-# Find Boost components
-find_package(Boost REQUIRED COMPONENTS program_options timer)
 find_package(OpenMP)
 if (OPENMP_FOUND)
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
@@ -62,6 +65,7 @@ file(GLOB_RECURSE TEST_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
 )
 
 file(GLOB_RECURSE BENCHMARK_SOURCES
@@ -114,40 +118,40 @@ target_include_directories(MolSim
             ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_include_directories(MolSimTests 
+target_include_directories(MolSimTests
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_include_directories(MolSimBenchmark 
+target_include_directories(MolSimBenchmark
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/benchmark
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
-            Boost::program_options
-            Boost::timer
         PRIVATE
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
             gtest
             gtest_main
+            cxxopts
 )
 
 target_link_libraries(MolSimTests
          PRIVATE
-            gtest 
+            gtest
             gtest_main
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
 
 target_link_libraries(MolSimBenchmark
-        PRIVATE 
+        PRIVATE
             benchmark
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
-            Boost::program_options
             gtest
             gtest_main
 )
