@@ -5,10 +5,13 @@
 #pragma once
 
 #include <vector>
+#include <gtest/gtest.h>
+
 #include "BoundaryEnums.h"
 #include "BoundaryProperties.h"
 #include "../objects/ParticleContainer.h"
 #include "calculators/Calculator.h"
+
 
 namespace boundaries {
     /**
@@ -38,6 +41,12 @@ namespace boundaries {
          * @param container The particle container holding all particles.
          */
         void postProcessBoundaries(ParticleContainer &container) const;
+
+    private:
+        const BoundaryProperties properties;
+        const double sigma=1;
+        const calculators::Calculator* calculator;
+
         /**
          * @brief Handles reflection for particles near the reflecting boundary.
          *
@@ -53,9 +62,17 @@ namespace boundaries {
          */
         void handleOutflow(ParticleContainer &container, BoundaryDirection direction) const;
 
-    private:
-        const BoundaryProperties properties;
-        const double sigma=1;
-        const calculators::Calculator* calculator;
-        };
+/**
+ * Class section end
+ *
+ *
+ *
+ * --------------------------------------------TEST SECTION------------------------------------------------------------
+ * To be able to use the private methods and attributes in testing, FRIEND_TESTs are declared here.
+ */
+        FRIEND_TEST(BoundaryHandlerTest, BasicReflection);
+        FRIEND_TEST(BoundaryHandlerTest, CornerReflection);
+        FRIEND_TEST(BoundaryHandlerTest, BasicOutflow);
+        FRIEND_TEST(BoundaryHandlerTest, MixedBoundaries);
+    };
 };
