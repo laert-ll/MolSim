@@ -31,8 +31,10 @@ bool ParticleContainer::pairExists(const Particle &particle1, const Particle &pa
         }
     }
     return false;
-void ParticleContainer::addCell(const std::array<double, 2>& start_coordinates, 
-                                const std::array<double, 2>& end_coordinates) {
+}
+
+void ParticleContainer::addCell(std::array<double, 2>& start_coordinates, 
+                                std::array<double, 2>& end_coordinates) {
     Cell newCell = Cell(start_coordinates, end_coordinates);
     cells.push_back(newCell);
 }
