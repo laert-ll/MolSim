@@ -10,6 +10,7 @@
 #include "io/out/XYZWriter.h"
 #include "spdlog/spdlog.h"
 #include "cxxopts.hpp"
+#include "boundaries/BoundaryController.h"
 
 class MolSim {
 public:
@@ -67,18 +68,18 @@ public:
      * @return True if the arguments were processed successfully and a valid calculator and output writer were selected, false otherwise.
      */
     static bool processArguments(int argc, char *argv[], std::string &inputFilePath,
-                                    double &delta_t, double &end_time,
-                                    std::unique_ptr<outputWriters::FileWriter> &outputWriter,
-                                    std::unique_ptr<calculators::Calculator> &calculator) {
+                                 double &delta_t, double &end_time,
+                                 std::unique_ptr<outputWriters::FileWriter> &outputWriter,
+                                 std::unique_ptr<calculators::Calculator> &calculator) {
         cxxopts::Options options("MolSim", "Molecular Simulation Program");
 
         options.add_options()
-            ("help", "Produce help message")
-            ("input", "Input file path", cxxopts::value<std::string>())
-            ("delta_t", "Set delta_t", cxxopts::value<double>()->default_value("0.014"))
-            ("end_time", "Set end_time", cxxopts::value<double>()->default_value("1000"))
-            ("output", "Output writer (vtk or xyz)", cxxopts::value<std::string>())
-            ("calculator", "Calculator (sv, lj or dummy)", cxxopts::value<std::string>());
+                ("help", "Produce help message")
+                ("input", "Input file path", cxxopts::value<std::string>())
+                ("delta_t", "Set delta_t", cxxopts::value<double>()->default_value("0.014"))
+                ("end_time", "Set end_time", cxxopts::value<double>()->default_value("1000"))
+                ("output", "Output writer (vtk or xyz)", cxxopts::value<std::string>())
+                ("calculator", "Calculator (sv, lj or dummy)", cxxopts::value<std::string>());
 
         auto result = options.parse(argc, argv);
 
@@ -160,11 +161,23 @@ public:
                                   std::unique_ptr<calculators::Calculator> &calculator) {
         const std::string &filename = "MD";
 
-        double current_time = 0; // start_time
+        double current_time = 0.0; // start_time
         int iteration = 0;
 
+        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
+//        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
+//        boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::OUTFLOW);
+//        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
+
+        std::array<double, 2> domain = {50, 30.0};
+
+        const boundaries::BoundaryController controller{boundaryMap, calculator.get(), domain, 1.0};
+
         while (current_time < end_time) {
+
+            controller.preProcessBoundaries(particleContainer);
             calculator->calculate(particleContainer, delta_t);
+            controller.postProcessBoundaries(particleContainer);
 
             iteration++;
             if (iteration % 10 == 0) {
@@ -174,10 +187,9 @@ public:
             if (iteration % 100 == 0) {
                 SPDLOG_INFO("Iteration {} finished.", iteration);
             }
-
             current_time += delta_t;
         }
 
         SPDLOG_INFO("Output written. Terminating...");
-    }
+        }
 };

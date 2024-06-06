@@ -11,7 +11,8 @@
 namespace calculators {
     class TestCalculator : public calculators::Calculator {
     private:
-        void calculateF(ParticleContainer &particleContainer) override {}
+//        void calculateF(ParticleContainer &particleContainer) override {};
+        void calculateFPairwise(Particle &particle1, Particle &particle2) const override{};
     };
 }
 

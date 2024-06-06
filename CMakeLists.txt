@@ -65,6 +65,7 @@ file(GLOB_RECURSE TEST_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
 )
 
 file(GLOB_RECURSE BENCHMARK_SOURCES
@@ -117,14 +118,16 @@ target_include_directories(MolSim
             ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_include_directories(MolSimTests 
+target_include_directories(MolSimTests
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_include_directories(MolSimBenchmark 
+target_include_directories(MolSimBenchmark
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/benchmark
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 target_link_libraries(MolSim
@@ -140,13 +143,13 @@ target_link_libraries(MolSim
 
 target_link_libraries(MolSimTests
          PRIVATE
-            gtest 
+            gtest
             gtest_main
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
 
 target_link_libraries(MolSimBenchmark
-        PRIVATE 
+        PRIVATE
             benchmark
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
             gtest
