@@ -57,6 +57,8 @@ endif()
 file(GLOB_RECURSE MY_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/io/in/resources/SimulationInputSpec.cxx"
+    "${CMAKE_CURRENT_SOURCE_DIR}/io/in/resources/SimulationInputSpec.hxx"
 )
 
 file(GLOB_RECURSE TEST_SOURCES
@@ -113,16 +115,17 @@ target_compile_features(MolSim
 target_include_directories(MolSim
         PUBLIC
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
+            ${CMAKE_CURRENT_SOURCE_DIR}/io/in/resources
         PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_include_directories(MolSimTests 
+target_include_directories(MolSimTests
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/tests
 )
 
-target_include_directories(MolSimBenchmark 
+target_include_directories(MolSimBenchmark
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/benchmark
 )
@@ -140,13 +143,13 @@ target_link_libraries(MolSim
 
 target_link_libraries(MolSimTests
          PRIVATE
-            gtest 
+            gtest
             gtest_main
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
 )
 
 target_link_libraries(MolSimBenchmark
-        PRIVATE 
+        PRIVATE
             benchmark
             spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
             gtest

@@ -47,7 +47,8 @@ TEST(ReadFileTest, ReadParticlesFromFile) {
     outfile.close();
 
     fileReaders::TXTReader fileReader;
-    ParticleContainer particleContainer = fileReader.readFile("test_particles.txt");
+    SimulationDataContainer simulationDataContainer = fileReader.readFile("test_particles.txt");
+    ParticleContainer particleContainer = simulationDataContainer.getParticleContainer();
 
     ASSERT_EQ(particleContainer.getSize(), 4);
     std::vector<Particle> container = particleContainer.getParticles();
@@ -88,7 +89,8 @@ TEST(ReadFileTest, ReadCuboidsFromFile) {
     outfile.close();
 
     fileReaders::TXTReader fileReader;
-    ParticleContainer particleContainer = fileReader.readFile("test_cuboids.txt");
+    SimulationDataContainer simulationDataContainer = fileReader.readFile("test_cuboids.txt");
+    ParticleContainer particleContainer = simulationDataContainer.getParticleContainer();
 
     ASSERT_EQ(particleContainer.getSize(), 13);
     std::vector<Particle> particles = particleContainer.getParticles();
