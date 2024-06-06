@@ -70,7 +70,8 @@ public:
     static bool processArguments(int argc, char *argv[], std::string &inputFilePath,
                                  double &delta_t, double &end_time,
                                  std::unique_ptr<outputWriters::FileWriter> &outputWriter,
-                                 std::unique_ptr<calculators::Calculator> &calculator) {
+                                 std::unique_ptr<calculators::Calculator> &calculator,
+                                 std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> &boundaryMap) {
         cxxopts::Options options("MolSim", "Molecular Simulation Program");
 
         options.add_options()
@@ -79,7 +80,8 @@ public:
                 ("delta_t", "Set delta_t", cxxopts::value<double>()->default_value("0.014"))
                 ("end_time", "Set end_time", cxxopts::value<double>()->default_value("1000"))
                 ("output", "Output writer (vtk or xyz)", cxxopts::value<std::string>())
-                ("calculator", "Calculator (sv, lj or dummy)", cxxopts::value<std::string>());
+                ("calculator", "Calculator (sv, lj or dummy)", cxxopts::value<std::string>())
+                ("boundaries", "Boundary conditions (0000 to 2222)", cxxopts::value<std::string>()->default_value("1111"));
 
         auto result = options.parse(argc, argv);
 
@@ -140,7 +142,46 @@ public:
             SPDLOG_ERROR("Invalid input; please select a calculator.");
             return false;
         }
+        if (result.count("boundaries")) {
+            std::string boundariesArg = result["boundaries"].as<std::string>();
+            if (boundariesArg.size() == 4) {
+                std::array<boundaries::BoundaryDirection, 4> directions = {
+                        boundaries::BoundaryDirection::LEFT,
+                        boundaries::BoundaryDirection::BOTTOM,
+                        boundaries::BoundaryDirection::RIGHT,
+                        boundaries::BoundaryDirection::TOP
+                };
 
+                for (int i = 0; i < 4; ++i) {
+                    switch (boundariesArg[i]) {
+                        case '0':
+                            boundaryMap[directions[i]] = boundaries::BoundaryType::OFF;
+                            break;
+                        case '1':
+                            boundaryMap[directions[i]] = boundaries::BoundaryType::REFLECTING;
+                            break;
+                        case '2':
+                            boundaryMap[directions[i]] = boundaries::BoundaryType::OUTFLOW;
+                            break;
+                        default:
+                            SPDLOG_WARN("Invalid boundary value '{}', defaulting all to REFLECTING", boundariesArg[i]);
+                            boundaryMap[directions[i]] = boundaries::BoundaryType::REFLECTING;
+                    }
+                }
+            } else {
+                SPDLOG_WARN("Invalid boundary string length, defaulting all boundaries to REFLECTING");
+                boundaryMap[boundaries::BoundaryDirection::LEFT] = boundaries::BoundaryType::REFLECTING;
+                boundaryMap[boundaries::BoundaryDirection::BOTTOM] = boundaries::BoundaryType::REFLECTING;
+                boundaryMap[boundaries::BoundaryDirection::RIGHT] = boundaries::BoundaryType::REFLECTING;
+                boundaryMap[boundaries::BoundaryDirection::TOP] = boundaries::BoundaryType::REFLECTING;
+            }
+        } else {
+            SPDLOG_WARN("No boundary conditions specified, defaulting all boundaries to REFLECTING");
+            boundaryMap[boundaries::BoundaryDirection::LEFT] = boundaries::BoundaryType::REFLECTING;
+            boundaryMap[boundaries::BoundaryDirection::BOTTOM] = boundaries::BoundaryType::REFLECTING;
+            boundaryMap[boundaries::BoundaryDirection::RIGHT] = boundaries::BoundaryType::REFLECTING;
+            boundaryMap[boundaries::BoundaryDirection::TOP] = boundaries::BoundaryType::REFLECTING;
+        }
         return true;
     }
 
@@ -158,16 +199,12 @@ public:
     */
     static void performSimulation(ParticleContainer &particleContainer, double &delta_t, double &end_time,
                                   std::unique_ptr<outputWriters::FileWriter> &outputWriter,
-                                  std::unique_ptr<calculators::Calculator> &calculator) {
+                                  std::unique_ptr<calculators::Calculator> &calculator,
+                                  const std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> &boundaryMap) {
         const std::string &filename = "MD";
 
         double current_time = 0.0; // start_time
         int iteration = 0;
-
-        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
-//        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
-//        boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::OUTFLOW);
-//        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
 
         std::array<double, 2> domain = {50, 30.0};
 
