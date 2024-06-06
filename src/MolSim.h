@@ -10,7 +10,7 @@
 #include "io/out/XYZWriter.h"
 #include "spdlog/spdlog.h"
 #include "cxxopts.hpp"
-#include "Boundaries/BoundaryController.h"
+#include "boundaries/BoundaryController.h"
 
 class MolSim {
 public:

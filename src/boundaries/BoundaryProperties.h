@@ -49,7 +49,8 @@ namespace boundaries {
          * @brief Generates a boundary map with default values.
          *
          * @param originalMap The original boundary map.
-         * @return The boundary map with default values.
+         * @return The boundary map with remaining directions filled with "Reflecting"
+         * Since it's in 2D, the Front and Back
          */
         static std::map<BoundaryDirection, BoundaryType> getBoundaryMapWithDefaults(const std::map<BoundaryDirection, BoundaryType>& originalMap) {
             std::map<BoundaryDirection, BoundaryType> mapWithDefaults = originalMap;
