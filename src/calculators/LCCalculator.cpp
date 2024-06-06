@@ -15,15 +15,15 @@ namespace calculators {
         particleContainer.arrangeCells();
 
         for (auto p1 = particleContainer.begin(); p1 != particleContainer.end(); ++p1) {
-            for (auto& particle2_ref : particleContainer.getNeighboringParticles(*p1)) { // Pass the particle object itself
-                auto& particle1 = *p1; // Dereference the iterator to access the actual Particle object
-                auto& particle2 = particle2_ref.get(); // Dereference the reference wrapper to access the actual Particle object
-                if (particle1.getType() < particle2.getType()) { // Use methods of Particle class via iterator
-
+            for (auto p2 : particleContainer.getNeighboringParticles(*p1)) {
+                auto& particle1 = *p1;
+                auto& particle2 = p2.get();
+                // size_t index1 = std::distance(particleContainer.begin(), p1);
+                // size_t index2 = std::distance(particleContainer.begin(), p2.get());
+                // if (index1 > index2) {
                     // Get the positions and masses of the two particles
-                    const std::array<double, 3> x1 = particle1.getX();
-                    const std::array<double, 3> x2 = particle2.getX();
-
+                    const std::array<double, 3>& x1 = particle1.getX();
+                    const std::array<double, 3>& x2 = particle2.getX();
                     // Calculate the distance vector and its norm
                     const std::array<double, 3> dx = ArrayUtils::elementWisePairOp(x1, x2, std::minus<>());
                     const double distance = ArrayUtils::L2Norm(dx);
@@ -41,7 +41,7 @@ namespace calculators {
                                                                                     std::minus<>());
                     particle1.setF(newF1);
                     particle2.setF(newF2);
-                }
+                // }
             }
         }
     }

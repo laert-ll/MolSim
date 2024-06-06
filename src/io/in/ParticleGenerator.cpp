@@ -33,7 +33,7 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Parti
     SPDLOG_DEBUG("Generating cuboid: LLF {}, NumParticles {}, Distance {}, Mass {}, StartV {}, MeanV {}",
                  ArrayUtils::to_string(lowerLeftFrontCorner), ArrayUtils::to_string(numParticlesPerDimension), distance,
                  m, ArrayUtils::to_string(startV), meanV);
-
+    int i = 0;
     // Generate particles for the cuboid
     for (std::size_t xIndex = 0; xIndex < numParticlesPerDimension[0]; ++xIndex) {
         for (std::size_t yIndex = 0; yIndex < numParticlesPerDimension[1]; ++yIndex) {
@@ -46,7 +46,7 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Parti
                 };
 
                 // Simulate Brownian Motion by using MaxwellBoltzmannDistribution
-                const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 3);
+                const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 2);
 
                 std::array<double, 3> v = startV;
                 // Add elements of deltaV to v based on dimension
@@ -55,7 +55,9 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Parti
                 }
                 // Create a new particle and add it to the container
                 Particle newParticle(x, v, m, 0, 0); // Set volume and type to zero for now
+                i++;
                 particleContainer.addParticle(newParticle);
+                particleContainer.reassign(newParticle);
             }
         }
     }
