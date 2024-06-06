@@ -1,4 +1,5 @@
 #include "ParticleContainer.h"
+#include "spdlog/spdlog.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -40,7 +41,9 @@ void ParticleContainer::addCell(std::array<double, 2>& start_coordinates,
 }
 
 void ParticleContainer::initializeNeighboringCells() {
-    double cutoff = 3.0;
+    // this should be fixed by the next assignment to be received from the input
+    // instead of being locally added like this, apologies
+    double cutoff = 30; 
     for (auto& cell : cells) {
         auto& start = cell.getStartCoordinates();
         auto& end = cell.getEndCoordinates();
@@ -72,8 +75,6 @@ void ParticleContainer::initializePairs() {
 }
 
 void ParticleContainer::arrangeCells() {
-    particlePairs.clear();
-
     for (auto &cell : cells) {
         auto& start = cell.getStartCoordinates();
         auto& end = cell.getEndCoordinates();
@@ -84,6 +85,7 @@ void ParticleContainer::arrangeCells() {
                 pos[1] < start[1] || pos[1] >= end[1]) {
                 cell.removeParticle(particle->get());
                 reassign(particle->get());
+                break;
             }
         }
     }
@@ -125,7 +127,7 @@ Cell ParticleContainer::findCell(const Particle& particle) {
             return cell;
         }
     }
-    throw std::out_of_range("No cell found for the particle");
+    return Cell({0.0, 0.0}, {0.0, 0.0});
 }
 
 void ParticleContainer::setVolumes() {

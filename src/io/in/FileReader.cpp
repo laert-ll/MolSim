@@ -168,13 +168,13 @@ void FileReader::loadCells(const std::vector<std::string> &lines, ParticleContai
                                                      start_coordinates[1] + cutoff_radius};
             particles.addCell(start_coordinates, end_coordinates);
             SPDLOG_DEBUG("Added cell with start_coordinates: ({}, {}) and end_coordinates: ({}, {})",
-                         start_coordinates[0], start_coordinates[1], end_coordinates[0], end_coordinates[1]);
+                        start_coordinates[0], start_coordinates[1], end_coordinates[0], end_coordinates[1]);
         }
     }
 
     particles.initializeNeighboringCells();
 
-    for (int i = 4; i < num_cuboids + 2; ++i) {
+    for (int i = 5; i < num_cuboids + 5; ++i) {
         std::istringstream datastream(lines[i]);
         parseDataFromLine(datastream, llf);
         parseDataFromLine(datastream, numParticles);
@@ -190,8 +190,8 @@ void FileReader::loadCells(const std::vector<std::string> &lines, ParticleContai
         CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, dimension);
         ParticleGenerator::generateCuboid(cuboidParams, particles);
         SPDLOG_DEBUG("Completed generating cuboid {}", i);
-        particles.initializePairs();
     }
+    particles.arrangeCells();
     SPDLOG_INFO("Finished loading cuboids!");
 }
 
