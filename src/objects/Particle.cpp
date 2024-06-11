@@ -90,6 +90,11 @@ bool Particle::operator==(const Particle &other) const {
            (volume == other.volume) and (old_f == other.old_f);
 }
 
+bool Particle::hasZeroVelocities() const {
+    const auto& velocities = this->getV();
+    return velocities[0] == 0.0 && velocities[1] == 0.0 && velocities[2] == 0.0;
+}
+
 std::ostream &operator<<(std::ostream &stream, Particle &p) {
     stream << p.toString();
     return stream;

@@ -164,6 +164,19 @@ inline Container elementWiseScalarOp(const Scalar &lhs, const Container &rhs,
   SPDLOG_TRACE("Element wise scalar operation: {} {} = {}", lhs, to_string(rhs), to_string(ret));
   return ret;
 }
+/**
+ * Calculates the dot product of two containers.
+ * @tparam Container
+ * @param lhs
+ * @param rhs
+ * @return result of the dot product as double value.
+ */
+template <class Container>
+double dotProduct(const Container &lhs, const Container &rhs) {
+  double result = std::inner_product(lhs.begin(), lhs.end(), rhs.begin(), 0.0);
+  SPDLOG_TRACE("Dot product operation: {} {} = {}", to_string(lhs), to_string(rhs), result);
+  return result;
+}
 
 /**
  * Calculates the L2 norm for a given container.

@@ -91,6 +91,8 @@ public:
     bool operator==(const Particle &other) const;
 
     std::string toString() const;
+
+    bool hasZeroVelocities() const;
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

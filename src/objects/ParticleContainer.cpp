@@ -88,4 +88,14 @@ size_t ParticleContainer::getSize() const {
 
 std::vector<Particle> ParticleContainer::getParticles() const {
     return particles;
-};
+}
+
+bool ParticleContainer::hasZeroVelocities() const {
+    auto particles = this->getParticles();
+    for (const auto& particle : particles) {
+        if (!particle.hasZeroVelocities()) {
+            return false;
+        }
+    }
+    return true;
+}
