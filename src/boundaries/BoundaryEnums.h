@@ -13,6 +13,7 @@ namespace boundaries {
     enum class BoundaryType {
         REFLECTING, /**< Boundary reflects particles. */
         OUTFLOW,    /**< Boundary allows particles to flow out. */
+        PERIODIC,
         OFF         /**< Boundary is turned off. */
     };
 

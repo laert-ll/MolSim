@@ -23,6 +23,8 @@ namespace calculators {
         if (distance == 0.0)
             return;
 
+        double epsilon = pow((particle1.getEpsilon() * particle2.getEpsilon()), 0.5);
+        double sigma = 0.5 * (particle1.getSigma() + particle2.getSigma());
         // Calculate the force between the two particles
         const double forceMagnitude = -(24 * epsilon / (distance * distance)) *
                                       ((pow(sigma / distance, 6) - 2 * pow(sigma / distance, 12)));

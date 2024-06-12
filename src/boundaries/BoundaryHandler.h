@@ -61,6 +61,14 @@ namespace boundaries {
          * @param direction The boundary direction to process.
          */
         void handleOutflow(ParticleContainer &container, BoundaryDirection direction) const;
+        /**
+         * @brief Handles periodic for particles outside the domain.
+         * For x-domain {0, 20} 0 will be included, 20 will be excluded -> [0, 20)
+         *
+         * @param container The particle container holding all particles.
+         * @param direction The boundary direction to process.
+         */
+        void handlePeriodic(ParticleContainer &container, BoundaryDirection direction) const;
 
 /**
  * Class section end

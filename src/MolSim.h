@@ -81,7 +81,7 @@ public:
                 ("end_time", "Set end_time", cxxopts::value<double>()->default_value("1000"))
                 ("output", "Output writer (vtk or xyz)", cxxopts::value<std::string>())
                 ("calculator", "Calculator (sv, lj or dummy)", cxxopts::value<std::string>())
-                ("boundaries", "Boundary conditions (0000 to 2222)", cxxopts::value<std::string>()->default_value("1111"));
+                ("boundaries", "Boundary conditions (0000 to 3333)", cxxopts::value<std::string>()->default_value("3333"));
 
         auto result = options.parse(argc, argv);
 
@@ -119,7 +119,7 @@ public:
                 calculator = std::make_unique<calculators::SVCalculator>();
                 SPDLOG_INFO("Selected calculator: sv");
             } else if (calculatorArg == "lj") {
-                calculator = std::make_unique<calculators::LJCalculator>(1, 5, 5.31608);
+                calculator = std::make_unique<calculators::LJCalculator>(3.0);
                 SPDLOG_INFO("Selected calculator: lj");
             } else {
                 SPDLOG_ERROR("Invalid option for calculator: {}", calculatorArg);
@@ -163,9 +163,12 @@ public:
                         case '2':
                             boundaryMap[directions[i]] = boundaries::BoundaryType::OUTFLOW;
                             break;
+                        case '3':
+                            boundaryMap[directions[i]] = boundaries::BoundaryType::PERIODIC;
+                            break;
                         default:
-                            SPDLOG_WARN("Invalid boundary value '{}', defaulting all to REFLECTING", boundariesArg[i]);
-                            boundaryMap[directions[i]] = boundaries::BoundaryType::REFLECTING;
+                            SPDLOG_WARN("Invalid boundary value '{}', defaulting all to PERIODIC", boundariesArg[i]);
+                            boundaryMap[directions[i]] = boundaries::BoundaryType::PERIODIC;
                     }
                 }
             } else {
@@ -206,7 +209,7 @@ public:
         double current_time = 0.0; // start_time
         int iteration = 0;
 
-        std::array<double, 2> domain = {50, 30.0};
+        std::array<double, 2> domain = {20.0, 20.0};
 
         const boundaries::BoundaryController controller{boundaryMap, calculator.get(), domain, 1.0};
 
@@ -215,6 +218,14 @@ public:
             controller.preProcessBoundaries(particleContainer);
             calculator->calculate(particleContainer, delta_t);
             controller.postProcessBoundaries(particleContainer);
+
+            for (Particle &p : particleContainer) {
+//                std::array<double, 3> force{p.getOldF()};
+//                SPDLOG_INFO("Force: ({}, {}, {})", force[0], force[1], force[2]);  // Loggen der Werte
+                std::array<double, 3> velocity{p.getX()};
+                SPDLOG_INFO("Pos: {{{}, {}, {}}}", velocity[0], velocity[1], velocity[2]);
+            }
+            SPDLOG_INFO("Size: {}", particleContainer.getSize());
 
             iteration++;
             if (iteration % 10 == 0) {

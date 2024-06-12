@@ -19,21 +19,41 @@ namespace boundaries {
             for (auto it = properties.getBoundaryMap().begin(); it != properties.getBoundaryMap().end(); ++it) {
                 if (it->second == BoundaryType::OUTFLOW)
                     handleOutflow(container, it->first);
+                if (it->second == BoundaryType::PERIODIC)
+                    handlePeriodic(container, it->first);
             }
     }
     void BoundaryHandler::handleReflection(ParticleContainer &container, BoundaryDirection direction) const {
+        bool checkLowerBound = false;
+        int index = 0;
+        switch (direction) {
+            case BoundaryDirection::LEFT:
+                index = 0;
+                checkLowerBound = true;
+                break;
+            case BoundaryDirection::RIGHT:
+                index = 0;
+                break;
+            case BoundaryDirection::BOTTOM:
+                index = 1;
+                checkLowerBound = true;
+                break;
+            case BoundaryDirection::TOP:
+                index = 1;
+                break;
+            case BoundaryDirection::FRONT:
+                index = 2;
+                checkLowerBound = true;
+                break;
+            case BoundaryDirection::BACK:
+                index = 2;
+                break;
+        }
+        double boundary = properties.getDomain()[index];
         // If selected index is lower boundary (lowerX, lowerY, lowerZ)
-        if (direction == BoundaryDirection::BOTTOM || direction == BoundaryDirection::LEFT ||
-            direction == BoundaryDirection::FRONT) {
+        if (checkLowerBound) {
             double tolerance = pow(2, 1/6) * sigma;
             // for indexing x, y, z coordinate
-            int index;
-            if (direction == BoundaryDirection::LEFT)
-                index = 0;
-            else if (direction == BoundaryDirection::BOTTOM)
-                index = 1;
-            else
-                index = 2;
 #pragma omp parallel for
             for (auto &p: container) {
                 double distanceToBoundary = p.getX().at(index);
@@ -51,14 +71,6 @@ namespace boundaries {
             }
             return;
         }
-        int index;
-        if (direction == BoundaryDirection::RIGHT)
-            index = 0;
-        else if (direction == BoundaryDirection::TOP)
-            index = 1;
-        else
-            index = 2;
-        double boundary = properties.getDomain()[index];
         double tolerance = pow(2, 1/6) * sigma;
 #pragma omp parallel for
         for (auto &p: container) {
@@ -107,6 +119,61 @@ namespace boundaries {
             auto &el = p.getX().at(index);
             if ((checkLowerBound && el <= 0) || (!checkLowerBound && el >= properties.getDomain()[index])) {
                 container.deleteParticle(p);
+            }
+        }
+    }
+
+    void BoundaryHandler::handlePeriodic(ParticleContainer &container, BoundaryDirection direction) const {
+        bool checkLowerBound = false;
+        int index = 0;
+        switch (direction) {
+            case BoundaryDirection::LEFT:
+                index = 0;
+                checkLowerBound = true;
+                break;
+            case BoundaryDirection::RIGHT:
+                index = 0;
+                break;
+            case BoundaryDirection::BOTTOM:
+                index = 1;
+                checkLowerBound = true;
+                break;
+            case BoundaryDirection::TOP:
+                index = 1;
+                break;
+            case BoundaryDirection::FRONT:
+                index = 2;
+                checkLowerBound = true;
+                break;
+            case BoundaryDirection::BACK:
+                index = 2;
+                break;
+        }
+        double boundary = properties.getDomain()[index];
+        // If selected index is lower boundary (lowerX, lowerY, lowerZ)
+        if (checkLowerBound) {
+#pragma omp parallel for
+            for (auto &p: container) {
+                if (p.getX().at(index) < 0) {
+                    if(index == 0)
+                        p.setX({boundary + p.getX().at(0), p.getX().at(1), p.getX().at(2)});
+                    if(index == 1)
+                        p.setX({p.getX().at(0), boundary + p.getX().at(1), p.getX().at(2)});
+                    if(index == 2)
+                        p.setX({p.getX().at(0), p.getX().at(1), boundary + p.getX().at(2)});
+                }
+            }
+            return;
+        }
+#pragma omp parallel for
+        for (auto &p: container) {
+            if (p.getX().at(index) >= boundary) {
+                if(index == 0)
+                    p.setX({p.getX().at(0) - boundary, p.getX().at(1), p.getX().at(2)});
+                if(index == 1)
+                    p.setX({p.getX().at(0), p.getX().at(1) - boundary, p.getX().at(2)});
+                if(index == 2)
+                    p.setX({p.getX().at(0), p.getX().at(1), p.getX().at(2) - boundary});
             }
         }
     }
