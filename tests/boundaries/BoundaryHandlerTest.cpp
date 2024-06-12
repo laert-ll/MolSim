@@ -31,7 +31,7 @@ namespace boundaries {
         SPDLOG_INFO("Testing Reflections...");
         std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
         std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5, 3.0);
+        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
         boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
@@ -70,7 +70,7 @@ namespace boundaries {
     TEST(BoundaryHandlerTest, CornerReflection) {
         std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
         std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5, 3.0);
+        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
         boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
@@ -113,7 +113,7 @@ namespace boundaries {
         boundaryMap.emplace(boundaries::BoundaryDirection::TOP, boundaries::BoundaryType::OUTFLOW);
 
         std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5, 3.0);
+        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
         boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
@@ -155,7 +155,7 @@ namespace boundaries {
         boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::OUTFLOW);
 
         std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5, 3.0);
+        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
         boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
@@ -232,7 +232,7 @@ namespace boundaries {
         boundaryMap.emplace(boundaries::BoundaryDirection::TOP, boundaries::BoundaryType::OUTFLOW);
 
         std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5, 3.0);
+        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
         boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
@@ -286,7 +286,7 @@ namespace boundaries {
     TEST(BoundaryHandlerTest, CornerPeriodic) {
         std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
         std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(1, 5, 3.0);
+        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
         boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};

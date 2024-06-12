@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+  <xs:element name="Simulation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="InputParameters" type="InputParametersType"/>
+        <xs:element name="Cuboid" type="CuboidType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="InputParametersType">
+    <xs:sequence>
+      <xs:element name="BaseName" type="xs:string"/>
+      <xs:element name="WriteFrequency" type="xs:int"/>
+      <xs:element name="DeltaT" type="xs:double"/>
+      <xs:element name="EndTime" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CuboidType">
+    <xs:sequence>
+      <xs:element name="Coordinates" type="xs:string"/>
+      <xs:element name="ParticlesPerDimension" type="xs:string"/>
+      <xs:element name="Distance" type="xs:double"/>
+      <xs:element name="Mass" type="xs:double"/>
+      <xs:element name="InitialVelocities" type="xs:string"/>
+      <xs:element name="MeanVelocity" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

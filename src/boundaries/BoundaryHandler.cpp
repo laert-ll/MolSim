@@ -74,7 +74,7 @@ namespace boundaries {
         double tolerance = pow(2, 1/6) * sigma;
 #pragma omp parallel for
         for (auto &p: container) {
-            double distanceToBoundary = p.getX().at(index) - boundary;
+            double distanceToBoundary = boundary -p.getX().at(index);
             // only calculate reflection if near boundary
             if (distanceToBoundary < tolerance) {
                 Particle ghost{p};
