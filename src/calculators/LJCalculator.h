@@ -16,8 +16,6 @@ namespace calculators {
      */
     class LJCalculator : public Calculator {
     private:
-        const double sigma;
-        const double epsilon;
         const double threshold;
 
     public:
@@ -26,13 +24,13 @@ namespace calculators {
          *
          * Initializes the SVCalculator object.
          */
-        LJCalculator(double sigma, double epsilon, double threshold) : sigma(sigma), epsilon(epsilon), threshold(threshold) {}
+        LJCalculator(double threshold) : threshold(threshold) {}
 
         /**
-             * Calculates the force between all pairs of unique particles considering the third Newton's law.
+             * Calculates the force between two particles considering the third Newton's law.
              *
              * @param particleContainer The ParticleContainer containing the particles to calculate the forces for.
              */
-        void calculateF(ParticleContainer &particleContainer) override;
+        void calculateFPairwise(Particle &particle1, Particle &particle2) const override;
     };
 }

@@ -12,6 +12,9 @@
 class ParticleContainer {
 private:
     /**
+     * Boundary
+     */
+    /**
      * A vector to store the particles.
      */
     std::vector<Particle> particles;
@@ -21,6 +24,7 @@ private:
     std::vector<std::pair<std::reference_wrapper<Particle>, std::reference_wrapper<Particle>>> particlePairs;
 
 public:
+
     ParticleContainer() = default;
 
     ~ParticleContainer() = default;
@@ -30,6 +34,17 @@ public:
      * @param particle the particle to add
      */
     void addParticle(const Particle &particle);
+
+    /**
+     * Method to remove a particle from the container.
+     * @param particle the particle to remove
+     */
+    void deleteParticle(const Particle &particle);
+
+    /**
+     * Method to check if pair in ParticlePairs already exists
+     */
+    bool pairExists(const Particle &particle1, const Particle &particle2) const;
 
     /**
      * Method to fill the vector of unique pairs with the references to particles.

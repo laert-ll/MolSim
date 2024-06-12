@@ -39,6 +39,16 @@ private:
     double m;
 
     /**
+     * Sigma of this particle
+     */
+    double sigma;
+
+    /**
+     * Epsilon of this particle
+     */
+    double epsilon;
+
+    /**
      * Paraview volume of this particle
      */
     double volume;
@@ -57,8 +67,12 @@ public:
     Particle(
             // for visualization, we need always 3 coordinates
             // -> in case of 2d, we use only the first and the second
-            std::array<double, 3> x_arg, std::array<double, 3> v_arg, 
+            std::array<double, 3> x_arg, std::array<double, 3> v_arg,
             double m_arg, double volume_arg, int type = 0);
+
+    // New constructor with sigma and epsilon as new parameters
+    Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
+             double m_arg, double volume_arg, int type_arg, double sig_arg, double eps_arg);
 
     virtual ~Particle();
 
@@ -91,6 +105,10 @@ public:
     bool operator==(const Particle &other) const;
 
     std::string toString() const;
+
+    double getSigma() const;
+
+    double getEpsilon() const;
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

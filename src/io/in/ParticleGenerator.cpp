@@ -45,7 +45,7 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Parti
                 };
 
                 // Simulate Brownian Motion by using MaxwellBoltzmannDistribution
-                const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 3);
+                const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 2);
 
                 // Add deltaV to v
                 const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<>());

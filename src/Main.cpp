@@ -10,6 +10,8 @@
 #include "MolSim.h"
 #include <iostream>
 #include <memory>
+#include <map>
+#include "boundaries/BoundaryController.h"
 
 /**
  * @brief The main function of the program.
@@ -35,10 +37,11 @@ int main(int argc, char *argsv[]) {
     std::string inputFilePath;
     double delta_t;
     double end_time;
-    std::unique_ptr<outputWriters::OutputWriter> outputWriter;
+    std::unique_ptr<outputWriters::FileWriter> outputWriter;
     std::unique_ptr<calculators::Calculator> calculator;
+    std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
 
-    if (!MolSim::processArguments(argc, argsv, inputFilePath, delta_t, end_time, outputWriter, calculator)) {
+    if (!MolSim::processArguments(argc, argsv, inputFilePath, delta_t, end_time, outputWriter, calculator, boundaryMap)) {
         return 1;
     }
 
@@ -46,7 +49,7 @@ int main(int argc, char *argsv[]) {
 
     SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
 
-    MolSim::performSimulation(particleContainer, delta_t, end_time, outputWriter, calculator);
+    MolSim::performSimulation(particleContainer, delta_t, end_time, outputWriter, calculator, boundaryMap);
 
     SPDLOG_INFO("Simulation completed.");
 

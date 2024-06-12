@@ -27,13 +27,16 @@ namespace calculators {
          * @param particleContainer The ParticleContainer containing the particles to update.
          * @param delta_t The time step used in the calculations.
          */
-        void calculate(ParticleContainer &particleContainer, double delta_t) override;
+//        void calculate(ParticleContainer &particleContainer, double delta_t) override;
 
         /**
              * Calculates the force between all pairs of unique particles considering the third Newton's law.
              *
              * @param particleContainer The ParticleContainer containing the particles to calculate the forces for.
              */
-        void calculateF(ParticleContainer &particleContainer) override;
+//        void calculateF(ParticleContainer &particleContainer) override;
+
+//        void calculateReflection(Particle &p, Particle &ghost) override;
+        void calculateFPairwise(Particle &particle1, Particle &particle2) const override;
     };
 }

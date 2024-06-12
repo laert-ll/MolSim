@@ -1,3 +1,4 @@
+
 //
 // Created by kimj2 on 01.05.2024.
 //
@@ -7,6 +8,7 @@
 #include "../objects/ParticleContainer.h"
 #include "../utils/ArrayUtils.h"
 #include <omp.h>
+#include "spdlog/spdlog.h"
 
 namespace calculators {
     /**
@@ -38,6 +40,29 @@ namespace calculators {
         }
 
         /**
+         * @brief Calculates the forces acting on particles.
+         *
+         * This method is responsible for calculating the forces acting on all particles in the provided particle container.
+         *
+         * @param particleContainer The container of particles to calculate the forces for.
+         */
+        virtual void calculateF(ParticleContainer &particleContainer) {
+#pragma omp parallel for
+            for (auto &p: particleContainer) {
+                p.setOldF(p.getF());  // Update oldF with currentF
+                p.setF({0, 0, 0});     // Reset F to zeros
+            }
+
+            // Iterate over all unique pairs of particles
+#pragma omp parallel for
+            for (auto pair = particleContainer.pair_begin(); pair != particleContainer.pair_end(); ++pair) {
+                Particle &particle1 = pair->first.get();
+                Particle &particle2 = pair->second.get();
+                calculateFPairwise(particle1, particle2);
+            }
+        }
+
+        /**
              * @brief Calculates the new velocities of particles.
              *
              * This method is responsible for updating the velocities of all particles in the provided particle container.
@@ -46,7 +71,7 @@ namespace calculators {
              * @param delta_t The time step used for the calculations.
              */
         virtual void calculateV(ParticleContainer &particleContainer, double delta_t) {
-            #pragma omp parallel for
+#pragma omp parallel for
             for (auto &p: particleContainer) {
                 // Get the current position, velocity, force and mass of the particle
                 std::array<double, 3> v = p.getV();
@@ -64,7 +89,17 @@ namespace calculators {
                 const std::array<double, 3> delta_v = ArrayUtils::elementWiseScalarOp(delta_t / m, avg_f,
                                                                                       std::multiplies<>());
                 v = ArrayUtils::elementWisePairOp(v, delta_v, std::plus<>());
+
                 p.setV(v);
+                if (!warned) {
+                    for (int i = 0; i < 3; i++) {
+                        if (abs(v[i]) > 0.56121 / (2 * delta_t)) {
+                            warned = true;
+                            SPDLOG_WARN("Particles might be too fast and fly out of reflecting boundaries!\n"
+                                        "Maybe try a smaller delta_t");
+                        }
+                    }
+                }
             }
         }
 
@@ -77,7 +112,7 @@ namespace calculators {
              * @param delta_t The time step used for the calculations.
              */
         virtual void calculateX(ParticleContainer &particleContainer, double delta_t) {
-            #pragma omp parallel for
+#pragma omp parallel for
             for (auto &p: particleContainer) {
                 // Get the current position, velocity, force and mass of the particle
                 std::array<double, 3> x = p.getX();
@@ -104,7 +139,9 @@ namespace calculators {
                 p.setX(x);
             }
         }
-    
+
+        virtual void calculateFPairwise(Particle &particle1, Particle &particle2) const {};
+
     protected:
         /**
          * @brief Determines if two points are far apart based on a given threshold.
@@ -118,7 +155,7 @@ namespace calculators {
          * @param threshold The threshold value to compare the Manhattan  distance with.
          * @return True if the points are considered "far", false otherwise.
          */
-        virtual bool isFar(const std::array<double, 3> &x1, const std::array<double, 3> &x2, double threshold) {
+        virtual bool isFar(const std::array<double, 3> &x1, const std::array<double, 3> &x2, double threshold) const {
             const std::array<double, 3> absDiff = ArrayUtils::elementWisePairOp(x1, x2,
                                                                                 [](double a, double b) {
                                                                                     return std::abs(a - b);
@@ -129,13 +166,6 @@ namespace calculators {
         }
 
     private:
-        /**
-         * @brief Calculates the forces acting on particles.
-         *
-         * This method is responsible for calculating the forces acting on all particles in the provided particle container.
-         *
-         * @param particleContainer The container of particles to calculate the forces for.
-         */
-        virtual void calculateF(ParticleContainer &particleContainer) = 0;
+        bool warned = false;
     };
-}
+};

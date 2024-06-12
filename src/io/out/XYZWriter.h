@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "../../objects/Particle.h"
+#include "objects/Particle.h"
 #include "FileWriter.h"
 
 #include <fstream>
@@ -21,7 +21,7 @@ namespace outputWriters {
      * This class is a concrete implementation of the `OutputWriter` base class.
      * It provides an implementation for the `plotParticles` method, which writes the positions of particles in the provided particle container to an XYZ file.
      */
-    class XYZWriter : public OutputWriter {
+    class XYZWriter : public FileWriter {
 
     public:
         XYZWriter() = default;
@@ -41,4 +41,4 @@ namespace outputWriters {
          */
         void plotParticles(int iteration, ParticleContainer &particleContainer, const std::string &filename);
     };
-}// namespace out
+}// namespace outputWriters
