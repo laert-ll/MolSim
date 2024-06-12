@@ -44,3 +44,40 @@ TEST(ThermostatTest, InitializeTempTest) {
     EXPECT_NEAR(currentTemp, 10.0, 1e-3);
 }
 
+TEST(ThermostatTest, SetTempDirectlyTest) {
+    const double initialTemp = 10.0;
+    const double targetTemp = 20.0;
+    const Thermostat thermostat(initialTemp, targetTemp, 1, 1.0, 3);
+    ParticleContainer particleContainer;
+    const std::array<double, 3> x = {0.0, 0.0, 0.0};
+    const std::array<double, 3> v = {1.0, 1.0, 1.0};
+    const Particle particle(x, v, 1.0, 0.0);
+    particleContainer.addParticle(particle);
+
+    thermostat.initializeTemp(particleContainer);
+
+    thermostat.setTempDirectly(particleContainer);
+
+    const double currentTemp = thermostat.calculateCurrentTemp(particleContainer);
+    EXPECT_NEAR(currentTemp, targetTemp, 1e-3);
+}
+
+TEST(ThermostatTest, SetTempGraduallyTest) {
+    const double initialTemp = 10.0;
+    const double targetTemp = 20.0;
+    const double maxDeltaTemp = 1.0;
+    const Thermostat thermostat(initialTemp, targetTemp, 1, maxDeltaTemp, 3);
+    ParticleContainer particleContainer;
+    const std::array<double, 3> x = {0.0, 0.0, 0.0};
+    const std::array<double, 3> v = {1.0, 1.0, 1.0}; // Initial velocities set to achieve the initial temperature
+    const Particle particle(x, v, 1.0, 0.0);
+    particleContainer.addParticle(particle);
+
+    thermostat.initializeTemp(particleContainer);
+
+    thermostat.setTempGradually(particleContainer);
+
+    const double currentTemp = thermostat.calculateCurrentTemp(particleContainer);
+    const double expectedTemp = initialTemp + maxDeltaTemp;
+    EXPECT_NEAR(currentTemp, expectedTemp, 1e-3);
+}

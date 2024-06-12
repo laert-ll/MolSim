@@ -37,7 +37,7 @@ void Thermostat::setTempDirectly(ParticleContainer &particleContainer) const {
 
 void Thermostat::setTempGradually(ParticleContainer &particleContainer) const {
     const double currentTemp = calculateCurrentTemp(particleContainer);
-    const double delta_temp = std::max(std::abs(target_temp - currentTemp), this->max_delta_temp);
+    const double delta_temp = std::min(std::abs(target_temp - currentTemp), this->max_delta_temp);
     const double updatedTemp = this->target_temp > currentTemp ? currentTemp + delta_temp : currentTemp - delta_temp;
     setTemp(particleContainer, updatedTemp);
 }
