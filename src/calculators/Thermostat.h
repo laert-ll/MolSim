@@ -20,14 +20,34 @@ public:
 
     void initializeTemp(ParticleContainer &particleContainer) const;
 
+    double calculateCurrentTemp(ParticleContainer &particleContainer) const;
+
+    [[nodiscard]] double getStartTemp() const {
+        return start_temp;
+    }
+
+    [[nodiscard]] double getTargetTemp() const {
+        return target_temp;
+    }
+
+    [[nodiscard]] int getApplyFrequency() const {
+        return applyFrequency;
+    }
+
+    [[nodiscard]] double getMaxDeltaTemp() const {
+        return max_delta_temp;
+    }
+
+    [[nodiscard]] int getDimension() const {
+        return dimension;
+    }
+
 private:
     double start_temp;
     double target_temp;
     int applyFrequency;
     double max_delta_temp;
     int dimension;
-
-    double calculateCurrentTemp(ParticleContainer &particleContainer) const;
 
     double calculateKinEnergy(ParticleContainer &particleContainer) const;
 

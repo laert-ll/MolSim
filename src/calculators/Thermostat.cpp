@@ -1,9 +1,6 @@
 //
 // Created by kimj2 on 11.06.2024.
 //
-
-#pragma once
-
 #include "../objects/ParticleContainer.h"
 #include "Thermostat.h"
 #include "../utils/ArrayUtils.h"
@@ -44,13 +41,12 @@ void Thermostat::setTempGradually(ParticleContainer &particleContainer) const {
     setTemp(particleContainer, updatedTemp);
 }
 
-
-//----------------------------------------Helper functions----------------------------------------------------
-
 double Thermostat::calculateCurrentTemp(ParticleContainer &particleContainer) const {
     double kinEnergy = calculateKinEnergy(particleContainer);
     return 2.0 / (this->dimension * particleContainer.getSize()) * kinEnergy;
 }
+
+//----------------------------------------Helper functions----------------------------------------------------
 
 double Thermostat::calculateKinEnergy(ParticleContainer &particleContainer) const {
     double kinEnergy = 0.0;
