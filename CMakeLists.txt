@@ -79,6 +79,8 @@ file(GLOB_RECURSE BENCHMARK_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp"
 )
 
 #------------------------------------------LOGGING---------------------------------------------------------
