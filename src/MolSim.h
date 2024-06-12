@@ -2,7 +2,6 @@
 // Created by kimj2 on 14.05.2024.
 //
 #include "calculators/SVCalculator.h"
-#include "calculators/DummyCalculator.h"
 #include "calculators/LJCalculator.h"
 #include "io/in/FileReader.h"
 #include "objects/ParticleContainer.h"
@@ -56,7 +55,7 @@ public:
      * - "--delta_t": Sets the time step size for the simulation. Default is 0.014.
      * - "--end_time": Sets the end time for the simulation. Default is 1000.
      * - "--output": Specifies the output writer to be used. Options are 'vtk' or 'xyz'. Default is 'vtk'.
-     * - "--calculator": Specifies the calculator to be used. Options are 'sv', 'lj', or 'dummy'.
+     * - "--calculator": Specifies the calculator to be used. Options are 'sv' or 'lj'.
      *
      * @param argc The number of command line arguments.
      * @param argv The array of command line arguments.
@@ -79,7 +78,7 @@ public:
             ("delta_t", "Set delta_t", cxxopts::value<double>()->default_value("0.014"))
             ("end_time", "Set end_time", cxxopts::value<double>()->default_value("1000"))
             ("output", "Output writer (vtk or xyz)", cxxopts::value<std::string>())
-            ("calculator", "Calculator (sv, lj or dummy)", cxxopts::value<std::string>());
+            ("calculator", "Calculator (sv or lj)", cxxopts::value<std::string>());
 
         auto result = options.parse(argc, argv);
 
@@ -119,12 +118,9 @@ public:
             } else if (calculatorArg == "lj") {
                 calculator = std::make_unique<calculators::LJCalculator>(1, 5, 5.31608);
                 SPDLOG_INFO("Selected calculator: lj");
-            } else if (calculatorArg == "dummy") {
-                calculator = std::make_unique<calculators::DummyCalculator>();
-                SPDLOG_INFO("Selected calculator: dummy");
             } else {
                 SPDLOG_ERROR("Invalid option for calculator: {}", calculatorArg);
-                SPDLOG_ERROR("Only 'sv', 'lj', or 'dummy' are allowed.");
+                SPDLOG_ERROR("Only 'sv' or 'lj' are allowed.");
                 return false;
             }
         }
