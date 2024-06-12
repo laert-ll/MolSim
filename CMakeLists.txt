@@ -55,8 +55,10 @@ endif ()
 
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hxx"
 )
 
 file(GLOB_RECURSE TEST_SOURCES
@@ -122,12 +124,14 @@ target_include_directories(MolSimTests
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/tests
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
 )
 
 target_include_directories(MolSimBenchmark
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/benchmark
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
 )
 
 target_link_libraries(MolSim
