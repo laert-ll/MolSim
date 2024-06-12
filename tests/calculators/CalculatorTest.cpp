@@ -11,7 +11,8 @@
 namespace calculators {
     class TestCalculator : public calculators::Calculator {
     private:
-        void calculateF(ParticleContainer &particleContainer) override {}
+//        void calculateF(ParticleContainer &particleContainer) override {};
+        void calculateFPairwise(Particle &particle1, Particle &particle2) const override{};
     };
 }
 
@@ -38,18 +39,18 @@ TEST(CalculatorTest, CalculateXTest) {
         calculator->calculateX(pc, delta_t);
     }
 
-    const std::vector<std::array<double, 3>> expectedX = {
+    const std::vector<std::array<double, 3>> expectedPositions = {
             {0.8950,  0.8950,  0.8950},
             {-0.8950, -0.8950, -0.8950}
     };
 
     auto it = pc.begin();
     for (size_t i = 0; i < pc.getSize(); ++i, ++it) {
-        std::array<double, 3> expectedF = expectedX[i];
+        std::array<double, 3> expectedX = expectedPositions[i];
         std::array<double, 3> actualX = it->getX();
-        EXPECT_NEAR(expectedF[0], actualX[0], 1e-3);
-        EXPECT_NEAR(expectedF[1], actualX[1], 1e-3);
-        EXPECT_NEAR(expectedF[2], actualX[2], 1e-3);
+        EXPECT_NEAR(expectedX[0], actualX[0], 1e-3);
+        EXPECT_NEAR(expectedX[1], actualX[1], 1e-3);
+        EXPECT_NEAR(expectedX[2], actualX[2], 1e-3);
     }
 }
 

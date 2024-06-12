@@ -119,7 +119,7 @@ public:
                 calculator = std::make_unique<calculators::SVCalculator>();
                 SPDLOG_INFO("Selected calculator: sv");
             } else if (calculatorArg == "lj") {
-                calculator = std::make_unique<calculators::LJCalculator>(3.0);
+                calculator = std::make_unique<calculators::LJCalculator>(5.31608);
                 SPDLOG_INFO("Selected calculator: lj");
             } else {
                 SPDLOG_ERROR("Invalid option for calculator: {}", calculatorArg);
@@ -218,14 +218,6 @@ public:
             controller.preProcessBoundaries(particleContainer);
             calculator->calculate(particleContainer, delta_t);
             controller.postProcessBoundaries(particleContainer);
-
-//            for (Particle &p : particleContainer) {
-////                std::array<double, 3> force{p.getOldF()};
-////                SPDLOG_INFO("Force: ({}, {}, {})", force[0], force[1], force[2]);  // Loggen der Werte
-//                std::array<double, 3> velocity{p.getX()};
-//                SPDLOG_INFO("Pos: {{{}, {}, {}}}", velocity[0], velocity[1], velocity[2]);
-//            }
-//            SPDLOG_INFO("Size: {}", particleContainer.getSize());
 
             iteration++;
             if (iteration % 10 == 0) {

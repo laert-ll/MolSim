@@ -7,7 +7,7 @@
 namespace {
     const double sigma = 1.0;
     const double epsilon = 5.0;
-    const auto calculator = std::make_unique<calculators::LJCalculator>(sigma, epsilon, 5.31608);
+    const auto calculator = std::make_unique<calculators::LJCalculator>(5.31608);
 }
 
 TEST(LJCalculatorTest, CalculateFTest) {
