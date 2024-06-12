@@ -10,6 +10,8 @@
 #include <iostream>
 #include "../utils/ArrayUtils.h"
 
+const double COMPARISON_TOLERANCE = 1e-6;
+
 Particle::Particle(int type_arg) {
     type = type_arg;
     f = {0., 0., 0.};
@@ -91,8 +93,9 @@ bool Particle::operator==(const Particle &other) const {
 }
 
 bool Particle::hasZeroVelocities() const {
-    const auto& velocities = this->getV();
-    return velocities[0] == 0.0 && velocities[1] == 0.0 && velocities[2] == 0.0;
+    const auto &velocities = this->getV();
+    return std::abs(velocities[0]) < COMPARISON_TOLERANCE && std::abs(velocities[1]) < COMPARISON_TOLERANCE &&
+           std::abs(velocities[2]) < COMPARISON_TOLERANCE;
 }
 
 std::ostream &operator<<(std::ostream &stream, Particle &p) {

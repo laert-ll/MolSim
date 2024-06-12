@@ -6,7 +6,7 @@
 #include "../../src/objects/Particle.h"
 #include "gtest/gtest.h"
 
-TEST(ThermostatTest, CalculateCurrentTemp) {
+TEST(ThermostatTest, CalculateCurrentTempTest) {
     Thermostat thermostat(0.0, 0.0, 0, 1.0, 3);
     ParticleContainer particleContainer;
     std::array<double, 3> x = {0.0, 0.0, 0.0};
@@ -20,3 +20,27 @@ TEST(ThermostatTest, CalculateCurrentTemp) {
     // So, the current temperature should be 2.0 / (3 * 1) * 1.5 = 1.0
     EXPECT_DOUBLE_EQ(currentTemp, 1.0);
 }
+
+TEST(ThermostatTest, InitializeTempTest) {
+    const Thermostat thermostat(10.0, 20.0, 1, 1.0, 3);
+    ParticleContainer particleContainer;
+    const std::array<double, 3> x = {0.0, 0.0, 0.0};
+    const std::array<double, 3> v = {0.0, 0.0, 0.0}; // Initial velocities are zero
+    const Particle particle1(x, v, 1.0, 0.0);
+    const Particle particle2(x, v, 1.0, 0.0);
+    particleContainer.addParticle(particle1);
+    particleContainer.addParticle(particle2);
+
+    thermostat.initializeTemp(particleContainer);
+
+    for (const auto &particle : particleContainer.getParticles()) {
+        const auto &velocities = particle.getV();
+        for (int i = 0; i < 3; ++i) {
+            EXPECT_NE(velocities[i], 0.0);
+        }
+    }
+
+    const double currentTemp = thermostat.calculateCurrentTemp(particleContainer);
+    EXPECT_NEAR(currentTemp, 10.0, 1e-3);
+}
+

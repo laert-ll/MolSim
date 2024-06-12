@@ -6,13 +6,14 @@
 #include "../utils/ArrayUtils.h"
 #include "../utils/MaxwellBoltzmannDistribution.h"
 
+const double COMPARISON_TOLERANCE = 1e-9;
 
 void Thermostat::initializeTemp(ParticleContainer &particleContainer) const {
     if (particleContainer.hasZeroVelocities()) { // Check if all velocities are zero
         // Initialize velocities by applying Brownian motion
         double maxwellBoltzmannFactor;
 
-        for (auto &particle : particleContainer.getParticles()) {
+        for (auto &particle : particleContainer) {
             maxwellBoltzmannFactor = sqrt(start_temp / particle.getM());
 
             std::array<double, 3> v = particle.getV();
@@ -50,14 +51,14 @@ double Thermostat::calculateCurrentTemp(ParticleContainer &particleContainer) co
 
 double Thermostat::calculateKinEnergy(ParticleContainer &particleContainer) const {
     double kinEnergy = 0.0;
-    for (auto &particle : particleContainer.getParticles()) {
+    for (auto &particle : particleContainer) {
         kinEnergy += 0.5 * particle.getM() * ArrayUtils::dotProduct(particle.getV(), particle.getV());
     }
     return kinEnergy;
 }
 
 void Thermostat::scaleV(double beta, ParticleContainer &particleContainer) const {
-    for (auto particle : particleContainer.getParticles()) {
+    for (auto &particle : particleContainer) {
         std::array<double, 3> v = particle.getV();
         v = beta * v;
         particle.setV(v);
@@ -66,6 +67,11 @@ void Thermostat::scaleV(double beta, ParticleContainer &particleContainer) const
 
 void Thermostat::setTemp(ParticleContainer &particleContainer, double newTemp) const {
     const double currentTemp = calculateCurrentTemp(particleContainer);
-    const double beta = sqrt(newTemp / currentTemp);
+    double beta;
+    if (std::abs(currentTemp) < COMPARISON_TOLERANCE) { // Check if currentTemp is zero
+        beta = sqrt(newTemp / COMPARISON_TOLERANCE); // or some default value
+    } else {
+        beta = sqrt(newTemp / currentTemp);
+    }
     scaleV(beta, particleContainer);
 }

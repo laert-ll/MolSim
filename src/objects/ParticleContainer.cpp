@@ -91,8 +91,7 @@ std::vector<Particle> ParticleContainer::getParticles() const {
 }
 
 bool ParticleContainer::hasZeroVelocities() const {
-    auto particles = this->getParticles();
-    for (const auto& particle : particles) {
+    for (const auto& particle : this->particles) {
         if (!particle.hasZeroVelocities()) {
             return false;
         }
