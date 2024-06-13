@@ -163,6 +163,18 @@ inline Container elementWiseScalarOp(const Scalar &lhs, const Container &rhs,
 }
 
 /**
+ * Calculates the dot product of two containers.
+ * @tparam Container
+ * @param lhs
+ * @param rhs
+ * @return result of the dot product as double value.
+ */
+    template <class Container>
+    double dotProduct(const Container &lhs, const Container &rhs) {
+        return std::inner_product(lhs.begin(), lhs.end(), rhs.begin(), 0.0);
+    }
+
+/**
  * Calculates the L2 norm for a given container.
  * @tparam Container
  * @param c
@@ -173,7 +185,6 @@ template <class Container> auto L2Norm(const Container &c) {
                                    [](auto a, auto b) { return a + b * b; }));
 }
 } // namespace ArrayUtils
-
 
 /**
  * Stream operator for containers.

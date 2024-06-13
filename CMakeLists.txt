@@ -68,6 +68,8 @@ file(GLOB_RECURSE TEST_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp"
 )
 
 file(GLOB_RECURSE BENCHMARK_SOURCES
@@ -79,6 +81,8 @@ file(GLOB_RECURSE BENCHMARK_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp"
 )
 
 #------------------------------------------LOGGING---------------------------------------------------------

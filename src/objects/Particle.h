@@ -106,6 +106,8 @@ public:
 
     std::string toString() const;
 
+    bool hasZeroVelocities() const;
+
     double getSigma() const;
 
     double getEpsilon() const;

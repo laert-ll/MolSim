@@ -10,6 +10,8 @@
 #include <iostream>
 #include "../utils/ArrayUtils.h"
 
+const double COMPARISON_TOLERANCE = 1e-6;
+
 Particle::Particle(int type_arg) {
     type = type_arg;
     f = {0., 0., 0.};
@@ -85,6 +87,13 @@ void Particle::setM(const double newMass) {
 void Particle::setVolume(const double newVolume) {
     volume = newVolume;
 }
+
+bool Particle::hasZeroVelocities() const {
+    const auto &velocities = this->getV();
+    return std::abs(velocities[0]) < COMPARISON_TOLERANCE && std::abs(velocities[1]) < COMPARISON_TOLERANCE &&
+           std::abs(velocities[2]) < COMPARISON_TOLERANCE;
+}
+
 
 std::string Particle::toString() const {
     std::stringstream stream;
