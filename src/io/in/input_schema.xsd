@@ -3,7 +3,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element name="InputParameters" type="InputParametersType"/>
-        <xs:element name="Cuboid" type="CuboidType"/>
+        <xs:element name="Cuboid" type="CuboidType" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -27,5 +27,4 @@
       <xs:element name="MeanVelocity" type="xs:double"/>
     </xs:sequence>
   </xs:complexType>
-
 </xs:schema>

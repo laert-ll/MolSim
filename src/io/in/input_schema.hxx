@@ -507,27 +507,25 @@ class Simulation: public ::xml_schema::type
   // Cuboid
   //
   typedef ::CuboidType Cuboid_type;
+  typedef ::xsd::cxx::tree::sequence< Cuboid_type > Cuboid_sequence;
+  typedef Cuboid_sequence::iterator Cuboid_iterator;
+  typedef Cuboid_sequence::const_iterator Cuboid_const_iterator;
   typedef ::xsd::cxx::tree::traits< Cuboid_type, char > Cuboid_traits;
 
-  const Cuboid_type&
+  const Cuboid_sequence&
   Cuboid () const;
 
-  Cuboid_type&
+  Cuboid_sequence&
   Cuboid ();
 
   void
-  Cuboid (const Cuboid_type& x);
-
-  void
-  Cuboid (::std::unique_ptr< Cuboid_type > p);
+  Cuboid (const Cuboid_sequence& s);
 
   // Constructors.
   //
-  Simulation (const InputParameters_type&,
-              const Cuboid_type&);
+  Simulation (const InputParameters_type&);
 
-  Simulation (::std::unique_ptr< InputParameters_type >,
-              ::std::unique_ptr< Cuboid_type >);
+  Simulation (::std::unique_ptr< InputParameters_type >);
 
   Simulation (const ::xercesc::DOMElement& e,
               ::xml_schema::flags f = 0,
@@ -556,7 +554,7 @@ class Simulation: public ::xml_schema::type
 
   protected:
   ::xsd::cxx::tree::one< InputParameters_type > InputParameters_;
-  ::xsd::cxx::tree::one< Cuboid_type > Cuboid_;
+  Cuboid_sequence Cuboid_;
 };
 
 #include <iosfwd>

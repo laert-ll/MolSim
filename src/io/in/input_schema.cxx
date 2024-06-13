@@ -279,28 +279,22 @@ InputParameters (::std::unique_ptr< InputParameters_type > x)
   this->InputParameters_.set (std::move (x));
 }
 
-const Simulation::Cuboid_type& Simulation::
+const Simulation::Cuboid_sequence& Simulation::
 Cuboid () const
 {
-  return this->Cuboid_.get ();
+  return this->Cuboid_;
 }
 
-Simulation::Cuboid_type& Simulation::
+Simulation::Cuboid_sequence& Simulation::
 Cuboid ()
 {
-  return this->Cuboid_.get ();
+  return this->Cuboid_;
 }
 
 void Simulation::
-Cuboid (const Cuboid_type& x)
+Cuboid (const Cuboid_sequence& s)
 {
-  this->Cuboid_.set (x);
-}
-
-void Simulation::
-Cuboid (::std::unique_ptr< Cuboid_type > x)
-{
-  this->Cuboid_.set (std::move (x));
+  this->Cuboid_ = s;
 }
 
 
@@ -684,20 +678,18 @@ CuboidType::
 //
 
 Simulation::
-Simulation (const InputParameters_type& InputParameters,
-            const Cuboid_type& Cuboid)
+Simulation (const InputParameters_type& InputParameters)
 : ::xml_schema::type (),
   InputParameters_ (InputParameters, this),
-  Cuboid_ (Cuboid, this)
+  Cuboid_ (this)
 {
 }
 
 Simulation::
-Simulation (::std::unique_ptr< InputParameters_type > InputParameters,
-            ::std::unique_ptr< Cuboid_type > Cuboid)
+Simulation (::std::unique_ptr< InputParameters_type > InputParameters)
 : ::xml_schema::type (),
   InputParameters_ (std::move (InputParameters), this),
-  Cuboid_ (std::move (Cuboid), this)
+  Cuboid_ (this)
 {
 }
 
@@ -757,11 +749,8 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       ::std::unique_ptr< Cuboid_type > r (
         Cuboid_traits::create (i, f, this));
 
-      if (!Cuboid_.present ())
-      {
-        this->Cuboid_.set (::std::move (r));
-        continue;
-      }
+      this->Cuboid_.push_back (::std::move (r));
+      continue;
     }
 
     break;
@@ -771,13 +760,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   {
     throw ::xsd::cxx::tree::expected_element< char > (
       "InputParameters",
-      "");
-  }
-
-  if (!Cuboid_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "Cuboid",
       "");
   }
 }

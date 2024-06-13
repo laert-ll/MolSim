@@ -47,7 +47,7 @@ int main(int argc, char *argsv[]) {
         return 1;
     }
 
-    std::unique_ptr<fileReaders::TXTReader> fileReader = std::make_unique<fileReaders::TXTReader>();
+    std::unique_ptr<fileReaders::XMLReader> fileReader = std::make_unique<fileReaders::XMLReader>();
     ParticleContainer particleContainer = fileReader->readFile(inputFilePath);
 
     SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);

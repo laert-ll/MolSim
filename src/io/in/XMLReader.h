@@ -1,16 +1,18 @@
 #pragma once
 
 #include "../../objects/ParticleContainer.h"
+#include "input_schema.hxx"
 #include "FileReader.h"
 #include <string>
 
+
 namespace fileReaders {
-    class XMLReader : public FileReader {
+
+    class XMLReader {
     public:
-        XMLReader() = default;
-
-        ~XMLReader() override = default;
-
         static ParticleContainer readFile(const std::string& filepath);
+    private:
+        static void loadCuboids(const Simulation& simulation, ParticleContainer& particleContainer);
     };
-}// namespace fileReaders
+
+}  // namespace fileReaders
