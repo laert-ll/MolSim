@@ -51,14 +51,15 @@ if (OPENMP_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif ()
+
 # ------------------------------------------------------------------------------------------------------------
 
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hxx"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
 )
 
 file(GLOB_RECURSE TEST_SOURCES
@@ -70,6 +71,8 @@ file(GLOB_RECURSE TEST_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
 )
 
 file(GLOB_RECURSE BENCHMARK_SOURCES
@@ -83,6 +86,8 @@ file(GLOB_RECURSE BENCHMARK_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
 )
 
 #------------------------------------------LOGGING---------------------------------------------------------
@@ -151,6 +156,7 @@ target_link_libraries(MolSim
 
 target_link_libraries(MolSimTests
         PRIVATE
+        xerces-c
         gtest
         gtest_main
         spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
@@ -158,6 +164,7 @@ target_link_libraries(MolSimTests
 
 target_link_libraries(MolSimBenchmark
         PRIVATE
+        xerces-c
         benchmark
         spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
         gtest

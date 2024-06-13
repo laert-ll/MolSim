@@ -2,6 +2,7 @@
 #include "../src/calculators/LJCalculator.h"
 #include "../src/objects/ParticleContainer.h"
 #include "../src/io/in/FileReader.h"
+#include "../src/io/in/TXTReader.h"
 #include "benchmark/benchmark.h"
 #include <memory>
 
@@ -12,7 +13,9 @@ static void BM_LJCalculator(benchmark::State& state) {
                             state.range(0) == 3 ? 0.0005 : 5;
     const double end_time = 5.0;
     std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(5.31608);
-    ParticleContainer particleContainer = FileReader::readFile("../resources/input-cuboid.txt");
+
+    fileReaders::TXTReader fileReader = fileReaders::TXTReader();
+    ParticleContainer particleContainer = fileReader.readFile("../resources/input-cuboid.txt");
 
     for (auto _ : state) {
         double current_time = 0;

@@ -1,6 +1,8 @@
 #include "calculators/SVCalculator.h"
 #include "calculators/LJCalculator.h"
 #include "io/in/FileReader.h"
+#include "io/in/TXTReader.h"
+#include "io/in/XMLReader.h"
 #include "objects/ParticleContainer.h"
 #include "io/out/FileWriter.h"
 #include "io/out/VTKWriter.h"
@@ -45,7 +47,8 @@ int main(int argc, char *argsv[]) {
         return 1;
     }
 
-    ParticleContainer particleContainer = FileReader::readFile(inputFilePath);
+    std::unique_ptr<fileReaders::TXTReader> fileReader = std::make_unique<fileReaders::TXTReader>();
+    ParticleContainer particleContainer = fileReader->readFile(inputFilePath);
 
     SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
 

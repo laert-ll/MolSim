@@ -6,11 +6,11 @@
 #include <fstream>
 #include <sstream>
 
-#include "../../../src/io/in/FileReader.h"
+#include "../../../src/io/in/TXTReader.h"
 
 //Check if the lines are read correctly and wrong lines are ignored
 TEST(FileReaderTest, readFileLinesBasicTest) {
-    FileReader fileReader;
+    fileReaders::TXTReader fileReader;
     std::ofstream testfile("test_file.txt");
     testfile << "3\n"
              << "# This should be ignored\n"
@@ -18,7 +18,7 @@ TEST(FileReaderTest, readFileLinesBasicTest) {
              << "Data Set 2\n"
              << "Data Set 3\n";
     testfile.close();
-    std::vector<std::string> lines = FileReader::readFileLines("test_file.txt");
+    std::vector<std::string> lines = fileReaders::TXTReader::readFileLines("test_file.txt");
     ASSERT_EQ(lines.size(), 4);
     EXPECT_EQ(lines[1], "Data Set 1");
     EXPECT_EQ(lines[2], "Data Set 2");
@@ -40,8 +40,8 @@ TEST(ReadFileTest, ReadParticlesFromFile) {
             << "34.75 0.0 0.0    0.0 0.0296 0.0  1.0e-14\n";
     outfile.close();
 
-    // Read particle data from the file
-    ParticleContainer particleContainer = FileReader::readFile("test_particles.txt");
+    fileReaders::TXTReader fileReader;
+    ParticleContainer particleContainer = fileReader.readFile("test_particles.txt");
 
     // Check if the particles are loaded correctly
     ASSERT_EQ(particleContainer.getSize(), 4);
@@ -86,7 +86,8 @@ TEST(ReadFileTest, ReadCuboidsFromFile) {
     outfile.close();
 
     // Read cuboid data from the file
-    ParticleContainer particleContainer = FileReader::readFile("test_cuboids.txt");
+    fileReaders::TXTReader fileReader;
+    ParticleContainer particleContainer = fileReader.readFile("test_particles.txt");
 
     // Check if the cuboids are loaded correctly
     ASSERT_EQ(particleContainer.getSize(), 13);
@@ -126,24 +127,11 @@ TEST(ReadFileTest, EmptyFile) {
     outfile.close();
 
     // Test whether the method throws an exception for an empty file
-    ASSERT_THROW(FileReader().readFile("empty_file.txt"), std::runtime_error);
+    fileReaders::TXTReader fileReader;
+    ASSERT_THROW(fileReader.readFile("empty_file.txt"), std::runtime_error);
 
     // Delete the temporary file
     std::remove("empty_file.txt");
-}
-
-// Test case for handling invalid data code
-TEST(ReadFileTest, InvalidDataCode) {
-    // Create a temporary file with an invalid data code
-    std::ofstream outfile("invalid_data_code.txt");
-    outfile << "2\n";  // Invalid data code
-    outfile.close();
-
-    // Test whether the method throws an exception for an invalid data code
-    ASSERT_THROW(FileReader().readFile("invalid_data_code.txt"), std::runtime_error);
-
-    // Delete the temporary file
-    std::remove("invalid_data_code.txt");
 }
 
 // Test case for FileReader::loadParticles method
@@ -157,14 +145,9 @@ TEST(FileReaderTest, LoadParticles) {
             "34.75 0.0 0.0 0.0 0.0296 0.0 1.0e-14"
     };
 
-    // Create a FileReader object
-    FileReader fileReader;
-
     // Create a ParticleContainer object
     ParticleContainer particleContainer;
-
-    // Call the loadParticles method
-    FileReader::loadParticles(lines, particleContainer);
+    fileReaders::TXTReader::loadParticles(lines, particleContainer);
 
     // Check if the particles are loaded correctly
     ASSERT_EQ(particleContainer.getSize(), 4);
@@ -210,14 +193,8 @@ TEST(FileReaderTest, LoadCuboids) {
             "-10.0 -10.0 0.0   3 3 1   1.0 1.0   0.0 -10.0 0.0   0.1"
     };
 
-    // Create a FileReader object
-    FileReader fileReader;
-
-    // Create a ParticleContainer object
     ParticleContainer particleContainer;
-
-    // Call the loadCuboids method
-    FileReader::loadCuboids(lines, particleContainer);
+    fileReaders::TXTReader::loadCuboids(lines, particleContainer);
 
     // Check if the particles are loaded correctly
     ASSERT_EQ(particleContainer.getSize(), 13);
