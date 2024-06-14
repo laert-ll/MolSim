@@ -60,15 +60,17 @@ namespace fileReaders {
         double m;
 
         int num_particles = std::stoi(lines[0]);
+        int dimension = std::stoi(lines[1]);
         SPDLOG_DEBUG("Number of particles to load: {}", num_particles);
+        SPDLOG_DEBUG("Dimension of simulation: {}", dimension);
 
-        for (int i = 1; i < num_particles + 1; ++i) {
+        for (int i = 2; i < num_particles + 2; ++i) {
             std::istringstream datastream(lines[i]);
             parseDataFromLine(datastream, x);
             parseDataFromLine(datastream, v);
             datastream >> m;
 
-            ParticleParameters parameters(x, v, m, 0, 0);
+            ParticleParameters parameters(x, v, m, 0, 0, dimension);
             Particle newParticle = ParticleGenerator::generateParticle(parameters);
             particleContainer.addParticle(newParticle);
         }
@@ -84,9 +86,11 @@ namespace fileReaders {
         double distance, mass, meanV;
 
         int num_cuboids = std::stoi(lines[0]);
+        int dimension = std::stoi(lines[1]);
         SPDLOG_DEBUG("Number of cuboids to load: {}", num_cuboids);
+        SPDLOG_DEBUG("Dimension of simulation: {}", dimension);
 
-        for (int i = 1; i < num_cuboids + 1; ++i) {
+        for (int i = 2; i < num_cuboids + 2; ++i) {
             std::istringstream datastream(lines[i]);
             parseDataFromLine(datastream, llf);
             parseDataFromLine(datastream, numParticles);
@@ -99,13 +103,14 @@ namespace fileReaders {
                 exit(-1);
             }
 
-            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV);
+            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, dimension);
             ParticleGenerator::generateCuboid(cuboidParams, particles);
             SPDLOG_DEBUG("Completed generating cuboid {}", i);
-            particles.initializePairs();
         }
+        particles.initializePairs();
         SPDLOG_INFO("Finished loading cuboids!");
     }
+
 
     void TXTReader::loadDiscs(const std::vector<std::string> &lines, ParticleContainer &particles) {
         SPDLOG_INFO("Starting to load discs...");

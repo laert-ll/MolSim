@@ -48,8 +48,7 @@ namespace boundaries {
         outfile.close();
 
         // Read cuboid data from the file
-        fileReaders::TXTReader fileReader;
-        ParticleContainer container = fileReader.readFile("particles_near_reflecting_boundary.txt");
+        ParticleContainer container = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
         std::remove("particles_near_reflecting_boundary");
 
         // Check if Force of all Particles is zero
