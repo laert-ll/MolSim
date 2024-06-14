@@ -26,8 +26,6 @@ namespace fileReaders {
 
         static ParticleContainer readFile(const std::string &filepath);
 
-    private:
-
         static const std::set<int> allowedDataCodes;
         static const std::set<int> allowedDimensions;
 
@@ -75,21 +73,6 @@ namespace fileReaders {
         * @param lines
         */
         static void validateHeaderLines(const std::vector<std::string> &lines);
-
-
-        /**
-        * Class section end
-        *
-        *
-        *
-        * --------------------------------------------TEST SECTION------------------------------------------------------------
-        * To be able to use the private methods and attributes in testing, FRIEND_TESTs are declared here.
-        */
-        FRIEND_TEST(FileReaderTest, LoadParticles);
-
-        FRIEND_TEST(FileReaderTest, LoadCuboids);
-
-        FRIEND_TEST(FileReaderTest, readFileLinesBasicTest);
 
     };
 }// namespace fileReaders

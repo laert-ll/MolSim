@@ -86,8 +86,7 @@ TEST(ReadFileTest, ReadCuboidsFromFile) {
     outfile.close();
 
     // Read cuboid data from the file
-    fileReaders::TXTReader fileReader;
-    ParticleContainer particleContainer = fileReader.readFile("test_particles.txt");
+    ParticleContainer particleContainer = fileReaders::TXTReader::readFile("test_particles.txt");
 
     // Check if the cuboids are loaded correctly
     ASSERT_EQ(particleContainer.getSize(), 13);
