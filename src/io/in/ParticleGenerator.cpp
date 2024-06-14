@@ -21,17 +21,18 @@ Particle ParticleGenerator::generateParticle(const ParticleParameters &parameter
                     parameters.getType()};
 }
 
-void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, ParticleContainer& particleContainer) {
+void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, ParticleContainer &particleContainer) {
     // Extract parameters for easier access
-    const auto &lowerLeftFrontCorner = parameters.lowerLeftFrontCorner;
-    const auto &numParticlesPerDimension = parameters.numParticlesPerDimension;
-    const auto &distance = parameters.distance;
-    const auto &m = parameters.m;
-    const auto &startV = parameters.startV;
-    const auto &meanV = parameters.meanV;
-    SPDLOG_DEBUG("Generating cuboid: LLF [{} {} {}], NumParticles [{} {} {}], Distance {}, Mass {}, StartV [{} {} {}], MeanV {}",
-                 lowerLeftFrontCorner[0], lowerLeftFrontCorner[1], lowerLeftFrontCorner[2], numParticlesPerDimension[0], numParticlesPerDimension[1],
-                 numParticlesPerDimension[2], distance, m, startV[0], startV[1], startV[2], meanV);
+    const auto &lowerLeftFrontCorner = parameters.getLowerLeftFrontCorner();
+    const auto &numParticlesPerDimension = parameters.getNumParticlesPerDimension();
+    const auto &distance = parameters.getDistance();
+    const auto &m = parameters.getMass();
+    const auto &startV = parameters.getStartV();
+    const auto &meanV = parameters.getMeanV();
+    const auto &dimension = parameters.getDimension();
+    SPDLOG_DEBUG("Generating cuboid: LLF {}, NumParticles {}, Distance {}, Mass {}, StartV {}, MeanV {}",
+                 ArrayUtils::to_string(lowerLeftFrontCorner), ArrayUtils::to_string(numParticlesPerDimension), distance,
+                 m, ArrayUtils::to_string(startV), meanV);
 
     // Generate particles for the cuboid
     for (std::size_t xIndex = 0; xIndex < numParticlesPerDimension[0]; ++xIndex) {
@@ -45,11 +46,13 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Parti
                 };
 
                 // Simulate Brownian Motion by using MaxwellBoltzmannDistribution
-                const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 2);
+                const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 3);
 
-                // Add deltaV to v
-                const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<>());
-
+                std::array<double, 3> v = startV;
+                // Add elements of deltaV to v based on dimension
+                for (int i = 0; i < dimension; ++i) {
+                    v[i] += deltaV[i];
+                }
                 // Create a new particle and add it to the container
                 Particle newParticle(x, v, m, 0, 0); // Set volume and type to zero for now
                 particleContainer.addParticle(newParticle);

@@ -40,7 +40,7 @@ namespace fileReaders {
             for (auto& value : numParticles) partDimStream >> value;
             for (auto& value : startV) initVelStream >> value;
 
-            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV);
+            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, 3);
             ParticleGenerator::generateCuboid(cuboidParams, particleContainer);
             particleContainer.initializePairs();
         }
