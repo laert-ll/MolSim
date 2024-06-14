@@ -24,7 +24,12 @@ namespace fileReaders {
 
         ~TXTReader() override = default;
 
-        static ParticleContainer readFile(const std::string& filepath);
+        static ParticleContainer readFile(const std::string &filepath);
+
+    private:
+
+        static const std::set<int> allowedDataCodes;
+        static const std::set<int> allowedDimensions;
 
         /**
         * Reads particle data from a file and returns a ParticleContainer.
@@ -32,11 +37,11 @@ namespace fileReaders {
         * @param filepath The path to the file to read particle data from.
         * @return A ParticleContainer containing the particles read from the file.
         */
-        static void loadParticles(const std::vector<std::string>& lines, ParticleContainer& particles);
+        static void loadParticles(const std::vector<std::string> &lines, ParticleContainer &particles);
 
-        static void loadCuboids(const std::vector<std::string>& lines, ParticleContainer& particles);
+        static void loadCuboids(const std::vector<std::string> &lines, ParticleContainer &particles);
 
-
+        static void loadDiscs(const std::vector<std::string> &lines, ParticleContainer &particles);
 
         /**
         * This method parses an array of values from a single line (string)
@@ -61,17 +66,29 @@ namespace fileReaders {
         */
         static std::vector<std::string> readFileLines(const std::string &filepath);
 
+        /**
+        * This method validates the header lines of the input file.
+        * The header lines should contain the data code, number of data sets, and the dimension of the simulation.
+        *
+        * This method checks if the header data are allowed and returns error exitcode, if not.
+        *
+        * @param lines
+        */
+        static void validateHeaderLines(const std::vector<std::string> &lines);
 
-    /**
-    * Class section end
-    *
-    *
-    *
-    * --------------------------------------------TEST SECTION------------------------------------------------------------
-    * To be able to use the private methods and attributes in testing, FRIEND_TESTs are declared here.
-    */
+
+        /**
+        * Class section end
+        *
+        *
+        *
+        * --------------------------------------------TEST SECTION------------------------------------------------------------
+        * To be able to use the private methods and attributes in testing, FRIEND_TESTs are declared here.
+        */
         FRIEND_TEST(FileReaderTest, LoadParticles);
+
         FRIEND_TEST(FileReaderTest, LoadCuboids);
+
         FRIEND_TEST(FileReaderTest, readFileLinesBasicTest);
 
     };

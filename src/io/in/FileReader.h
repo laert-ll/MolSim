@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../../objects/ParticleContainer.h"
-#include "CuboidParameters.h"
+#include "io/in/parameters/CuboidParameters.h"
 #include "ParticleGenerator.h"
 
 namespace fileReaders {
