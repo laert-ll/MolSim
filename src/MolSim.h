@@ -11,6 +11,7 @@
 #include "spdlog/spdlog.h"
 #include "cxxopts.hpp"
 #include "boundaries/BoundaryController.h"
+#include "calculators/Thermostat.h"
 
 class MolSim {
 public:
@@ -199,19 +200,25 @@ public:
     * @param end_time The end time of the simulation.
     * @param outputWriter The file writer to be used.
     * @param calculator The calculator to be used.
+    * @param boundaryMap The boundary conditions to be used.
+    * @param thermostat The thermostat to be used.
     */
     static void performSimulation(ParticleContainer &particleContainer, double &delta_t, double &end_time,
                                   std::unique_ptr<outputWriters::FileWriter> &outputWriter,
                                   std::unique_ptr<calculators::Calculator> &calculator,
-                                  const std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> &boundaryMap) {
+                                  const std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> &boundaryMap,
+                                  std::unique_ptr<Thermostat> &thermostat) {
         const std::string &filename = "MD";
 
         double current_time = 0.0; // start_time
         int iteration = 0;
+        const int thermostatApplyFrequency = thermostat->getApplyFrequency();
 
         std::array<double, 2> domain = {100.0, 100.0};
 
         const boundaries::BoundaryController controller{boundaryMap, calculator.get(), domain, 1.0};
+
+        thermostat->initializeTemp(particleContainer);
 
         while (current_time < end_time) {
 
@@ -220,6 +227,10 @@ public:
             controller.postProcessBoundaries(particleContainer);
 
             iteration++;
+            if (iteration % thermostatApplyFrequency == 0) {
+                thermostat->setTempGradually(particleContainer);
+            }
+
             if (iteration % 10 == 0) {
                 outputWriter->plotParticles(iteration, particleContainer, filename);
             }
