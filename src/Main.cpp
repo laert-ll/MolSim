@@ -35,7 +35,7 @@ int main(int argc, char *argsv[]) {
     double delta_t;
     double end_time;
     std::unique_ptr<outputWriters::FileWriter> outputWriter;
-    std::unique_ptr<calculators::Calculator> calculator;
+    std::shared_ptr<calculators::Calculator> calculator;
     std::unique_ptr<std::map<boundaries::BoundaryDirection, boundaries::BoundaryType>> boundaryMap;
     std::unique_ptr<Thermostat> thermostat = std::make_unique<Thermostat>(10, 20, 5, 1, 3);;
 

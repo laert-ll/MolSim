@@ -177,7 +177,4 @@ namespace boundaries {
             }
         }
     }
-
-    BoundaryHandler::BoundaryHandler(BoundaryProperties properties, calculators::Calculator *calculator)
-            : properties(std::move(properties)), calculator(calculator) {}
 }

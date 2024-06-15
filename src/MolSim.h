@@ -71,7 +71,7 @@ public:
     static bool processArguments(int argc, char *argv[], std::string &inputFilePath,
                                  double &delta_t, double &end_time,
                                  std::unique_ptr<outputWriters::FileWriter> &outputWriter,
-                                 std::unique_ptr<calculators::Calculator> &calculator,
+                                 std::shared_ptr<calculators::Calculator> calculator,
                                  std::unique_ptr<std::map<boundaries::BoundaryDirection, boundaries::BoundaryType>> &boundaryMap) {
         cxxopts::Options options("MolSim", "Molecular Simulation Program");
 
@@ -206,7 +206,7 @@ public:
     */
     static void performSimulation(ParticleContainer &particleContainer, double &delta_t, double &end_time,
                                   std::unique_ptr<outputWriters::FileWriter> &outputWriter,
-                                  std::unique_ptr<calculators::Calculator> &calculator,
+                                  std::shared_ptr<calculators::Calculator> &calculator,
                                   std::unique_ptr<std::map<boundaries::BoundaryDirection, boundaries::BoundaryType>> &boundaryMap,
                                   std::unique_ptr<Thermostat> &thermostat) {
         const std::string &filename = "MD";
@@ -218,7 +218,7 @@ public:
         std::array<double, 2> domain = {30.0, 50.0};
 
         const boundaries::BoundaryProperties properties{domain, *boundaryMap};
-        const boundaries::BoundaryHandler handler{properties, calculator.get()};
+        const boundaries::BoundaryHandler handler{properties, calculator};
 
         thermostat->initializeTemp(particleContainer);
 
