@@ -36,7 +36,7 @@ namespace boundaries {
         std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
+        boundaries::BoundaryHandler handler{properties, calculator.get()};
         std::ofstream outfile("particles_near_reflecting_boundary.txt");
         outfile << "0\n"  // Data code for Particles
                 << "4\n"  // Number of data sets
@@ -75,7 +75,7 @@ namespace boundaries {
         std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
+        boundaries::BoundaryHandler handler{properties, calculator.get()};
         std::ofstream outfile("particles_near_reflecting_boundary.txt");
         outfile << "0\n"  // Data code for Particles
                 << "4\n"  // Number of data sets
@@ -118,7 +118,7 @@ namespace boundaries {
         std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
+        boundaries::BoundaryHandler handler{properties, calculator.get()};
         std::ofstream outfile("particles_near_reflecting_boundary.txt");
         outfile << "0\n"  // Data code for Particles
                 << "4\n"  // Number of data sets
@@ -160,7 +160,7 @@ namespace boundaries {
         std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
+        boundaries::BoundaryHandler handler{properties, calculator.get()};
         std::ofstream outfile("particles_near_reflecting_boundary.txt");
         outfile << "0\n"  // Data code for Particles
                 << "8\n"  // Number of data sets
@@ -237,7 +237,7 @@ namespace boundaries {
         std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
+        boundaries::BoundaryHandler handler{properties, calculator.get()};
         std::ofstream outfile("particles_near_reflecting_boundary.txt");
         outfile << "0\n"  // Data code for Particles
                 << "4\n"  // Number of data sets
@@ -291,7 +291,7 @@ namespace boundaries {
         std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
+        boundaries::BoundaryHandler handler{properties, calculator.get()};
         std::ofstream outfile("particles_near_reflecting_boundary.txt");
         outfile << "0\n"  // Data code for Particles
                 << "4\n"  // Number of data sets

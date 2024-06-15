@@ -214,7 +214,7 @@ public:
         int iteration = 0;
         const int thermostatApplyFrequency = thermostat->getApplyFrequency();
 
-        std::array<double, 2> domain = {100.0, 100.0};
+        std::array<double, 2> domain = {30.0, 50.0};
 
         const boundaries::BoundaryProperties properties{domain, boundaryMap};
         const boundaries::BoundaryHandler handler{properties, calculator.get()};
@@ -225,7 +225,7 @@ public:
 
             handler.preProcessBoundaries(particleContainer);
             calculator->calculate(particleContainer, delta_t);
-            handledr.postProcessBoundaries(particleContainer);
+            handler.postProcessBoundaries(particleContainer);
 
             iteration++;
             if (iteration % thermostatApplyFrequency == 0) {

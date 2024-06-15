@@ -13,7 +13,7 @@
 #include <iostream>
 #include <memory>
 #include <map>
-#include "boundaries/BoundaryController.h"
+#include "boundaries/BoundaryHandler.h"
 #include "calculators/Thermostat.h"
 
 /**
