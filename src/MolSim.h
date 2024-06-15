@@ -10,7 +10,7 @@
 #include "io/out/XYZWriter.h"
 #include "spdlog/spdlog.h"
 #include "cxxopts.hpp"
-#include "boundaries/BoundaryController.h"
+#include "boundaries/BoundaryHandler.h"
 #include "calculators/Thermostat.h"
 
 class MolSim {
@@ -214,17 +214,18 @@ public:
         int iteration = 0;
         const int thermostatApplyFrequency = thermostat->getApplyFrequency();
 
-        std::array<double, 2> domain = {100.0, 100.0};
+        std::array<double, 2> domain = {30.0, 50.0};
 
-        const boundaries::BoundaryController controller{boundaryMap, calculator.get(), domain, 1.0};
+        const boundaries::BoundaryProperties properties{domain, boundaryMap};
+        const boundaries::BoundaryHandler handler{properties, calculator.get()};
 
         thermostat->initializeTemp(particleContainer);
 
         while (current_time < end_time) {
 
-            controller.preProcessBoundaries(particleContainer);
+            handler.preProcessBoundaries(particleContainer);
             calculator->calculate(particleContainer, delta_t);
-            controller.postProcessBoundaries(particleContainer);
+            handler.postProcessBoundaries(particleContainer);
 
             iteration++;
             if (iteration % thermostatApplyFrequency == 0) {

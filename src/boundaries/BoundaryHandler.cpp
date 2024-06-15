@@ -52,11 +52,11 @@ namespace boundaries {
         double boundary = properties.getDomain()[index];
         // If selected index is lower boundary (lowerX, lowerY, lowerZ)
         if (checkLowerBound) {
-            double tolerance = pow(2, 1/6) * sigma;
             // for indexing x, y, z coordinate
 #pragma omp parallel for
             for (auto &p: container) {
                 double distanceToBoundary = p.getX().at(index);
+                double tolerance = pow(2, 1/6) * p.getSigma();
                 // only calculate reflection if near boundary
                 if (distanceToBoundary < tolerance) {
                     Particle ghost{p};
@@ -71,11 +71,11 @@ namespace boundaries {
             }
             return;
         }
-        double tolerance = pow(2, 1/6) * sigma;
 #pragma omp parallel for
         for (auto &p: container) {
             double distanceToBoundary = boundary -p.getX().at(index);
             // only calculate reflection if near boundary
+            double tolerance = pow(2, 1/6) * p.getSigma();
             if (distanceToBoundary < tolerance) {
                 Particle ghost{p};
                 if (index == 0)
@@ -178,7 +178,6 @@ namespace boundaries {
         }
     }
 
-    BoundaryHandler::BoundaryHandler(BoundaryProperties properties, calculators::Calculator *calculator,
-                                     double sigma)
-            : properties(std::move(properties)), sigma(sigma), calculator(calculator) {}
+    BoundaryHandler::BoundaryHandler(BoundaryProperties properties, calculators::Calculator *calculator)
+            : properties(std::move(properties)), calculator(calculator) {}
 }
