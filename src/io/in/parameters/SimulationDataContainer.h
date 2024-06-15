@@ -16,26 +16,26 @@ public:
             : particleContainer(particleContainer), fileWriterParameters(fileWriterParameters),
               simulationParameters(simulationParameters), thermostatParameters(thermostatParameters) {}
 
-    [[nodiscard]] ParticleContainer &getParticleContainer() const {
+    [[nodiscard]] ParticleContainer getParticleContainer() const {
         return particleContainer;
     }
 
-    [[nodiscard]] FileWriterParameters &getFileWriterParameters() const {
+    [[nodiscard]] FileWriterParameters getFileWriterParameters() const {
         return fileWriterParameters;
     }
 
-    [[nodiscard]] SimulationParameters &getSimulationParameters() const {
+    [[nodiscard]] SimulationParameters getSimulationParameters() const {
         return simulationParameters;
     }
 
-    [[nodiscard]] ThermostatParameters &getThermostatParameters() const {
+    [[nodiscard]] ThermostatParameters getThermostatParameters() const {
         return thermostatParameters;
     }
 
 private:
-    ParticleContainer &particleContainer;
-    FileWriterParameters &fileWriterParameters;
-    SimulationParameters &simulationParameters;
-    ThermostatParameters &thermostatParameters;
+    ParticleContainer particleContainer;
+    FileWriterParameters fileWriterParameters;
+    SimulationParameters simulationParameters;
+    ThermostatParameters thermostatParameters;
 
 };

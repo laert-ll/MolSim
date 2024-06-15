@@ -7,31 +7,52 @@
 
 namespace fileReaders {
 
-    SimulationDataContainer XMLReader::readFile(const std::string& filepath) {
+    SimulationDataContainer XMLReader::readFile(const std::string &filepath) {
         SPDLOG_INFO("Reading XML file: {}", filepath);
 
-        std::unique_ptr<Simulation> simulation  = Simulation_(filepath);
-        const auto& fileWriterParameters = simulation->FileWriterParameters();
-        const auto& simulationParameters = simulation->SimulationParameters();
-        const auto& thermostatParameters = simulation->ThermostatParameters();
+        std::unique_ptr<Simulation> simulation = Simulation_(filepath);
+        const auto &fileWriterParametersParsed = simulation->FileWriterParameters();
+        const auto &simulationParametersParsed = simulation->SimulationParameters();
+        const auto &thermostatParametersParsed = simulation->ThermostatParameters();
 
 
         ParticleContainer particleContainer;
         loadCuboids(*simulation, particleContainer);
 
+        FileWriterParameters fileWriterParameters = loadFileWriterParameters(*simulation);
+        SimulationParameters simulationParameters = loadSimulationParameters(*simulation);
+        ThermostatParameters thermostatParameters = loadThermostatParameters(*simulation);
+
         SimulationDataContainer simulationDataContainer(particleContainer,
-                                                        (FileWriterParameters &) fileWriterParameters,
-                                                        (SimulationParameters &) simulationParameters,
-                                                        (ThermostatParameters &) thermostatParameters);
+                                                        fileWriterParameters,
+                                                        simulationParameters,
+                                                        thermostatParameters);
 
         return simulationDataContainer;
     }
 
-    void XMLReader::loadCuboids(const Simulation& simulation, ParticleContainer& particleContainer) {
-        SPDLOG_INFO("Starting to load cuboids...");
-        const auto& cuboids = simulation.Cuboids();
+    FileWriterParameters XMLReader::loadFileWriterParameters(const Simulation &simulation) {
+        const auto &fileWriterParametersParsed = simulation.FileWriterParameters();
+        return {fileWriterParametersParsed.BaseName(), fileWriterParametersParsed.WriteFrequency()};
+    }
 
-        for (const auto& cuboid : cuboids) {
+    SimulationParameters XMLReader::loadSimulationParameters(const Simulation &simulation) {
+        const auto &simulationParametersParsed = simulation.SimulationParameters();
+        return {simulationParametersParsed.EndT(), simulationParametersParsed.DeltaT()};
+    }
+
+    ThermostatParameters XMLReader::loadThermostatParameters(const Simulation &simulation) {
+        const auto &thermostatParametersParsed = simulation.ThermostatParameters();
+        return {thermostatParametersParsed.StartTemperature(), thermostatParametersParsed.TargetTemperature(),
+                thermostatParametersParsed.ApplyFrequency(), thermostatParametersParsed.MaxDeltaTemperature(),
+                thermostatParametersParsed.Dimension()};
+    }
+
+    void XMLReader::loadCuboids(const Simulation &simulation, ParticleContainer &particleContainer) {
+        SPDLOG_INFO("Starting to load cuboids...");
+        const auto &cuboids = simulation.Cuboids();
+
+        for (const auto &cuboid: cuboids) {
             std::array<double, 3> llf{};
             std::array<size_t, 3> numParticles{};
             std::array<double, 3> startV{};
@@ -43,9 +64,9 @@ namespace fileReaders {
             std::istringstream partDimStream(cuboid.ParticlesPerDimension());
             std::istringstream initVelStream(cuboid.InitialVelocities());
 
-            for (auto& value : llf) coordStream >> value;
-            for (auto& value : numParticles) partDimStream >> value;
-            for (auto& value : startV) initVelStream >> value;
+            for (auto &value: llf) coordStream >> value;
+            for (auto &value: numParticles) partDimStream >> value;
+            for (auto &value: startV) initVelStream >> value;
 
             CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, 3);
             ParticleGenerator::generateCuboid(cuboidParams, particleContainer);

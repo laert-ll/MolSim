@@ -320,8 +320,8 @@ class SimulationParametersType: public ::xml_schema::type
   public:
   // EndT
   //
-  typedef ::xml_schema::decimal EndT_type;
-  typedef ::xsd::cxx::tree::traits< EndT_type, char, ::xsd::cxx::tree::schema_type::decimal > EndT_traits;
+  typedef ::xml_schema::double_ EndT_type;
+  typedef ::xsd::cxx::tree::traits< EndT_type, char, ::xsd::cxx::tree::schema_type::double_ > EndT_traits;
 
   const EndT_type&
   EndT () const;
@@ -334,8 +334,8 @@ class SimulationParametersType: public ::xml_schema::type
 
   // DeltaT
   //
-  typedef ::xml_schema::decimal DeltaT_type;
-  typedef ::xsd::cxx::tree::traits< DeltaT_type, char, ::xsd::cxx::tree::schema_type::decimal > DeltaT_traits;
+  typedef ::xml_schema::double_ DeltaT_type;
+  typedef ::xsd::cxx::tree::traits< DeltaT_type, char, ::xsd::cxx::tree::schema_type::double_ > DeltaT_traits;
 
   const DeltaT_type&
   DeltaT () const;

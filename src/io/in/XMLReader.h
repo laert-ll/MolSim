@@ -13,6 +13,12 @@ namespace fileReaders {
         static SimulationDataContainer readFile(const std::string& filepath);
     private:
         static void loadCuboids(const Simulation& simulation, ParticleContainer& particleContainer);
+
+        static FileWriterParameters loadFileWriterParameters(const Simulation &simulation);
+
+        static SimulationParameters loadSimulationParameters(const Simulation &simulation);
+
+        static ThermostatParameters loadThermostatParameters(const Simulation &simulation);
     };
 
 }  // namespace fileReaders

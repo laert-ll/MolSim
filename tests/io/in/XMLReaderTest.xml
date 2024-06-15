@@ -1,0 +1,26 @@
+<Simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="../../../src/io/in/input_schema.xsd">
+    <FileWriterParameters>
+        <BaseName>test</BaseName>
+        <WriteFrequency>10</WriteFrequency>
+    </FileWriterParameters>
+    <SimulationParameters>
+        <EndT>100.0</EndT>
+        <DeltaT>0.1</DeltaT>
+    </SimulationParameters>
+    <ThermostatParameters>
+        <StartTemperature>300.0</StartTemperature>
+        <TargetTemperature>300.0</TargetTemperature>
+        <ApplyFrequency>100</ApplyFrequency>
+        <MaxDeltaTemperature>10.0</MaxDeltaTemperature>
+        <Dimension>3</Dimension>
+    </ThermostatParameters>
+    <Cuboids>
+        <Coordinates>0.0 0.0 0.0</Coordinates>
+        <ParticlesPerDimension>5 5 5</ParticlesPerDimension>
+        <Distance>1.0</Distance>
+        <Mass>1.0</Mass>
+        <InitialVelocities>0.0 0.0 0.0</InitialVelocities>
+        <MeanVelocity>0.0</MeanVelocity>
+    </Cuboids>
+</Simulation>

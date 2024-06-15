@@ -28,11 +28,6 @@
  * @return The exit status of the program.
  */
 int main(int argc, char *argsv[]) {
-    // Example calls:
-    // ./MolSim --help
-    // ./MolSim ../resources/input-sun.txt --delta_t=0.001 --end_time=5 --output=vtk --calculator=sv
-    // ./MolSim ../resources/input-cuboid.txt --delta_t=0.001 --end_time=5 --output=vtk --calculator=lj
-
     // Set the log level to the wanted level
     std::string log_level = LOG_LEVEL;
     MolSim::setLogLevel(log_level);
