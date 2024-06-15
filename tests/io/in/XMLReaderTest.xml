@@ -15,6 +15,14 @@
         <MaxDeltaTemperature>10.0</MaxDeltaTemperature>
         <Dimension>3</Dimension>
     </ThermostatParameters>
+    <BoundaryParameters>
+        <TOP>REFLECTING</TOP>
+        <RIGHT>OUTFLOW</RIGHT>
+        <BOTTOM>REFLECTING</BOTTOM>
+        <LEFT>PERIODIC</LEFT>
+        <FRONT>OFF</FRONT>
+        <BACK>OFF</BACK>
+    </BoundaryParameters>
     <Cuboids>
         <Coordinates>0.0 0.0 0.0</Coordinates>
         <ParticlesPerDimension>5 5 5</ParticlesPerDimension>

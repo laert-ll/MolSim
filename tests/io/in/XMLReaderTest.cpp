@@ -18,5 +18,14 @@ TEST(XMLReaderTest, ReadFileTest) {
     EXPECT_NEAR(data.getThermostatParameters()->getTargetTemp(), 300.0, COMPARISON_TOLERANCE);
     EXPECT_NEAR(data.getThermostatParameters()->getMaxDeltaTemp(), 10.0, COMPARISON_TOLERANCE);
     EXPECT_EQ(data.getThermostatParameters()->getDimension(), 3);
+
+    auto boundaryMap = data.getBoundaryParameters()->getBoundaryMap();
+    EXPECT_EQ(boundaryMap[boundaries::BoundaryDirection::TOP], boundaries::BoundaryType::REFLECTING);
+    EXPECT_EQ(boundaryMap[boundaries::BoundaryDirection::RIGHT], boundaries::BoundaryType::OUTFLOW);
+    EXPECT_EQ(boundaryMap[boundaries::BoundaryDirection::BOTTOM], boundaries::BoundaryType::REFLECTING);
+    EXPECT_EQ(boundaryMap[boundaries::BoundaryDirection::LEFT], boundaries::BoundaryType::PERIODIC);
+    EXPECT_EQ(boundaryMap[boundaries::BoundaryDirection::FRONT], boundaries::BoundaryType::OFF);
+    EXPECT_EQ(boundaryMap[boundaries::BoundaryDirection::BACK], boundaries::BoundaryType::OFF);
+
     EXPECT_EQ(data.getParticleContainer()->getSize(), 125);
 }
