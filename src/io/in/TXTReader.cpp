@@ -55,8 +55,9 @@ namespace fileReaders {
         std::unique_ptr<FileWriterParameters> fileWriterParameters = std::make_unique<FileWriterParameters>();
         std::unique_ptr<SimulationParameters> simulationParameters = std::make_unique<SimulationParameters>();
         std::unique_ptr<ThermostatParameters> thermostatParameters = std::make_unique<ThermostatParameters>();
+        std::unique_ptr<BoundaryParameters> boundaryParameters = std::make_unique<BoundaryParameters>();
         SimulationDataContainer simulationDataContainer(std::move(particleContainer), std::move(fileWriterParameters), std::move(simulationParameters),
-                                                        std::move(thermostatParameters));
+                                                        std::move(thermostatParameters), std::move(boundaryParameters));
         return simulationDataContainer;
     }
 

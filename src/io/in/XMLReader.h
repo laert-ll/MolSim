@@ -19,6 +19,10 @@ namespace fileReaders {
         static SimulationParameters loadSimulationParameters(const Simulation &simulation);
 
         static ThermostatParameters loadThermostatParameters(const Simulation &simulation);
+
+        static BoundaryParameters loadBoundaryParameters(const Simulation &simulation);
+
+        static boundaries::BoundaryType stringToBoundaryType(const std::string &boundaryTypeStr);
     };
 
 }  // namespace fileReaders

@@ -18,11 +18,13 @@ namespace fileReaders {
         std::unique_ptr<FileWriterParameters> fileWriterParameters = std::make_unique<FileWriterParameters>(loadFileWriterParameters(*simulation));
         std::unique_ptr<SimulationParameters> simulationParameters = std::make_unique<SimulationParameters>(loadSimulationParameters(*simulation));
         std::unique_ptr<ThermostatParameters> thermostatParameters = std::make_unique<ThermostatParameters>(loadThermostatParameters(*simulation));
+        std::unique_ptr<BoundaryParameters> boundaryParameters = std::make_unique<BoundaryParameters>(loadBoundaryParameters(*simulation));
 
         SimulationDataContainer simulationDataContainer(std::move(particleContainer),
                                                         std::move(fileWriterParameters),
                                                         std::move(simulationParameters),
-                                                        std::move(thermostatParameters));
+                                                        std::move(thermostatParameters),
+                                                        std::move(boundaryParameters));
 
         return simulationDataContainer;
     }
@@ -42,6 +44,35 @@ namespace fileReaders {
         return {thermostatParametersParsed.StartTemperature(), thermostatParametersParsed.TargetTemperature(),
                 thermostatParametersParsed.ApplyFrequency(), thermostatParametersParsed.MaxDeltaTemperature(),
                 thermostatParametersParsed.Dimension()};
+    }
+
+    BoundaryParameters XMLReader::loadBoundaryParameters(const Simulation &simulation) {
+        const auto &boundaryParametersParsed = simulation.BoundaryParameters();
+
+        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
+
+        boundaryMap[boundaries::BoundaryDirection::TOP] = stringToBoundaryType(boundaryParametersParsed.TOP());
+        boundaryMap[boundaries::BoundaryDirection::RIGHT] = stringToBoundaryType(boundaryParametersParsed.RIGHT());
+        boundaryMap[boundaries::BoundaryDirection::BOTTOM] = stringToBoundaryType(boundaryParametersParsed.BOTTOM());
+        boundaryMap[boundaries::BoundaryDirection::LEFT] = stringToBoundaryType(boundaryParametersParsed.LEFT());
+        boundaryMap[boundaries::BoundaryDirection::FRONT] = stringToBoundaryType(boundaryParametersParsed.FRONT());
+        boundaryMap[boundaries::BoundaryDirection::BACK] = stringToBoundaryType(boundaryParametersParsed.BACK());
+
+        return BoundaryParameters(boundaryMap);
+    }
+
+    boundaries::BoundaryType XMLReader::stringToBoundaryType(const std::string& boundaryTypeStr) {
+        if (boundaryTypeStr == "REFLECTING") {
+            return boundaries::BoundaryType::REFLECTING;
+        } else if (boundaryTypeStr == "OUTFLOW") {
+            return boundaries::BoundaryType::OUTFLOW;
+        } else if (boundaryTypeStr == "PERIODIC") {
+            return boundaries::BoundaryType::PERIODIC;
+        } else if (boundaryTypeStr == "OFF") {
+            return boundaries::BoundaryType::OFF;
+        } else {
+            throw std::invalid_argument("Invalid boundary type string: " + boundaryTypeStr);
+        }
     }
 
     void XMLReader::loadCuboids(const Simulation &simulation, ParticleContainer &particleContainer) {

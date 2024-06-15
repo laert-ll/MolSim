@@ -220,6 +220,199 @@ Dimension (const Dimension_type& x)
 }
 
 
+// BoundaryType
+//
+
+BoundaryType::
+BoundaryType (value v)
+: ::xml_schema::string (_xsd_BoundaryType_literals_[v])
+{
+}
+
+BoundaryType::
+BoundaryType (const char* v)
+: ::xml_schema::string (v)
+{
+}
+
+BoundaryType::
+BoundaryType (const ::std::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+BoundaryType::
+BoundaryType (const ::xml_schema::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+BoundaryType::
+BoundaryType (const BoundaryType& v,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (v, f, c)
+{
+}
+
+BoundaryType& BoundaryType::
+operator= (value v)
+{
+  static_cast< ::xml_schema::string& > (*this) = 
+  ::xml_schema::string (_xsd_BoundaryType_literals_[v]);
+
+  return *this;
+}
+
+
+// BoundaryParametersType
+//
+
+const BoundaryParametersType::TOP_type& BoundaryParametersType::
+TOP () const
+{
+  return this->TOP_.get ();
+}
+
+BoundaryParametersType::TOP_type& BoundaryParametersType::
+TOP ()
+{
+  return this->TOP_.get ();
+}
+
+void BoundaryParametersType::
+TOP (const TOP_type& x)
+{
+  this->TOP_.set (x);
+}
+
+void BoundaryParametersType::
+TOP (::std::unique_ptr< TOP_type > x)
+{
+  this->TOP_.set (std::move (x));
+}
+
+const BoundaryParametersType::RIGHT_type& BoundaryParametersType::
+RIGHT () const
+{
+  return this->RIGHT_.get ();
+}
+
+BoundaryParametersType::RIGHT_type& BoundaryParametersType::
+RIGHT ()
+{
+  return this->RIGHT_.get ();
+}
+
+void BoundaryParametersType::
+RIGHT (const RIGHT_type& x)
+{
+  this->RIGHT_.set (x);
+}
+
+void BoundaryParametersType::
+RIGHT (::std::unique_ptr< RIGHT_type > x)
+{
+  this->RIGHT_.set (std::move (x));
+}
+
+const BoundaryParametersType::BOTTOM_type& BoundaryParametersType::
+BOTTOM () const
+{
+  return this->BOTTOM_.get ();
+}
+
+BoundaryParametersType::BOTTOM_type& BoundaryParametersType::
+BOTTOM ()
+{
+  return this->BOTTOM_.get ();
+}
+
+void BoundaryParametersType::
+BOTTOM (const BOTTOM_type& x)
+{
+  this->BOTTOM_.set (x);
+}
+
+void BoundaryParametersType::
+BOTTOM (::std::unique_ptr< BOTTOM_type > x)
+{
+  this->BOTTOM_.set (std::move (x));
+}
+
+const BoundaryParametersType::LEFT_type& BoundaryParametersType::
+LEFT () const
+{
+  return this->LEFT_.get ();
+}
+
+BoundaryParametersType::LEFT_type& BoundaryParametersType::
+LEFT ()
+{
+  return this->LEFT_.get ();
+}
+
+void BoundaryParametersType::
+LEFT (const LEFT_type& x)
+{
+  this->LEFT_.set (x);
+}
+
+void BoundaryParametersType::
+LEFT (::std::unique_ptr< LEFT_type > x)
+{
+  this->LEFT_.set (std::move (x));
+}
+
+const BoundaryParametersType::FRONT_type& BoundaryParametersType::
+FRONT () const
+{
+  return this->FRONT_.get ();
+}
+
+BoundaryParametersType::FRONT_type& BoundaryParametersType::
+FRONT ()
+{
+  return this->FRONT_.get ();
+}
+
+void BoundaryParametersType::
+FRONT (const FRONT_type& x)
+{
+  this->FRONT_.set (x);
+}
+
+void BoundaryParametersType::
+FRONT (::std::unique_ptr< FRONT_type > x)
+{
+  this->FRONT_.set (std::move (x));
+}
+
+const BoundaryParametersType::BACK_type& BoundaryParametersType::
+BACK () const
+{
+  return this->BACK_.get ();
+}
+
+BoundaryParametersType::BACK_type& BoundaryParametersType::
+BACK ()
+{
+  return this->BACK_.get ();
+}
+
+void BoundaryParametersType::
+BACK (const BACK_type& x)
+{
+  this->BACK_.set (x);
+}
+
+void BoundaryParametersType::
+BACK (::std::unique_ptr< BACK_type > x)
+{
+  this->BACK_.set (std::move (x));
+}
+
+
 // CuboidType
 //
 
@@ -423,6 +616,30 @@ void Simulation::
 ThermostatParameters (::std::unique_ptr< ThermostatParameters_type > x)
 {
   this->ThermostatParameters_.set (std::move (x));
+}
+
+const Simulation::BoundaryParameters_type& Simulation::
+BoundaryParameters () const
+{
+  return this->BoundaryParameters_.get ();
+}
+
+Simulation::BoundaryParameters_type& Simulation::
+BoundaryParameters ()
+{
+  return this->BoundaryParameters_.get ();
+}
+
+void Simulation::
+BoundaryParameters (const BoundaryParameters_type& x)
+{
+  this->BoundaryParameters_.set (x);
+}
+
+void Simulation::
+BoundaryParameters (::std::unique_ptr< BoundaryParameters_type > x)
+{
+  this->BoundaryParameters_.set (std::move (x));
 }
 
 const Simulation::Cuboids_sequence& Simulation::
@@ -854,6 +1071,302 @@ ThermostatParametersType::
 {
 }
 
+// BoundaryType
+//
+
+BoundaryType::
+BoundaryType (const ::xercesc::DOMElement& e,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (e, f, c)
+{
+  _xsd_BoundaryType_convert ();
+}
+
+BoundaryType::
+BoundaryType (const ::xercesc::DOMAttr& a,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (a, f, c)
+{
+  _xsd_BoundaryType_convert ();
+}
+
+BoundaryType::
+BoundaryType (const ::std::string& s,
+              const ::xercesc::DOMElement* e,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (s, e, f, c)
+{
+  _xsd_BoundaryType_convert ();
+}
+
+BoundaryType* BoundaryType::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class BoundaryType (*this, f, c);
+}
+
+BoundaryType::value BoundaryType::
+_xsd_BoundaryType_convert () const
+{
+  ::xsd::cxx::tree::enum_comparator< char > c (_xsd_BoundaryType_literals_);
+  const value* i (::std::lower_bound (
+                    _xsd_BoundaryType_indexes_,
+                    _xsd_BoundaryType_indexes_ + 4,
+                    *this,
+                    c));
+
+  if (i == _xsd_BoundaryType_indexes_ + 4 || _xsd_BoundaryType_literals_[*i] != *this)
+  {
+    throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
+  }
+
+  return *i;
+}
+
+const char* const BoundaryType::
+_xsd_BoundaryType_literals_[4] =
+{
+  "REFLECTING",
+  "OUTFLOW",
+  "PERIODIC",
+  "OFF"
+};
+
+const BoundaryType::value BoundaryType::
+_xsd_BoundaryType_indexes_[4] =
+{
+  ::BoundaryType::OFF,
+  ::BoundaryType::OUTFLOW,
+  ::BoundaryType::PERIODIC,
+  ::BoundaryType::REFLECTING
+};
+
+// BoundaryParametersType
+//
+
+BoundaryParametersType::
+BoundaryParametersType (const TOP_type& TOP,
+                        const RIGHT_type& RIGHT,
+                        const BOTTOM_type& BOTTOM,
+                        const LEFT_type& LEFT,
+                        const FRONT_type& FRONT,
+                        const BACK_type& BACK)
+: ::xml_schema::type (),
+  TOP_ (TOP, this),
+  RIGHT_ (RIGHT, this),
+  BOTTOM_ (BOTTOM, this),
+  LEFT_ (LEFT, this),
+  FRONT_ (FRONT, this),
+  BACK_ (BACK, this)
+{
+}
+
+BoundaryParametersType::
+BoundaryParametersType (const BoundaryParametersType& x,
+                        ::xml_schema::flags f,
+                        ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  TOP_ (x.TOP_, f, this),
+  RIGHT_ (x.RIGHT_, f, this),
+  BOTTOM_ (x.BOTTOM_, f, this),
+  LEFT_ (x.LEFT_, f, this),
+  FRONT_ (x.FRONT_, f, this),
+  BACK_ (x.BACK_, f, this)
+{
+}
+
+BoundaryParametersType::
+BoundaryParametersType (const ::xercesc::DOMElement& e,
+                        ::xml_schema::flags f,
+                        ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  TOP_ (this),
+  RIGHT_ (this),
+  BOTTOM_ (this),
+  LEFT_ (this),
+  FRONT_ (this),
+  BACK_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void BoundaryParametersType::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // TOP
+    //
+    if (n.name () == "TOP" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< TOP_type > r (
+        TOP_traits::create (i, f, this));
+
+      if (!TOP_.present ())
+      {
+        this->TOP_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // RIGHT
+    //
+    if (n.name () == "RIGHT" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< RIGHT_type > r (
+        RIGHT_traits::create (i, f, this));
+
+      if (!RIGHT_.present ())
+      {
+        this->RIGHT_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // BOTTOM
+    //
+    if (n.name () == "BOTTOM" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< BOTTOM_type > r (
+        BOTTOM_traits::create (i, f, this));
+
+      if (!BOTTOM_.present ())
+      {
+        this->BOTTOM_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // LEFT
+    //
+    if (n.name () == "LEFT" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< LEFT_type > r (
+        LEFT_traits::create (i, f, this));
+
+      if (!LEFT_.present ())
+      {
+        this->LEFT_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // FRONT
+    //
+    if (n.name () == "FRONT" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< FRONT_type > r (
+        FRONT_traits::create (i, f, this));
+
+      if (!FRONT_.present ())
+      {
+        this->FRONT_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // BACK
+    //
+    if (n.name () == "BACK" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< BACK_type > r (
+        BACK_traits::create (i, f, this));
+
+      if (!BACK_.present ())
+      {
+        this->BACK_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!TOP_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "TOP",
+      "");
+  }
+
+  if (!RIGHT_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "RIGHT",
+      "");
+  }
+
+  if (!BOTTOM_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "BOTTOM",
+      "");
+  }
+
+  if (!LEFT_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "LEFT",
+      "");
+  }
+
+  if (!FRONT_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "FRONT",
+      "");
+  }
+
+  if (!BACK_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "BACK",
+      "");
+  }
+}
+
+BoundaryParametersType* BoundaryParametersType::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class BoundaryParametersType (*this, f, c);
+}
+
+BoundaryParametersType& BoundaryParametersType::
+operator= (const BoundaryParametersType& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->TOP_ = x.TOP_;
+    this->RIGHT_ = x.RIGHT_;
+    this->BOTTOM_ = x.BOTTOM_;
+    this->LEFT_ = x.LEFT_;
+    this->FRONT_ = x.FRONT_;
+    this->BACK_ = x.BACK_;
+  }
+
+  return *this;
+}
+
+BoundaryParametersType::
+~BoundaryParametersType ()
+{
+}
+
 // CuboidType
 //
 
@@ -1073,11 +1586,13 @@ CuboidType::
 Simulation::
 Simulation (const FileWriterParameters_type& FileWriterParameters,
             const SimulationParameters_type& SimulationParameters,
-            const ThermostatParameters_type& ThermostatParameters)
+            const ThermostatParameters_type& ThermostatParameters,
+            const BoundaryParameters_type& BoundaryParameters)
 : ::xml_schema::type (),
   FileWriterParameters_ (FileWriterParameters, this),
   SimulationParameters_ (SimulationParameters, this),
   ThermostatParameters_ (ThermostatParameters, this),
+  BoundaryParameters_ (BoundaryParameters, this),
   Cuboids_ (this)
 {
 }
@@ -1085,11 +1600,13 @@ Simulation (const FileWriterParameters_type& FileWriterParameters,
 Simulation::
 Simulation (::std::unique_ptr< FileWriterParameters_type > FileWriterParameters,
             ::std::unique_ptr< SimulationParameters_type > SimulationParameters,
-            ::std::unique_ptr< ThermostatParameters_type > ThermostatParameters)
+            ::std::unique_ptr< ThermostatParameters_type > ThermostatParameters,
+            ::std::unique_ptr< BoundaryParameters_type > BoundaryParameters)
 : ::xml_schema::type (),
   FileWriterParameters_ (std::move (FileWriterParameters), this),
   SimulationParameters_ (std::move (SimulationParameters), this),
   ThermostatParameters_ (std::move (ThermostatParameters), this),
+  BoundaryParameters_ (std::move (BoundaryParameters), this),
   Cuboids_ (this)
 {
 }
@@ -1102,6 +1619,7 @@ Simulation (const Simulation& x,
   FileWriterParameters_ (x.FileWriterParameters_, f, this),
   SimulationParameters_ (x.SimulationParameters_, f, this),
   ThermostatParameters_ (x.ThermostatParameters_, f, this),
+  BoundaryParameters_ (x.BoundaryParameters_, f, this),
   Cuboids_ (x.Cuboids_, f, this)
 {
 }
@@ -1114,6 +1632,7 @@ Simulation (const ::xercesc::DOMElement& e,
   FileWriterParameters_ (this),
   SimulationParameters_ (this),
   ThermostatParameters_ (this),
+  BoundaryParameters_ (this),
   Cuboids_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
@@ -1175,6 +1694,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // BoundaryParameters
+    //
+    if (n.name () == "BoundaryParameters" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< BoundaryParameters_type > r (
+        BoundaryParameters_traits::create (i, f, this));
+
+      if (!BoundaryParameters_.present ())
+      {
+        this->BoundaryParameters_.set (::std::move (r));
+        continue;
+      }
+    }
+
     // Cuboids
     //
     if (n.name () == "Cuboids" && n.namespace_ ().empty ())
@@ -1209,6 +1742,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "ThermostatParameters",
       "");
   }
+
+  if (!BoundaryParameters_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "BoundaryParameters",
+      "");
+  }
 }
 
 Simulation* Simulation::
@@ -1227,6 +1767,7 @@ operator= (const Simulation& x)
     this->FileWriterParameters_ = x.FileWriterParameters_;
     this->SimulationParameters_ = x.SimulationParameters_;
     this->ThermostatParameters_ = x.ThermostatParameters_;
+    this->BoundaryParameters_ = x.BoundaryParameters_;
     this->Cuboids_ = x.Cuboids_;
   }
 

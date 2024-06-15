@@ -8,15 +8,18 @@
 #include "FileWriterParameters.h"
 #include "SimulationParameters.h"
 #include "ThermostatParameters.h"
+#include "BoundaryParameters.h"
 
 #include <memory>
 
 class SimulationDataContainer {
 public:
     SimulationDataContainer(std::unique_ptr<ParticleContainer> particleContainer, std::unique_ptr<FileWriterParameters> fileWriterParameters,
-                            std::unique_ptr<SimulationParameters> simulationParameters, std::unique_ptr<ThermostatParameters> thermostatParameters)
+                            std::unique_ptr<SimulationParameters> simulationParameters, std::unique_ptr<ThermostatParameters> thermostatParameters,
+                            std::unique_ptr<BoundaryParameters> boundaryParameters)
             : particleContainer(std::move(particleContainer)), fileWriterParameters(std::move(fileWriterParameters)),
-              simulationParameters(std::move(simulationParameters)), thermostatParameters(std::move(thermostatParameters)) {}
+              simulationParameters(std::move(simulationParameters)), thermostatParameters(std::move(thermostatParameters)),
+              boundaryParameters(std::move(boundaryParameters)){}
 
     [[nodiscard]] ParticleContainer* getParticleContainer() const {
         return particleContainer.get();
@@ -34,9 +37,14 @@ public:
         return thermostatParameters.get();
     }
 
+    [[nodiscard]] BoundaryParameters* getBoundaryParameters() const {
+        return boundaryParameters.get();
+    }
+
 private:
     std::unique_ptr<ParticleContainer> particleContainer;
     std::unique_ptr<FileWriterParameters> fileWriterParameters;
     std::unique_ptr<SimulationParameters> simulationParameters;
     std::unique_ptr<ThermostatParameters> thermostatParameters;
+    std::unique_ptr<BoundaryParameters> boundaryParameters;
 };
