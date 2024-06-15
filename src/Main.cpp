@@ -36,13 +36,12 @@ int main(int argc, char *argsv[]) {
     // Set the log level to the wanted level
     std::string log_level = LOG_LEVEL;
     MolSim::setLogLevel(log_level);
-
     std::string inputFilePath;
     double delta_t;
     double end_time;
     std::unique_ptr<outputWriters::FileWriter> outputWriter;
     std::unique_ptr<calculators::Calculator> calculator;
-    std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
+    std::unique_ptr<std::map<boundaries::BoundaryDirection, boundaries::BoundaryType>> boundaryMap;
     std::unique_ptr<Thermostat> thermostat = std::make_unique<Thermostat>(10, 20, 5, 1, 3);;
 
     if (!MolSim::processArguments(argc, argsv, inputFilePath, delta_t, end_time, outputWriter, calculator, boundaryMap)) {

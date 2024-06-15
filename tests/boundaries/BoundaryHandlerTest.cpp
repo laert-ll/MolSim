@@ -33,23 +33,20 @@ namespace boundaries {
         SPDLOG_INFO("Testing Reflections...");
         std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
         std::array<double, 2> domain = {20.0, 20.0};
+        boundaryMap.emplace(boundaries::BoundaryDirection::LEFT, boundaries::BoundaryType::OUTFLOW);
+        boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::OUTFLOW);
+        boundaryMap.emplace(boundaries::BoundaryDirection::TOP, boundaries::BoundaryType::OUTFLOW);
+        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
         std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
         boundaries::BoundaryHandler handler{properties, calculator.get()};
-        std::ofstream outfile("particles_near_reflecting_boundary.txt");
-        outfile << "0\n"  // Data code for Particles
-                << "4\n"  // Number of data sets
-                << "2\n"  // Dimension of simulation
-                << "10.0 0.5 0.0     0.0 3.0 0.0      1.0\n" // Bottom
-                << "10.0 19.5 0.0    0.0 3.0 0.0      1.0\n" // Top
-                << "0.5 10.0 0.0     -3.0 0.0 0.0     1.0\n" // Left
-                << "19.5 10.0 0.0    3.0 0.0 0.0      1.0\n";// Right
-        outfile.close();
 
-        // Read cuboid data from the file
-        SimulationDataContainer simulationDataContainer = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
-        ParticleContainer container = simulationDataContainer.getParticleContainer();
+        ParticleContainer container{};
+        container.addParticle(Particle{std::array<double, 3>{10.0, 0.5, 0.0}, std::array<double, 3>{0.0, 3.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{10.0, 19.5, 0.0}, std::array<double, 3>{0.0, 3.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{0.5, 10., 0.0}, std::array<double, 3>{0.0, 3.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{19.5, 10., 0.0}, std::array<double, 3>{0.0, 3.0, 0.0}, 1.0, 0.0});
         std::remove("particles_near_reflecting_boundary");
 
         // Check if Force of all Particles is zero
@@ -75,6 +72,10 @@ namespace boundaries {
         std::array<double, 2> domain = {20.0, 20.0};
         std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
+        boundaryMap[BoundaryDirection::TOP] = boundaries::BoundaryType::REFLECTING;
+        boundaryMap[BoundaryDirection::BOTTOM] = boundaries::BoundaryType::REFLECTING;
+        boundaryMap[BoundaryDirection::LEFT] = boundaries::BoundaryType::REFLECTING;
+        boundaryMap[BoundaryDirection::RIGHT] = boundaries::BoundaryType::REFLECTING;
         // Initialization of BoundaryHandler
         boundaries::BoundaryHandler handler{properties, calculator.get()};
         std::ofstream outfile("particles_near_reflecting_boundary.txt");
@@ -158,7 +159,8 @@ namespace boundaries {
         std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
         boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
         boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::OUTFLOW);
-
+        boundaryMap[BoundaryDirection::TOP] = boundaries::BoundaryType::REFLECTING;
+        boundaryMap[BoundaryDirection::LEFT] = boundaries::BoundaryType::REFLECTING;
         std::array<double, 2> domain = {20.0, 20.0};
         std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
@@ -231,14 +233,13 @@ namespace boundaries {
     }
 
     TEST(BoundaryHandlerTest, PeriodicBoundaries) {
-        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
-        boundaryMap.emplace(boundaries::BoundaryDirection::LEFT, boundaries::BoundaryType::OUTFLOW);
-        boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::OUTFLOW);
-        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
-        boundaryMap.emplace(boundaries::BoundaryDirection::TOP, boundaries::BoundaryType::OUTFLOW);
-
         std::array<double, 2> domain = {20.0, 20.0};
         std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
+        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
+        boundaryMap[BoundaryDirection::TOP] = boundaries::BoundaryType::PERIODIC;
+        boundaryMap[BoundaryDirection::BOTTOM] = boundaries::BoundaryType::PERIODIC;
+        boundaryMap[BoundaryDirection::LEFT] = boundaries::BoundaryType::PERIODIC;
+        boundaryMap[BoundaryDirection::RIGHT] = boundaries::BoundaryType::PERIODIC;
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
         boundaries::BoundaryHandler handler{properties, calculator.get()};
@@ -292,6 +293,10 @@ namespace boundaries {
     // Check if the forces after reflection are correct
     TEST(BoundaryHandlerTest, CornerPeriodic) {
         std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
+        boundaryMap[BoundaryDirection::TOP] = boundaries::BoundaryType::PERIODIC;
+        boundaryMap[BoundaryDirection::BOTTOM] = boundaries::BoundaryType::PERIODIC;
+        boundaryMap[BoundaryDirection::LEFT] = boundaries::BoundaryType::PERIODIC;
+        boundaryMap[BoundaryDirection::RIGHT] = boundaries::BoundaryType::PERIODIC;
         std::array<double, 2> domain = {20.0, 20.0};
         std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
