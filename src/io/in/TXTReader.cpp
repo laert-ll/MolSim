@@ -35,16 +35,16 @@ namespace fileReaders {
         // Log the data code
         SPDLOG_INFO("Data Code of file '{}': {}", filepath, dataCode);
         // Load particles or cuboid based on data code
-        ParticleContainer particleContainer;
+        std::unique_ptr<ParticleContainer> particleContainer = std::make_unique<ParticleContainer>();
         switch (dataCode) {
             case 0:
-                loadParticles(lines, particleContainer);
+                loadParticles(lines, *particleContainer);
                 break;
             case 1:
-                loadCuboids(lines, particleContainer);
+                loadCuboids(lines, *particleContainer);
                 break;
             case 2:
-                loadDiscs(lines, particleContainer);
+                loadDiscs(lines, *particleContainer);
                 break;
             default:
                 SPDLOG_ERROR("Invalid data code in file '", filepath + "': Only data codes 0 and 1 are supported.");
@@ -52,11 +52,12 @@ namespace fileReaders {
                         "Invalid data code in file '" + filepath + "': Only data codes 0 and 1 are supported.");
         }
 
-        FileWriterParameters fileWriterParameters;
-        SimulationParameters simulationParameters;
-        ThermostatParameters thermostatParameters{};
-        SimulationDataContainer simulationDataContainer(particleContainer, fileWriterParameters, simulationParameters,
-                                                        thermostatParameters);
+        std::unique_ptr<FileWriterParameters> fileWriterParameters = std::make_unique<FileWriterParameters>();
+        std::unique_ptr<SimulationParameters> simulationParameters = std::make_unique<SimulationParameters>();
+        std::unique_ptr<ThermostatParameters> thermostatParameters = std::make_unique<ThermostatParameters>();
+        std::unique_ptr<BoundaryParameters> boundaryParameters = std::make_unique<BoundaryParameters>();
+        SimulationDataContainer simulationDataContainer(std::move(particleContainer), std::move(fileWriterParameters), std::move(simulationParameters),
+                                                        std::move(thermostatParameters), std::move(boundaryParameters));
         return simulationDataContainer;
     }
 

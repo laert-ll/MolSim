@@ -15,11 +15,11 @@ public:
             : baseName(std::move(baseName)), writeFrequency(writeFrequency) {}
 
 
-    [[nodiscard]] const std::string &getBaseName() const {
+    const std::string &getBaseName() const {
         return baseName;
     }
 
-    [[nodiscard]] int getWriteFrequency() const {
+    int getWriteFrequency() const {
         return writeFrequency;
     }
 private:

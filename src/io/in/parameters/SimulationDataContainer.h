@@ -8,34 +8,43 @@
 #include "FileWriterParameters.h"
 #include "SimulationParameters.h"
 #include "ThermostatParameters.h"
+#include "BoundaryParameters.h"
+
+#include <memory>
 
 class SimulationDataContainer {
 public:
-    SimulationDataContainer(ParticleContainer &particleContainer, FileWriterParameters &fileWriterParameters,
-                            SimulationParameters &simulationParameters, ThermostatParameters &thermostatParameters)
-            : particleContainer(particleContainer), fileWriterParameters(fileWriterParameters),
-              simulationParameters(simulationParameters), thermostatParameters(thermostatParameters) {}
+    SimulationDataContainer(std::unique_ptr<ParticleContainer> particleContainer, std::unique_ptr<FileWriterParameters> fileWriterParameters,
+                            std::unique_ptr<SimulationParameters> simulationParameters, std::unique_ptr<ThermostatParameters> thermostatParameters,
+                            std::unique_ptr<BoundaryParameters> boundaryParameters)
+            : particleContainer(std::move(particleContainer)), fileWriterParameters(std::move(fileWriterParameters)),
+              simulationParameters(std::move(simulationParameters)), thermostatParameters(std::move(thermostatParameters)),
+              boundaryParameters(std::move(boundaryParameters)){}
 
-    [[nodiscard]] ParticleContainer &getParticleContainer() const {
-        return particleContainer;
+    [[nodiscard]] ParticleContainer* getParticleContainer() const {
+        return particleContainer.get();
     }
 
-    [[nodiscard]] FileWriterParameters &getFileWriterParameters() const {
-        return fileWriterParameters;
+    [[nodiscard]] FileWriterParameters* getFileWriterParameters() const {
+        return fileWriterParameters.get();
     }
 
-    [[nodiscard]] SimulationParameters &getSimulationParameters() const {
-        return simulationParameters;
+    [[nodiscard]] SimulationParameters* getSimulationParameters() const {
+        return simulationParameters.get();
     }
 
-    [[nodiscard]] ThermostatParameters &getThermostatParameters() const {
-        return thermostatParameters;
+    [[nodiscard]] ThermostatParameters* getThermostatParameters() const {
+        return thermostatParameters.get();
+    }
+
+    [[nodiscard]] BoundaryParameters* getBoundaryParameters() const {
+        return boundaryParameters.get();
     }
 
 private:
-    ParticleContainer &particleContainer;
-    FileWriterParameters &fileWriterParameters;
-    SimulationParameters &simulationParameters;
-    ThermostatParameters &thermostatParameters;
-
+    std::unique_ptr<ParticleContainer> particleContainer;
+    std::unique_ptr<FileWriterParameters> fileWriterParameters;
+    std::unique_ptr<SimulationParameters> simulationParameters;
+    std::unique_ptr<ThermostatParameters> thermostatParameters;
+    std::unique_ptr<BoundaryParameters> boundaryParameters;
 };

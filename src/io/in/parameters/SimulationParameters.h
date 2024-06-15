@@ -9,11 +9,11 @@ public:
 
     SimulationParameters(double end_t, double delta_t) : end_t(end_t), delta_t(delta_t) {}
 
-    [[nodiscard]] double getEnd_t() const {
+    double getEnd_t() const {
         return end_t;
     }
 
-    [[nodiscard]] double getDelta_t() const {
+    double getDelta_t() const {
         return delta_t;
     }
 

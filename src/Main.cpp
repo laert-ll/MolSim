@@ -28,11 +28,6 @@
  * @return The exit status of the program.
  */
 int main(int argc, char *argsv[]) {
-    // Example calls:
-    // ./MolSim --help
-    // ./MolSim ../resources/input-sun.txt --delta_t=0.001 --end_time=5 --output=vtk --calculator=sv
-    // ./MolSim ../resources/input-cuboid.txt --delta_t=0.001 --end_time=5 --output=vtk --calculator=lj
-
     // Set the log level to the wanted level
     std::string log_level = LOG_LEVEL;
     MolSim::setLogLevel(log_level);
@@ -41,7 +36,7 @@ int main(int argc, char *argsv[]) {
     double end_time;
     std::unique_ptr<outputWriters::FileWriter> outputWriter;
     std::unique_ptr<calculators::Calculator> calculator;
-    std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
+    std::unique_ptr<std::map<boundaries::BoundaryDirection, boundaries::BoundaryType>> boundaryMap;
     std::unique_ptr<Thermostat> thermostat = std::make_unique<Thermostat>(10, 20, 5, 1, 3);;
 
     if (!MolSim::processArguments(argc, argsv, inputFilePath, delta_t, end_time, outputWriter, calculator, boundaryMap)) {
@@ -53,7 +48,7 @@ int main(int argc, char *argsv[]) {
 
     SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
 
-    MolSim::performSimulation(simulationDataContainer.getParticleContainer(), delta_t, end_time, outputWriter, calculator, boundaryMap, thermostat);
+    MolSim::performSimulation(*simulationDataContainer.getParticleContainer(), delta_t, end_time, outputWriter, calculator, boundaryMap, thermostat);
 
     SPDLOG_INFO("Simulation completed.");
 

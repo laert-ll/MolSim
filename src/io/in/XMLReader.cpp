@@ -7,31 +7,79 @@
 
 namespace fileReaders {
 
-    SimulationDataContainer XMLReader::readFile(const std::string& filepath) {
+    SimulationDataContainer XMLReader::readFile(const std::string &filepath) {
         SPDLOG_INFO("Reading XML file: {}", filepath);
 
-        std::unique_ptr<Simulation> simulation  = Simulation_(filepath);
-        const auto& fileWriterParameters = simulation->FileWriterParameters();
-        const auto& simulationParameters = simulation->SimulationParameters();
-        const auto& thermostatParameters = simulation->ThermostatParameters();
+        std::unique_ptr<Simulation> simulation = Simulation_(filepath);
 
+        std::unique_ptr<ParticleContainer> particleContainer = std::make_unique<ParticleContainer>();
+        loadCuboids(*simulation, *particleContainer);
 
-        ParticleContainer particleContainer;
-        loadCuboids(*simulation, particleContainer);
+        std::unique_ptr<FileWriterParameters> fileWriterParameters = std::make_unique<FileWriterParameters>(loadFileWriterParameters(*simulation));
+        std::unique_ptr<SimulationParameters> simulationParameters = std::make_unique<SimulationParameters>(loadSimulationParameters(*simulation));
+        std::unique_ptr<ThermostatParameters> thermostatParameters = std::make_unique<ThermostatParameters>(loadThermostatParameters(*simulation));
+        std::unique_ptr<BoundaryParameters> boundaryParameters = std::make_unique<BoundaryParameters>(loadBoundaryParameters(*simulation));
 
-        SimulationDataContainer simulationDataContainer(particleContainer,
-                                                        (FileWriterParameters &) fileWriterParameters,
-                                                        (SimulationParameters &) simulationParameters,
-                                                        (ThermostatParameters &) thermostatParameters);
+        SimulationDataContainer simulationDataContainer(std::move(particleContainer),
+                                                        std::move(fileWriterParameters),
+                                                        std::move(simulationParameters),
+                                                        std::move(thermostatParameters),
+                                                        std::move(boundaryParameters));
 
         return simulationDataContainer;
     }
 
-    void XMLReader::loadCuboids(const Simulation& simulation, ParticleContainer& particleContainer) {
-        SPDLOG_INFO("Starting to load cuboids...");
-        const auto& cuboids = simulation.Cuboids();
+    FileWriterParameters XMLReader::loadFileWriterParameters(const Simulation &simulation) {
+        const auto &fileWriterParametersParsed = simulation.FileWriterParameters();
+        return {fileWriterParametersParsed.BaseName(), fileWriterParametersParsed.WriteFrequency()};
+    }
 
-        for (const auto& cuboid : cuboids) {
+    SimulationParameters XMLReader::loadSimulationParameters(const Simulation &simulation) {
+        const auto &simulationParametersParsed = simulation.SimulationParameters();
+        return {simulationParametersParsed.EndT(), simulationParametersParsed.DeltaT()};
+    }
+
+    ThermostatParameters XMLReader::loadThermostatParameters(const Simulation &simulation) {
+        const auto &thermostatParametersParsed = simulation.ThermostatParameters();
+        return {thermostatParametersParsed.StartTemperature(), thermostatParametersParsed.TargetTemperature(),
+                thermostatParametersParsed.ApplyFrequency(), thermostatParametersParsed.MaxDeltaTemperature(),
+                thermostatParametersParsed.Dimension()};
+    }
+
+    BoundaryParameters XMLReader::loadBoundaryParameters(const Simulation &simulation) {
+        const auto &boundaryParametersParsed = simulation.BoundaryParameters();
+
+        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
+
+        boundaryMap[boundaries::BoundaryDirection::TOP] = stringToBoundaryType(boundaryParametersParsed.TOP());
+        boundaryMap[boundaries::BoundaryDirection::RIGHT] = stringToBoundaryType(boundaryParametersParsed.RIGHT());
+        boundaryMap[boundaries::BoundaryDirection::BOTTOM] = stringToBoundaryType(boundaryParametersParsed.BOTTOM());
+        boundaryMap[boundaries::BoundaryDirection::LEFT] = stringToBoundaryType(boundaryParametersParsed.LEFT());
+        boundaryMap[boundaries::BoundaryDirection::FRONT] = stringToBoundaryType(boundaryParametersParsed.FRONT());
+        boundaryMap[boundaries::BoundaryDirection::BACK] = stringToBoundaryType(boundaryParametersParsed.BACK());
+
+        return BoundaryParameters(boundaryMap);
+    }
+
+    boundaries::BoundaryType XMLReader::stringToBoundaryType(const std::string& boundaryTypeStr) {
+        if (boundaryTypeStr == "REFLECTING") {
+            return boundaries::BoundaryType::REFLECTING;
+        } else if (boundaryTypeStr == "OUTFLOW") {
+            return boundaries::BoundaryType::OUTFLOW;
+        } else if (boundaryTypeStr == "PERIODIC") {
+            return boundaries::BoundaryType::PERIODIC;
+        } else if (boundaryTypeStr == "OFF") {
+            return boundaries::BoundaryType::OFF;
+        } else {
+            throw std::invalid_argument("Invalid boundary type string: " + boundaryTypeStr);
+        }
+    }
+
+    void XMLReader::loadCuboids(const Simulation &simulation, ParticleContainer &particleContainer) {
+        SPDLOG_INFO("Starting to load cuboids...");
+        const auto &cuboids = simulation.Cuboids();
+
+        for (const auto &cuboid: cuboids) {
             std::array<double, 3> llf{};
             std::array<size_t, 3> numParticles{};
             std::array<double, 3> startV{};
@@ -43,9 +91,9 @@ namespace fileReaders {
             std::istringstream partDimStream(cuboid.ParticlesPerDimension());
             std::istringstream initVelStream(cuboid.InitialVelocities());
 
-            for (auto& value : llf) coordStream >> value;
-            for (auto& value : numParticles) partDimStream >> value;
-            for (auto& value : startV) initVelStream >> value;
+            for (auto &value: llf) coordStream >> value;
+            for (auto &value: numParticles) partDimStream >> value;
+            for (auto &value: startV) initVelStream >> value;
 
             CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, 3);
             ParticleGenerator::generateCuboid(cuboidParams, particleContainer);
