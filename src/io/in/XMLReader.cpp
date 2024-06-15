@@ -11,23 +11,30 @@ namespace fileReaders {
         SPDLOG_INFO("Reading XML file: {}", filepath);
 
         std::unique_ptr<Simulation> simulation  = Simulation_(filepath);
+        const auto& fileWriterParameters = simulation->FileWriterParameters();
+        const auto& simulationParameters = simulation->SimulationParameters();
+        const auto& thermostatParameters = simulation->ThermostatParameters();
 
-        const auto& inputParams = simulation->InputParameters();
 
         ParticleContainer particleContainer;
         loadCuboids(*simulation, particleContainer);
 
-        return particleContainer;
+        SimulationDataContainer simulationDataContainer(particleContainer,
+                                                        (FileWriterParameters &) fileWriterParameters,
+                                                        (SimulationParameters &) simulationParameters,
+                                                        (ThermostatParameters &) thermostatParameters);
+
+        return simulationDataContainer;
     }
 
     void XMLReader::loadCuboids(const Simulation& simulation, ParticleContainer& particleContainer) {
         SPDLOG_INFO("Starting to load cuboids...");
-        const auto& cuboids = simulation.Cuboid();
+        const auto& cuboids = simulation.Cuboids();
 
         for (const auto& cuboid : cuboids) {
-            std::array<double, 3> llf;
-            std::array<size_t, 3> numParticles;
-            std::array<double, 3> startV;
+            std::array<double, 3> llf{};
+            std::array<size_t, 3> numParticles{};
+            std::array<double, 3> startV{};
             double distance = cuboid.Distance();
             double mass = cuboid.Mass();
             double meanV = cuboid.MeanVelocity();

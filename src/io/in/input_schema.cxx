@@ -40,85 +40,183 @@
 
 #include "input_schema.hxx"
 
-// InputParametersType
+// FileWriterParametersType
 //
 
-const InputParametersType::BaseName_type& InputParametersType::
+const FileWriterParametersType::BaseName_type& FileWriterParametersType::
 BaseName () const
 {
   return this->BaseName_.get ();
 }
 
-InputParametersType::BaseName_type& InputParametersType::
+FileWriterParametersType::BaseName_type& FileWriterParametersType::
 BaseName ()
 {
   return this->BaseName_.get ();
 }
 
-void InputParametersType::
+void FileWriterParametersType::
 BaseName (const BaseName_type& x)
 {
   this->BaseName_.set (x);
 }
 
-void InputParametersType::
+void FileWriterParametersType::
 BaseName (::std::unique_ptr< BaseName_type > x)
 {
   this->BaseName_.set (std::move (x));
 }
 
-const InputParametersType::WriteFrequency_type& InputParametersType::
+const FileWriterParametersType::WriteFrequency_type& FileWriterParametersType::
 WriteFrequency () const
 {
   return this->WriteFrequency_.get ();
 }
 
-InputParametersType::WriteFrequency_type& InputParametersType::
+FileWriterParametersType::WriteFrequency_type& FileWriterParametersType::
 WriteFrequency ()
 {
   return this->WriteFrequency_.get ();
 }
 
-void InputParametersType::
+void FileWriterParametersType::
 WriteFrequency (const WriteFrequency_type& x)
 {
   this->WriteFrequency_.set (x);
 }
 
-const InputParametersType::DeltaT_type& InputParametersType::
+
+// SimulationParametersType
+//
+
+const SimulationParametersType::EndT_type& SimulationParametersType::
+EndT () const
+{
+  return this->EndT_.get ();
+}
+
+SimulationParametersType::EndT_type& SimulationParametersType::
+EndT ()
+{
+  return this->EndT_.get ();
+}
+
+void SimulationParametersType::
+EndT (const EndT_type& x)
+{
+  this->EndT_.set (x);
+}
+
+const SimulationParametersType::DeltaT_type& SimulationParametersType::
 DeltaT () const
 {
   return this->DeltaT_.get ();
 }
 
-InputParametersType::DeltaT_type& InputParametersType::
+SimulationParametersType::DeltaT_type& SimulationParametersType::
 DeltaT ()
 {
   return this->DeltaT_.get ();
 }
 
-void InputParametersType::
+void SimulationParametersType::
 DeltaT (const DeltaT_type& x)
 {
   this->DeltaT_.set (x);
 }
 
-const InputParametersType::EndTime_type& InputParametersType::
-EndTime () const
+
+// ThermostatParametersType
+//
+
+const ThermostatParametersType::StartTemperature_type& ThermostatParametersType::
+StartTemperature () const
 {
-  return this->EndTime_.get ();
+  return this->StartTemperature_.get ();
 }
 
-InputParametersType::EndTime_type& InputParametersType::
-EndTime ()
+ThermostatParametersType::StartTemperature_type& ThermostatParametersType::
+StartTemperature ()
 {
-  return this->EndTime_.get ();
+  return this->StartTemperature_.get ();
 }
 
-void InputParametersType::
-EndTime (const EndTime_type& x)
+void ThermostatParametersType::
+StartTemperature (const StartTemperature_type& x)
 {
-  this->EndTime_.set (x);
+  this->StartTemperature_.set (x);
+}
+
+const ThermostatParametersType::TargetTemperature_type& ThermostatParametersType::
+TargetTemperature () const
+{
+  return this->TargetTemperature_.get ();
+}
+
+ThermostatParametersType::TargetTemperature_type& ThermostatParametersType::
+TargetTemperature ()
+{
+  return this->TargetTemperature_.get ();
+}
+
+void ThermostatParametersType::
+TargetTemperature (const TargetTemperature_type& x)
+{
+  this->TargetTemperature_.set (x);
+}
+
+const ThermostatParametersType::ApplyFrequency_type& ThermostatParametersType::
+ApplyFrequency () const
+{
+  return this->ApplyFrequency_.get ();
+}
+
+ThermostatParametersType::ApplyFrequency_type& ThermostatParametersType::
+ApplyFrequency ()
+{
+  return this->ApplyFrequency_.get ();
+}
+
+void ThermostatParametersType::
+ApplyFrequency (const ApplyFrequency_type& x)
+{
+  this->ApplyFrequency_.set (x);
+}
+
+const ThermostatParametersType::MaxDeltaTemperature_type& ThermostatParametersType::
+MaxDeltaTemperature () const
+{
+  return this->MaxDeltaTemperature_.get ();
+}
+
+ThermostatParametersType::MaxDeltaTemperature_type& ThermostatParametersType::
+MaxDeltaTemperature ()
+{
+  return this->MaxDeltaTemperature_.get ();
+}
+
+void ThermostatParametersType::
+MaxDeltaTemperature (const MaxDeltaTemperature_type& x)
+{
+  this->MaxDeltaTemperature_.set (x);
+}
+
+const ThermostatParametersType::Dimension_type& ThermostatParametersType::
+Dimension () const
+{
+  return this->Dimension_.get ();
+}
+
+ThermostatParametersType::Dimension_type& ThermostatParametersType::
+Dimension ()
+{
+  return this->Dimension_.get ();
+}
+
+void ThermostatParametersType::
+Dimension (const Dimension_type& x)
+{
+  this->Dimension_.set (x);
 }
 
 
@@ -255,88 +353,128 @@ MeanVelocity (const MeanVelocity_type& x)
 // Simulation
 //
 
-const Simulation::InputParameters_type& Simulation::
-InputParameters () const
+const Simulation::FileWriterParameters_type& Simulation::
+FileWriterParameters () const
 {
-  return this->InputParameters_.get ();
+  return this->FileWriterParameters_.get ();
 }
 
-Simulation::InputParameters_type& Simulation::
-InputParameters ()
+Simulation::FileWriterParameters_type& Simulation::
+FileWriterParameters ()
 {
-  return this->InputParameters_.get ();
-}
-
-void Simulation::
-InputParameters (const InputParameters_type& x)
-{
-  this->InputParameters_.set (x);
+  return this->FileWriterParameters_.get ();
 }
 
 void Simulation::
-InputParameters (::std::unique_ptr< InputParameters_type > x)
+FileWriterParameters (const FileWriterParameters_type& x)
 {
-  this->InputParameters_.set (std::move (x));
-}
-
-const Simulation::Cuboid_sequence& Simulation::
-Cuboid () const
-{
-  return this->Cuboid_;
-}
-
-Simulation::Cuboid_sequence& Simulation::
-Cuboid ()
-{
-  return this->Cuboid_;
+  this->FileWriterParameters_.set (x);
 }
 
 void Simulation::
-Cuboid (const Cuboid_sequence& s)
+FileWriterParameters (::std::unique_ptr< FileWriterParameters_type > x)
 {
-  this->Cuboid_ = s;
+  this->FileWriterParameters_.set (std::move (x));
+}
+
+const Simulation::SimulationParameters_type& Simulation::
+SimulationParameters () const
+{
+  return this->SimulationParameters_.get ();
+}
+
+Simulation::SimulationParameters_type& Simulation::
+SimulationParameters ()
+{
+  return this->SimulationParameters_.get ();
+}
+
+void Simulation::
+SimulationParameters (const SimulationParameters_type& x)
+{
+  this->SimulationParameters_.set (x);
+}
+
+void Simulation::
+SimulationParameters (::std::unique_ptr< SimulationParameters_type > x)
+{
+  this->SimulationParameters_.set (std::move (x));
+}
+
+const Simulation::ThermostatParameters_type& Simulation::
+ThermostatParameters () const
+{
+  return this->ThermostatParameters_.get ();
+}
+
+Simulation::ThermostatParameters_type& Simulation::
+ThermostatParameters ()
+{
+  return this->ThermostatParameters_.get ();
+}
+
+void Simulation::
+ThermostatParameters (const ThermostatParameters_type& x)
+{
+  this->ThermostatParameters_.set (x);
+}
+
+void Simulation::
+ThermostatParameters (::std::unique_ptr< ThermostatParameters_type > x)
+{
+  this->ThermostatParameters_.set (std::move (x));
+}
+
+const Simulation::Cuboids_sequence& Simulation::
+Cuboids () const
+{
+  return this->Cuboids_;
+}
+
+Simulation::Cuboids_sequence& Simulation::
+Cuboids ()
+{
+  return this->Cuboids_;
+}
+
+void Simulation::
+Cuboids (const Cuboids_sequence& s)
+{
+  this->Cuboids_ = s;
 }
 
 
 #include <xsd/cxx/xml/dom/parsing-source.hxx>
 
-// InputParametersType
+// FileWriterParametersType
 //
 
-InputParametersType::
-InputParametersType (const BaseName_type& BaseName,
-                     const WriteFrequency_type& WriteFrequency,
-                     const DeltaT_type& DeltaT,
-                     const EndTime_type& EndTime)
+FileWriterParametersType::
+FileWriterParametersType (const BaseName_type& BaseName,
+                          const WriteFrequency_type& WriteFrequency)
 : ::xml_schema::type (),
   BaseName_ (BaseName, this),
-  WriteFrequency_ (WriteFrequency, this),
-  DeltaT_ (DeltaT, this),
-  EndTime_ (EndTime, this)
+  WriteFrequency_ (WriteFrequency, this)
 {
 }
 
-InputParametersType::
-InputParametersType (const InputParametersType& x,
-                     ::xml_schema::flags f,
-                     ::xml_schema::container* c)
+FileWriterParametersType::
+FileWriterParametersType (const FileWriterParametersType& x,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
   BaseName_ (x.BaseName_, f, this),
-  WriteFrequency_ (x.WriteFrequency_, f, this),
-  DeltaT_ (x.DeltaT_, f, this),
-  EndTime_ (x.EndTime_, f, this)
+  WriteFrequency_ (x.WriteFrequency_, f, this)
 {
 }
 
-InputParametersType::
-InputParametersType (const ::xercesc::DOMElement& e,
-                     ::xml_schema::flags f,
-                     ::xml_schema::container* c)
+FileWriterParametersType::
+FileWriterParametersType (const ::xercesc::DOMElement& e,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   BaseName_ (this),
-  WriteFrequency_ (this),
-  DeltaT_ (this),
-  EndTime_ (this)
+  WriteFrequency_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -345,7 +483,7 @@ InputParametersType (const ::xercesc::DOMElement& e,
   }
 }
 
-void InputParametersType::
+void FileWriterParametersType::
 parse (::xsd::cxx::xml::dom::parser< char >& p,
        ::xml_schema::flags f)
 {
@@ -380,28 +518,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // DeltaT
-    //
-    if (n.name () == "DeltaT" && n.namespace_ ().empty ())
-    {
-      if (!DeltaT_.present ())
-      {
-        this->DeltaT_.set (DeltaT_traits::create (i, f, this));
-        continue;
-      }
-    }
-
-    // EndTime
-    //
-    if (n.name () == "EndTime" && n.namespace_ ().empty ())
-    {
-      if (!EndTime_.present ())
-      {
-        this->EndTime_.set (EndTime_traits::create (i, f, this));
-        continue;
-      }
-    }
-
     break;
   }
 
@@ -418,6 +534,111 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "WriteFrequency",
       "");
   }
+}
+
+FileWriterParametersType* FileWriterParametersType::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class FileWriterParametersType (*this, f, c);
+}
+
+FileWriterParametersType& FileWriterParametersType::
+operator= (const FileWriterParametersType& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->BaseName_ = x.BaseName_;
+    this->WriteFrequency_ = x.WriteFrequency_;
+  }
+
+  return *this;
+}
+
+FileWriterParametersType::
+~FileWriterParametersType ()
+{
+}
+
+// SimulationParametersType
+//
+
+SimulationParametersType::
+SimulationParametersType (const EndT_type& EndT,
+                          const DeltaT_type& DeltaT)
+: ::xml_schema::type (),
+  EndT_ (EndT, this),
+  DeltaT_ (DeltaT, this)
+{
+}
+
+SimulationParametersType::
+SimulationParametersType (const SimulationParametersType& x,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  EndT_ (x.EndT_, f, this),
+  DeltaT_ (x.DeltaT_, f, this)
+{
+}
+
+SimulationParametersType::
+SimulationParametersType (const ::xercesc::DOMElement& e,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  EndT_ (this),
+  DeltaT_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void SimulationParametersType::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // EndT
+    //
+    if (n.name () == "EndT" && n.namespace_ ().empty ())
+    {
+      if (!EndT_.present ())
+      {
+        this->EndT_.set (EndT_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // DeltaT
+    //
+    if (n.name () == "DeltaT" && n.namespace_ ().empty ())
+    {
+      if (!DeltaT_.present ())
+      {
+        this->DeltaT_.set (DeltaT_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!EndT_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "EndT",
+      "");
+  }
 
   if (!DeltaT_.present ())
   {
@@ -425,39 +646,211 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "DeltaT",
       "");
   }
-
-  if (!EndTime_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "EndTime",
-      "");
-  }
 }
 
-InputParametersType* InputParametersType::
+SimulationParametersType* SimulationParametersType::
 _clone (::xml_schema::flags f,
         ::xml_schema::container* c) const
 {
-  return new class InputParametersType (*this, f, c);
+  return new class SimulationParametersType (*this, f, c);
 }
 
-InputParametersType& InputParametersType::
-operator= (const InputParametersType& x)
+SimulationParametersType& SimulationParametersType::
+operator= (const SimulationParametersType& x)
 {
   if (this != &x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
-    this->BaseName_ = x.BaseName_;
-    this->WriteFrequency_ = x.WriteFrequency_;
+    this->EndT_ = x.EndT_;
     this->DeltaT_ = x.DeltaT_;
-    this->EndTime_ = x.EndTime_;
   }
 
   return *this;
 }
 
-InputParametersType::
-~InputParametersType ()
+SimulationParametersType::
+~SimulationParametersType ()
+{
+}
+
+// ThermostatParametersType
+//
+
+ThermostatParametersType::
+ThermostatParametersType (const StartTemperature_type& StartTemperature,
+                          const TargetTemperature_type& TargetTemperature,
+                          const ApplyFrequency_type& ApplyFrequency,
+                          const MaxDeltaTemperature_type& MaxDeltaTemperature,
+                          const Dimension_type& Dimension)
+: ::xml_schema::type (),
+  StartTemperature_ (StartTemperature, this),
+  TargetTemperature_ (TargetTemperature, this),
+  ApplyFrequency_ (ApplyFrequency, this),
+  MaxDeltaTemperature_ (MaxDeltaTemperature, this),
+  Dimension_ (Dimension, this)
+{
+}
+
+ThermostatParametersType::
+ThermostatParametersType (const ThermostatParametersType& x,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  StartTemperature_ (x.StartTemperature_, f, this),
+  TargetTemperature_ (x.TargetTemperature_, f, this),
+  ApplyFrequency_ (x.ApplyFrequency_, f, this),
+  MaxDeltaTemperature_ (x.MaxDeltaTemperature_, f, this),
+  Dimension_ (x.Dimension_, f, this)
+{
+}
+
+ThermostatParametersType::
+ThermostatParametersType (const ::xercesc::DOMElement& e,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  StartTemperature_ (this),
+  TargetTemperature_ (this),
+  ApplyFrequency_ (this),
+  MaxDeltaTemperature_ (this),
+  Dimension_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void ThermostatParametersType::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // StartTemperature
+    //
+    if (n.name () == "StartTemperature" && n.namespace_ ().empty ())
+    {
+      if (!StartTemperature_.present ())
+      {
+        this->StartTemperature_.set (StartTemperature_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // TargetTemperature
+    //
+    if (n.name () == "TargetTemperature" && n.namespace_ ().empty ())
+    {
+      if (!TargetTemperature_.present ())
+      {
+        this->TargetTemperature_.set (TargetTemperature_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // ApplyFrequency
+    //
+    if (n.name () == "ApplyFrequency" && n.namespace_ ().empty ())
+    {
+      if (!ApplyFrequency_.present ())
+      {
+        this->ApplyFrequency_.set (ApplyFrequency_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // MaxDeltaTemperature
+    //
+    if (n.name () == "MaxDeltaTemperature" && n.namespace_ ().empty ())
+    {
+      if (!MaxDeltaTemperature_.present ())
+      {
+        this->MaxDeltaTemperature_.set (MaxDeltaTemperature_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // Dimension
+    //
+    if (n.name () == "Dimension" && n.namespace_ ().empty ())
+    {
+      if (!Dimension_.present ())
+      {
+        this->Dimension_.set (Dimension_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!StartTemperature_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "StartTemperature",
+      "");
+  }
+
+  if (!TargetTemperature_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "TargetTemperature",
+      "");
+  }
+
+  if (!ApplyFrequency_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "ApplyFrequency",
+      "");
+  }
+
+  if (!MaxDeltaTemperature_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "MaxDeltaTemperature",
+      "");
+  }
+
+  if (!Dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Dimension",
+      "");
+  }
+}
+
+ThermostatParametersType* ThermostatParametersType::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class ThermostatParametersType (*this, f, c);
+}
+
+ThermostatParametersType& ThermostatParametersType::
+operator= (const ThermostatParametersType& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->StartTemperature_ = x.StartTemperature_;
+    this->TargetTemperature_ = x.TargetTemperature_;
+    this->ApplyFrequency_ = x.ApplyFrequency_;
+    this->MaxDeltaTemperature_ = x.MaxDeltaTemperature_;
+    this->Dimension_ = x.Dimension_;
+  }
+
+  return *this;
+}
+
+ThermostatParametersType::
+~ThermostatParametersType ()
 {
 }
 
@@ -678,18 +1071,26 @@ CuboidType::
 //
 
 Simulation::
-Simulation (const InputParameters_type& InputParameters)
+Simulation (const FileWriterParameters_type& FileWriterParameters,
+            const SimulationParameters_type& SimulationParameters,
+            const ThermostatParameters_type& ThermostatParameters)
 : ::xml_schema::type (),
-  InputParameters_ (InputParameters, this),
-  Cuboid_ (this)
+  FileWriterParameters_ (FileWriterParameters, this),
+  SimulationParameters_ (SimulationParameters, this),
+  ThermostatParameters_ (ThermostatParameters, this),
+  Cuboids_ (this)
 {
 }
 
 Simulation::
-Simulation (::std::unique_ptr< InputParameters_type > InputParameters)
+Simulation (::std::unique_ptr< FileWriterParameters_type > FileWriterParameters,
+            ::std::unique_ptr< SimulationParameters_type > SimulationParameters,
+            ::std::unique_ptr< ThermostatParameters_type > ThermostatParameters)
 : ::xml_schema::type (),
-  InputParameters_ (std::move (InputParameters), this),
-  Cuboid_ (this)
+  FileWriterParameters_ (std::move (FileWriterParameters), this),
+  SimulationParameters_ (std::move (SimulationParameters), this),
+  ThermostatParameters_ (std::move (ThermostatParameters), this),
+  Cuboids_ (this)
 {
 }
 
@@ -698,8 +1099,10 @@ Simulation (const Simulation& x,
             ::xml_schema::flags f,
             ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
-  InputParameters_ (x.InputParameters_, f, this),
-  Cuboid_ (x.Cuboid_, f, this)
+  FileWriterParameters_ (x.FileWriterParameters_, f, this),
+  SimulationParameters_ (x.SimulationParameters_, f, this),
+  ThermostatParameters_ (x.ThermostatParameters_, f, this),
+  Cuboids_ (x.Cuboids_, f, this)
 {
 }
 
@@ -708,8 +1111,10 @@ Simulation (const ::xercesc::DOMElement& e,
             ::xml_schema::flags f,
             ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
-  InputParameters_ (this),
-  Cuboid_ (this)
+  FileWriterParameters_ (this),
+  SimulationParameters_ (this),
+  ThermostatParameters_ (this),
+  Cuboids_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -728,38 +1133,80 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (i));
 
-    // InputParameters
+    // FileWriterParameters
     //
-    if (n.name () == "InputParameters" && n.namespace_ ().empty ())
+    if (n.name () == "FileWriterParameters" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< InputParameters_type > r (
-        InputParameters_traits::create (i, f, this));
+      ::std::unique_ptr< FileWriterParameters_type > r (
+        FileWriterParameters_traits::create (i, f, this));
 
-      if (!InputParameters_.present ())
+      if (!FileWriterParameters_.present ())
       {
-        this->InputParameters_.set (::std::move (r));
+        this->FileWriterParameters_.set (::std::move (r));
         continue;
       }
     }
 
-    // Cuboid
+    // SimulationParameters
     //
-    if (n.name () == "Cuboid" && n.namespace_ ().empty ())
+    if (n.name () == "SimulationParameters" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< Cuboid_type > r (
-        Cuboid_traits::create (i, f, this));
+      ::std::unique_ptr< SimulationParameters_type > r (
+        SimulationParameters_traits::create (i, f, this));
 
-      this->Cuboid_.push_back (::std::move (r));
+      if (!SimulationParameters_.present ())
+      {
+        this->SimulationParameters_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // ThermostatParameters
+    //
+    if (n.name () == "ThermostatParameters" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< ThermostatParameters_type > r (
+        ThermostatParameters_traits::create (i, f, this));
+
+      if (!ThermostatParameters_.present ())
+      {
+        this->ThermostatParameters_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // Cuboids
+    //
+    if (n.name () == "Cuboids" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< Cuboids_type > r (
+        Cuboids_traits::create (i, f, this));
+
+      this->Cuboids_.push_back (::std::move (r));
       continue;
     }
 
     break;
   }
 
-  if (!InputParameters_.present ())
+  if (!FileWriterParameters_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
-      "InputParameters",
+      "FileWriterParameters",
+      "");
+  }
+
+  if (!SimulationParameters_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "SimulationParameters",
+      "");
+  }
+
+  if (!ThermostatParameters_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "ThermostatParameters",
       "");
   }
 }
@@ -777,8 +1224,10 @@ operator= (const Simulation& x)
   if (this != &x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
-    this->InputParameters_ = x.InputParameters_;
-    this->Cuboid_ = x.Cuboid_;
+    this->FileWriterParameters_ = x.FileWriterParameters_;
+    this->SimulationParameters_ = x.SimulationParameters_;
+    this->ThermostatParameters_ = x.ThermostatParameters_;
+    this->Cuboids_ = x.Cuboids_;
   }
 
   return *this;

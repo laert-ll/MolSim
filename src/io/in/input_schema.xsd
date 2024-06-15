@@ -2,15 +2,15 @@
   <xs:element name="Simulation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="OutputFiles" type="OutputFilesType" maxOccurs="1"/>
+        <xs:element name="FileWriterParameters" type="FileWriterParametersType" maxOccurs="1"/>
         <xs:element name="SimulationParameters" type="SimulationParametersType" maxOccurs="1"/>
-
+        <xs:element name="ThermostatParameters" type="ThermostatParametersType" maxOccurs="1"/>
         <xs:element name="Cuboids" type="CuboidType" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
 
-  <xs:complexType name="OutputFilesType">
+  <xs:complexType name="FileWriterParametersType">
     <xs:sequence>
       <xs:element name="BaseName" type="xs:string"/>
       <xs:element name="WriteFrequency" type="xs:int"/>
@@ -21,6 +21,16 @@
     <xs:sequence>
       <xs:element name="EndT" type="xs:decimal"/>
       <xs:element name="DeltaT" type="xs:decimal"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ThermostatParametersType">
+    <xs:sequence>
+      <xs:element name="StartTemperature" type="xs:double"/>
+      <xs:element name="TargetTemperature" type="xs:double"/>
+      <xs:element name="ApplyFrequency" type="xs:int"/>
+      <xs:element name="MaxDeltaTemperature" type="xs:double"/>
+      <xs:element name="Dimension" type="xs:int"/>
     </xs:sequence>
   </xs:complexType>
 

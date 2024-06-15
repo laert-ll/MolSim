@@ -48,7 +48,8 @@ namespace boundaries {
         outfile.close();
 
         // Read cuboid data from the file
-        ParticleContainer container = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        SimulationDataContainer simulationDataContainer = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        ParticleContainer container = simulationDataContainer.getParticleContainer();
         std::remove("particles_near_reflecting_boundary");
 
         // Check if Force of all Particles is zero
@@ -87,7 +88,8 @@ namespace boundaries {
         outfile.close();
 
         // Read cuboid data from the file
-        ParticleContainer container = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        SimulationDataContainer simulationDataContainer = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        ParticleContainer container = simulationDataContainer.getParticleContainer();
         std::remove("particles_near_reflecting_boundary");
 
         // Check if Force of all Particles is zero
@@ -130,7 +132,8 @@ namespace boundaries {
         outfile.close();
 
         // Read cuboid data from the file
-        ParticleContainer container = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        SimulationDataContainer simulationDataContainer = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        ParticleContainer container = simulationDataContainer.getParticleContainer();
         std::remove("particles_near_reflecting_boundary");
 
         // Check if Force of all Particles is zero
@@ -176,7 +179,8 @@ namespace boundaries {
         outfile.close();
 
         // Read cuboid data from the file
-        ParticleContainer container = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        SimulationDataContainer simulationDataContainer = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        ParticleContainer container = simulationDataContainer.getParticleContainer();
         std::remove("particles_near_reflecting_boundary");
 
         // Check if Force of all Particles is zero
@@ -249,7 +253,8 @@ namespace boundaries {
         outfile.close();
 
         // Read cuboid data from the file
-        ParticleContainer container = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        SimulationDataContainer simulationDataContainer = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        ParticleContainer container = simulationDataContainer.getParticleContainer();
         std::remove("particles_near_reflecting_boundary");
 
         // Check if Force of all Particles is zero
@@ -303,7 +308,8 @@ namespace boundaries {
         outfile.close();
 
         // Read cuboid data from the file
-        ParticleContainer container = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        SimulationDataContainer simulationDataContainer = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+        ParticleContainer container = simulationDataContainer.getParticleContainer();
         std::remove("particles_near_reflecting_boundary");
 
         // Check if Force of all Particles is zero

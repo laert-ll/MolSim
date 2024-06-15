@@ -10,7 +10,7 @@ namespace fileReaders {
 
     class XMLReader {
     public:
-        static ParticleContainer readFile(const std::string& filepath);
+        static SimulationDataContainer readFile(const std::string& filepath);
     private:
         static void loadCuboids(const Simulation& simulation, ParticleContainer& particleContainer);
     };

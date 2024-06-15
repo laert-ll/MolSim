@@ -15,7 +15,8 @@ static void BM_LJCalculator(benchmark::State& state) {
     std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(5.31608);
 
     fileReaders::TXTReader fileReader = fileReaders::TXTReader();
-    ParticleContainer particleContainer = fileReader.readFile("../resources/input-cuboid.txt");
+    SimulationDataContainer simulationDataContainer = fileReader.readFile("../resources/input-cuboid.txt");
+    ParticleContainer particleContainer = simulationDataContainer.getParticleContainer();
 
     for (auto _ : state) {
         double current_time = 0;

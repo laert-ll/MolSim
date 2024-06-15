@@ -7,13 +7,14 @@
 #include "../../../objects/ParticleContainer.h"
 #include "FileWriterParameters.h"
 #include "SimulationParameters.h"
+#include "ThermostatParameters.h"
 
 class SimulationDataContainer {
 public:
     SimulationDataContainer(ParticleContainer &particleContainer, FileWriterParameters &fileWriterParameters,
-                            SimulationParameters &simulationParameters)
+                            SimulationParameters &simulationParameters, ThermostatParameters &thermostatParameters)
             : particleContainer(particleContainer), fileWriterParameters(fileWriterParameters),
-              simulationParameters(simulationParameters) {}
+              simulationParameters(simulationParameters), thermostatParameters(thermostatParameters) {}
 
     [[nodiscard]] ParticleContainer &getParticleContainer() const {
         return particleContainer;
@@ -27,10 +28,14 @@ public:
         return simulationParameters;
     }
 
+    [[nodiscard]] ThermostatParameters &getThermostatParameters() const {
+        return thermostatParameters;
+    }
 
 private:
     ParticleContainer &particleContainer;
     FileWriterParameters &fileWriterParameters;
     SimulationParameters &simulationParameters;
+    ThermostatParameters &thermostatParameters;
 
 };

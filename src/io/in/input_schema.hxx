@@ -226,7 +226,9 @@ namespace xml_schema
 
 // Forward declarations.
 //
-class InputParametersType;
+class FileWriterParametersType;
+class SimulationParametersType;
+class ThermostatParametersType;
 class CuboidType;
 class Simulation;
 
@@ -244,7 +246,7 @@ class Simulation;
 
 #include <xsd/cxx/xml/dom/parsing-header.hxx>
 
-class InputParametersType: public ::xml_schema::type
+class FileWriterParametersType: public ::xml_schema::type
 {
   public:
   // BaseName
@@ -278,58 +280,28 @@ class InputParametersType: public ::xml_schema::type
   void
   WriteFrequency (const WriteFrequency_type& x);
 
-  // DeltaT
-  //
-  typedef ::xml_schema::double_ DeltaT_type;
-  typedef ::xsd::cxx::tree::traits< DeltaT_type, char, ::xsd::cxx::tree::schema_type::double_ > DeltaT_traits;
-
-  const DeltaT_type&
-  DeltaT () const;
-
-  DeltaT_type&
-  DeltaT ();
-
-  void
-  DeltaT (const DeltaT_type& x);
-
-  // EndTime
-  //
-  typedef ::xml_schema::double_ EndTime_type;
-  typedef ::xsd::cxx::tree::traits< EndTime_type, char, ::xsd::cxx::tree::schema_type::double_ > EndTime_traits;
-
-  const EndTime_type&
-  EndTime () const;
-
-  EndTime_type&
-  EndTime ();
-
-  void
-  EndTime (const EndTime_type& x);
-
   // Constructors.
   //
-  InputParametersType (const BaseName_type&,
-                       const WriteFrequency_type&,
-                       const DeltaT_type&,
-                       const EndTime_type&);
+  FileWriterParametersType (const BaseName_type&,
+                            const WriteFrequency_type&);
 
-  InputParametersType (const ::xercesc::DOMElement& e,
-                       ::xml_schema::flags f = 0,
-                       ::xml_schema::container* c = 0);
+  FileWriterParametersType (const ::xercesc::DOMElement& e,
+                            ::xml_schema::flags f = 0,
+                            ::xml_schema::container* c = 0);
 
-  InputParametersType (const InputParametersType& x,
-                       ::xml_schema::flags f = 0,
-                       ::xml_schema::container* c = 0);
+  FileWriterParametersType (const FileWriterParametersType& x,
+                            ::xml_schema::flags f = 0,
+                            ::xml_schema::container* c = 0);
 
-  virtual InputParametersType*
+  virtual FileWriterParametersType*
   _clone (::xml_schema::flags f = 0,
           ::xml_schema::container* c = 0) const;
 
-  InputParametersType&
-  operator= (const InputParametersType& x);
+  FileWriterParametersType&
+  operator= (const FileWriterParametersType& x);
 
   virtual 
-  ~InputParametersType ();
+  ~FileWriterParametersType ();
 
   // Implementation.
   //
@@ -341,8 +313,186 @@ class InputParametersType: public ::xml_schema::type
   protected:
   ::xsd::cxx::tree::one< BaseName_type > BaseName_;
   ::xsd::cxx::tree::one< WriteFrequency_type > WriteFrequency_;
+};
+
+class SimulationParametersType: public ::xml_schema::type
+{
+  public:
+  // EndT
+  //
+  typedef ::xml_schema::decimal EndT_type;
+  typedef ::xsd::cxx::tree::traits< EndT_type, char, ::xsd::cxx::tree::schema_type::decimal > EndT_traits;
+
+  const EndT_type&
+  EndT () const;
+
+  EndT_type&
+  EndT ();
+
+  void
+  EndT (const EndT_type& x);
+
+  // DeltaT
+  //
+  typedef ::xml_schema::decimal DeltaT_type;
+  typedef ::xsd::cxx::tree::traits< DeltaT_type, char, ::xsd::cxx::tree::schema_type::decimal > DeltaT_traits;
+
+  const DeltaT_type&
+  DeltaT () const;
+
+  DeltaT_type&
+  DeltaT ();
+
+  void
+  DeltaT (const DeltaT_type& x);
+
+  // Constructors.
+  //
+  SimulationParametersType (const EndT_type&,
+                            const DeltaT_type&);
+
+  SimulationParametersType (const ::xercesc::DOMElement& e,
+                            ::xml_schema::flags f = 0,
+                            ::xml_schema::container* c = 0);
+
+  SimulationParametersType (const SimulationParametersType& x,
+                            ::xml_schema::flags f = 0,
+                            ::xml_schema::container* c = 0);
+
+  virtual SimulationParametersType*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  SimulationParametersType&
+  operator= (const SimulationParametersType& x);
+
+  virtual 
+  ~SimulationParametersType ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< EndT_type > EndT_;
   ::xsd::cxx::tree::one< DeltaT_type > DeltaT_;
-  ::xsd::cxx::tree::one< EndTime_type > EndTime_;
+};
+
+class ThermostatParametersType: public ::xml_schema::type
+{
+  public:
+  // StartTemperature
+  //
+  typedef ::xml_schema::double_ StartTemperature_type;
+  typedef ::xsd::cxx::tree::traits< StartTemperature_type, char, ::xsd::cxx::tree::schema_type::double_ > StartTemperature_traits;
+
+  const StartTemperature_type&
+  StartTemperature () const;
+
+  StartTemperature_type&
+  StartTemperature ();
+
+  void
+  StartTemperature (const StartTemperature_type& x);
+
+  // TargetTemperature
+  //
+  typedef ::xml_schema::double_ TargetTemperature_type;
+  typedef ::xsd::cxx::tree::traits< TargetTemperature_type, char, ::xsd::cxx::tree::schema_type::double_ > TargetTemperature_traits;
+
+  const TargetTemperature_type&
+  TargetTemperature () const;
+
+  TargetTemperature_type&
+  TargetTemperature ();
+
+  void
+  TargetTemperature (const TargetTemperature_type& x);
+
+  // ApplyFrequency
+  //
+  typedef ::xml_schema::int_ ApplyFrequency_type;
+  typedef ::xsd::cxx::tree::traits< ApplyFrequency_type, char > ApplyFrequency_traits;
+
+  const ApplyFrequency_type&
+  ApplyFrequency () const;
+
+  ApplyFrequency_type&
+  ApplyFrequency ();
+
+  void
+  ApplyFrequency (const ApplyFrequency_type& x);
+
+  // MaxDeltaTemperature
+  //
+  typedef ::xml_schema::double_ MaxDeltaTemperature_type;
+  typedef ::xsd::cxx::tree::traits< MaxDeltaTemperature_type, char, ::xsd::cxx::tree::schema_type::double_ > MaxDeltaTemperature_traits;
+
+  const MaxDeltaTemperature_type&
+  MaxDeltaTemperature () const;
+
+  MaxDeltaTemperature_type&
+  MaxDeltaTemperature ();
+
+  void
+  MaxDeltaTemperature (const MaxDeltaTemperature_type& x);
+
+  // Dimension
+  //
+  typedef ::xml_schema::int_ Dimension_type;
+  typedef ::xsd::cxx::tree::traits< Dimension_type, char > Dimension_traits;
+
+  const Dimension_type&
+  Dimension () const;
+
+  Dimension_type&
+  Dimension ();
+
+  void
+  Dimension (const Dimension_type& x);
+
+  // Constructors.
+  //
+  ThermostatParametersType (const StartTemperature_type&,
+                            const TargetTemperature_type&,
+                            const ApplyFrequency_type&,
+                            const MaxDeltaTemperature_type&,
+                            const Dimension_type&);
+
+  ThermostatParametersType (const ::xercesc::DOMElement& e,
+                            ::xml_schema::flags f = 0,
+                            ::xml_schema::container* c = 0);
+
+  ThermostatParametersType (const ThermostatParametersType& x,
+                            ::xml_schema::flags f = 0,
+                            ::xml_schema::container* c = 0);
+
+  virtual ThermostatParametersType*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  ThermostatParametersType&
+  operator= (const ThermostatParametersType& x);
+
+  virtual 
+  ~ThermostatParametersType ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< StartTemperature_type > StartTemperature_;
+  ::xsd::cxx::tree::one< TargetTemperature_type > TargetTemperature_;
+  ::xsd::cxx::tree::one< ApplyFrequency_type > ApplyFrequency_;
+  ::xsd::cxx::tree::one< MaxDeltaTemperature_type > MaxDeltaTemperature_;
+  ::xsd::cxx::tree::one< Dimension_type > Dimension_;
 };
 
 class CuboidType: public ::xml_schema::type
@@ -487,45 +637,83 @@ class CuboidType: public ::xml_schema::type
 class Simulation: public ::xml_schema::type
 {
   public:
-  // InputParameters
+  // FileWriterParameters
   //
-  typedef ::InputParametersType InputParameters_type;
-  typedef ::xsd::cxx::tree::traits< InputParameters_type, char > InputParameters_traits;
+  typedef ::FileWriterParametersType FileWriterParameters_type;
+  typedef ::xsd::cxx::tree::traits< FileWriterParameters_type, char > FileWriterParameters_traits;
 
-  const InputParameters_type&
-  InputParameters () const;
+  const FileWriterParameters_type&
+  FileWriterParameters () const;
 
-  InputParameters_type&
-  InputParameters ();
-
-  void
-  InputParameters (const InputParameters_type& x);
+  FileWriterParameters_type&
+  FileWriterParameters ();
 
   void
-  InputParameters (::std::unique_ptr< InputParameters_type > p);
+  FileWriterParameters (const FileWriterParameters_type& x);
 
-  // Cuboid
+  void
+  FileWriterParameters (::std::unique_ptr< FileWriterParameters_type > p);
+
+  // SimulationParameters
   //
-  typedef ::CuboidType Cuboid_type;
-  typedef ::xsd::cxx::tree::sequence< Cuboid_type > Cuboid_sequence;
-  typedef Cuboid_sequence::iterator Cuboid_iterator;
-  typedef Cuboid_sequence::const_iterator Cuboid_const_iterator;
-  typedef ::xsd::cxx::tree::traits< Cuboid_type, char > Cuboid_traits;
+  typedef ::SimulationParametersType SimulationParameters_type;
+  typedef ::xsd::cxx::tree::traits< SimulationParameters_type, char > SimulationParameters_traits;
 
-  const Cuboid_sequence&
-  Cuboid () const;
+  const SimulationParameters_type&
+  SimulationParameters () const;
 
-  Cuboid_sequence&
-  Cuboid ();
+  SimulationParameters_type&
+  SimulationParameters ();
 
   void
-  Cuboid (const Cuboid_sequence& s);
+  SimulationParameters (const SimulationParameters_type& x);
+
+  void
+  SimulationParameters (::std::unique_ptr< SimulationParameters_type > p);
+
+  // ThermostatParameters
+  //
+  typedef ::ThermostatParametersType ThermostatParameters_type;
+  typedef ::xsd::cxx::tree::traits< ThermostatParameters_type, char > ThermostatParameters_traits;
+
+  const ThermostatParameters_type&
+  ThermostatParameters () const;
+
+  ThermostatParameters_type&
+  ThermostatParameters ();
+
+  void
+  ThermostatParameters (const ThermostatParameters_type& x);
+
+  void
+  ThermostatParameters (::std::unique_ptr< ThermostatParameters_type > p);
+
+  // Cuboids
+  //
+  typedef ::CuboidType Cuboids_type;
+  typedef ::xsd::cxx::tree::sequence< Cuboids_type > Cuboids_sequence;
+  typedef Cuboids_sequence::iterator Cuboids_iterator;
+  typedef Cuboids_sequence::const_iterator Cuboids_const_iterator;
+  typedef ::xsd::cxx::tree::traits< Cuboids_type, char > Cuboids_traits;
+
+  const Cuboids_sequence&
+  Cuboids () const;
+
+  Cuboids_sequence&
+  Cuboids ();
+
+  void
+  Cuboids (const Cuboids_sequence& s);
 
   // Constructors.
   //
-  Simulation (const InputParameters_type&);
+  Simulation (const FileWriterParameters_type&,
+              const SimulationParameters_type&,
+              const ThermostatParameters_type&);
 
-  Simulation (::std::unique_ptr< InputParameters_type >);
+  Simulation (::std::unique_ptr< FileWriterParameters_type >,
+              ::std::unique_ptr< SimulationParameters_type >,
+              ::std::unique_ptr< ThermostatParameters_type >);
 
   Simulation (const ::xercesc::DOMElement& e,
               ::xml_schema::flags f = 0,
@@ -553,8 +741,10 @@ class Simulation: public ::xml_schema::type
          ::xml_schema::flags);
 
   protected:
-  ::xsd::cxx::tree::one< InputParameters_type > InputParameters_;
-  Cuboid_sequence Cuboid_;
+  ::xsd::cxx::tree::one< FileWriterParameters_type > FileWriterParameters_;
+  ::xsd::cxx::tree::one< SimulationParameters_type > SimulationParameters_;
+  ::xsd::cxx::tree::one< ThermostatParameters_type > ThermostatParameters_;
+  Cuboids_sequence Cuboids_;
 };
 
 #include <iosfwd>

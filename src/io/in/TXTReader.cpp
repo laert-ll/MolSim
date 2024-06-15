@@ -51,8 +51,13 @@ namespace fileReaders {
                 throw std::runtime_error(
                         "Invalid data code in file '" + filepath + "': Only data codes 0 and 1 are supported.");
         }
-            
-        return particleContainer;
+
+        FileWriterParameters fileWriterParameters;
+        SimulationParameters simulationParameters;
+        ThermostatParameters thermostatParameters{};
+        SimulationDataContainer simulationDataContainer(particleContainer, fileWriterParameters, simulationParameters,
+                                                        thermostatParameters);
+        return simulationDataContainer;
     }
 
     void TXTReader::loadParticles(const std::vector<std::string> &lines, ParticleContainer &particleContainer) {
