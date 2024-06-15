@@ -48,7 +48,7 @@ int main(int argc, char *argsv[]) {
 
     SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
 
-    MolSim::performSimulation(simulationDataContainer.getParticleContainer(), delta_t, end_time, outputWriter, calculator, boundaryMap, thermostat);
+    MolSim::performSimulation(*simulationDataContainer.getParticleContainer(), delta_t, end_time, outputWriter, calculator, boundaryMap, thermostat);
 
     SPDLOG_INFO("Simulation completed.");
 

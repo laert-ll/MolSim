@@ -11,22 +11,18 @@ namespace fileReaders {
         SPDLOG_INFO("Reading XML file: {}", filepath);
 
         std::unique_ptr<Simulation> simulation = Simulation_(filepath);
-        const auto &fileWriterParametersParsed = simulation->FileWriterParameters();
-        const auto &simulationParametersParsed = simulation->SimulationParameters();
-        const auto &thermostatParametersParsed = simulation->ThermostatParameters();
 
+        std::unique_ptr<ParticleContainer> particleContainer = std::make_unique<ParticleContainer>();
+        loadCuboids(*simulation, *particleContainer);
 
-        ParticleContainer particleContainer;
-        loadCuboids(*simulation, particleContainer);
+        std::unique_ptr<FileWriterParameters> fileWriterParameters = std::make_unique<FileWriterParameters>(loadFileWriterParameters(*simulation));
+        std::unique_ptr<SimulationParameters> simulationParameters = std::make_unique<SimulationParameters>(loadSimulationParameters(*simulation));
+        std::unique_ptr<ThermostatParameters> thermostatParameters = std::make_unique<ThermostatParameters>(loadThermostatParameters(*simulation));
 
-        FileWriterParameters fileWriterParameters = loadFileWriterParameters(*simulation);
-        SimulationParameters simulationParameters = loadSimulationParameters(*simulation);
-        ThermostatParameters thermostatParameters = loadThermostatParameters(*simulation);
-
-        SimulationDataContainer simulationDataContainer(particleContainer,
-                                                        fileWriterParameters,
-                                                        simulationParameters,
-                                                        thermostatParameters);
+        SimulationDataContainer simulationDataContainer(std::move(particleContainer),
+                                                        std::move(fileWriterParameters),
+                                                        std::move(simulationParameters),
+                                                        std::move(thermostatParameters));
 
         return simulationDataContainer;
     }

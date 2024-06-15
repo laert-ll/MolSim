@@ -16,7 +16,7 @@ static void BM_LJCalculator(benchmark::State& state) {
 
     fileReaders::TXTReader fileReader = fileReaders::TXTReader();
     SimulationDataContainer simulationDataContainer = fileReader.readFile("../resources/input-cuboid.txt");
-    ParticleContainer particleContainer = simulationDataContainer.getParticleContainer();
+    ParticleContainer particleContainer = *simulationDataContainer.getParticleContainer();
 
     for (auto _ : state) {
         double current_time = 0;
