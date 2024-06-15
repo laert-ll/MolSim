@@ -7,7 +7,7 @@
 
 namespace fileReaders {
 
-    ParticleContainer XMLReader::readFile(const std::string& filepath) {
+    SimulationDataContainer XMLReader::readFile(const std::string& filepath) {
         SPDLOG_INFO("Reading XML file: {}", filepath);
 
         std::unique_ptr<Simulation> simulation  = Simulation_(filepath);

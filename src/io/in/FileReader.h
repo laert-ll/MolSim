@@ -4,6 +4,7 @@
 #include "../../objects/ParticleContainer.h"
 #include "io/in/parameters/CuboidParameters.h"
 #include "ParticleGenerator.h"
+#include "io/in/parameters/SimulationDataContainer.h"
 
 namespace fileReaders {
 
@@ -13,6 +14,6 @@ namespace fileReaders {
 
         virtual ~FileReader() = default;
 
-        static ParticleContainer readFile(const std::string& filepath);
+        static SimulationDataContainer readFile(const std::string& filepath);
     };
 }// namespace fileReaders

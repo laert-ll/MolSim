@@ -24,7 +24,7 @@ namespace fileReaders {
 
         ~TXTReader() override = default;
 
-        static ParticleContainer readFile(const std::string &filepath);
+        static SimulationDataContainer readFile(const std::string &filepath);
 
         static const std::set<int> allowedDataCodes;
         static const std::set<int> allowedDimensions;

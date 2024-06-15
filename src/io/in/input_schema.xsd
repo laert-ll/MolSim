@@ -2,18 +2,25 @@
   <xs:element name="Simulation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="InputParameters" type="InputParametersType"/>
-        <xs:element name="Cuboid" type="CuboidType" maxOccurs="unbounded"/>
+        <xs:element name="OutputFiles" type="OutputFilesType" maxOccurs="1"/>
+        <xs:element name="SimulationParameters" type="SimulationParametersType" maxOccurs="1"/>
+
+        <xs:element name="Cuboids" type="CuboidType" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
 
-  <xs:complexType name="InputParametersType">
+  <xs:complexType name="OutputFilesType">
     <xs:sequence>
       <xs:element name="BaseName" type="xs:string"/>
       <xs:element name="WriteFrequency" type="xs:int"/>
-      <xs:element name="DeltaT" type="xs:double"/>
-      <xs:element name="EndTime" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="SimulationParametersType">
+    <xs:sequence>
+      <xs:element name="EndT" type="xs:decimal"/>
+      <xs:element name="DeltaT" type="xs:decimal"/>
     </xs:sequence>
   </xs:complexType>
 

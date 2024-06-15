@@ -50,11 +50,11 @@ int main(int argc, char *argsv[]) {
     }
 
     std::unique_ptr<fileReaders::XMLReader> fileReader = std::make_unique<fileReaders::XMLReader>();
-    ParticleContainer particleContainer = fileReader->readFile(inputFilePath);
+    SimulationDataContainer simulationDataContainer = fileReader->readFile(inputFilePath);
 
     SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
 
-    MolSim::performSimulation(particleContainer, delta_t, end_time, outputWriter, calculator, boundaryMap, thermostat);
+    MolSim::performSimulation(simulationDataContainer.getParticleContainer(), delta_t, end_time, outputWriter, calculator, boundaryMap, thermostat);
 
     SPDLOG_INFO("Simulation completed.");
 
