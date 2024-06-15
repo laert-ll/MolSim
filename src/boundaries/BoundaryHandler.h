@@ -25,9 +25,8 @@ namespace boundaries {
          *
          * @param properties The boundary properties.
          * @param calculator Pointer to the calculator used for force calculations.
-         * @param sigma The interaction distance parameter.
          */
-        BoundaryHandler(BoundaryProperties properties, calculators::Calculator *calculator, double sigma);
+        BoundaryHandler(BoundaryProperties properties, calculators::Calculator *calculator);
 
         /**
          * @brief Pre-processes boundaries before the main particle calculations.
@@ -44,7 +43,6 @@ namespace boundaries {
 
     private:
         const BoundaryProperties properties;
-        const double sigma=1;
         const calculators::Calculator* calculator;
 
         /**

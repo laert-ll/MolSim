@@ -22,7 +22,7 @@ namespace boundaries {
          * @param sigma The interaction distance parameter.
          */
         BoundaryController(const std::map<BoundaryDirection, BoundaryType>& boundaryMap,
-                           calculators::Calculator *calculator, std::array<double, 2> domain, double sigma);
+                           calculators::Calculator *calculator, std::array<double, 2> domain);
 
         /**
           * @brief Processes boundaries before the main particle calculations.
