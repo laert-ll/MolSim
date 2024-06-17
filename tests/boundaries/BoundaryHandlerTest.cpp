@@ -56,6 +56,7 @@ namespace boundaries {
                                                                    {0.0,    -120.0, 0.0},
                                                                    {120.0,  0.0,    0.0},
                                                                    {-120.0, 0.0,    0.0}};
+
         handler.preProcessBoundaries(container);
         std::vector<Particle> particles = container.getParticles();
         for (int i = 0; i < 4; i++) {
