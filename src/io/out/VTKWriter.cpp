@@ -110,4 +110,15 @@ namespace outputWriters {
         writer.writeFile(filename, iteration);
     }
 
+    void VTKWriter::plotParticlesLC(int iteration, LinkedCellContainer &linkedCellContainer, const std::string &filename) {
+        outputWriters::VTKWriter writer;
+        writer.initializeOutput(linkedCellContainer.getSize());
+
+        for (auto p = linkedCellContainer.begin(); p != linkedCellContainer.end(); ++p) {
+            writer.plotParticle(*p);
+        }
+
+        writer.writeFile(filename, iteration);
+    }
+
 } // namespace outputWriters

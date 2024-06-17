@@ -1,10 +1,16 @@
 <Simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="../src/io/in/input_schema.xsd">
   <InputParameters>
-    <BaseName>Simulation1</BaseName>
-    <WriteFrequency>10</WriteFrequency>
-    <DeltaT>0.001</DeltaT>
-    <EndTime>100.0</EndTime>
+    <Domain>
+      <x>180.0</x>
+      <y>90.0</y>
+      <z>3.0</z>
+    </Domain>
+    <CutoffRadius>3.0</CutoffRadius>
+    <BaseName>MD_</BaseName>
+    <WriteFrequency>100</WriteFrequency>
+    <DeltaT>0.0005</DeltaT>
+    <EndTime>20.0</EndTime>
   </InputParameters>
   <Cuboid>
     <Coordinates>0.5 0.5 0.0</Coordinates>

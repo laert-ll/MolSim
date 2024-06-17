@@ -32,5 +32,9 @@ namespace calculators {
              * @param particleContainer The ParticleContainer containing the particles to calculate the forces for.
              */
         void calculateFPairwise(Particle &particle1, Particle &particle2) const override;
+
+        void calculateLC(LinkedCellContainer &linkedCellContainer, double delta_t) override {
+        // Implementation of the calculateLC function
+        }
     };
 }

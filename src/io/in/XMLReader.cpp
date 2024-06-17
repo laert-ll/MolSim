@@ -7,22 +7,23 @@
 
 namespace fileReaders {
 
-    ParticleContainer XMLReader::readFile(const std::string& filepath) {
+    void XMLReader::readFileParameters(const std::string& filepath) {
         SPDLOG_INFO("Reading XML file: {}", filepath);
 
-        std::unique_ptr<Simulation> simulation  = Simulation_(filepath);
+        std::unique_ptr<Simulation> simulation = Simulation_(filepath);
 
         const auto& inputParams = simulation->InputParameters();
 
-        ParticleContainer particleContainer;
-        loadCuboids(*simulation, particleContainer);
+        // Extract the required parameters from the simulation configuration
+        domain = {inputParams.Domain().x(), inputParams.Domain().y(), inputParams.Domain().z()};
+        cutoffRadius = inputParams.CutoffRadius();
+        delta_t = inputParams.DeltaT();
+        end_time = inputParams.EndTime();
+        baseName = inputParams.BaseName();
+        writerFrequency = inputParams.WriteFrequency();
 
-        return particleContainer;
-    }
-
-    void XMLReader::loadCuboids(const Simulation& simulation, ParticleContainer& particleContainer) {
-        SPDLOG_INFO("Starting to load cuboids...");
-        const auto& cuboids = simulation.Cuboid();
+        // Populate cuboidParameters from the simulation configuration
+        const auto& cuboids = simulation->Cuboid();
 
         for (const auto& cuboid : cuboids) {
             std::array<double, 3> llf;
@@ -41,10 +42,36 @@ namespace fileReaders {
             for (auto& value : startV) initVelStream >> value;
 
             CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV);
-            ParticleGenerator::generateCuboid(cuboidParams, particleContainer);
-            particleContainer.initializePairs();
+            cuboidParameters.push_back(cuboidParams);
         }
-        SPDLOG_INFO("Finished loading cuboids!");
+    }
+
+    std::array<double, 3> XMLReader::getDomain() const {
+        return domain;
+    }
+
+    double XMLReader::getCutoffRadius() const {
+        return cutoffRadius;
+    }
+
+    double XMLReader::getDeltaT() const {
+        return delta_t;
+    }
+
+    double XMLReader::getEndTime() const {
+        return end_time;
+    }
+
+    std::string XMLReader::getBaseName() const {
+        return baseName;
+    }
+
+    int XMLReader::getWriterFrequency() const {
+        return writerFrequency;
+    }
+
+    std::vector<CuboidParameters> XMLReader::getCuboidParameters() const {
+        return cuboidParameters;
     }
 
 }  // namespace fileReaders

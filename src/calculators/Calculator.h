@@ -6,6 +6,7 @@
 #pragma once
 
 #include "../objects/ParticleContainer.h"
+#include "../objects/LinkedCellContainer.h"
 #include "../utils/ArrayUtils.h"
 #include <omp.h>
 #include "spdlog/spdlog.h"
@@ -38,6 +39,8 @@ namespace calculators {
             calculateX(particleContainer, delta_t);
             calculateV(particleContainer, delta_t);
         }
+
+        virtual void calculateLC(LinkedCellContainer &linkedCellContainer, double delta_t) = 0;
 
         /**
          * @brief Calculates the forces acting on particles.

@@ -227,6 +227,7 @@ namespace xml_schema
 // Forward declarations.
 //
 class InputParametersType;
+class DomainType;
 class CuboidType;
 class Simulation;
 
@@ -247,6 +248,37 @@ class Simulation;
 class InputParametersType: public ::xml_schema::type
 {
   public:
+  // Domain
+  //
+  typedef ::DomainType Domain_type;
+  typedef ::xsd::cxx::tree::traits< Domain_type, char > Domain_traits;
+
+  const Domain_type&
+  Domain () const;
+
+  Domain_type&
+  Domain ();
+
+  void
+  Domain (const Domain_type& x);
+
+  void
+  Domain (::std::unique_ptr< Domain_type > p);
+
+  // CutoffRadius
+  //
+  typedef ::xml_schema::double_ CutoffRadius_type;
+  typedef ::xsd::cxx::tree::traits< CutoffRadius_type, char, ::xsd::cxx::tree::schema_type::double_ > CutoffRadius_traits;
+
+  const CutoffRadius_type&
+  CutoffRadius () const;
+
+  CutoffRadius_type&
+  CutoffRadius ();
+
+  void
+  CutoffRadius (const CutoffRadius_type& x);
+
   // BaseName
   //
   typedef ::xml_schema::string BaseName_type;
@@ -308,7 +340,16 @@ class InputParametersType: public ::xml_schema::type
 
   // Constructors.
   //
-  InputParametersType (const BaseName_type&,
+  InputParametersType (const Domain_type&,
+                       const CutoffRadius_type&,
+                       const BaseName_type&,
+                       const WriteFrequency_type&,
+                       const DeltaT_type&,
+                       const EndTime_type&);
+
+  InputParametersType (::std::unique_ptr< Domain_type >,
+                       const CutoffRadius_type&,
+                       const BaseName_type&,
                        const WriteFrequency_type&,
                        const DeltaT_type&,
                        const EndTime_type&);
@@ -339,10 +380,94 @@ class InputParametersType: public ::xml_schema::type
          ::xml_schema::flags);
 
   protected:
+  ::xsd::cxx::tree::one< Domain_type > Domain_;
+  ::xsd::cxx::tree::one< CutoffRadius_type > CutoffRadius_;
   ::xsd::cxx::tree::one< BaseName_type > BaseName_;
   ::xsd::cxx::tree::one< WriteFrequency_type > WriteFrequency_;
   ::xsd::cxx::tree::one< DeltaT_type > DeltaT_;
   ::xsd::cxx::tree::one< EndTime_type > EndTime_;
+};
+
+class DomainType: public ::xml_schema::type
+{
+  public:
+  // x
+  //
+  typedef ::xml_schema::double_ x_type;
+  typedef ::xsd::cxx::tree::traits< x_type, char, ::xsd::cxx::tree::schema_type::double_ > x_traits;
+
+  const x_type&
+  x () const;
+
+  x_type&
+  x ();
+
+  void
+  x (const x_type& x);
+
+  // y
+  //
+  typedef ::xml_schema::double_ y_type;
+  typedef ::xsd::cxx::tree::traits< y_type, char, ::xsd::cxx::tree::schema_type::double_ > y_traits;
+
+  const y_type&
+  y () const;
+
+  y_type&
+  y ();
+
+  void
+  y (const y_type& x);
+
+  // z
+  //
+  typedef ::xml_schema::double_ z_type;
+  typedef ::xsd::cxx::tree::traits< z_type, char, ::xsd::cxx::tree::schema_type::double_ > z_traits;
+
+  const z_type&
+  z () const;
+
+  z_type&
+  z ();
+
+  void
+  z (const z_type& x);
+
+  // Constructors.
+  //
+  DomainType (const x_type&,
+              const y_type&,
+              const z_type&);
+
+  DomainType (const ::xercesc::DOMElement& e,
+              ::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0);
+
+  DomainType (const DomainType& x,
+              ::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0);
+
+  virtual DomainType*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  DomainType&
+  operator= (const DomainType& x);
+
+  virtual 
+  ~DomainType ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< x_type > x_;
+  ::xsd::cxx::tree::one< y_type > y_;
+  ::xsd::cxx::tree::one< z_type > z_;
 };
 
 class CuboidType: public ::xml_schema::type

@@ -10,10 +10,20 @@
 
   <xs:complexType name="InputParametersType">
     <xs:sequence>
+      <xs:element name="Domain" type="DomainType"/>
+      <xs:element name="CutoffRadius" type="xs:double"/>
       <xs:element name="BaseName" type="xs:string"/>
       <xs:element name="WriteFrequency" type="xs:int"/>
       <xs:element name="DeltaT" type="xs:double"/>
       <xs:element name="EndTime" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="DomainType">
+    <xs:sequence>
+      <xs:element name="x" type="xs:double"/>
+      <xs:element name="y" type="xs:double"/>
+      <xs:element name="z" type="xs:double"/>
     </xs:sequence>
   </xs:complexType>
 

@@ -1,12 +1,9 @@
-#include "calculators/SVCalculator.h"
-#include "calculators/LJCalculator.h"
 #include "io/in/FileReader.h"
 #include "io/in/TXTReader.h"
 #include "io/in/XMLReader.h"
 #include "objects/ParticleContainer.h"
+#include "objects/LinkedCellContainer.h"
 #include "io/out/FileWriter.h"
-#include "io/out/VTKWriter.h"
-#include "io/out/XYZWriter.h"
 #include "cxxopts.hpp"
 #include "spdlog/spdlog.h"
 #include "MolSim.h"
@@ -27,11 +24,6 @@
  * @return The exit status of the program.
  */
 int main(int argc, char *argsv[]) {
-    // Example calls:
-    // ./MolSim --help
-    // ./MolSim ../resources/input-sun.txt --delta_t=0.001 --end_time=5 --output=vtk --calculator=sv
-    // ./MolSim ../resources/input-cuboid.txt --delta_t=0.001 --end_time=5 --output=vtk --calculator=lj
-
     // Set the log level to the wanted level
     std::string log_level = LOG_LEVEL;
     MolSim::setLogLevel(log_level);
@@ -39,22 +31,35 @@ int main(int argc, char *argsv[]) {
     std::string inputFilePath;
     double delta_t;
     double end_time;
+    std::array<double, 3> domain;
+    double cutoffRadius;
+    std::string baseName;
+    int writerFrequency;
+    std::vector<CuboidParameters> cuboidParameters;
+    ParticleContainer particleContainer;
+    LinkedCellContainer linkedCellContainer;
+    std::unique_ptr<fileReaders::TXTReader> TXTReader;
+    std::unique_ptr<fileReaders::XMLReader> XMLReader;
     std::unique_ptr<outputWriters::FileWriter> outputWriter;
     std::unique_ptr<calculators::Calculator> calculator;
     std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
+    int simulationType;
 
-    if (!MolSim::processArguments(argc, argsv, inputFilePath, delta_t, end_time, outputWriter, calculator, boundaryMap)) {
+    if (!MolSim::processArguments(argc, argsv, inputFilePath, delta_t, end_time, domain, cutoffRadius, particleContainer, linkedCellContainer,
+                                    baseName, writerFrequency, cuboidParameters, TXTReader, XMLReader, outputWriter, calculator, boundaryMap, simulationType)) {
         return 1;
     }
 
-    std::unique_ptr<fileReaders::XMLReader> fileReader = std::make_unique<fileReaders::XMLReader>();
-    ParticleContainer particleContainer = fileReader->readFile(inputFilePath);
+    SPDLOG_INFO("Starting simulation");
 
-    SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
-
-    MolSim::performSimulation(particleContainer, delta_t, end_time, outputWriter, calculator, boundaryMap);
+    MolSim::performSimulation(delta_t, end_time, domain, cutoffRadius, particleContainer, linkedCellContainer, baseName, writerFrequency, 
+                            cuboidParameters, TXTReader, XMLReader, outputWriter, calculator, boundaryMap, simulationType);
 
     SPDLOG_INFO("Simulation completed.");
 
     return 0;
 }
+
+
+// fix arguments of process arguments
+// fix arguments of perform simulation

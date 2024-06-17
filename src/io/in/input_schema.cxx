@@ -43,6 +43,48 @@
 // InputParametersType
 //
 
+const InputParametersType::Domain_type& InputParametersType::
+Domain () const
+{
+  return this->Domain_.get ();
+}
+
+InputParametersType::Domain_type& InputParametersType::
+Domain ()
+{
+  return this->Domain_.get ();
+}
+
+void InputParametersType::
+Domain (const Domain_type& x)
+{
+  this->Domain_.set (x);
+}
+
+void InputParametersType::
+Domain (::std::unique_ptr< Domain_type > x)
+{
+  this->Domain_.set (std::move (x));
+}
+
+const InputParametersType::CutoffRadius_type& InputParametersType::
+CutoffRadius () const
+{
+  return this->CutoffRadius_.get ();
+}
+
+InputParametersType::CutoffRadius_type& InputParametersType::
+CutoffRadius ()
+{
+  return this->CutoffRadius_.get ();
+}
+
+void InputParametersType::
+CutoffRadius (const CutoffRadius_type& x)
+{
+  this->CutoffRadius_.set (x);
+}
+
 const InputParametersType::BaseName_type& InputParametersType::
 BaseName () const
 {
@@ -119,6 +161,64 @@ void InputParametersType::
 EndTime (const EndTime_type& x)
 {
   this->EndTime_.set (x);
+}
+
+
+// DomainType
+//
+
+const DomainType::x_type& DomainType::
+x () const
+{
+  return this->x_.get ();
+}
+
+DomainType::x_type& DomainType::
+x ()
+{
+  return this->x_.get ();
+}
+
+void DomainType::
+x (const x_type& x)
+{
+  this->x_.set (x);
+}
+
+const DomainType::y_type& DomainType::
+y () const
+{
+  return this->y_.get ();
+}
+
+DomainType::y_type& DomainType::
+y ()
+{
+  return this->y_.get ();
+}
+
+void DomainType::
+y (const y_type& x)
+{
+  this->y_.set (x);
+}
+
+const DomainType::z_type& DomainType::
+z () const
+{
+  return this->z_.get ();
+}
+
+DomainType::z_type& DomainType::
+z ()
+{
+  return this->z_.get ();
+}
+
+void DomainType::
+z (const z_type& x)
+{
+  this->z_.set (x);
 }
 
 
@@ -304,11 +404,32 @@ Cuboid (const Cuboid_sequence& s)
 //
 
 InputParametersType::
-InputParametersType (const BaseName_type& BaseName,
+InputParametersType (const Domain_type& Domain,
+                     const CutoffRadius_type& CutoffRadius,
+                     const BaseName_type& BaseName,
                      const WriteFrequency_type& WriteFrequency,
                      const DeltaT_type& DeltaT,
                      const EndTime_type& EndTime)
 : ::xml_schema::type (),
+  Domain_ (Domain, this),
+  CutoffRadius_ (CutoffRadius, this),
+  BaseName_ (BaseName, this),
+  WriteFrequency_ (WriteFrequency, this),
+  DeltaT_ (DeltaT, this),
+  EndTime_ (EndTime, this)
+{
+}
+
+InputParametersType::
+InputParametersType (::std::unique_ptr< Domain_type > Domain,
+                     const CutoffRadius_type& CutoffRadius,
+                     const BaseName_type& BaseName,
+                     const WriteFrequency_type& WriteFrequency,
+                     const DeltaT_type& DeltaT,
+                     const EndTime_type& EndTime)
+: ::xml_schema::type (),
+  Domain_ (std::move (Domain), this),
+  CutoffRadius_ (CutoffRadius, this),
   BaseName_ (BaseName, this),
   WriteFrequency_ (WriteFrequency, this),
   DeltaT_ (DeltaT, this),
@@ -321,6 +442,8 @@ InputParametersType (const InputParametersType& x,
                      ::xml_schema::flags f,
                      ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
+  Domain_ (x.Domain_, f, this),
+  CutoffRadius_ (x.CutoffRadius_, f, this),
   BaseName_ (x.BaseName_, f, this),
   WriteFrequency_ (x.WriteFrequency_, f, this),
   DeltaT_ (x.DeltaT_, f, this),
@@ -333,6 +456,8 @@ InputParametersType (const ::xercesc::DOMElement& e,
                      ::xml_schema::flags f,
                      ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  Domain_ (this),
+  CutoffRadius_ (this),
   BaseName_ (this),
   WriteFrequency_ (this),
   DeltaT_ (this),
@@ -354,6 +479,31 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     const ::xercesc::DOMElement& i (p.cur_element ());
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (i));
+
+    // Domain
+    //
+    if (n.name () == "Domain" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< Domain_type > r (
+        Domain_traits::create (i, f, this));
+
+      if (!Domain_.present ())
+      {
+        this->Domain_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // CutoffRadius
+    //
+    if (n.name () == "CutoffRadius" && n.namespace_ ().empty ())
+    {
+      if (!CutoffRadius_.present ())
+      {
+        this->CutoffRadius_.set (CutoffRadius_traits::create (i, f, this));
+        continue;
+      }
+    }
 
     // BaseName
     //
@@ -405,6 +555,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     break;
   }
 
+  if (!Domain_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Domain",
+      "");
+  }
+
+  if (!CutoffRadius_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "CutoffRadius",
+      "");
+  }
+
   if (!BaseName_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
@@ -447,6 +611,8 @@ operator= (const InputParametersType& x)
   if (this != &x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
+    this->Domain_ = x.Domain_;
+    this->CutoffRadius_ = x.CutoffRadius_;
     this->BaseName_ = x.BaseName_;
     this->WriteFrequency_ = x.WriteFrequency_;
     this->DeltaT_ = x.DeltaT_;
@@ -458,6 +624,141 @@ operator= (const InputParametersType& x)
 
 InputParametersType::
 ~InputParametersType ()
+{
+}
+
+// DomainType
+//
+
+DomainType::
+DomainType (const x_type& x,
+            const y_type& y,
+            const z_type& z)
+: ::xml_schema::type (),
+  x_ (x, this),
+  y_ (y, this),
+  z_ (z, this)
+{
+}
+
+DomainType::
+DomainType (const DomainType& x,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  x_ (x.x_, f, this),
+  y_ (x.y_, f, this),
+  z_ (x.z_, f, this)
+{
+}
+
+DomainType::
+DomainType (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  x_ (this),
+  y_ (this),
+  z_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void DomainType::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // x
+    //
+    if (n.name () == "x" && n.namespace_ ().empty ())
+    {
+      if (!x_.present ())
+      {
+        this->x_.set (x_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // y
+    //
+    if (n.name () == "y" && n.namespace_ ().empty ())
+    {
+      if (!y_.present ())
+      {
+        this->y_.set (y_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // z
+    //
+    if (n.name () == "z" && n.namespace_ ().empty ())
+    {
+      if (!z_.present ())
+      {
+        this->z_.set (z_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!x_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "x",
+      "");
+  }
+
+  if (!y_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "y",
+      "");
+  }
+
+  if (!z_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "z",
+      "");
+  }
+}
+
+DomainType* DomainType::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class DomainType (*this, f, c);
+}
+
+DomainType& DomainType::
+operator= (const DomainType& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->x_ = x.x_;
+    this->y_ = x.y_;
+    this->z_ = x.z_;
+  }
+
+  return *this;
+}
+
+DomainType::
+~DomainType ()
 {
 }
 

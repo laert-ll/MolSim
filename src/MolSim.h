@@ -3,8 +3,12 @@
 //
 #include "calculators/SVCalculator.h"
 #include "calculators/LJCalculator.h"
+#include "calculators/LC_LJCalculator.h"
 #include "io/in/FileReader.h"
+#include "io/in/TXTReader.h"
+#include "io/in/XMLReader.h"
 #include "objects/ParticleContainer.h"
+#include "objects/LinkedCellContainer.h"
 #include "io/out/FileWriter.h"
 #include "io/out/VTKWriter.h"
 #include "io/out/XYZWriter.h"
@@ -67,11 +71,13 @@ public:
      *
      * @return True if the arguments were processed successfully and a valid calculator and output writer were selected, false otherwise.
      */
-    static bool processArguments(int argc, char *argv[], std::string &inputFilePath,
-                                 double &delta_t, double &end_time,
-                                 std::unique_ptr<outputWriters::FileWriter> &outputWriter,
-                                 std::unique_ptr<calculators::Calculator> &calculator,
-                                 std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> &boundaryMap) {
+    static bool processArguments(int argc, char *argv[], std::string &inputFilePath, 
+                                 double &delta_t, double &end_time, std::array<double, 3> &domain, double &cutoffRadius,
+                                 ParticleContainer &particleContainer, LinkedCellContainer &linkedCellContainer,
+                                 std::string &baseName, int &writerFrequency, std::vector<CuboidParameters> &cuboidParameters,
+                                 std::unique_ptr<fileReaders::TXTReader> &TXTReader, std::unique_ptr<fileReaders::XMLReader> &XMLReader,
+                                 std::unique_ptr<outputWriters::FileWriter> &outputWriter, std::unique_ptr<calculators::Calculator> &calculator,
+                                 std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> &boundaryMap, int &simulationType) {
         cxxopts::Options options("MolSim", "Molecular Simulation Program");
 
         options.add_options()
@@ -93,6 +99,34 @@ public:
         if (result.count("input")) {
             inputFilePath = result["input"].as<std::string>();
             SPDLOG_INFO("Input file path: {}", inputFilePath);
+            
+            if (inputFilePath.length() >= 4 && inputFilePath.substr(inputFilePath.length() - 4) == ".xml") {
+                SPDLOG_INFO("Detected XML file format.");
+
+                XMLReader = std::make_unique<fileReaders::XMLReader>();
+                XMLReader->readFileParameters(inputFilePath);
+                double cellSize = 3.0;
+
+                domain = XMLReader->getDomain();
+                cutoffRadius = XMLReader->getCutoffRadius();
+                baseName = XMLReader->getBaseName();
+                writerFrequency = XMLReader->getWriterFrequency();
+                delta_t = XMLReader->getDeltaT();
+                end_time = XMLReader->getEndTime();
+                cuboidParameters = XMLReader->getCuboidParameters();
+
+                calculator = std::make_unique<calculators::LC_LJCalculator>();
+                outputWriter = std::make_unique<outputWriters::VTKWriter>();
+
+                linkedCellContainer = LinkedCellContainer(domain, cuboidParameters, cutoffRadius, cellSize);
+                simulationType = 0;
+                return true;
+            }
+            else {
+                TXTReader = std::make_unique<fileReaders::TXTReader>();
+                particleContainer = TXTReader->readFile(inputFilePath);
+                simulationType = 1;
+            }
         }
 
         delta_t = result["delta_t"].as<double>();
@@ -200,36 +234,61 @@ public:
     * @param outputWriter The file writer to be used.
     * @param calculator The calculator to be used.
     */
-    static void performSimulation(ParticleContainer &particleContainer, double &delta_t, double &end_time,
-                                  std::unique_ptr<outputWriters::FileWriter> &outputWriter,
-                                  std::unique_ptr<calculators::Calculator> &calculator,
-                                  const std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> &boundaryMap) {
-        const std::string &filename = "MD";
+    static void performSimulation(double &delta_t, double &end_time, std::array<double, 3> &domain, double &cutoffRadius, 
+                                  ParticleContainer &particleContainer, LinkedCellContainer &linkedCellContainer,
+                                  std::string &baseName, int &writerFrequency,std::vector<CuboidParameters> &cuboidParameters,
+                                  std::unique_ptr<fileReaders::TXTReader> &TXTReader, std::unique_ptr<fileReaders::XMLReader> &XMLReader,
+                                  std::unique_ptr<outputWriters::FileWriter> &outputWriter, std::unique_ptr<calculators::Calculator> &calculator,
+                                  std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> &boundaryMap, int &simulationType) {
+        if (simulationType == 0) {
 
-        double current_time = 0.0; // start_time
-        int iteration = 0;
+            double current_time = 0.0; // start_time
+            int iteration = 0;
 
-        std::array<double, 2> domain = {100.0, 100.0};
+            while (current_time < end_time) {
 
-        const boundaries::BoundaryController controller{boundaryMap, calculator.get(), domain, 1.0};
+                calculator->calculateLC(linkedCellContainer, delta_t);
 
-        while (current_time < end_time) {
+                iteration++;
+                if (iteration % writerFrequency == 0) {
+                    outputWriter->plotParticlesLC(iteration, linkedCellContainer, baseName);
+                }
 
-            controller.preProcessBoundaries(particleContainer);
-            calculator->calculate(particleContainer, delta_t);
-            controller.postProcessBoundaries(particleContainer);
-
-            iteration++;
-            if (iteration % 10 == 0) {
-                outputWriter->plotParticles(iteration, particleContainer, filename);
+                if (iteration % 100 == 0) {
+                    SPDLOG_INFO("Iteration {} finished.", iteration);
+                }
+                current_time += delta_t;
             }
 
-            if (iteration % 100 == 0) {
-                SPDLOG_INFO("Iteration {} finished.", iteration);
-            }
-            current_time += delta_t;
         }
+        else {
+            const std::string &filename = "MD";
 
-        SPDLOG_INFO("Output written. Terminating...");
+            double current_time = 0.0; // start_time
+            int iteration = 0;
+
+            std::array<double, 2> domain = {100.0, 100.0};
+
+            const boundaries::BoundaryController controller{boundaryMap, calculator.get(), domain, 1.0};
+
+            while (current_time < end_time) {
+
+                controller.preProcessBoundaries(particleContainer);
+                calculator->calculate(particleContainer, delta_t);
+                controller.postProcessBoundaries(particleContainer);
+
+                iteration++;
+                if (iteration % 10 == 0) {
+                    outputWriter->plotParticles(iteration, particleContainer, filename);
+                }
+
+                if (iteration % 100 == 0) {
+                    SPDLOG_INFO("Iteration {} finished.", iteration);
+                }
+                current_time += delta_t;
+            }
+
+            SPDLOG_INFO("Output written. Terminating...");
+        }
     }
 };

@@ -37,4 +37,7 @@ namespace outputWriters {
         file.close();
     }
 
+
+    void XYZWriter::plotParticlesLC(int iteration, LinkedCellContainer &linkedCellContainer, const std::string &filename) {}
+
 } // namespace outputWriters
