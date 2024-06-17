@@ -34,6 +34,7 @@ int main(int argc, char *argsv[]) {
     std::string inputFilePath;
     double delta_t;
     double end_time;
+    std::unique_ptr<fileReaders::XMLReader> fileReader;
     std::unique_ptr<outputWriters::FileWriter> outputWriter;
     std::shared_ptr<calculators::Calculator> calculator;
     std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
@@ -43,7 +44,15 @@ int main(int argc, char *argsv[]) {
         return 1;
     }
 
-    std::unique_ptr<fileReaders::XMLReader> fileReader = std::make_unique<fileReaders::XMLReader>();
+    if (inputFilePath.length() >= 4 && inputFilePath.substr(inputFilePath.length() - 4) == ".xml") {
+        SPDLOG_INFO("Processing XML input file: {}", inputFilePath);
+        fileReader = std::make_unique<fileReaders::XMLReader>();
+    } 
+    else {
+        SPDLOG_INFO("Processing TXT input file: {}", inputFilePath);
+        fileReader = std::make_unique<fileReaders::XMLReader>();
+    }
+
     SimulationDataContainer simulationDataContainer = fileReader->readFile(inputFilePath);
 
     SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
