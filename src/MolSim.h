@@ -265,7 +265,7 @@ public:
         const std::string &filename = fileWriterParameters.getBaseName();
         while (current_time < end_time) {
 
-            SPDLOG_INFO("Starting iteration {} with time {}.", iteration, current_time);
+            SPDLOG_TRACE("Starting iteration {} with time {}.", iteration, current_time);
             handler.preProcessBoundaries(particleContainer);
             calculator->calculate(particleContainer, delta_t);
             handler.postProcessBoundaries(particleContainer);
