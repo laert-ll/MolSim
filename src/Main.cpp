@@ -32,32 +32,29 @@ int main(int argc, char *argsv[]) {
     std::string log_level = LOG_LEVEL;
     MolSim::setLogLevel(log_level);
     std::string inputFilePath;
-    double delta_t;
-    double end_time;
-    std::unique_ptr<fileReaders::XMLReader> fileReader;
+    double delta_t = -1.0;
+    double end_time = -1.0;
+    std::unique_ptr<fileReaders::FileReader> fileReader;
     std::unique_ptr<outputWriters::FileWriter> outputWriter;
     std::shared_ptr<calculators::Calculator> calculator;
-    std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
+    // std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
     std::unique_ptr<Thermostat> thermostat = std::make_unique<Thermostat>(10, 20, 5, 1, 3);
 
-    if (!MolSim::processArguments(argc, argsv, inputFilePath, delta_t, end_time, outputWriter, calculator, boundaryMap)) {
+    if (!MolSim::processArguments(argc, argsv, inputFilePath, delta_t, end_time, outputWriter, calculator)) {
         return 1;
     }
 
     if (inputFilePath.length() >= 4 && inputFilePath.substr(inputFilePath.length() - 4) == ".xml") {
         SPDLOG_INFO("Processing XML input file: {}", inputFilePath);
         fileReader = std::make_unique<fileReaders::XMLReader>();
-    } 
-    else {
+    } else {
         SPDLOG_INFO("Processing TXT input file: {}", inputFilePath);
-        fileReader = std::make_unique<fileReaders::XMLReader>();
+        fileReader = std::make_unique<fileReaders::TXTReader>();
     }
 
     SimulationDataContainer simulationDataContainer = fileReader->readFile(inputFilePath);
-
-    SPDLOG_INFO("Starting simulation with delta_t: {}, end_time: {}", delta_t, end_time);
-
-    MolSim::performSimulation(*simulationDataContainer.getParticleContainer(), delta_t, end_time, outputWriter, calculator, boundaryMap, thermostat);
+    MolSim::updateSimulationParameters(simulationDataContainer, delta_t, end_time);
+    MolSim::performSimulation(simulationDataContainer, outputWriter, calculator);
 
     SPDLOG_INFO("Simulation completed.");
 

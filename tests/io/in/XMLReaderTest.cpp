@@ -8,7 +8,8 @@
 const double COMPARISON_TOLERANCE = 1e-6;
 
 TEST(XMLReaderTest, ReadFileTest) {
-    SimulationDataContainer data = fileReaders::XMLReader::readFile("./tests/io/in/XMLReaderTest.xml");
+    const auto fileReader = std::make_unique<fileReaders::XMLReader>();
+    SimulationDataContainer data = fileReader->readFile("./tests/io/in/XMLReaderTest.xml");
 
     EXPECT_EQ(data.getFileWriterParameters()->getBaseName(), "test");
     EXPECT_EQ(data.getFileWriterParameters()->getWriteFrequency(), 10);

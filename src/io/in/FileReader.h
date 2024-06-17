@@ -14,6 +14,6 @@ namespace fileReaders {
 
         virtual ~FileReader() = default;
 
-        static SimulationDataContainer readFile(const std::string& filepath);
+        virtual SimulationDataContainer readFile(const std::string& filePath) = 0;
     };
 }// namespace fileReaders

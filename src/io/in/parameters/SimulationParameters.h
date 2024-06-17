@@ -9,15 +9,23 @@ public:
 
     SimulationParameters(double end_t, double delta_t) : end_t(end_t), delta_t(delta_t) {}
 
-    double getEnd_t() const {
+    [[nodiscard]] double getEnd_t() const {
         return end_t;
     }
 
-    double getDelta_t() const {
+    [[nodiscard]] double getDelta_t() const {
         return delta_t;
     }
 
+    void setEnd_t(double newEnd_t) {
+        end_t = newEnd_t;
+    }
+
+    void setDelta_t(double newDelta_t) {
+        delta_t = newDelta_t;
+    }
+
 private:
-    const double end_t;
-    const double delta_t;
+    double end_t;
+    double delta_t;
 };

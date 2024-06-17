@@ -77,7 +77,7 @@ namespace fileReaders {
 
     void XMLReader::loadCuboids(const Simulation &simulation, ParticleContainer &particleContainer) {
         SPDLOG_INFO("Starting to load cuboids...");
-        const auto &cuboids = simulation.Cuboids();
+        const auto &cuboids = simulation.Cuboid();
 
         for (const auto &cuboid: cuboids) {
             std::array<double, 3> llf{};

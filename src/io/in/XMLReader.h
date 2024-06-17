@@ -8,21 +8,21 @@
 
 namespace fileReaders {
 
-    class XMLReader {
+    class XMLReader : public FileReader {
     public:
-        static SimulationDataContainer readFile(const std::string& filepath);
+        SimulationDataContainer readFile(const std::string& filepath) override;
     private:
-        static void loadCuboids(const Simulation& simulation, ParticleContainer& particleContainer);
+        void loadCuboids(const Simulation& simulation, ParticleContainer& particleContainer);
 
-        static FileWriterParameters loadFileWriterParameters(const Simulation &simulation);
+        FileWriterParameters loadFileWriterParameters(const Simulation &simulation);
 
-        static SimulationParameters loadSimulationParameters(const Simulation &simulation);
+        SimulationParameters loadSimulationParameters(const Simulation &simulation);
 
-        static ThermostatParameters loadThermostatParameters(const Simulation &simulation);
+        ThermostatParameters loadThermostatParameters(const Simulation &simulation);
 
-        static BoundaryParameters loadBoundaryParameters(const Simulation &simulation);
+        BoundaryParameters loadBoundaryParameters(const Simulation &simulation);
 
-        static boundaries::BoundaryType stringToBoundaryType(const std::string &boundaryTypeStr);
+        boundaries::BoundaryType stringToBoundaryType(const std::string &boundaryTypeStr);
     };
 
 }  // namespace fileReaders

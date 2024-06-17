@@ -642,22 +642,22 @@ BoundaryParameters (::std::unique_ptr< BoundaryParameters_type > x)
   this->BoundaryParameters_.set (std::move (x));
 }
 
-const Simulation::Cuboids_sequence& Simulation::
-Cuboids () const
+const Simulation::Cuboid_sequence& Simulation::
+Cuboid () const
 {
-  return this->Cuboids_;
+  return this->Cuboid_;
 }
 
-Simulation::Cuboids_sequence& Simulation::
-Cuboids ()
+Simulation::Cuboid_sequence& Simulation::
+Cuboid ()
 {
-  return this->Cuboids_;
+  return this->Cuboid_;
 }
 
 void Simulation::
-Cuboids (const Cuboids_sequence& s)
+Cuboid (const Cuboid_sequence& s)
 {
-  this->Cuboids_ = s;
+  this->Cuboid_ = s;
 }
 
 
@@ -1593,7 +1593,7 @@ Simulation (const FileWriterParameters_type& FileWriterParameters,
   SimulationParameters_ (SimulationParameters, this),
   ThermostatParameters_ (ThermostatParameters, this),
   BoundaryParameters_ (BoundaryParameters, this),
-  Cuboids_ (this)
+  Cuboid_ (this)
 {
 }
 
@@ -1607,7 +1607,7 @@ Simulation (::std::unique_ptr< FileWriterParameters_type > FileWriterParameters,
   SimulationParameters_ (std::move (SimulationParameters), this),
   ThermostatParameters_ (std::move (ThermostatParameters), this),
   BoundaryParameters_ (std::move (BoundaryParameters), this),
-  Cuboids_ (this)
+  Cuboid_ (this)
 {
 }
 
@@ -1620,7 +1620,7 @@ Simulation (const Simulation& x,
   SimulationParameters_ (x.SimulationParameters_, f, this),
   ThermostatParameters_ (x.ThermostatParameters_, f, this),
   BoundaryParameters_ (x.BoundaryParameters_, f, this),
-  Cuboids_ (x.Cuboids_, f, this)
+  Cuboid_ (x.Cuboid_, f, this)
 {
 }
 
@@ -1633,7 +1633,7 @@ Simulation (const ::xercesc::DOMElement& e,
   SimulationParameters_ (this),
   ThermostatParameters_ (this),
   BoundaryParameters_ (this),
-  Cuboids_ (this)
+  Cuboid_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1708,14 +1708,14 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // Cuboids
+    // Cuboid
     //
-    if (n.name () == "Cuboids" && n.namespace_ ().empty ())
+    if (n.name () == "Cuboid" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< Cuboids_type > r (
-        Cuboids_traits::create (i, f, this));
+      ::std::unique_ptr< Cuboid_type > r (
+        Cuboid_traits::create (i, f, this));
 
-      this->Cuboids_.push_back (::std::move (r));
+      this->Cuboid_.push_back (::std::move (r));
       continue;
     }
 
@@ -1768,7 +1768,7 @@ operator= (const Simulation& x)
     this->SimulationParameters_ = x.SimulationParameters_;
     this->ThermostatParameters_ = x.ThermostatParameters_;
     this->BoundaryParameters_ = x.BoundaryParameters_;
-    this->Cuboids_ = x.Cuboids_;
+    this->Cuboid_ = x.Cuboid_;
   }
 
   return *this;

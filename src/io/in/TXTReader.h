@@ -24,7 +24,7 @@ namespace fileReaders {
 
         ~TXTReader() override = default;
 
-        static SimulationDataContainer readFile(const std::string &filepath);
+        SimulationDataContainer readFile(const std::string &filepath) override;
 
         static const std::set<int> allowedDataCodes;
         static const std::set<int> allowedDimensions;
@@ -35,11 +35,11 @@ namespace fileReaders {
         * @param filepath The path to the file to read particle data from.
         * @return A ParticleContainer containing the particles read from the file.
         */
-        static void loadParticles(const std::vector<std::string> &lines, ParticleContainer &particles);
+        void loadParticles(const std::vector<std::string> &lines, ParticleContainer &particles);
 
-        static void loadCuboids(const std::vector<std::string> &lines, ParticleContainer &particles);
+        void loadCuboids(const std::vector<std::string> &lines, ParticleContainer &particles);
 
-        static void loadDiscs(const std::vector<std::string> &lines, ParticleContainer &particles);
+        void loadDiscs(const std::vector<std::string> &lines, ParticleContainer &particles);
 
         /**
         * This method parses an array of values from a single line (string)
@@ -51,7 +51,7 @@ namespace fileReaders {
         * @param data data object to update according to the given line
         */
         template<typename T, size_t N>
-        static void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data);
+        void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data);
 
         /**
         * This method reads the file specified by the parameter 'filepath'
@@ -62,7 +62,7 @@ namespace fileReaders {
         * @param filepath
         * @return vector of strings
         */
-        static std::vector<std::string> readFileLines(const std::string &filepath);
+        std::vector<std::string> readFileLines(const std::string &filepath);
 
         /**
         * This method validates the header lines of the input file.
@@ -72,7 +72,7 @@ namespace fileReaders {
         *
         * @param lines
         */
-        static void validateHeaderLines(const std::vector<std::string> &lines);
+        void validateHeaderLines(const std::vector<std::string> &lines);
 
     };
 }// namespace fileReaders

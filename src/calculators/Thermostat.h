@@ -10,7 +10,8 @@ class Thermostat {
 public:
     Thermostat() = default;
 
-    Thermostat(double start_temp, double target_temp, int applyFrequency, double max_delta_temp, int dimension) :
+    Thermostat(double start_temp, double target_temp, int applyFrequency, double max_delta_temp,
+               int dimension) :
             start_temp(start_temp), target_temp(target_temp), applyFrequency(applyFrequency),
             max_delta_temp(max_delta_temp), dimension(dimension) {}
 

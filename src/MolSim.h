@@ -15,6 +15,8 @@
 
 class MolSim {
 public:
+    constexpr static const double COMPARISON_TOLERANCE = 1e-6;
+
     /**
      * @brief Sets the log level for the program.
      *
@@ -71,8 +73,7 @@ public:
     static bool processArguments(int argc, char *argv[], std::string &inputFilePath,
                                  double &delta_t, double &end_time,
                                  std::unique_ptr<outputWriters::FileWriter> &outputWriter,
-                                 std::shared_ptr<calculators::Calculator> &calculator,
-                                 std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> &boundaryMap) {
+                                 std::shared_ptr<calculators::Calculator> &calculator) {
         cxxopts::Options options("MolSim", "Molecular Simulation Program");
 
         options.add_options()
@@ -82,7 +83,8 @@ public:
                 ("end_time", "Set end_time", cxxopts::value<double>()->default_value("1000"))
                 ("output", "Output writer (vtk or xyz)", cxxopts::value<std::string>())
                 ("calculator", "Calculator (sv, lj or dummy)", cxxopts::value<std::string>())
-                ("boundaries", "Boundary conditions (0000 to 3333)", cxxopts::value<std::string>()->default_value("3333"));
+                ("boundaries", "Boundary conditions (0000 to 3333)",
+                 cxxopts::value<std::string>()->default_value("3333"));
 
         auto result = options.parse(argc, argv);
 
@@ -148,6 +150,7 @@ public:
             SPDLOG_ERROR("Invalid input; please select a calculator.");
             return false;
         }
+        /**
         if (result.count("boundaries")) {
             std::string boundariesArg = result["boundaries"].as<std::string>();
             if (boundariesArg.size() == 4) {
@@ -190,7 +193,18 @@ public:
             boundaryMap[boundaries::BoundaryDirection::RIGHT] = boundaries::BoundaryType::REFLECTING;
             boundaryMap[boundaries::BoundaryDirection::TOP] = boundaries::BoundaryType::REFLECTING;
         }
+         **/
         return true;
+    }
+
+    static void updateSimulationParameters(SimulationDataContainer &simulationDataContainer,
+                                           double &delta_t, double &end_time) {
+        if (std::abs(delta_t - (-1.0)) < COMPARISON_TOLERANCE) {
+            simulationDataContainer.getSimulationParameters()->setDelta_t(delta_t);
+        }
+        if (std::abs(end_time - (-1.0)) < COMPARISON_TOLERANCE) {
+            simulationDataContainer.getSimulationParameters()->setEnd_t(end_time);
+        }
     }
 
     /**
@@ -207,39 +221,69 @@ public:
     * @param boundaryMap The boundary conditions to be used.
     * @param thermostat The thermostat to be used.
     */
-    static void performSimulation(ParticleContainer &particleContainer, double &delta_t, double &end_time,
+    static void performSimulation(SimulationDataContainer &simulationDataContainer,
                                   std::unique_ptr<outputWriters::FileWriter> &outputWriter,
-                                  std::shared_ptr<calculators::Calculator> &calculator,
-                                  std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> &boundaryMap,
-                                  std::unique_ptr<Thermostat> &thermostat) {
-        const std::string &filename = "MD";
+                                  std::shared_ptr<calculators::Calculator> &calculator) {
+        if (!simulationDataContainer.getParticleContainer() ||
+            !simulationDataContainer.getFileWriterParameters() ||
+            !simulationDataContainer.getSimulationParameters() ||
+            !simulationDataContainer.getThermostatParameters() ||
+            !simulationDataContainer.getBoundaryParameters()) {
+            SPDLOG_ERROR("One or more required components are missing in the SimulationDataContainer");
+            return;
+        }
+
+        ParticleContainer& particleContainer = *simulationDataContainer.getParticleContainer();
+        FileWriterParameters& fileWriterParameters = *simulationDataContainer.getFileWriterParameters();
+        SimulationParameters& simulationParameters = *simulationDataContainer.getSimulationParameters();
+        ThermostatParameters& thermostatParameters = *simulationDataContainer.getThermostatParameters();
+        BoundaryParameters& boundaryParameters = *simulationDataContainer.getBoundaryParameters();
+
+        const double delta_t = simulationParameters.getDelta_t();
+        const double end_time = simulationParameters.getEnd_t();
+        SPDLOG_INFO("Simulation started with delta_T: {}, end_t: {}.", delta_t,
+                    end_time);
+
+        Thermostat thermostat(thermostatParameters.getStartTemp(), thermostatParameters.getTargetTemp(),
+                              thermostatParameters.getApplyFrequency(), thermostatParameters.getMaxDeltaTemp(),
+                              thermostatParameters.getDimension());
+        SPDLOG_INFO("Thermostat initialized with start_temp: {}, target_temp: {}, apply_frequency: {}, max_delta_temp: {}, dimension: {}.",
+                    thermostatParameters.getStartTemp(), thermostatParameters.getTargetTemp(),
+                    thermostatParameters.getApplyFrequency(), thermostatParameters.getMaxDeltaTemp(),
+                    thermostatParameters.getDimension());
+        const auto& boundaryMap = boundaryParameters.getBoundaryMap();
+        SPDLOG_INFO("Boundary conditions initialized.");
 
         double current_time = 0.0; // start_time
         int iteration = 0;
-        const int thermostatApplyFrequency = thermostat->getApplyFrequency();
+        const int thermostatApplyFrequency = thermostat.getApplyFrequency();
 
         std::array<double, 2> domain = {63.0, 36.0};
 
         const boundaries::BoundaryProperties properties{domain, boundaryMap};
         const boundaries::BoundaryHandler handler{properties, calculator};
 
-        thermostat->initializeTemp(particleContainer);
+        thermostat.initializeTemp(particleContainer);
 
         calculator->setGravity(-12.9);
 
+        const std::string &filename = fileWriterParameters.getBaseName();
         while (current_time < end_time) {
 
+            SPDLOG_INFO("Starting iteration {} with time {}.", iteration, current_time);
             handler.preProcessBoundaries(particleContainer);
             calculator->calculate(particleContainer, delta_t);
             handler.postProcessBoundaries(particleContainer);
 
             iteration++;
             if (iteration % thermostatApplyFrequency == 0) {
-                thermostat->setTempGradually(particleContainer);
+                thermostat.setTempGradually(particleContainer);
+                SPDLOG_INFO("Thermostat applied at iteration {}.", iteration);
             }
 
             if (iteration % 10 == 0) {
                 outputWriter->plotParticles(iteration, particleContainer, filename);
+                SPDLOG_INFO("Output written for iteration {}.", iteration);
             }
 
             if (iteration % 100 == 0) {

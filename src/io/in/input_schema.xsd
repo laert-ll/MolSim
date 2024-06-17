@@ -6,7 +6,7 @@
         <xs:element name="SimulationParameters" type="SimulationParametersType" maxOccurs="1"/>
         <xs:element name="ThermostatParameters" type="ThermostatParametersType" maxOccurs="1"/>
         <xs:element name="BoundaryParameters" type="BoundaryParametersType" maxOccurs="1"/>
-        <xs:element name="Cuboids" type="CuboidType" maxOccurs="unbounded"/>
+        <xs:element name="Cuboid" type="CuboidType" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

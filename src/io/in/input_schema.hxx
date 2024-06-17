@@ -918,22 +918,22 @@ class Simulation: public ::xml_schema::type
   void
   BoundaryParameters (::std::unique_ptr< BoundaryParameters_type > p);
 
-  // Cuboids
+  // Cuboid
   //
-  typedef ::CuboidType Cuboids_type;
-  typedef ::xsd::cxx::tree::sequence< Cuboids_type > Cuboids_sequence;
-  typedef Cuboids_sequence::iterator Cuboids_iterator;
-  typedef Cuboids_sequence::const_iterator Cuboids_const_iterator;
-  typedef ::xsd::cxx::tree::traits< Cuboids_type, char > Cuboids_traits;
+  typedef ::CuboidType Cuboid_type;
+  typedef ::xsd::cxx::tree::sequence< Cuboid_type > Cuboid_sequence;
+  typedef Cuboid_sequence::iterator Cuboid_iterator;
+  typedef Cuboid_sequence::const_iterator Cuboid_const_iterator;
+  typedef ::xsd::cxx::tree::traits< Cuboid_type, char > Cuboid_traits;
 
-  const Cuboids_sequence&
-  Cuboids () const;
+  const Cuboid_sequence&
+  Cuboid () const;
 
-  Cuboids_sequence&
-  Cuboids ();
+  Cuboid_sequence&
+  Cuboid ();
 
   void
-  Cuboids (const Cuboids_sequence& s);
+  Cuboid (const Cuboid_sequence& s);
 
   // Constructors.
   //
@@ -977,7 +977,7 @@ class Simulation: public ::xml_schema::type
   ::xsd::cxx::tree::one< SimulationParameters_type > SimulationParameters_;
   ::xsd::cxx::tree::one< ThermostatParameters_type > ThermostatParameters_;
   ::xsd::cxx::tree::one< BoundaryParameters_type > BoundaryParameters_;
-  Cuboids_sequence Cuboids_;
+  Cuboid_sequence Cuboid_;
 };
 
 #include <iosfwd>
