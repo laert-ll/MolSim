@@ -96,11 +96,6 @@ public:
         if (result.count("input")) {
             inputFilePath = result["input"].as<std::string>();
             SPDLOG_INFO("Input file path: {}", inputFilePath);
-
-            // Check if input ends with ".xml"
-            if (inputFilePath.length() >= 4 && inputFilePath.substr(inputFilePath.length() - 4) == ".xml") {
-                return true; // Only XML file input is sufficient
-            }
         }
 
         delta_t = result["delta_t"].as<double>();
