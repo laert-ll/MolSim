@@ -53,7 +53,7 @@ namespace boundaries {
         // If selected index is lower boundary (lowerX, lowerY, lowerZ)
         if (checkLowerBound) {
             // for indexing x, y, z coordinate
-#pragma omp parallel for
+//#pragma omp parallel for
             for (auto &p: container) {
                 double distanceToBoundary = p.getX().at(index);
                 double tolerance = pow(2, 1/6) * p.getSigma();
@@ -71,19 +71,19 @@ namespace boundaries {
             }
             return;
         }
-#pragma omp parallel for
+//#pragma omp parallel for
         for (auto &p: container) {
-            double distanceToBoundary = boundary -p.getX().at(index);
+            double distanceToBoundary = boundary - p.getX().at(index);
             // only calculate reflection if near boundary
             double tolerance = pow(2, 1/6) * p.getSigma();
             if (distanceToBoundary < tolerance) {
                 Particle ghost{p};
                 if (index == 0)
-                    ghost.setX({boundary - distanceToBoundary, p.getX().at(1), p.getX().at(2)});
+                    ghost.setX({boundary + distanceToBoundary, p.getX().at(1), p.getX().at(2)});
                 else if (index == 1)
-                    ghost.setX({p.getX().at(0), boundary - distanceToBoundary, p.getX().at(2)});
+                    ghost.setX({p.getX().at(0), boundary + distanceToBoundary, p.getX().at(2)});
                 else
-                    ghost.setX({p.getX().at(0), p.getX().at(1), boundary - distanceToBoundary});
+                    ghost.setX({p.getX().at(0), p.getX().at(1), boundary + distanceToBoundary});
                 calculator->calculateFPairwise(p, ghost);
             }
         }
@@ -152,7 +152,7 @@ namespace boundaries {
         double boundary = properties.getDomain()[index];
         // If selected index is lower boundary (lowerX, lowerY, lowerZ)
         if (checkLowerBound) {
-#pragma omp parallel for
+//#pragma omp parallel for
             for (auto &p: container) {
                 if (p.getX().at(index) < 0) {
                     if(index == 0)
@@ -165,7 +165,7 @@ namespace boundaries {
             }
             return;
         }
-#pragma omp parallel for
+//#pragma omp parallel for
         for (auto &p: container) {
             if (p.getX().at(index) >= boundary) {
                 if(index == 0)

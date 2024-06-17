@@ -48,12 +48,12 @@ namespace calculators {
         void calculateGravity(ParticleContainer &particleContainer) {
             for (Particle p : particleContainer) {
                 double grav_force = p.getM() * g_grav;
-                p.setF({p.getF()[0], p.getF()[1] + grav_force, p.getF()[2]});
+                const std::array<double, 3> newForce {p.getF()[0], p.getF()[1] + grav_force, p.getF()[2]};
+                p.setF(newForce);
             }
         }
 
         /**
-         *
          * @param gravity The g_grav value
          */
         void setGravity(double g_arg) {
