@@ -18,7 +18,7 @@ namespace calculators {
         for (Particle &particle1: linkedCellContainer) {
             std::array<double, 3> x1 = particle1.getX();
             for (auto &cell : linkedCellContainer.getNeighboringCells(particle1)) {
-                for (auto p2 : cell->getParticles()) {
+                for (Particle* p2 : cell->getParticles()) {
                     auto &particle2 = *p2;
 
                     // LJ force calculation

@@ -159,6 +159,14 @@ void LinkedCellContainer::populateCells() {
         int cellIndexZ = static_cast<int>(position[2] / domain[2]);
         cells[cellIndexX][cellIndexY][cellIndexZ].addParticle(&particle);
     }
+    for (auto &row: cells) {
+        for (auto &col: row) {
+            for (auto &cell: col) {
+                SPDLOG_INFO("Cell at index ({}, {}, {}) has {} particles", cell.getIndex()[0], cell.getIndex()[1],
+                            cell.getIndex()[2], cell.getParticles().size());
+            }
+        }
+    }
 }
 
 std::vector<Cell *> &LinkedCellContainer::getNeighboringCells(const Particle &particle) {
