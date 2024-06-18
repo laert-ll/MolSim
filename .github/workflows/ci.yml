@@ -31,7 +31,6 @@ jobs:
         name: built
         path: ${{github.workspace}}/build
 
-
   test:
     needs: build
     runs-on: ubuntu-latest
@@ -44,6 +43,9 @@ jobs:
         with:
           name: built
           path: ${{ github.workspace }}/build
+
+      - name: Install libxerces-c-3.2
+        run: sudo apt install libxerces-c-3.2
 
       - name: Set execute permissions for tests
         run: chmod +x ${{ github.workspace }}/build/MolSimTests ${{ github.workspace }}/build/MolSimBenchmark
