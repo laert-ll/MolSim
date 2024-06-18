@@ -154,9 +154,9 @@ void LinkedCellContainer::loadCuboids(std::vector<CuboidParameters> &cuboidParam
 void LinkedCellContainer::populateCells() {
     for (auto &particle: particles) {
         auto position = particle.getX();
-        int cellIndexX = static_cast<int>(position[0] / domain[0]);
-        int cellIndexY = static_cast<int>(position[1] / domain[1]);
-        int cellIndexZ = static_cast<int>(position[2] / domain[2]);
+        int cellIndexX = static_cast<int>(position[0] / cellSize);
+        int cellIndexY = static_cast<int>(position[1] / cellSize);
+        int cellIndexZ = static_cast<int>(position[2] / cellSize);
         cells[cellIndexX][cellIndexY][cellIndexZ].addParticle(&particle);
     }
     for (auto &row: cells) {
@@ -170,9 +170,9 @@ void LinkedCellContainer::populateCells() {
 }
 
 std::vector<Cell *> &LinkedCellContainer::getNeighboringCells(const Particle &particle) {
-    int cellIndexX = static_cast<int>(particle.getX()[0] / domain[0]);
-    int cellIndexY = static_cast<int>(particle.getX()[1] / domain[1]);
-    int cellIndexZ = static_cast<int>(particle.getX()[2] / domain[2]);
+    int cellIndexX = static_cast<int>(particle.getX()[0] / cellSize);
+    int cellIndexY = static_cast<int>(particle.getX()[1] / cellSize);
+    int cellIndexZ = static_cast<int>(particle.getX()[2] / cellSize);
     return cells[cellIndexX][cellIndexY][cellIndexZ].getNeighboringCells();
 }
 
@@ -192,8 +192,8 @@ void LinkedCellContainer::update() {
 }
 
 std::array<int, 3> LinkedCellContainer::getIndex(Particle *particle) {
-    int cellIndexX = static_cast<int>(particle->getX()[0] / domain[0]);
-    int cellIndexY = static_cast<int>(particle->getX()[1] / domain[1]);
-    int cellIndexZ = static_cast<int>(particle->getX()[2] / domain[2]);
+    int cellIndexX = static_cast<int>(particle->getX()[0] / cellSize);
+    int cellIndexY = static_cast<int>(particle->getX()[1] / cellSize);
+    int cellIndexZ = static_cast<int>(particle->getX()[2] / cellSize);
     return std::array<int, 3>{{cellIndexX, cellIndexY, cellIndexZ}};
 }
