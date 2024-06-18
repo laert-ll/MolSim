@@ -47,9 +47,6 @@ jobs:
           name: built
           path: ${{ github.workspace }}/build
 
-      - name: Set LD_LIBRARY_PATH
-        run: echo "/usr/lib:/usr/local/lib" >> $GITHUB_ENV
-
       - name: Set execute permissions for tests
         run: chmod +x ${{ github.workspace }}/build/MolSimTests ${{ github.workspace }}/build/MolSimBenchmark
 
