@@ -12,7 +12,7 @@ LinkedCellContainer::LinkedCellContainer(std::array<double, 3> &domain, std::vec
         : domain(domain), cutoffRadius(cutoffRadius), cellSize(cellSize) {
     initializeCells();
     initializeNeighbors();
-    loadCuboids(cuboidParameters);
+    generateCuboids(cuboidParameters);
     populateCells();
 }
 
@@ -123,7 +123,7 @@ void LinkedCellContainer::initializeNeighbors() {
 
 }
 
-void LinkedCellContainer::loadCuboids(std::vector<CuboidParameters> &cuboidParameters) {
+void LinkedCellContainer::generateCuboids(std::vector<CuboidParameters> &cuboidParameters) {
     for (const auto &cuboid: cuboidParameters) {
         const auto &lowerLeftFrontCorner = cuboid.lowerLeftFrontCorner;
         const auto &numParticlesPerDimension = cuboid.numParticlesPerDimension;
@@ -148,7 +148,12 @@ void LinkedCellContainer::loadCuboids(std::vector<CuboidParameters> &cuboidParam
                 }
             }
         }
+
+        SPDLOG_INFO("Finished generating cuboid with LLF [{}, {}, {}], NumParticles [{}, {}, {}], Distance {}, Mass {}, StartV [{}, {}, {}], MeanV {}",
+                    lowerLeftFrontCorner[0], lowerLeftFrontCorner[1], lowerLeftFrontCorner[2], numParticlesPerDimension[0], numParticlesPerDimension[1],
+                    numParticlesPerDimension[2], distance, m, startV[0], startV[1], startV[2], meanV);
     }
+    SPDLOG_INFO("Number of generated Particles: {}", particles.size());
 }
 
 void LinkedCellContainer::populateCells() {

@@ -83,7 +83,7 @@ public:
 
     void initializeNeighbors();
 
-    void loadCuboids(std::vector<CuboidParameters> &cuboidParameters);
+    void generateCuboids(std::vector<CuboidParameters> &cuboidParameters);
 
     void populateCells();
 
