@@ -194,10 +194,10 @@ public:
 
     static void updateSimulationParameters(SimulationDataContainer &simulationDataContainer,
                                            double &delta_t, double &end_time) {
-        if (std::abs(delta_t - (-1.0)) < COMPARISON_TOLERANCE) {
+        if (std::abs(delta_t - (-1.0)) > COMPARISON_TOLERANCE) {
             simulationDataContainer.getSimulationParameters()->setDelta_t(delta_t);
         }
-        if (std::abs(end_time - (-1.0)) < COMPARISON_TOLERANCE) {
+        if (std::abs(end_time - (-1.0)) > COMPARISON_TOLERANCE) {
             simulationDataContainer.getSimulationParameters()->setEnd_t(end_time);
         }
     }
