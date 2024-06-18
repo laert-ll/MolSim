@@ -7,15 +7,16 @@
 
 #include <cmath>
 
-LinkedCellContainer::LinkedCellContainer(std::array<double, 3> &domain, std::vector<CuboidParameters> &cuboidParameters, double &cutoffRadius, double &cellSize)
-    : domain (domain), cutoffRadius(cutoffRadius), cellSize(cellSize) {
+LinkedCellContainer::LinkedCellContainer(std::array<double, 3> &domain, std::vector<CuboidParameters> &cuboidParameters,
+                                         double &cutoffRadius, double &cellSize)
+        : domain(domain), cutoffRadius(cutoffRadius), cellSize(cellSize) {
     initializeCells();
     initializeNeighbors();
     loadCuboids(cuboidParameters);
     populateCells();
 }
 
-void LinkedCellContainer::addParticle(const Particle& particle) {
+void LinkedCellContainer::addParticle(const Particle &particle) {
     particles.push_back(particle);
 }
 
@@ -64,20 +65,21 @@ void LinkedCellContainer::initializeCells() {
     }
     for (int y = 0; y < numCellsY; ++y) {
         for (int z = 0; z < numCellsZ; ++z) {
-            cells[numCellsX-1][y][z] = Cell(numCellsX-1, y, z, lastCellSizeX, cellSize, cellSize);
+            cells[numCellsX - 1][y][z] = Cell(numCellsX - 1, y, z, lastCellSizeX, cellSize, cellSize);
         }
     }
     for (int x = 0; x < numCellsX; ++x) {
         for (int z = 0; z < numCellsZ; ++z) {
-            cells[x][numCellsY-1][z] = Cell(x, numCellsY-1, z, cellSize, lastCellSizeY, cellSize);
+            cells[x][numCellsY - 1][z] = Cell(x, numCellsY - 1, z, cellSize, lastCellSizeY, cellSize);
         }
     }
     for (int x = 0; x < numCellsX; ++x) {
         for (int y = 0; y < numCellsY; ++y) {
-            cells[x][y][numCellsZ-1] = Cell(x, y, numCellsZ-1, cellSize, cellSize, lastCellSizeZ);
+            cells[x][y][numCellsZ - 1] = Cell(x, y, numCellsZ - 1, cellSize, cellSize, lastCellSizeZ);
         }
     }
-    cells[numCellsX - 1][numCellsY - 1][numCellsZ - 1] = Cell(numCellsX - 1, numCellsY - 1, numCellsZ - 1, lastCellSizeX, lastCellSizeY, lastCellSizeZ);
+    cells[numCellsX - 1][numCellsY - 1][numCellsZ - 1] = Cell(numCellsX - 1, numCellsY - 1, numCellsZ - 1,
+                                                              lastCellSizeX, lastCellSizeY, lastCellSizeZ);
     SPDLOG_INFO("Created LinkedCellContainer with (cell) dimensions: {} x {} x {}", numCellsX, numCellsY, numCellsZ);
 
 }
@@ -85,9 +87,9 @@ void LinkedCellContainer::initializeCells() {
 void LinkedCellContainer::initializeNeighbors() {
     int cutoffRadiusIndex = static_cast<int>(std::ceil(cutoffRadius / cellSize)) + 1;
 
-    for (auto &row : cells) {
-        for (auto &col : row) {
-            for (auto &cell : col) {
+    for (auto &row: cells) {
+        for (auto &col: row) {
+            for (auto &cell: col) {
                 for (int x = -cutoffRadiusIndex; x <= cutoffRadiusIndex; ++x) {
                     for (int y = -cutoffRadiusIndex; y <= cutoffRadiusIndex; ++y) {
                         for (int z = -cutoffRadiusIndex; z <= cutoffRadiusIndex; ++z) {
@@ -101,19 +103,28 @@ void LinkedCellContainer::initializeNeighbors() {
                             if (neighborXIndex >= 0 && neighborXIndex < cells.size() &&
                                 neighborYIndex >= 0 && neighborYIndex < cells[0].size() &&
                                 neighborZIndex >= 0 && neighborZIndex < cells[0][0].size()) {
-                                cells[neighborXIndex][neighborYIndex][neighborZIndex].addNeighbor(&cells[neighborXIndex][neighborYIndex][neighborZIndex]);
+                                cell.addNeighbor(&cells[neighborXIndex][neighborYIndex][neighborZIndex]);
                             }
                         }
                     }
                 }
-                SPDLOG_INFO("Cell neighbor size is {}", cell.getNeighboringCellsSize());
             }
         }
     }
+
+    for (auto &row: cells) {
+        for (auto &col: row) {
+            for (auto &cell: col) {
+                SPDLOG_INFO("Cell at index ({}, {}, {}) has {} neighbors", cell.getIndex()[0], cell.getIndex()[1],
+                            cell.getIndex()[2], cell.getNeighboringCellsSize());
+            }
+        }
+    }
+
 }
 
 void LinkedCellContainer::loadCuboids(std::vector<CuboidParameters> &cuboidParameters) {
-    for (const auto &cuboid : cuboidParameters) {
+    for (const auto &cuboid: cuboidParameters) {
         const auto &lowerLeftFrontCorner = cuboid.lowerLeftFrontCorner;
         const auto &numParticlesPerDimension = cuboid.numParticlesPerDimension;
         const auto &distance = cuboid.distance;
@@ -141,7 +152,7 @@ void LinkedCellContainer::loadCuboids(std::vector<CuboidParameters> &cuboidParam
 }
 
 void LinkedCellContainer::populateCells() {
-    for (auto &particle : particles) {
+    for (auto &particle: particles) {
         auto position = particle.getX();
         int cellIndexX = static_cast<int>(position[0] / domain[0]);
         int cellIndexY = static_cast<int>(position[1] / domain[1]);
@@ -150,7 +161,7 @@ void LinkedCellContainer::populateCells() {
     }
 }
 
-std::vector<Cell*>& LinkedCellContainer::getNeighboringCells(const Particle &particle) {
+std::vector<Cell *> &LinkedCellContainer::getNeighboringCells(const Particle &particle) {
     int cellIndexX = static_cast<int>(particle.getX()[0] / domain[0]);
     int cellIndexY = static_cast<int>(particle.getX()[1] / domain[1]);
     int cellIndexZ = static_cast<int>(particle.getX()[2] / domain[2]);
@@ -158,10 +169,10 @@ std::vector<Cell*>& LinkedCellContainer::getNeighboringCells(const Particle &par
 }
 
 void LinkedCellContainer::update() {
-    for (auto &row : cells) {
-        for (auto &col : row) {
-            for (auto &cell : col) {
-                for (auto &particle : cell.getParticles()) {
+    for (auto &row: cells) {
+        for (auto &col: row) {
+            for (auto &cell: col) {
+                for (auto &particle: cell.getParticles()) {
                     auto particleIndex = getIndex(particle);
                     if (!(cell.getIndex() == particleIndex)) {
                         cells[particleIndex[0]][particleIndex[1]][particleIndex[2]].addParticle(particle);
@@ -172,7 +183,7 @@ void LinkedCellContainer::update() {
     }
 }
 
-std::array<int, 3> LinkedCellContainer::getIndex(Particle* particle) {
+std::array<int, 3> LinkedCellContainer::getIndex(Particle *particle) {
     int cellIndexX = static_cast<int>(particle->getX()[0] / domain[0]);
     int cellIndexY = static_cast<int>(particle->getX()[1] / domain[1]);
     int cellIndexZ = static_cast<int>(particle->getX()[2] / domain[2]);
