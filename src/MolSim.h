@@ -1,6 +1,7 @@
 //
 // Created by kimj2 on 14.05.2024.
 //
+#include <chrono>
 #include "calculators/SVCalculator.h"
 #include "calculators/LJCalculator.h"
 #include "io/in/FileReader.h"
@@ -236,8 +237,7 @@ public:
 
         const double delta_t = simulationParameters.getDelta_t();
         const double end_time = simulationParameters.getEnd_t();
-        SPDLOG_INFO("Simulation started with delta_T: {}, end_t: {}.", delta_t,
-                    end_time);
+        SPDLOG_INFO("Simulation started with delta_T: {}, end_t: {}.", delta_t, end_time);
 
         Thermostat thermostat(thermostatParameters.getStartTemp(), thermostatParameters.getTargetTemp(),
                               thermostatParameters.getApplyFrequency(), thermostatParameters.getMaxDeltaTemp(),
@@ -263,8 +263,10 @@ public:
         calculator->setGravity(-12.9);
 
         const std::string &filename = fileWriterParameters.getBaseName();
-        while (current_time < end_time) {
 
+        auto start = std::chrono::high_resolution_clock::now();
+
+        while (current_time < end_time) {
             SPDLOG_TRACE("Starting iteration {} with time {}.", iteration, current_time);
             handler.preProcessBoundaries(particleContainer);
             calculator->calculate(particleContainer, delta_t);
@@ -273,19 +275,27 @@ public:
             iteration++;
             if (iteration % thermostatApplyFrequency == 0) {
                 thermostat.setTempGradually(particleContainer);
-                SPDLOG_INFO("Thermostat applied at iteration {}.", iteration);
+                SPDLOG_DEBUG("Thermostat applied at iteration {}.", iteration);
             }
 
             if (iteration % 10 == 0) {
                 outputWriter->plotParticles(iteration, particleContainer, filename);
-                SPDLOG_INFO("Output written for iteration {}.", iteration);
+                SPDLOG_DEBUG("Output written for iteration {}.", iteration);
             }
 
             if (iteration % 100 == 0) {
-                SPDLOG_INFO("Iteration {} finished.", iteration);
+//                SPDLOG_INFO("Iteration {} finished.", iteration);
             }
             current_time += delta_t;
         }
+
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = end - start;
+        double totalMolecules = particleContainer.getSize() * iteration;
+        double MUPS = totalMolecules / elapsed.count();
+
+        SPDLOG_INFO("Simulation completed in {} seconds.", elapsed.count());
+        SPDLOG_INFO("Molecule-updates per second (MUPS): {}", MUPS);
 
         SPDLOG_INFO("Output written. Terminating...");
     }
