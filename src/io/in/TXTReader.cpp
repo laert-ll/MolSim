@@ -8,6 +8,7 @@
 #include "FileReader.h"
 #include "TXTReader.h"
 #include "spdlog/spdlog.h"
+#include "io/in/parameters/DiscParameters.h"
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -15,7 +16,7 @@
 
 namespace fileReaders {
 
-    ParticleContainer TXTReader::readFile(const std::string &filepath) {
+    SimulationDataContainer TXTReader::readFile(const std::string &filepath) {
         auto lines = readFileLines(filepath);
 
         // Check if there are lines in the file
@@ -24,30 +25,26 @@ namespace fileReaders {
             throw std::runtime_error("File is empty: " + filepath);
         }
 
+        // Validate the header lines
+        validateHeaderLines(lines);
+
         // Parse the data code
-        int dataCode;
-        try {
-            dataCode = std::stoi(lines[0]);
-            // Remove the first element of lines
-            lines.erase(lines.begin());
-        } catch (const std::invalid_argument &e) {
-            throw std::runtime_error(
-                    "Invalid data code in file '" + filepath + "': " + e.what() + ". Data code must be an integer.");
-        } catch (const std::out_of_range &e) {
-            throw std::runtime_error(
-                    "Data code out of range in file '" + filepath + "': " + e.what() + ". Data code must be an integer.");
-        }
+        int dataCode = std::stoi(lines[0]);
+        lines.erase(lines.begin());
 
         // Log the data code
         SPDLOG_INFO("Data Code of file '{}': {}", filepath, dataCode);
         // Load particles or cuboid based on data code
-        ParticleContainer particleContainer;
+        std::unique_ptr<ParticleContainer> particleContainer = std::make_unique<ParticleContainer>();
         switch (dataCode) {
             case 0:
-                loadParticles(lines, particleContainer);
+                loadParticles(lines, *particleContainer);
                 break;
             case 1:
-                loadCuboids(lines, particleContainer);
+                loadCuboids(lines, *particleContainer);
+                break;
+            case 2:
+                loadDiscs(lines, *particleContainer);
                 break;
             default:
                 SPDLOG_ERROR("Invalid data code in file '", filepath + "': Only data codes 0 and 1 are supported.");
@@ -55,7 +52,13 @@ namespace fileReaders {
                         "Invalid data code in file '" + filepath + "': Only data codes 0 and 1 are supported.");
         }
 
-        return particleContainer;
+        std::unique_ptr<FileWriterParameters> fileWriterParameters = std::make_unique<FileWriterParameters>();
+        std::unique_ptr<SimulationParameters> simulationParameters = std::make_unique<SimulationParameters>();
+        std::unique_ptr<ThermostatParameters> thermostatParameters = std::make_unique<ThermostatParameters>();
+        std::unique_ptr<BoundaryParameters> boundaryParameters = std::make_unique<BoundaryParameters>();
+        SimulationDataContainer simulationDataContainer(std::move(particleContainer), std::move(fileWriterParameters), std::move(simulationParameters),
+                                                        std::move(thermostatParameters), std::move(boundaryParameters));
+        return simulationDataContainer;
     }
 
     void TXTReader::loadParticles(const std::vector<std::string> &lines, ParticleContainer &particleContainer) {
@@ -63,15 +66,17 @@ namespace fileReaders {
         double m;
 
         int num_particles = std::stoi(lines[0]);
+        int dimension = std::stoi(lines[1]);
         SPDLOG_DEBUG("Number of particles to load: {}", num_particles);
+        SPDLOG_DEBUG("Dimension of simulation: {}", dimension);
 
-        for (int i = 1; i < num_particles + 1; ++i) {
+        for (int i = 2; i < num_particles + 2; ++i) {
             std::istringstream datastream(lines[i]);
             parseDataFromLine(datastream, x);
             parseDataFromLine(datastream, v);
             datastream >> m;
 
-            ParticleParameters parameters(x, v, m, 0, 0);
+            ParticleParameters parameters(x, v, m, 0, 0, dimension);
             Particle newParticle = ParticleGenerator::generateParticle(parameters);
             particleContainer.addParticle(newParticle);
         }
@@ -87,9 +92,11 @@ namespace fileReaders {
         double distance, mass, meanV;
 
         int num_cuboids = std::stoi(lines[0]);
+        int dimension = std::stoi(lines[1]);
         SPDLOG_DEBUG("Number of cuboids to load: {}", num_cuboids);
+        SPDLOG_DEBUG("Dimension of simulation: {}", dimension);
 
-        for (int i = 1; i < num_cuboids + 1; ++i) {
+        for (int i = 2; i < num_cuboids + 2; ++i) {
             std::istringstream datastream(lines[i]);
             parseDataFromLine(datastream, llf);
             parseDataFromLine(datastream, numParticles);
@@ -102,14 +109,50 @@ namespace fileReaders {
                 exit(-1);
             }
 
-            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV);
+            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, dimension);
             ParticleGenerator::generateCuboid(cuboidParams, particles);
             SPDLOG_DEBUG("Completed generating cuboid {}", i);
-            particles.initializePairs();
         }
+        particles.initializePairs();
         SPDLOG_INFO("Finished loading cuboids!");
     }
+
+
+    void TXTReader::loadDiscs(const std::vector<std::string> &lines, ParticleContainer &particles) {
+        SPDLOG_INFO("Starting to load discs...");
+        std::array<double, 3> center{}, startV{};
+        int numParticlesAlongRadius;
+        double distance, mass;
+
+        int num_discs = std::stoi(lines[0]);
+        int dimension = std::stoi(lines[1]);
+        SPDLOG_DEBUG("Number of discs to load: {}", num_discs);
+        SPDLOG_DEBUG("Dimension of simulation: {}", dimension);
+
+        for (int i = 2; i < num_discs + 2; ++i) {
+            std::istringstream datastream(lines[i]);
+            parseDataFromLine(datastream, center);
+            parseDataFromLine(datastream, startV);
+            datastream >> numParticlesAlongRadius >> distance >> mass;
+
+            if (datastream.fail()) {
+                SPDLOG_ERROR("Error reading file: unexpected data format on line {}", i + 1);
+                exit(-1);
+            }
+
+            DiscParameters discParams(center, startV, numParticlesAlongRadius, distance, mass, dimension);
+            ParticleGenerator::generateDisc(discParams, particles);
+            SPDLOG_DEBUG("Completed generating disc {}", i);
+            particles.initializePairs();
+        }
+        SPDLOG_INFO("Finished loading discs!");
+    }
+
     // ------------------------------------------- Helper methods --------------------------------------------------
+
+    const std::set<int> TXTReader::allowedDataCodes = {0, 1, 2};
+    const std::set<int> TXTReader::allowedDimensions = {2, 3};
+
     template<typename T, size_t N>
     void TXTReader::parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data) {
         for (auto &value: data) {
@@ -125,24 +168,49 @@ namespace fileReaders {
         std::vector<std::string> lines;
         std::ifstream input_file(filepath);
         std::string tmp_string;
+        bool data_code_read = false;
         bool num_data_read = false;
+        bool dimension_read = false;
 
         if (input_file.is_open()) {
             while (std::getline(input_file, tmp_string)) {
-                if (!tmp_string.empty() && tmp_string[0] != '#') {
-                    if (!num_data_read) {
-                        int num_data = std::stoi(tmp_string);
-                        if (num_data < 0) {
-                            SPDLOG_ERROR("Error: Number of data sets cannot be negative.");
-                            exit(-1);
-                        }
-
-                        // Reserve space in the vector to avoid reallocations
-                        lines.reserve(num_data + 1);
-                        num_data_read = true;
-                    }
-                    lines.push_back(tmp_string);
+                // Ignore comment lines
+                if (!tmp_string.empty() && tmp_string[0] == '#') {
+                    continue;
                 }
+
+                // Read and validate the data code
+                if (!data_code_read) {
+                    int data_code = std::stoi(tmp_string);
+                    if (allowedDataCodes.find(data_code) == allowedDataCodes.end()) {
+                        SPDLOG_ERROR("Error: Invalid data code {}. Only 0 and 1 are allowed.", data_code);
+                        exit(-1);
+                    }
+                    data_code_read = true;
+                }
+
+                    // Read and validate the number of data sets
+                else if (!num_data_read) {
+                    int num_data = std::stoi(tmp_string);
+                    if (num_data < 0) {
+                        SPDLOG_ERROR("Error: Number of data sets cannot be negative.");
+                        exit(-1);
+                    }
+                    num_data_read = true;
+                }
+
+                    // Read and validate the dimension
+                else if (!dimension_read) {
+                    int dimension = std::stoi(tmp_string);
+                    if (allowedDimensions.find(dimension) == allowedDimensions.end()) {
+                        SPDLOG_ERROR("Error: Invalid dimension {}. Only 2 or 3 are allowed.", dimension);
+                        exit(-1);
+                    }
+                    dimension_read = true;
+                }
+
+                // Add the line to the vector
+                lines.push_back(tmp_string);
             }
         } else {
             SPDLOG_ERROR("Error: could not open file {}", filepath);
@@ -150,4 +218,48 @@ namespace fileReaders {
         }
         return lines;
     }
+
+    void TXTReader::validateHeaderLines(const std::vector<std::string> &lines) {
+        bool data_code_read = false;
+        bool num_datasets_read = false;
+
+        if (lines.size() < 3) {
+            SPDLOG_ERROR("Error: File does not contain enough header lines. Expected 3 header lines, but found {}.",
+                         lines.size());
+            exit(-1);
+        }
+
+        for (const auto &line: lines) {
+            // Read and validate the data code
+            if (!data_code_read) {
+                int data_code = std::stoi(line);
+                if (allowedDataCodes.find(data_code) == allowedDataCodes.end()) {
+                    SPDLOG_ERROR("Error: Invalid data code {}. Only 0 and 1 are allowed.", data_code);
+                    exit(-1);
+                }
+                data_code_read = true;
+            }
+
+                // Read and validate the number of data sets
+            else if (!num_datasets_read) {
+                int num_data = std::stoi(line);
+                if (num_data < 0) {
+                    SPDLOG_ERROR("Error: Number of data sets cannot be negative.");
+                    exit(-1);
+                }
+                num_datasets_read = true;
+            }
+
+                // Read and validate the dimension
+            else {
+                int dimension = std::stoi(line);
+                if (allowedDimensions.find(dimension) == allowedDimensions.end()) {
+                    SPDLOG_ERROR("Error: Invalid dimension {}. Only 2 or 3 are allowed.", dimension);
+                    exit(-1);
+                }
+                return;
+            }
+        }
+    }
 }
+

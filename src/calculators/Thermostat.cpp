@@ -5,6 +5,7 @@
 #include "Thermostat.h"
 #include "../utils/ArrayUtils.h"
 #include "../utils/MaxwellBoltzmannDistribution.h"
+#include "spdlog/spdlog.h"
 
 const double COMPARISON_TOLERANCE = 1e-9;
 
@@ -25,10 +26,12 @@ void Thermostat::initializeTemp(ParticleContainer &particleContainer) const {
 
             particle.setV(v);
         }
+        SPDLOG_INFO("Initialized velocities with Brownian motion");
     }
 
     // Velocity scaling to initial temperature
     setTemp(particleContainer, start_temp);
+    SPDLOG_INFO("Scaled velocities to initial temperature");
 }
 
 void Thermostat::setTempDirectly(ParticleContainer &particleContainer) const {

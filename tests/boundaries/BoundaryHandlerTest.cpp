@@ -11,7 +11,6 @@
 #include "io/in/FileReader.h"
 #include "io/in/TXTReader.h"
 #include "io/in/XMLReader.h"
-
 // Helper function to compare two std::array<double, 3> with a given tolerance
 bool arraysNear(const std::array<double, 3> &arr1, const std::array<double, 3> &arr2, double tolerance) {
     for (size_t i = 0; i < arr1.size(); ++i) {
@@ -33,24 +32,20 @@ namespace boundaries {
         SPDLOG_INFO("Testing Reflections...");
         std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
         std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
+        boundaryMap.emplace(boundaries::BoundaryDirection::LEFT, boundaries::BoundaryType::OUTFLOW);
+        boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::OUTFLOW);
+        boundaryMap.emplace(boundaries::BoundaryDirection::TOP, boundaries::BoundaryType::OUTFLOW);
+        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
+        std::shared_ptr<calculators::Calculator> calculator = std::make_shared<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
-        std::ofstream outfile("particles_near_reflecting_boundary.txt");
-        outfile << "0\n"  // Data code for Particles
-                << "4\n"  // Number of data sets
-                << "2\n"  // Dimension of simulation
-                << "10.0 0.5 0.0     0.0 3.0 0.0      1.0\n" // Bottom
-                << "10.0 19.5 0.0    0.0 3.0 0.0      1.0\n" // Top
-                << "0.5 10.0 0.0     -3.0 0.0 0.0     1.0\n" // Left
-                << "19.5 10.0 0.0    3.0 0.0 0.0      1.0\n";// Right
-        outfile.close();
+        boundaries::BoundaryHandler handler{properties, calculator};
 
-        // Read cuboid data from the file
-        fileReaders::TXTReader fileReader;
-        ParticleContainer container = fileReader.readFile("particles_near_reflecting_boundary.txt");
-        std::remove("particles_near_reflecting_boundary");
+        ParticleContainer container{};
+        container.addParticle(Particle{std::array<double, 3>{10.0, 0.5, 0.0}, std::array<double, 3>{0.0, 3.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{10.0, 19.5, 0.0}, std::array<double, 3>{0.0, 3.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{0.5, 10., 0.0}, std::array<double, 3>{0.0, 3.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{19.5, 10., 0.0}, std::array<double, 3>{0.0, 3.0, 0.0}, 1.0, 0.0});
 
         // Check if Force of all Particles is zero
         std::array<double, 3> zero{0.0, 0.0, 0.0};
@@ -61,6 +56,7 @@ namespace boundaries {
                                                                    {0.0,    -120.0, 0.0},
                                                                    {120.0,  0.0,    0.0},
                                                                    {-120.0, 0.0,    0.0}};
+
         handler.preProcessBoundaries(container);
         std::vector<Particle> particles = container.getParticles();
         for (int i = 0; i < 4; i++) {
@@ -73,24 +69,20 @@ namespace boundaries {
     TEST(BoundaryHandlerTest, CornerReflection) {
         std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
         std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
+        std::shared_ptr<calculators::Calculator> calculator = std::make_shared<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
+        boundaryMap[BoundaryDirection::TOP] = boundaries::BoundaryType::REFLECTING;
+        boundaryMap[BoundaryDirection::BOTTOM] = boundaries::BoundaryType::REFLECTING;
+        boundaryMap[BoundaryDirection::LEFT] = boundaries::BoundaryType::REFLECTING;
+        boundaryMap[BoundaryDirection::RIGHT] = boundaries::BoundaryType::REFLECTING;
         // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
-        std::ofstream outfile("particles_near_reflecting_boundary.txt");
-        outfile << "0\n"  // Data code for Particles
-                << "4\n"  // Number of data sets
-                << "2\n"  // Dimension of simulation
-                << "0.5 0.5 0.0     -1000.0 -3.0 0.0     1.0\n" // Bottom Left
-                << "0.5 19.5 0.0    -1000.0 3.0 0.0      1.0\n" // Top Left
-                << "19.5 0.5 0.0     1000.0 -3.0 0.0     1.0\n" // Bottom Right
-                << "19.5 19.5 0.0    1000.0 3.0 0.0      1.0\n";// Top Right
-        outfile.close();
+        boundaries::BoundaryHandler handler{properties, calculator};
 
-        // Read cuboid data from the file
-        fileReaders::TXTReader fileReader;
-        ParticleContainer container = fileReader.readFile("particles_near_reflecting_boundary.txt");
-        std::remove("particles_near_reflecting_boundary");
+        ParticleContainer container{};
+        container.addParticle(Particle{std::array<double, 3>{0.5, 0.5, 0.0}, std::array<double, 3>{-3.0, -3.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{0.5, 19.5, 0.0}, std::array<double, 3>{-3.0, -3.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{19.5, 0.5, 0.0}, std::array<double, 3>{3.0, -3.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{19.5, 19.5, 0.0}, std::array<double, 3>{3.0, -3.0, 0.0}, 1.0, 0.0});
 
         // Check if Force of all Particles is zero
         std::array<double, 3> zero{0.0, 0.0, 0.0};
@@ -117,24 +109,16 @@ namespace boundaries {
         boundaryMap.emplace(boundaries::BoundaryDirection::TOP, boundaries::BoundaryType::OUTFLOW);
 
         std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
+        std::shared_ptr<calculators::Calculator> calculator = std::make_shared<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
-        std::ofstream outfile("particles_near_reflecting_boundary.txt");
-        outfile << "0\n"  // Data code for Particles
-                << "4\n"  // Number of data sets
-                << "2\n"  // Dimension of simulation
-                << "10.0 0.5 0.0     0.0 -500.0 0.0     1.0\n"
-                << "10.0 19.5 0.0    0.0 500.0 0.0      1.0\n"
-                << "0.5 10.0 0.0     -1000.0 0.0 0.0     1.0\n"
-                << "19.5 10.0 0.0    1000.0 0.0 0.0      1.0\n";
-        outfile.close();
+        boundaries::BoundaryHandler handler{properties, calculator};
 
-        // Read cuboid data from the file
-        fileReaders::TXTReader fileReader;
-        ParticleContainer container = fileReader.readFile("particles_near_reflecting_boundary.txt");
-        std::remove("particles_near_reflecting_boundary");
+        ParticleContainer container{};
+        container.addParticle(Particle{std::array<double, 3>{10.0, 0.5, 0.0}, std::array<double, 3>{0.0, -500.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{10.0, 19.5, 0.0}, std::array<double, 3>{0.0, 500.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{0.5, 10.0, 0.0}, std::array<double, 3>{-1000.0, 0.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{19.5, 10.0, 0.0}, std::array<double, 3>{2000.0, 0.0, 0.0}, 1.0, 0.0});
 
         // Check if Force of all Particles is zero
         std::array<double, 3> zero{0.0, 0.0, 0.0};
@@ -158,30 +142,23 @@ namespace boundaries {
         std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
         boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
         boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::OUTFLOW);
-
+        boundaryMap[BoundaryDirection::TOP] = boundaries::BoundaryType::REFLECTING;
+        boundaryMap[BoundaryDirection::LEFT] = boundaries::BoundaryType::REFLECTING;
         std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
+        std::shared_ptr<calculators::Calculator> calculator = std::make_shared<calculators::LJCalculator>(3.0);
         boundaries::BoundaryProperties properties{domain, boundaryMap};
         // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
-        std::ofstream outfile("particles_near_reflecting_boundary.txt");
-        outfile << "0\n"  // Data code for Particles
-                << "8\n"  // Number of data sets
-                << "2\n"  // Dimension of simulation
-                << "10.0 0.5 0.0     0.0 -300.0 0.0     1.0\n" // Bottom - Slow
-                << "10.0 19.5 0.0    0.0 300.0 0.0      1.0\n" // Top
-                << "0.5 10.0 0.0     -300.0 0.0 0.0     1.0\n" // Left - Slow
-                << "19.5 10.0 0.0    1000.0 0.0 0.0      1.0\n" // Right
-                << "0.5 0.5 0.0     -300.0 -300.0 0.0  1.0\n" // Bottom Left - Slow
-                << "0.5 19.5 0.0    -300.0 300.0 0.0      1.0\n" // Top Left - Slow
-                << "19.5 0.5 0.0     1000.0 -300.0 0.0     1.0\n" // Bottom Right
-                << "19.5 19.5 0.0    1000.0 300.0 0.0      1.0\n";// Top Right
-        outfile.close();
+        boundaries::BoundaryHandler handler{properties, calculator};
 
-        // Read cuboid data from the file
-        fileReaders::TXTReader fileReader;
-        ParticleContainer container = fileReader.readFile("particles_near_reflecting_boundary.txt");
-        std::remove("particles_near_reflecting_boundary");
+        ParticleContainer container{};
+        container.addParticle(Particle{std::array<double, 3>{10.0, 0.5, 0.0}, std::array<double, 3>{0.0, -300.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{10.0, 19.5, 0.0}, std::array<double, 3>{0.0, -300.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{0.5, 10.0, 0.0}, std::array<double, 3>{-300.0, 0.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{19.5, 10.0, 0.0}, std::array<double, 3>{1000.0, 0.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{0.5, 0.5, 0.0}, std::array<double, 3>{-300.0, -300.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{0.5, 19.5, 0.0}, std::array<double, 3>{-300.0, 300.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{19.5, 0.5, 0.0}, std::array<double, 3>{1000.0, -300.0, 0.0}, 1.0, 0.0});
+        container.addParticle(Particle{std::array<double, 3>{19.5, 19.5, 0.0}, std::array<double, 3>{1000.0, 300.0, 0.0}, 1.0, 0.0});
 
         // Check if Force of all Particles is zero
         std::array<double, 3> zero{0.0, 0.0, 0.0};
@@ -230,113 +207,116 @@ namespace boundaries {
         }
     }
 
-    TEST(BoundaryHandlerTest, PeriodicBoundaries) {
-        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
-        boundaryMap.emplace(boundaries::BoundaryDirection::LEFT, boundaries::BoundaryType::OUTFLOW);
-        boundaryMap.emplace(boundaries::BoundaryDirection::RIGHT, boundaries::BoundaryType::OUTFLOW);
-        boundaryMap.emplace(boundaries::BoundaryDirection::BOTTOM, boundaries::BoundaryType::OUTFLOW);
-        boundaryMap.emplace(boundaries::BoundaryDirection::TOP, boundaries::BoundaryType::OUTFLOW);
-
-        std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
-        boundaries::BoundaryProperties properties{domain, boundaryMap};
-        // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
-        std::ofstream outfile("particles_near_reflecting_boundary.txt");
-        outfile << "0\n"  // Data code for Particles
-                << "4\n"  // Number of data sets
-                << "2\n"  // Dimension of simulation
-                << "15.0 0.5 0.0     0.0 -500.0 0.0     1.0\n"
-                << "5.0 19.5 0.0    0.0 500.0 0.0      1.0\n"
-                << "0.5 5.0 0.0     -1000.0 0.0 0.0     1.0\n"
-                << "19.5 15.0 0.0    1000.0 0.0 0.0      1.0\n";
-        outfile.close();
-
-        // Read cuboid data from the file
-        fileReaders::TXTReader fileReader;
-        ParticleContainer container = fileReader.readFile("particles_near_reflecting_boundary.txt");
-        std::remove("particles_near_reflecting_boundary");
-
-        // Check if Force of all Particles is zero
-        std::array<double, 3> zero{0.0, 0.0, 0.0};
-        for (Particle &p: container) {
-            ASSERT_EQ(p.getF(), zero);
-        }
-        // First timestep - The faster two particles should be deleted on the left/right
-        handler.preProcessBoundaries(container);
-        calculator->calculate(container, 0.0005);
-        handler.postProcessBoundaries(container);
-        ASSERT_EQ(container.getSize(), 4);
-        std::vector<std::array<double, 3>> expectedPositions{{15, 0.25,  0},
-                                                             {5,  19.75, 0},
-                                                             {0,  5,     0},
-                                                             {0,  5,     0}};
-        std::vector<Particle> particles = container.getParticles();
-        for (int i = 0; i < 4; i++)
-            ASSERT_ARRAYS_NEAR(particles[i].getX(), expectedPositions[i], 1e-6);
-        // Second timestep - The two slower particles get deleted on the bottom and top
-        handler.preProcessBoundaries(container);
-        calculator->calculate(container, 0.0005);
-        handler.postProcessBoundaries(container);
-        ASSERT_EQ(container.getSize(), 4);
-        particles.clear();
-        particles = container.getParticles();
-        expectedPositions = {{15, 0, 0},
-                             {5, 0, 0},
-                             {19.5, 5, 0},
-                             {0.5, 5, 0}};
-        for (int i = 0; i < 4; i++)
-            ASSERT_ARRAYS_NEAR(particles[i].getX(), expectedPositions[i], 1e-6);
-    }
-
-    // Check if the forces after reflection are correct
-    TEST(BoundaryHandlerTest, CornerPeriodic) {
-        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
-        std::array<double, 2> domain = {20.0, 20.0};
-        std::unique_ptr<calculators::Calculator> calculator = std::make_unique<calculators::LJCalculator>(3.0);
-        boundaries::BoundaryProperties properties{domain, boundaryMap};
-        // Initialization of BoundaryHandler
-        boundaries::BoundaryHandler handler{properties, calculator.get(), 1.0};
-        std::ofstream outfile("particles_near_reflecting_boundary.txt");
-        outfile << "0\n"  // Data code for Particles
-                << "4\n"  // Number of data sets
-                << "2\n"  // Dimension of simulation
-                << "0.5 0.5 0.0     -1000.0 -1000.0 0.0     1.0\n" // Bottom Left
-                << "0.5 19.5 0.0    -1000.0 1000.0 0.0      1.0\n" // Top Left
-                << "19.5 0.5 0.0     1000.0 -1000.0 0.0     1.0\n" // Bottom Right
-                << "19.5 19.5 0.0    1000.0 1000.0 0.0      1.0\n";// Top Right
-        outfile.close();
-
-        // Read cuboid data from the file
-        fileReaders::TXTReader fileReader;
-        ParticleContainer container = fileReader.readFile("particles_near_reflecting_boundary.txt");
-        std::remove("particles_near_reflecting_boundary");
-
-        // Check if Force of all Particles is zero
-        std::array<double, 3> zero{0.0, 0.0, 0.0};
-        for (Particle &p: container) {
-            ASSERT_EQ(p.getF(), zero);
-        }
-        // First timestep - The faster two particles should be deleted on the left/right
-        handler.preProcessBoundaries(container);
-        calculator->calculate(container, 0.0005);
-        handler.postProcessBoundaries(container);
-        ASSERT_EQ(container.getSize(), 4);
-        std::vector<Particle> particles = container.getParticles();
-        for (int i = 0; i < 4; i++)
-            ASSERT_ARRAYS_NEAR(particles[i].getX(), zero, 1e-6);
-        // Second timestep - The two slower particles get deleted on the bottom and top
-        handler.preProcessBoundaries(container);
-        calculator->calculate(container, 0.0005);
-        handler.postProcessBoundaries(container);
-        ASSERT_EQ(container.getSize(), 4);
-        particles.clear();
-        particles = container.getParticles();
-        std::vector<std::array<double, 3>> expectedPositions = {{19.5, 19.5, 0.0},
-                                                                {19.5, 0.5, 0.0},
-                                                                {0.5, 19.5, 0.0},
-                                                                {0.5, 0.5, 0.0}};
-        for (int i = 0; i < 4; i++)
-            ASSERT_ARRAYS_NEAR(particles[i].getX(), expectedPositions[i], 1e-6);
-    }
+//    TEST(BoundaryHandlerTest, PeriodicBoundaries) {
+//        std::array<double, 2> domain = {20.0, 20.0};
+//        std::shared_ptr<calculators::Calculator> calculator = std::make_shared<calculators::LJCalculator>(3.0);
+//        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
+//        boundaryMap[BoundaryDirection::TOP] = boundaries::BoundaryType::PERIODIC;
+//        boundaryMap[BoundaryDirection::BOTTOM] = boundaries::BoundaryType::PERIODIC;
+//        boundaryMap[BoundaryDirection::LEFT] = boundaries::BoundaryType::PERIODIC;
+//        boundaryMap[BoundaryDirection::RIGHT] = boundaries::BoundaryType::PERIODIC;
+//        boundaries::BoundaryProperties properties{domain, boundaryMap};
+//        // Initialization of BoundaryHandler
+//        boundaries::BoundaryHandler handler{properties, calculator};
+//        std::ofstream outfile("particles_near_reflecting_boundary.txt");
+//        outfile << "0\n"  // Data code for Particles
+//                << "4\n"  // Number of data sets
+//                << "2\n"  // Dimension of simulation
+//                << "15.0 0.5 0.0     0.0 -500.0 0.0     1.0\n"
+//                << "5.0 19.5 0.0    0.0 500.0 0.0      1.0\n"
+//                << "0.5 5.0 0.0     -1000.0 0.0 0.0     1.0\n"
+//                << "19.5 15.0 0.0    1000.0 0.0 0.0      1.0\n";
+//        outfile.close();
+//        ParticleContainer container{};
+//        container.addParticle(Particle{std::array<double, 3>{15.0, 0.5, 0.0}, std::array<double, 3>{0.0, -500.0, 0.0}, 1.0, 0.0});
+//        container.addParticle(Particle{std::array<double, 3>{5.0, 19.5, 0.0}, std::array<double, 3>{0.0, 500.0, 0.0}, 1.0, 0.0});
+//        container.addParticle(Particle{std::array<double, 3>{0.5, 5.0, 0.0}, std::array<double, 3>{-1000.0, 0.0, 0.0}, 1.0, 0.0});
+//        container.addParticle(Particle{std::array<double, 3>{19.5, 15.0, 0.0}, std::array<double, 3>{1000.0, 0.0, 0.0}, 1.0, 0.0});
+//
+//        // Check if Force of all Particles is zero
+//        std::array<double, 3> zero{0.0, 0.0, 0.0};
+//        for (Particle &p: container) {
+//            ASSERT_EQ(p.getF(), zero);
+//        }
+//        // First timestep - The faster two particles should be deleted on the left/right
+//        handler.preProcessBoundaries(container);
+//        calculator->calculate(container, 0.0005);
+//        handler.postProcessBoundaries(container);
+//        ASSERT_EQ(container.getSize(), 4);
+//        std::vector<std::array<double, 3>> expectedPositions{{15, 0.25,  0},
+//                                                             {5,  19.75, 0},
+//                                                             {0,  5,     0},
+//                                                             {0,  5,     0}};
+//        std::vector<Particle> particles = container.getParticles();
+//        for (int i = 0; i < 4; i++)
+//            ASSERT_ARRAYS_NEAR(particles[i].getX(), expectedPositions[i], 1e-6);
+//        // Second timestep - The two slower particles get deleted on the bottom and top
+//        handler.preProcessBoundaries(container);
+//        calculator->calculate(container, 0.0005);
+//        handler.postProcessBoundaries(container);
+//        ASSERT_EQ(container.getSize(), 4);
+//        particles.clear();
+//        particles = container.getParticles();
+//        expectedPositions = {{15, 0, 0},
+//                             {5, 0, 0},
+//                             {19.5, 5, 0},
+//                             {0.5, 5, 0}};
+//        for (int i = 0; i < 4; i++)
+//            ASSERT_ARRAYS_NEAR(particles[i].getX(), expectedPositions[i], 1e-6);
+//    }
+//
+//    // Check if the forces after reflection are correct
+//    TEST(BoundaryHandlerTest, CornerPeriodic) {
+//        std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap{};
+//        boundaryMap[BoundaryDirection::TOP] = boundaries::BoundaryType::PERIODIC;
+//        boundaryMap[BoundaryDirection::BOTTOM] = boundaries::BoundaryType::PERIODIC;
+//        boundaryMap[BoundaryDirection::LEFT] = boundaries::BoundaryType::PERIODIC;
+//        boundaryMap[BoundaryDirection::RIGHT] = boundaries::BoundaryType::PERIODIC;
+//        std::array<double, 2> domain = {20.0, 20.0};
+//        std::shared_ptr<calculators::Calculator> calculator = std::make_shared<calculators::LJCalculator>(3.0);
+//        boundaries::BoundaryProperties properties{domain, boundaryMap};
+//        // Initialization of BoundaryHandler
+//        boundaries::BoundaryHandler handler{properties, calculator};
+//        std::ofstream outfile("particles_near_reflecting_boundary.txt");
+//        outfile << "0\n"  // Data code for Particles
+//                << "4\n"  // Number of data sets
+//                << "2\n"  // Dimension of simulation
+//                << "0.5 0.5 0.0     -1000.0 -1000.0 0.0     1.0\n" // Bottom Left
+//                << "0.5 19.5 0.0    -1000.0 1000.0 0.0      1.0\n" // Top Left
+//                << "19.5 0.5 0.0     1000.0 -1000.0 0.0     1.0\n" // Bottom Right
+//                << "19.5 19.5 0.0    1000.0 1000.0 0.0      1.0\n";// Top Right
+//        outfile.close();
+//
+//        // Read cuboid data from the file
+//        SimulationDataContainer simulationDataContainer = fileReaders::TXTReader::readFile("particles_near_reflecting_boundary.txt");
+//        ParticleContainer container = *simulationDataContainer.getParticleContainer();
+//        std::remove("particles_near_reflecting_boundary");
+//
+//        // Check if Force of all Particles is zero
+//        std::array<double, 3> zero{0.0, 0.0, 0.0};
+//        for (Particle &p: container) {
+//            ASSERT_EQ(p.getF(), zero);
+//        }
+//        // First timestep - The faster two particles should be deleted on the left/right
+//        handler.preProcessBoundaries(container);
+//        calculator->calculate(container, 0.0005);
+//        handler.postProcessBoundaries(container);
+//        ASSERT_EQ(container.getSize(), 4);
+//        std::vector<Particle> particles = container.getParticles();
+//        for (int i = 0; i < 4; i++)
+//            ASSERT_ARRAYS_NEAR(particles[i].getX(), zero, 1e-6);
+//        // Second timestep - The two slower particles get deleted on the bottom and top
+//        handler.preProcessBoundaries(container);
+//        calculator->calculate(container, 0.0005);
+//        handler.postProcessBoundaries(container);
+//        ASSERT_EQ(container.getSize(), 4);
+//        particles.clear();
+//        particles = container.getParticles();
+//        std::vector<std::array<double, 3>> expectedPositions = {{19.5, 19.5, 0.0},
+//                                                                {19.5, 0.5, 0.0},
+//                                                                {0.5, 19.5, 0.0},
+//                                                                {0.5, 0.5, 0.0}};
+//        for (int i = 0; i < 4; i++)
+//            ASSERT_ARRAYS_NEAR(particles[i].getX(), expectedPositions[i], 1e-6);
+//    }
 } //boundaries

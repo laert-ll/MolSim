@@ -27,7 +27,7 @@ namespace boundaries {
          *
          * @return The 3D domain size.
          */
-        const std::array<double, 3> &getDomain() const {
+        [[nodiscard]] const std::array<double, 3> &getDomain() const {
             return domain;
         }
 
@@ -36,7 +36,7 @@ namespace boundaries {
          *
          * @return The boundary map.
          */
-        const std::map<BoundaryDirection, BoundaryType> &getBoundaryMap() const {
+        [[nodiscard]] const std::map<BoundaryDirection, BoundaryType> &getBoundaryMap() const {
             return boundaryMap;
         }
 

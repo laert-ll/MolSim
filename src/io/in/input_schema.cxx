@@ -40,185 +40,376 @@
 
 #include "input_schema.hxx"
 
-// InputParametersType
+// FileWriterParametersType
 //
 
-const InputParametersType::Domain_type& InputParametersType::
-Domain () const
-{
-  return this->Domain_.get ();
-}
-
-InputParametersType::Domain_type& InputParametersType::
-Domain ()
-{
-  return this->Domain_.get ();
-}
-
-void InputParametersType::
-Domain (const Domain_type& x)
-{
-  this->Domain_.set (x);
-}
-
-void InputParametersType::
-Domain (::std::unique_ptr< Domain_type > x)
-{
-  this->Domain_.set (std::move (x));
-}
-
-const InputParametersType::CutoffRadius_type& InputParametersType::
-CutoffRadius () const
-{
-  return this->CutoffRadius_.get ();
-}
-
-InputParametersType::CutoffRadius_type& InputParametersType::
-CutoffRadius ()
-{
-  return this->CutoffRadius_.get ();
-}
-
-void InputParametersType::
-CutoffRadius (const CutoffRadius_type& x)
-{
-  this->CutoffRadius_.set (x);
-}
-
-const InputParametersType::BaseName_type& InputParametersType::
+const FileWriterParametersType::BaseName_type& FileWriterParametersType::
 BaseName () const
 {
   return this->BaseName_.get ();
 }
 
-InputParametersType::BaseName_type& InputParametersType::
+FileWriterParametersType::BaseName_type& FileWriterParametersType::
 BaseName ()
 {
   return this->BaseName_.get ();
 }
 
-void InputParametersType::
+void FileWriterParametersType::
 BaseName (const BaseName_type& x)
 {
   this->BaseName_.set (x);
 }
 
-void InputParametersType::
+void FileWriterParametersType::
 BaseName (::std::unique_ptr< BaseName_type > x)
 {
   this->BaseName_.set (std::move (x));
 }
 
-const InputParametersType::WriteFrequency_type& InputParametersType::
+const FileWriterParametersType::WriteFrequency_type& FileWriterParametersType::
 WriteFrequency () const
 {
   return this->WriteFrequency_.get ();
 }
 
-InputParametersType::WriteFrequency_type& InputParametersType::
+FileWriterParametersType::WriteFrequency_type& FileWriterParametersType::
 WriteFrequency ()
 {
   return this->WriteFrequency_.get ();
 }
 
-void InputParametersType::
+void FileWriterParametersType::
 WriteFrequency (const WriteFrequency_type& x)
 {
   this->WriteFrequency_.set (x);
 }
 
-const InputParametersType::DeltaT_type& InputParametersType::
+
+// SimulationParametersType
+//
+
+const SimulationParametersType::EndT_type& SimulationParametersType::
+EndT () const
+{
+  return this->EndT_.get ();
+}
+
+SimulationParametersType::EndT_type& SimulationParametersType::
+EndT ()
+{
+  return this->EndT_.get ();
+}
+
+void SimulationParametersType::
+EndT (const EndT_type& x)
+{
+  this->EndT_.set (x);
+}
+
+const SimulationParametersType::DeltaT_type& SimulationParametersType::
 DeltaT () const
 {
   return this->DeltaT_.get ();
 }
 
-InputParametersType::DeltaT_type& InputParametersType::
+SimulationParametersType::DeltaT_type& SimulationParametersType::
 DeltaT ()
 {
   return this->DeltaT_.get ();
 }
 
-void InputParametersType::
+void SimulationParametersType::
 DeltaT (const DeltaT_type& x)
 {
   this->DeltaT_.set (x);
 }
 
-const InputParametersType::EndTime_type& InputParametersType::
-EndTime () const
-{
-  return this->EndTime_.get ();
-}
 
-InputParametersType::EndTime_type& InputParametersType::
-EndTime ()
-{
-  return this->EndTime_.get ();
-}
-
-void InputParametersType::
-EndTime (const EndTime_type& x)
-{
-  this->EndTime_.set (x);
-}
-
-
-// DomainType
+// ThermostatParametersType
 //
 
-const DomainType::x_type& DomainType::
-x () const
+const ThermostatParametersType::StartTemperature_type& ThermostatParametersType::
+StartTemperature () const
 {
-  return this->x_.get ();
+  return this->StartTemperature_.get ();
 }
 
-DomainType::x_type& DomainType::
-x ()
+ThermostatParametersType::StartTemperature_type& ThermostatParametersType::
+StartTemperature ()
 {
-  return this->x_.get ();
+  return this->StartTemperature_.get ();
 }
 
-void DomainType::
-x (const x_type& x)
+void ThermostatParametersType::
+StartTemperature (const StartTemperature_type& x)
 {
-  this->x_.set (x);
+  this->StartTemperature_.set (x);
 }
 
-const DomainType::y_type& DomainType::
-y () const
+const ThermostatParametersType::TargetTemperature_type& ThermostatParametersType::
+TargetTemperature () const
 {
-  return this->y_.get ();
+  return this->TargetTemperature_.get ();
 }
 
-DomainType::y_type& DomainType::
-y ()
+ThermostatParametersType::TargetTemperature_type& ThermostatParametersType::
+TargetTemperature ()
 {
-  return this->y_.get ();
+  return this->TargetTemperature_.get ();
 }
 
-void DomainType::
-y (const y_type& x)
+void ThermostatParametersType::
+TargetTemperature (const TargetTemperature_type& x)
 {
-  this->y_.set (x);
+  this->TargetTemperature_.set (x);
 }
 
-const DomainType::z_type& DomainType::
-z () const
+const ThermostatParametersType::ApplyFrequency_type& ThermostatParametersType::
+ApplyFrequency () const
 {
-  return this->z_.get ();
+  return this->ApplyFrequency_.get ();
 }
 
-DomainType::z_type& DomainType::
-z ()
+ThermostatParametersType::ApplyFrequency_type& ThermostatParametersType::
+ApplyFrequency ()
 {
-  return this->z_.get ();
+  return this->ApplyFrequency_.get ();
 }
 
-void DomainType::
-z (const z_type& x)
+void ThermostatParametersType::
+ApplyFrequency (const ApplyFrequency_type& x)
 {
-  this->z_.set (x);
+  this->ApplyFrequency_.set (x);
+}
+
+const ThermostatParametersType::MaxDeltaTemperature_type& ThermostatParametersType::
+MaxDeltaTemperature () const
+{
+  return this->MaxDeltaTemperature_.get ();
+}
+
+ThermostatParametersType::MaxDeltaTemperature_type& ThermostatParametersType::
+MaxDeltaTemperature ()
+{
+  return this->MaxDeltaTemperature_.get ();
+}
+
+void ThermostatParametersType::
+MaxDeltaTemperature (const MaxDeltaTemperature_type& x)
+{
+  this->MaxDeltaTemperature_.set (x);
+}
+
+const ThermostatParametersType::Dimension_type& ThermostatParametersType::
+Dimension () const
+{
+  return this->Dimension_.get ();
+}
+
+ThermostatParametersType::Dimension_type& ThermostatParametersType::
+Dimension ()
+{
+  return this->Dimension_.get ();
+}
+
+void ThermostatParametersType::
+Dimension (const Dimension_type& x)
+{
+  this->Dimension_.set (x);
+}
+
+
+// BoundaryType
+//
+
+BoundaryType::
+BoundaryType (value v)
+: ::xml_schema::string (_xsd_BoundaryType_literals_[v])
+{
+}
+
+BoundaryType::
+BoundaryType (const char* v)
+: ::xml_schema::string (v)
+{
+}
+
+BoundaryType::
+BoundaryType (const ::std::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+BoundaryType::
+BoundaryType (const ::xml_schema::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+BoundaryType::
+BoundaryType (const BoundaryType& v,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (v, f, c)
+{
+}
+
+BoundaryType& BoundaryType::
+operator= (value v)
+{
+  static_cast< ::xml_schema::string& > (*this) =
+  ::xml_schema::string (_xsd_BoundaryType_literals_[v]);
+
+  return *this;
+}
+
+
+// BoundaryParametersType
+//
+
+const BoundaryParametersType::TOP_type& BoundaryParametersType::
+TOP () const
+{
+  return this->TOP_.get ();
+}
+
+BoundaryParametersType::TOP_type& BoundaryParametersType::
+TOP ()
+{
+  return this->TOP_.get ();
+}
+
+void BoundaryParametersType::
+TOP (const TOP_type& x)
+{
+  this->TOP_.set (x);
+}
+
+void BoundaryParametersType::
+TOP (::std::unique_ptr< TOP_type > x)
+{
+  this->TOP_.set (std::move (x));
+}
+
+const BoundaryParametersType::RIGHT_type& BoundaryParametersType::
+RIGHT () const
+{
+  return this->RIGHT_.get ();
+}
+
+BoundaryParametersType::RIGHT_type& BoundaryParametersType::
+RIGHT ()
+{
+  return this->RIGHT_.get ();
+}
+
+void BoundaryParametersType::
+RIGHT (const RIGHT_type& x)
+{
+  this->RIGHT_.set (x);
+}
+
+void BoundaryParametersType::
+RIGHT (::std::unique_ptr< RIGHT_type > x)
+{
+  this->RIGHT_.set (std::move (x));
+}
+
+const BoundaryParametersType::BOTTOM_type& BoundaryParametersType::
+BOTTOM () const
+{
+  return this->BOTTOM_.get ();
+}
+
+BoundaryParametersType::BOTTOM_type& BoundaryParametersType::
+BOTTOM ()
+{
+  return this->BOTTOM_.get ();
+}
+
+void BoundaryParametersType::
+BOTTOM (const BOTTOM_type& x)
+{
+  this->BOTTOM_.set (x);
+}
+
+void BoundaryParametersType::
+BOTTOM (::std::unique_ptr< BOTTOM_type > x)
+{
+  this->BOTTOM_.set (std::move (x));
+}
+
+const BoundaryParametersType::LEFT_type& BoundaryParametersType::
+LEFT () const
+{
+  return this->LEFT_.get ();
+}
+
+BoundaryParametersType::LEFT_type& BoundaryParametersType::
+LEFT ()
+{
+  return this->LEFT_.get ();
+}
+
+void BoundaryParametersType::
+LEFT (const LEFT_type& x)
+{
+  this->LEFT_.set (x);
+}
+
+void BoundaryParametersType::
+LEFT (::std::unique_ptr< LEFT_type > x)
+{
+  this->LEFT_.set (std::move (x));
+}
+
+const BoundaryParametersType::FRONT_type& BoundaryParametersType::
+FRONT () const
+{
+  return this->FRONT_.get ();
+}
+
+BoundaryParametersType::FRONT_type& BoundaryParametersType::
+FRONT ()
+{
+  return this->FRONT_.get ();
+}
+
+void BoundaryParametersType::
+FRONT (const FRONT_type& x)
+{
+  this->FRONT_.set (x);
+}
+
+void BoundaryParametersType::
+FRONT (::std::unique_ptr< FRONT_type > x)
+{
+  this->FRONT_.set (std::move (x));
+}
+
+const BoundaryParametersType::BACK_type& BoundaryParametersType::
+BACK () const
+{
+  return this->BACK_.get ();
+}
+
+BoundaryParametersType::BACK_type& BoundaryParametersType::
+BACK ()
+{
+  return this->BACK_.get ();
+}
+
+void BoundaryParametersType::
+BACK (const BACK_type& x)
+{
+  this->BACK_.set (x);
+}
+
+void BoundaryParametersType::
+BACK (::std::unique_ptr< BACK_type > x)
+{
+  this->BACK_.set (std::move (x));
 }
 
 
@@ -355,28 +546,100 @@ MeanVelocity (const MeanVelocity_type& x)
 // Simulation
 //
 
-const Simulation::InputParameters_type& Simulation::
-InputParameters () const
+const Simulation::FileWriterParameters_type& Simulation::
+FileWriterParameters () const
 {
-  return this->InputParameters_.get ();
+  return this->FileWriterParameters_.get ();
 }
 
-Simulation::InputParameters_type& Simulation::
-InputParameters ()
+Simulation::FileWriterParameters_type& Simulation::
+FileWriterParameters ()
 {
-  return this->InputParameters_.get ();
-}
-
-void Simulation::
-InputParameters (const InputParameters_type& x)
-{
-  this->InputParameters_.set (x);
+  return this->FileWriterParameters_.get ();
 }
 
 void Simulation::
-InputParameters (::std::unique_ptr< InputParameters_type > x)
+FileWriterParameters (const FileWriterParameters_type& x)
 {
-  this->InputParameters_.set (std::move (x));
+  this->FileWriterParameters_.set (x);
+}
+
+void Simulation::
+FileWriterParameters (::std::unique_ptr< FileWriterParameters_type > x)
+{
+  this->FileWriterParameters_.set (std::move (x));
+}
+
+const Simulation::SimulationParameters_type& Simulation::
+SimulationParameters () const
+{
+  return this->SimulationParameters_.get ();
+}
+
+Simulation::SimulationParameters_type& Simulation::
+SimulationParameters ()
+{
+  return this->SimulationParameters_.get ();
+}
+
+void Simulation::
+SimulationParameters (const SimulationParameters_type& x)
+{
+  this->SimulationParameters_.set (x);
+}
+
+void Simulation::
+SimulationParameters (::std::unique_ptr< SimulationParameters_type > x)
+{
+  this->SimulationParameters_.set (std::move (x));
+}
+
+const Simulation::ThermostatParameters_type& Simulation::
+ThermostatParameters () const
+{
+  return this->ThermostatParameters_.get ();
+}
+
+Simulation::ThermostatParameters_type& Simulation::
+ThermostatParameters ()
+{
+  return this->ThermostatParameters_.get ();
+}
+
+void Simulation::
+ThermostatParameters (const ThermostatParameters_type& x)
+{
+  this->ThermostatParameters_.set (x);
+}
+
+void Simulation::
+ThermostatParameters (::std::unique_ptr< ThermostatParameters_type > x)
+{
+  this->ThermostatParameters_.set (std::move (x));
+}
+
+const Simulation::BoundaryParameters_type& Simulation::
+BoundaryParameters () const
+{
+  return this->BoundaryParameters_.get ();
+}
+
+Simulation::BoundaryParameters_type& Simulation::
+BoundaryParameters ()
+{
+  return this->BoundaryParameters_.get ();
+}
+
+void Simulation::
+BoundaryParameters (const BoundaryParameters_type& x)
+{
+  this->BoundaryParameters_.set (x);
+}
+
+void Simulation::
+BoundaryParameters (::std::unique_ptr< BoundaryParameters_type > x)
+{
+  this->BoundaryParameters_.set (std::move (x));
 }
 
 const Simulation::Cuboid_sequence& Simulation::
@@ -400,68 +663,35 @@ Cuboid (const Cuboid_sequence& s)
 
 #include <xsd/cxx/xml/dom/parsing-source.hxx>
 
-// InputParametersType
+// FileWriterParametersType
 //
 
-InputParametersType::
-InputParametersType (const Domain_type& Domain,
-                     const CutoffRadius_type& CutoffRadius,
-                     const BaseName_type& BaseName,
-                     const WriteFrequency_type& WriteFrequency,
-                     const DeltaT_type& DeltaT,
-                     const EndTime_type& EndTime)
+FileWriterParametersType::
+FileWriterParametersType (const BaseName_type& BaseName,
+                          const WriteFrequency_type& WriteFrequency)
 : ::xml_schema::type (),
-  Domain_ (Domain, this),
-  CutoffRadius_ (CutoffRadius, this),
   BaseName_ (BaseName, this),
-  WriteFrequency_ (WriteFrequency, this),
-  DeltaT_ (DeltaT, this),
-  EndTime_ (EndTime, this)
+  WriteFrequency_ (WriteFrequency, this)
 {
 }
 
-InputParametersType::
-InputParametersType (::std::unique_ptr< Domain_type > Domain,
-                     const CutoffRadius_type& CutoffRadius,
-                     const BaseName_type& BaseName,
-                     const WriteFrequency_type& WriteFrequency,
-                     const DeltaT_type& DeltaT,
-                     const EndTime_type& EndTime)
-: ::xml_schema::type (),
-  Domain_ (std::move (Domain), this),
-  CutoffRadius_ (CutoffRadius, this),
-  BaseName_ (BaseName, this),
-  WriteFrequency_ (WriteFrequency, this),
-  DeltaT_ (DeltaT, this),
-  EndTime_ (EndTime, this)
-{
-}
-
-InputParametersType::
-InputParametersType (const InputParametersType& x,
-                     ::xml_schema::flags f,
-                     ::xml_schema::container* c)
+FileWriterParametersType::
+FileWriterParametersType (const FileWriterParametersType& x,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
-  Domain_ (x.Domain_, f, this),
-  CutoffRadius_ (x.CutoffRadius_, f, this),
   BaseName_ (x.BaseName_, f, this),
-  WriteFrequency_ (x.WriteFrequency_, f, this),
-  DeltaT_ (x.DeltaT_, f, this),
-  EndTime_ (x.EndTime_, f, this)
+  WriteFrequency_ (x.WriteFrequency_, f, this)
 {
 }
 
-InputParametersType::
-InputParametersType (const ::xercesc::DOMElement& e,
-                     ::xml_schema::flags f,
-                     ::xml_schema::container* c)
+FileWriterParametersType::
+FileWriterParametersType (const ::xercesc::DOMElement& e,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
-  Domain_ (this),
-  CutoffRadius_ (this),
   BaseName_ (this),
-  WriteFrequency_ (this),
-  DeltaT_ (this),
-  EndTime_ (this)
+  WriteFrequency_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -470,7 +700,7 @@ InputParametersType (const ::xercesc::DOMElement& e,
   }
 }
 
-void InputParametersType::
+void FileWriterParametersType::
 parse (::xsd::cxx::xml::dom::parser< char >& p,
        ::xml_schema::flags f)
 {
@@ -479,31 +709,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     const ::xercesc::DOMElement& i (p.cur_element ());
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (i));
-
-    // Domain
-    //
-    if (n.name () == "Domain" && n.namespace_ ().empty ())
-    {
-      ::std::unique_ptr< Domain_type > r (
-        Domain_traits::create (i, f, this));
-
-      if (!Domain_.present ())
-      {
-        this->Domain_.set (::std::move (r));
-        continue;
-      }
-    }
-
-    // CutoffRadius
-    //
-    if (n.name () == "CutoffRadius" && n.namespace_ ().empty ())
-    {
-      if (!CutoffRadius_.present ())
-      {
-        this->CutoffRadius_.set (CutoffRadius_traits::create (i, f, this));
-        continue;
-      }
-    }
 
     // BaseName
     //
@@ -530,43 +735,7 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // DeltaT
-    //
-    if (n.name () == "DeltaT" && n.namespace_ ().empty ())
-    {
-      if (!DeltaT_.present ())
-      {
-        this->DeltaT_.set (DeltaT_traits::create (i, f, this));
-        continue;
-      }
-    }
-
-    // EndTime
-    //
-    if (n.name () == "EndTime" && n.namespace_ ().empty ())
-    {
-      if (!EndTime_.present ())
-      {
-        this->EndTime_.set (EndTime_traits::create (i, f, this));
-        continue;
-      }
-    }
-
     break;
-  }
-
-  if (!Domain_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "Domain",
-      "");
-  }
-
-  if (!CutoffRadius_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "CutoffRadius",
-      "");
   }
 
   if (!BaseName_.present ())
@@ -582,84 +751,62 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "WriteFrequency",
       "");
   }
-
-  if (!DeltaT_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "DeltaT",
-      "");
-  }
-
-  if (!EndTime_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "EndTime",
-      "");
-  }
 }
 
-InputParametersType* InputParametersType::
+FileWriterParametersType* FileWriterParametersType::
 _clone (::xml_schema::flags f,
         ::xml_schema::container* c) const
 {
-  return new class InputParametersType (*this, f, c);
+  return new class FileWriterParametersType (*this, f, c);
 }
 
-InputParametersType& InputParametersType::
-operator= (const InputParametersType& x)
+FileWriterParametersType& FileWriterParametersType::
+operator= (const FileWriterParametersType& x)
 {
   if (this != &x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
-    this->Domain_ = x.Domain_;
-    this->CutoffRadius_ = x.CutoffRadius_;
     this->BaseName_ = x.BaseName_;
     this->WriteFrequency_ = x.WriteFrequency_;
-    this->DeltaT_ = x.DeltaT_;
-    this->EndTime_ = x.EndTime_;
   }
 
   return *this;
 }
 
-InputParametersType::
-~InputParametersType ()
+FileWriterParametersType::
+~FileWriterParametersType ()
 {
 }
 
-// DomainType
+// SimulationParametersType
 //
 
-DomainType::
-DomainType (const x_type& x,
-            const y_type& y,
-            const z_type& z)
+SimulationParametersType::
+SimulationParametersType (const EndT_type& EndT,
+                          const DeltaT_type& DeltaT)
 : ::xml_schema::type (),
-  x_ (x, this),
-  y_ (y, this),
-  z_ (z, this)
+  EndT_ (EndT, this),
+  DeltaT_ (DeltaT, this)
 {
 }
 
-DomainType::
-DomainType (const DomainType& x,
-            ::xml_schema::flags f,
-            ::xml_schema::container* c)
+SimulationParametersType::
+SimulationParametersType (const SimulationParametersType& x,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
-  x_ (x.x_, f, this),
-  y_ (x.y_, f, this),
-  z_ (x.z_, f, this)
+  EndT_ (x.EndT_, f, this),
+  DeltaT_ (x.DeltaT_, f, this)
 {
 }
 
-DomainType::
-DomainType (const ::xercesc::DOMElement& e,
-            ::xml_schema::flags f,
-            ::xml_schema::container* c)
+SimulationParametersType::
+SimulationParametersType (const ::xercesc::DOMElement& e,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
-  x_ (this),
-  y_ (this),
-  z_ (this)
+  EndT_ (this),
+  DeltaT_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -668,7 +815,7 @@ DomainType (const ::xercesc::DOMElement& e,
   }
 }
 
-void DomainType::
+void SimulationParametersType::
 parse (::xsd::cxx::xml::dom::parser< char >& p,
        ::xml_schema::flags f)
 {
@@ -678,35 +825,24 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (i));
 
-    // x
+    // EndT
     //
-    if (n.name () == "x" && n.namespace_ ().empty ())
+    if (n.name () == "EndT" && n.namespace_ ().empty ())
     {
-      if (!x_.present ())
+      if (!EndT_.present ())
       {
-        this->x_.set (x_traits::create (i, f, this));
+        this->EndT_.set (EndT_traits::create (i, f, this));
         continue;
       }
     }
 
-    // y
+    // DeltaT
     //
-    if (n.name () == "y" && n.namespace_ ().empty ())
+    if (n.name () == "DeltaT" && n.namespace_ ().empty ())
     {
-      if (!y_.present ())
+      if (!DeltaT_.present ())
       {
-        this->y_.set (y_traits::create (i, f, this));
-        continue;
-      }
-    }
-
-    // z
-    //
-    if (n.name () == "z" && n.namespace_ ().empty ())
-    {
-      if (!z_.present ())
-      {
-        this->z_.set (z_traits::create (i, f, this));
+        this->DeltaT_.set (DeltaT_traits::create (i, f, this));
         continue;
       }
     }
@@ -714,51 +850,520 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     break;
   }
 
-  if (!x_.present ())
+  if (!EndT_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
-      "x",
+      "EndT",
       "");
   }
 
-  if (!y_.present ())
+  if (!DeltaT_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
-      "y",
-      "");
-  }
-
-  if (!z_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "z",
+      "DeltaT",
       "");
   }
 }
 
-DomainType* DomainType::
+SimulationParametersType* SimulationParametersType::
 _clone (::xml_schema::flags f,
         ::xml_schema::container* c) const
 {
-  return new class DomainType (*this, f, c);
+  return new class SimulationParametersType (*this, f, c);
 }
 
-DomainType& DomainType::
-operator= (const DomainType& x)
+SimulationParametersType& SimulationParametersType::
+operator= (const SimulationParametersType& x)
 {
   if (this != &x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
-    this->x_ = x.x_;
-    this->y_ = x.y_;
-    this->z_ = x.z_;
+    this->EndT_ = x.EndT_;
+    this->DeltaT_ = x.DeltaT_;
   }
 
   return *this;
 }
 
-DomainType::
-~DomainType ()
+SimulationParametersType::
+~SimulationParametersType ()
+{
+}
+
+// ThermostatParametersType
+//
+
+ThermostatParametersType::
+ThermostatParametersType (const StartTemperature_type& StartTemperature,
+                          const TargetTemperature_type& TargetTemperature,
+                          const ApplyFrequency_type& ApplyFrequency,
+                          const MaxDeltaTemperature_type& MaxDeltaTemperature,
+                          const Dimension_type& Dimension)
+: ::xml_schema::type (),
+  StartTemperature_ (StartTemperature, this),
+  TargetTemperature_ (TargetTemperature, this),
+  ApplyFrequency_ (ApplyFrequency, this),
+  MaxDeltaTemperature_ (MaxDeltaTemperature, this),
+  Dimension_ (Dimension, this)
+{
+}
+
+ThermostatParametersType::
+ThermostatParametersType (const ThermostatParametersType& x,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  StartTemperature_ (x.StartTemperature_, f, this),
+  TargetTemperature_ (x.TargetTemperature_, f, this),
+  ApplyFrequency_ (x.ApplyFrequency_, f, this),
+  MaxDeltaTemperature_ (x.MaxDeltaTemperature_, f, this),
+  Dimension_ (x.Dimension_, f, this)
+{
+}
+
+ThermostatParametersType::
+ThermostatParametersType (const ::xercesc::DOMElement& e,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  StartTemperature_ (this),
+  TargetTemperature_ (this),
+  ApplyFrequency_ (this),
+  MaxDeltaTemperature_ (this),
+  Dimension_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void ThermostatParametersType::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // StartTemperature
+    //
+    if (n.name () == "StartTemperature" && n.namespace_ ().empty ())
+    {
+      if (!StartTemperature_.present ())
+      {
+        this->StartTemperature_.set (StartTemperature_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // TargetTemperature
+    //
+    if (n.name () == "TargetTemperature" && n.namespace_ ().empty ())
+    {
+      if (!TargetTemperature_.present ())
+      {
+        this->TargetTemperature_.set (TargetTemperature_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // ApplyFrequency
+    //
+    if (n.name () == "ApplyFrequency" && n.namespace_ ().empty ())
+    {
+      if (!ApplyFrequency_.present ())
+      {
+        this->ApplyFrequency_.set (ApplyFrequency_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // MaxDeltaTemperature
+    //
+    if (n.name () == "MaxDeltaTemperature" && n.namespace_ ().empty ())
+    {
+      if (!MaxDeltaTemperature_.present ())
+      {
+        this->MaxDeltaTemperature_.set (MaxDeltaTemperature_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // Dimension
+    //
+    if (n.name () == "Dimension" && n.namespace_ ().empty ())
+    {
+      if (!Dimension_.present ())
+      {
+        this->Dimension_.set (Dimension_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!StartTemperature_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "StartTemperature",
+      "");
+  }
+
+  if (!TargetTemperature_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "TargetTemperature",
+      "");
+  }
+
+  if (!ApplyFrequency_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "ApplyFrequency",
+      "");
+  }
+
+  if (!MaxDeltaTemperature_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "MaxDeltaTemperature",
+      "");
+  }
+
+  if (!Dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Dimension",
+      "");
+  }
+}
+
+ThermostatParametersType* ThermostatParametersType::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class ThermostatParametersType (*this, f, c);
+}
+
+ThermostatParametersType& ThermostatParametersType::
+operator= (const ThermostatParametersType& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->StartTemperature_ = x.StartTemperature_;
+    this->TargetTemperature_ = x.TargetTemperature_;
+    this->ApplyFrequency_ = x.ApplyFrequency_;
+    this->MaxDeltaTemperature_ = x.MaxDeltaTemperature_;
+    this->Dimension_ = x.Dimension_;
+  }
+
+  return *this;
+}
+
+ThermostatParametersType::
+~ThermostatParametersType ()
+{
+}
+
+// BoundaryType
+//
+
+BoundaryType::
+BoundaryType (const ::xercesc::DOMElement& e,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (e, f, c)
+{
+  _xsd_BoundaryType_convert ();
+}
+
+BoundaryType::
+BoundaryType (const ::xercesc::DOMAttr& a,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (a, f, c)
+{
+  _xsd_BoundaryType_convert ();
+}
+
+BoundaryType::
+BoundaryType (const ::std::string& s,
+              const ::xercesc::DOMElement* e,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (s, e, f, c)
+{
+  _xsd_BoundaryType_convert ();
+}
+
+BoundaryType* BoundaryType::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class BoundaryType (*this, f, c);
+}
+
+BoundaryType::value BoundaryType::
+_xsd_BoundaryType_convert () const
+{
+  ::xsd::cxx::tree::enum_comparator< char > c (_xsd_BoundaryType_literals_);
+  const value* i (::std::lower_bound (
+                    _xsd_BoundaryType_indexes_,
+                    _xsd_BoundaryType_indexes_ + 4,
+                    *this,
+                    c));
+
+  if (i == _xsd_BoundaryType_indexes_ + 4 || _xsd_BoundaryType_literals_[*i] != *this)
+  {
+    throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
+  }
+
+  return *i;
+}
+
+const char* const BoundaryType::
+_xsd_BoundaryType_literals_[4] =
+{
+  "REFLECTING",
+  "OUTFLOW",
+  "PERIODIC",
+  "OFF"
+};
+
+const BoundaryType::value BoundaryType::
+_xsd_BoundaryType_indexes_[4] =
+{
+  ::BoundaryType::OFF,
+  ::BoundaryType::OUTFLOW,
+  ::BoundaryType::PERIODIC,
+  ::BoundaryType::REFLECTING
+};
+
+// BoundaryParametersType
+//
+
+BoundaryParametersType::
+BoundaryParametersType (const TOP_type& TOP,
+                        const RIGHT_type& RIGHT,
+                        const BOTTOM_type& BOTTOM,
+                        const LEFT_type& LEFT,
+                        const FRONT_type& FRONT,
+                        const BACK_type& BACK)
+: ::xml_schema::type (),
+  TOP_ (TOP, this),
+  RIGHT_ (RIGHT, this),
+  BOTTOM_ (BOTTOM, this),
+  LEFT_ (LEFT, this),
+  FRONT_ (FRONT, this),
+  BACK_ (BACK, this)
+{
+}
+
+BoundaryParametersType::
+BoundaryParametersType (const BoundaryParametersType& x,
+                        ::xml_schema::flags f,
+                        ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  TOP_ (x.TOP_, f, this),
+  RIGHT_ (x.RIGHT_, f, this),
+  BOTTOM_ (x.BOTTOM_, f, this),
+  LEFT_ (x.LEFT_, f, this),
+  FRONT_ (x.FRONT_, f, this),
+  BACK_ (x.BACK_, f, this)
+{
+}
+
+BoundaryParametersType::
+BoundaryParametersType (const ::xercesc::DOMElement& e,
+                        ::xml_schema::flags f,
+                        ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  TOP_ (this),
+  RIGHT_ (this),
+  BOTTOM_ (this),
+  LEFT_ (this),
+  FRONT_ (this),
+  BACK_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void BoundaryParametersType::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // TOP
+    //
+    if (n.name () == "TOP" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< TOP_type > r (
+        TOP_traits::create (i, f, this));
+
+      if (!TOP_.present ())
+      {
+        this->TOP_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // RIGHT
+    //
+    if (n.name () == "RIGHT" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< RIGHT_type > r (
+        RIGHT_traits::create (i, f, this));
+
+      if (!RIGHT_.present ())
+      {
+        this->RIGHT_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // BOTTOM
+    //
+    if (n.name () == "BOTTOM" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< BOTTOM_type > r (
+        BOTTOM_traits::create (i, f, this));
+
+      if (!BOTTOM_.present ())
+      {
+        this->BOTTOM_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // LEFT
+    //
+    if (n.name () == "LEFT" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< LEFT_type > r (
+        LEFT_traits::create (i, f, this));
+
+      if (!LEFT_.present ())
+      {
+        this->LEFT_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // FRONT
+    //
+    if (n.name () == "FRONT" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< FRONT_type > r (
+        FRONT_traits::create (i, f, this));
+
+      if (!FRONT_.present ())
+      {
+        this->FRONT_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // BACK
+    //
+    if (n.name () == "BACK" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< BACK_type > r (
+        BACK_traits::create (i, f, this));
+
+      if (!BACK_.present ())
+      {
+        this->BACK_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!TOP_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "TOP",
+      "");
+  }
+
+  if (!RIGHT_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "RIGHT",
+      "");
+  }
+
+  if (!BOTTOM_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "BOTTOM",
+      "");
+  }
+
+  if (!LEFT_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "LEFT",
+      "");
+  }
+
+  if (!FRONT_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "FRONT",
+      "");
+  }
+
+  if (!BACK_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "BACK",
+      "");
+  }
+}
+
+BoundaryParametersType* BoundaryParametersType::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class BoundaryParametersType (*this, f, c);
+}
+
+BoundaryParametersType& BoundaryParametersType::
+operator= (const BoundaryParametersType& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->TOP_ = x.TOP_;
+    this->RIGHT_ = x.RIGHT_;
+    this->BOTTOM_ = x.BOTTOM_;
+    this->LEFT_ = x.LEFT_;
+    this->FRONT_ = x.FRONT_;
+    this->BACK_ = x.BACK_;
+  }
+
+  return *this;
+}
+
+BoundaryParametersType::
+~BoundaryParametersType ()
 {
 }
 
@@ -979,17 +1584,29 @@ CuboidType::
 //
 
 Simulation::
-Simulation (const InputParameters_type& InputParameters)
+Simulation (const FileWriterParameters_type& FileWriterParameters,
+            const SimulationParameters_type& SimulationParameters,
+            const ThermostatParameters_type& ThermostatParameters,
+            const BoundaryParameters_type& BoundaryParameters)
 : ::xml_schema::type (),
-  InputParameters_ (InputParameters, this),
+  FileWriterParameters_ (FileWriterParameters, this),
+  SimulationParameters_ (SimulationParameters, this),
+  ThermostatParameters_ (ThermostatParameters, this),
+  BoundaryParameters_ (BoundaryParameters, this),
   Cuboid_ (this)
 {
 }
 
 Simulation::
-Simulation (::std::unique_ptr< InputParameters_type > InputParameters)
+Simulation (::std::unique_ptr< FileWriterParameters_type > FileWriterParameters,
+            ::std::unique_ptr< SimulationParameters_type > SimulationParameters,
+            ::std::unique_ptr< ThermostatParameters_type > ThermostatParameters,
+            ::std::unique_ptr< BoundaryParameters_type > BoundaryParameters)
 : ::xml_schema::type (),
-  InputParameters_ (std::move (InputParameters), this),
+  FileWriterParameters_ (std::move (FileWriterParameters), this),
+  SimulationParameters_ (std::move (SimulationParameters), this),
+  ThermostatParameters_ (std::move (ThermostatParameters), this),
+  BoundaryParameters_ (std::move (BoundaryParameters), this),
   Cuboid_ (this)
 {
 }
@@ -999,7 +1616,10 @@ Simulation (const Simulation& x,
             ::xml_schema::flags f,
             ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
-  InputParameters_ (x.InputParameters_, f, this),
+  FileWriterParameters_ (x.FileWriterParameters_, f, this),
+  SimulationParameters_ (x.SimulationParameters_, f, this),
+  ThermostatParameters_ (x.ThermostatParameters_, f, this),
+  BoundaryParameters_ (x.BoundaryParameters_, f, this),
   Cuboid_ (x.Cuboid_, f, this)
 {
 }
@@ -1009,7 +1629,10 @@ Simulation (const ::xercesc::DOMElement& e,
             ::xml_schema::flags f,
             ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
-  InputParameters_ (this),
+  FileWriterParameters_ (this),
+  SimulationParameters_ (this),
+  ThermostatParameters_ (this),
+  BoundaryParameters_ (this),
   Cuboid_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
@@ -1029,16 +1652,58 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (i));
 
-    // InputParameters
+    // FileWriterParameters
     //
-    if (n.name () == "InputParameters" && n.namespace_ ().empty ())
+    if (n.name () == "FileWriterParameters" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< InputParameters_type > r (
-        InputParameters_traits::create (i, f, this));
+      ::std::unique_ptr< FileWriterParameters_type > r (
+        FileWriterParameters_traits::create (i, f, this));
 
-      if (!InputParameters_.present ())
+      if (!FileWriterParameters_.present ())
       {
-        this->InputParameters_.set (::std::move (r));
+        this->FileWriterParameters_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // SimulationParameters
+    //
+    if (n.name () == "SimulationParameters" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< SimulationParameters_type > r (
+        SimulationParameters_traits::create (i, f, this));
+
+      if (!SimulationParameters_.present ())
+      {
+        this->SimulationParameters_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // ThermostatParameters
+    //
+    if (n.name () == "ThermostatParameters" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< ThermostatParameters_type > r (
+        ThermostatParameters_traits::create (i, f, this));
+
+      if (!ThermostatParameters_.present ())
+      {
+        this->ThermostatParameters_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // BoundaryParameters
+    //
+    if (n.name () == "BoundaryParameters" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< BoundaryParameters_type > r (
+        BoundaryParameters_traits::create (i, f, this));
+
+      if (!BoundaryParameters_.present ())
+      {
+        this->BoundaryParameters_.set (::std::move (r));
         continue;
       }
     }
@@ -1057,10 +1722,31 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     break;
   }
 
-  if (!InputParameters_.present ())
+  if (!FileWriterParameters_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
-      "InputParameters",
+      "FileWriterParameters",
+      "");
+  }
+
+  if (!SimulationParameters_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "SimulationParameters",
+      "");
+  }
+
+  if (!ThermostatParameters_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "ThermostatParameters",
+      "");
+  }
+
+  if (!BoundaryParameters_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "BoundaryParameters",
       "");
   }
 }
@@ -1078,7 +1764,10 @@ operator= (const Simulation& x)
   if (this != &x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
-    this->InputParameters_ = x.InputParameters_;
+    this->FileWriterParameters_ = x.FileWriterParameters_;
+    this->SimulationParameters_ = x.SimulationParameters_;
+    this->ThermostatParameters_ = x.ThermostatParameters_;
+    this->BoundaryParameters_ = x.BoundaryParameters_;
     this->Cuboid_ = x.Cuboid_;
   }
 

@@ -2,8 +2,9 @@
 #pragma once
 
 #include "../../objects/ParticleContainer.h"
-#include "CuboidParameters.h"
+#include "io/in/parameters/CuboidParameters.h"
 #include "ParticleGenerator.h"
+#include "io/in/parameters/SimulationDataContainer.h"
 
 namespace fileReaders {
 
@@ -13,6 +14,6 @@ namespace fileReaders {
 
         virtual ~FileReader() = default;
 
-        static ParticleContainer readFile(const std::string& filepath);
+        virtual SimulationDataContainer readFile(const std::string& filePath) = 0;
     };
 }// namespace fileReaders

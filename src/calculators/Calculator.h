@@ -36,11 +36,32 @@ namespace calculators {
          */
         virtual void calculate(ParticleContainer &particleContainer, double delta_t) {
             calculateF(particleContainer);
+            if (g_grav != 0.0)
+                calculateGravity(particleContainer);
             calculateX(particleContainer, delta_t);
             calculateV(particleContainer, delta_t);
         }
 
         virtual void calculateLC(LinkedCellContainer &linkedCellContainer, double delta_t) = 0;
+
+        /**
+         * @brief Performs the gravity force calculation on the particles in the container in y-direction
+         * @param particleContainer The container of particles to perform the calculations on.
+         */
+        void calculateGravity(ParticleContainer &particleContainer) {
+            for (Particle p : particleContainer) {
+                double grav_force = p.getM() * g_grav;
+                const std::array<double, 3> newForce {p.getF()[0], p.getF()[1] + grav_force, p.getF()[2]};
+                p.setF(newForce);
+            }
+        }
+
+        /**
+         * @param gravity The g_grav value
+         */
+        void setGravity(double g_arg) {
+            g_grav = g_arg;
+        }
 
         /**
          * @brief Calculates the forces acting on particles.
@@ -170,5 +191,6 @@ namespace calculators {
 
     private:
         bool warned = false;
+        double g_grav = 0.0;
     };
 };

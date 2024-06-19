@@ -24,7 +24,10 @@ namespace fileReaders {
 
         ~TXTReader() override = default;
 
-        static ParticleContainer readFile(const std::string& filepath);
+        SimulationDataContainer readFile(const std::string &filepath) override;
+
+        static const std::set<int> allowedDataCodes;
+        static const std::set<int> allowedDimensions;
 
         /**
         * Reads particle data from a file and returns a ParticleContainer.
@@ -32,11 +35,11 @@ namespace fileReaders {
         * @param filepath The path to the file to read particle data from.
         * @return A ParticleContainer containing the particles read from the file.
         */
-        static void loadParticles(const std::vector<std::string>& lines, ParticleContainer& particles);
+        void loadParticles(const std::vector<std::string> &lines, ParticleContainer &particles);
 
-        static void loadCuboids(const std::vector<std::string>& lines, ParticleContainer& particles);
+        void loadCuboids(const std::vector<std::string> &lines, ParticleContainer &particles);
 
-
+        void loadDiscs(const std::vector<std::string> &lines, ParticleContainer &particles);
 
         /**
         * This method parses an array of values from a single line (string)
@@ -48,7 +51,7 @@ namespace fileReaders {
         * @param data data object to update according to the given line
         */
         template<typename T, size_t N>
-        static void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data);
+        void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data);
 
         /**
         * This method reads the file specified by the parameter 'filepath'
@@ -59,20 +62,17 @@ namespace fileReaders {
         * @param filepath
         * @return vector of strings
         */
-        static std::vector<std::string> readFileLines(const std::string &filepath);
+        std::vector<std::string> readFileLines(const std::string &filepath);
 
-
-    /**
-    * Class section end
-    *
-    *
-    *
-    * --------------------------------------------TEST SECTION------------------------------------------------------------
-    * To be able to use the private methods and attributes in testing, FRIEND_TESTs are declared here.
-    */
-        FRIEND_TEST(FileReaderTest, LoadParticles);
-        FRIEND_TEST(FileReaderTest, LoadCuboids);
-        FRIEND_TEST(FileReaderTest, readFileLinesBasicTest);
+        /**
+        * This method validates the header lines of the input file.
+        * The header lines should contain the data code, number of data sets, and the dimension of the simulation.
+        *
+        * This method checks if the header data are allowed and returns error exitcode, if not.
+        *
+        * @param lines
+        */
+        void validateHeaderLines(const std::vector<std::string> &lines);
 
     };
 }// namespace fileReaders

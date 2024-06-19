@@ -61,7 +61,6 @@ file(GLOB_RECURSE MY_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
 )
 
 file(GLOB_RECURSE TEST_SOURCES
@@ -73,7 +72,6 @@ file(GLOB_RECURSE TEST_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/src/boundaries/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
 )
 
@@ -88,7 +86,6 @@ file(GLOB_RECURSE BENCHMARK_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/src/calculators/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
 )
 
@@ -114,8 +111,10 @@ add_compile_definitions(LOG_LEVEL="${log_level}")
 message(STATUS "Log level: ${log_level}")
 #-----------------------------------------------------------------------------------------------------------
 # create make target
-add_executable(MolSim ${MY_SRC})
-add_executable(MolSimTests ${TEST_SOURCES})
+add_executable(MolSim ${MY_SRC}
+        tests/io/in/XMLReaderTest.cpp)
+add_executable(MolSimTests ${TEST_SOURCES}
+        tests/io/in/XMLReaderTest.cpp)
 add_executable(MolSimBenchmark ${BENCHMARK_SOURCES})
 
 # set cxx standard. You may raise this if you want.
