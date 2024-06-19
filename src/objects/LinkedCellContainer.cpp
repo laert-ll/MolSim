@@ -171,7 +171,7 @@ void LinkedCellContainer::populateCells() {
      **/
 }
 
-std::vector<std::shared_ptr<Cell>> &LinkedCellContainer::getNeighboringCellsIncludingSelf(const Particle &particle) {
+std::vector<Cell *> &LinkedCellContainer::getNeighboringCellsIncludingSelf(const Particle &particle) {
     size_t cellIndexX = static_cast<size_t>(particle.getX()[0] / cellSize);
     size_t cellIndexY = static_cast<size_t>(particle.getX()[1] / cellSize);
     size_t cellIndexZ = static_cast<size_t>(particle.getX()[2] / cellSize);
@@ -193,7 +193,7 @@ void LinkedCellContainer::update() {
     }
 }
 
-std::array<size_t, 3> LinkedCellContainer::getIndex(std::shared_ptr<Particle>particle) {
+std::array<size_t, 3> LinkedCellContainer::getIndex(Particle *particle) {
     size_t cellIndexX = static_cast<size_t>(particle->getX()[0] / cellSize);
     size_t cellIndexY = static_cast<size_t>(particle->getX()[1] / cellSize);
     size_t cellIndexZ = static_cast<size_t>(particle->getX()[2] / cellSize);
