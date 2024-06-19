@@ -95,7 +95,7 @@ public:
     void addCell();
 
     /**
-    * Method to updateCells the cells and their particles.
+    * Method to update the cells and their particles.
     */
     void updateCells();
 

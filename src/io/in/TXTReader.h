@@ -40,12 +40,12 @@ namespace fileReaders {
 
         /**
         * This method parses an array of values from a single line (string)
-        * and updateCells the data object, specified as parameter, accordingly.
+        * and update the data object, specified as parameter, accordingly.
         *
         * @tparam T type of 'data'
         * @tparam N array size of 'data'
         * @param line current file line
-        * @param data data object to updateCells according to the given line
+        * @param data data object to update according to the given line
         */
         template<typename T, size_t N>
         static void parseDataFromLine(std::istringstream &datastream, std::array<T, N> &data);

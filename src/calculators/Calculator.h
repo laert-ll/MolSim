@@ -70,7 +70,7 @@ namespace calculators {
              *
              * This method is responsible for updating the velocities of all particles in the provided particle container.
              *
-             * @param particleContainer The container of particles to updateCells the velocities of.
+             * @param particleContainer The container of particles to update the velocities of.
              * @param delta_t The time step used for the calculations.
              */
         virtual void calculateV(ParticleContainer &particleContainer, double delta_t) {
@@ -111,7 +111,7 @@ namespace calculators {
              *
              * This method is responsible for updating the positions of all particles in the provided particle container.
              *
-             * @param particleContainer The container of particles to updateCells the positions of.
+             * @param particleContainer The container of particles to update the positions of.
              * @param delta_t The time step used for the calculations.
              */
         virtual void calculateX(ParticleContainer &particleContainer, double delta_t) {
