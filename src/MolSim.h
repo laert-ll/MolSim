@@ -246,7 +246,7 @@ public:
             int iteration = 0;
 
             while (current_time < end_time) {
-                SPDLOG_INFO("Starting iteration {}", iteration);
+                SPDLOG_DEBUG("Starting iteration {}", iteration);
                 calculator->calculateLC(linkedCellContainer, delta_t);
 
                 iteration++;

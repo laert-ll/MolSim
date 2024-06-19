@@ -17,10 +17,10 @@ namespace calculators {
 
         for (auto &particle1: linkedCellContainer) {
             std::array<double, 3> x1 = particle1->getX();
-            SPDLOG_INFO("Processing Particle at position ({}, {}, {})", x1[0], x1[1], x1[2]);
+            SPDLOG_DEBUG("Processing Particle at position ({}, {}, {})", x1[0], x1[1], x1[2]);
             std::vector<std::shared_ptr<Cell>> &neighboringCells = linkedCellContainer.getNeighboringCellsIncludingSelf(*particle1);
             for (auto &cell : neighboringCells) {
-                 SPDLOG_INFO("Processing Cell at index ({}, {}, {})", cell->getIndex()[0], cell->getIndex()[1],
+                 SPDLOG_DEBUG("Processing Cell at index ({}, {}, {})", cell->getIndex()[0], cell->getIndex()[1],
                            cell->getIndex()[2]);
                 for (auto &particle2 : cell->getParticles()) {
                     if (particle1 == particle2) {

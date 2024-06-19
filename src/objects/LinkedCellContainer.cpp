@@ -59,7 +59,7 @@ void LinkedCellContainer::initializeCells() {
                 const double cellSizeY = (y == numCellsY - 1) ? lastCellSizeY : cellSize;
                 const double cellSizeZ = (z == numCellsZ - 1) ? lastCellSizeZ : cellSize;
                 cells[x][y][z] = std::make_shared<Cell>(x, y, z, cellSizeX, cellSizeY, cellSizeZ);
-                SPDLOG_INFO("Created Cell at index ({}, {}, {}) with dimensions: {} x {} x {}",
+                SPDLOG_DEBUG("Created Cell at index ({}, {}, {}) with dimensions: {} x {} x {}",
                             x, y, z, cellSizeX, cellSizeY, cellSizeZ);
             }
         }
@@ -86,7 +86,7 @@ void LinkedCellContainer::initializeNeighbors() {
                                 neighborYIndex >= 0 && neighborYIndex < cells[0].size() &&
                                 neighborZIndex >= 0 && neighborZIndex < cells[0][0].size()) {
                                 cell->addNeighbor(cells[neighborXIndex][neighborYIndex][neighborZIndex]);
-                                SPDLOG_INFO("Cell at index ({}, {}, {}) has neighbor at index ({}, {}, {})",
+                                SPDLOG_DEBUG("Cell at index ({}, {}, {}) has neighbor at index ({}, {}, {})",
                                             cell->getIndex()[0], cell->getIndex()[1], cell->getIndex()[2],
                                             neighborXIndex, neighborYIndex, neighborZIndex);
                             }
@@ -119,7 +119,7 @@ void LinkedCellContainer::generateCuboids(std::vector<CuboidParameters> &cuboidP
                     const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<>());
 
                     auto newParticle = std::make_shared<Particle>(x, v, m, 0, 0);
-                    SPDLOG_INFO("Generated particle at position ({}, {}, {})", x[0], x[1], x[2]);
+                    SPDLOG_DEBUG("Generated particle at position ({}, {}, {})", x[0], x[1], x[2]);
                     addParticle(newParticle);
                 }
             }
@@ -137,7 +137,7 @@ void LinkedCellContainer::generateCuboids(std::vector<CuboidParameters> &cuboidP
 void LinkedCellContainer::populateCells() {
     for (auto &particle: particles) {
         auto position = particle->getX();
-        SPDLOG_INFO("Particle at position ({}, {}, {})", position[0], position[1], position[2]);
+        SPDLOG_DEBUG("Particle at position ({}, {}, {})", position[0], position[1], position[2]);
         if (position[0] >= domain[0] || position[0] < 0 || position[1] >= domain[1] || position[1] < 0 ||
             position[2] >= domain[2] || position[2] < 0) {
             SPDLOG_ERROR("Particle at position ({}, {}, {}) is outside the domain", position[0], position[1],
@@ -150,16 +150,6 @@ void LinkedCellContainer::populateCells() {
         cells[cellIndexX][cellIndexY][cellIndexZ]->addParticle(particle);
     }
     SPDLOG_INFO("Populated cells with particles");
-    /**
-    for (auto &row: cells) {
-        for (auto &col: row) {
-            for (auto &cell: col) {
-                SPDLOG_INFO("Cell at index ({}, {}, {}) has {} particles", cell.getIndex()[0], cell.getIndex()[1],
-                            cell.getIndex()[2], cell.getParticles().size());
-            }
-        }
-    }
-     **/
 }
 
 std::vector<std::shared_ptr<Cell>> &LinkedCellContainer::getNeighboringCellsIncludingSelf(const Particle &particle) {
