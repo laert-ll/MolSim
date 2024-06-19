@@ -95,9 +95,9 @@ public:
     void addCell();
 
     /**
-    * Method to update the cells and their particles.
+    * Method to updateCells the cells and their particles.
     */
-    void update();
+    void updateCells();
 
 
     std::array<size_t, 3> getIndex(const std::shared_ptr<Particle> &particle);

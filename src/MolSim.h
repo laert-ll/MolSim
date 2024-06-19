@@ -248,6 +248,7 @@ public:
             while (current_time < end_time) {
                 SPDLOG_DEBUG("Starting iteration {}", iteration);
                 calculator->calculateLC(linkedCellContainer, delta_t);
+                linkedCellContainer.updateCells();
 
                 iteration++;
                 if (iteration % writerFrequency == 0) {

@@ -159,14 +159,23 @@ std::vector<std::shared_ptr<Cell>> &LinkedCellContainer::getNeighboringCellsIncl
     return cells[cellIndexX][cellIndexY][cellIndexZ]->getNeighboringCells();
 }
 
-void LinkedCellContainer::update() {
+void LinkedCellContainer::updateCells() {
     for (auto &row: cells) {
         for (auto &col: row) {
             for (auto &cell: col) {
-                for (auto &particle: cell->getParticles()) {
-                    auto particleIndex = getIndex(particle);
+                auto it = cell->getParticles().begin();
+                while (it != cell->getParticles().end()) {
+                    auto particleIndex = getIndex(*it);
                     if (!(cell->getIndex() == particleIndex)) {
-                        cells[particleIndex[0]][particleIndex[1]][particleIndex[2]]->addParticle(particle);
+                        cells[particleIndex[0]][particleIndex[1]][particleIndex[2]]->addParticle(*it);
+                        SPDLOG_DEBUG("Moved particle to cell at index ({}, {}, {})", particleIndex[0], particleIndex[1],
+                                     particleIndex[2]);
+                        cell->removeParticle(*it);
+                        SPDLOG_DEBUG("Removed particle from cell at index ({}, {}, {})", cell->getIndex()[0],
+                                     cell->getIndex()[1], cell->getIndex()[2]);
+                        it = cell->getParticles().begin(); // Reset the iterator as the set has been modified
+                    } else {
+                        ++it;
                     }
                 }
             }

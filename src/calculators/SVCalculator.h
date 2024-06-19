@@ -24,7 +24,7 @@ namespace calculators {
         /**
          * Calls methods to calculate positions, forces, and velocities of particles in the right order.
          *
-         * @param particleContainer The ParticleContainer containing the particles to update.
+         * @param particleContainer The ParticleContainer containing the particles to updateCells.
          * @param delta_t The time step used in the calculations.
          */
 //        void calculate(ParticleContainer &particleContainer, double delta_t) override;
