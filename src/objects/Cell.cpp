@@ -1,18 +1,6 @@
 #include "Cell.h"
 #include "Particle.h"
 
-Cell::Cell() {}
-
-Cell::Cell(int xIndex, int yIndex, int zIndex, double cellSizeX, double cellSizeY, double cellSizeZ) {
-    index[0] = xIndex;
-    index[1] = yIndex;
-    index[2] = zIndex;
-
-    dimensions[0] = cellSizeX;
-    dimensions[1] = cellSizeY;
-    dimensions[2] = cellSizeZ;
-}
-
 void Cell::addParticle(Particle* particle) {
     particles.insert(particle);
 }
@@ -37,6 +25,6 @@ int Cell::getNeighboringCellsSize() {
     return neighboringCells.size();
 }
 
-std::array<int, 3> Cell::getIndex() {
+std::array<int, 3> Cell::getIndex(){
     return index;
 }

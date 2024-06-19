@@ -87,7 +87,7 @@ public:
 
     void populateCells();
 
-    std::vector<Cell*>& getNeighboringCells(const Particle &particle);
+    std::vector<Cell*>& getNeighboringCellsIncludingSelf(const Particle &particle);
 
     /**
     * Method to add a cell to cells.
