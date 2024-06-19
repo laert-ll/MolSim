@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "../objects/LinkedCellContainer.h"
 #include "Calculator.h"
 
