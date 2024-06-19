@@ -85,7 +85,7 @@ void LinkedCellContainer::initializeNeighbors() {
                             if (neighborXIndex >= 0 && neighborXIndex < cells.size() &&
                                 neighborYIndex >= 0 && neighborYIndex < cells[0].size() &&
                                 neighborZIndex >= 0 && neighborZIndex < cells[0][0].size()) {
-                                cell.addNeighbor(std::make_shared<Cell>(cells[neighborXIndex][neighborYIndex][neighborZIndex]));
+                                cell.addNeighbor(&cells[neighborXIndex][neighborYIndex][neighborZIndex]);
                                 SPDLOG_INFO("Cell at index ({}, {}, {}) has neighbor at index ({}, {}, {})",
                                             cell.getIndex()[0], cell.getIndex()[1], cell.getIndex()[2],
                                             neighborXIndex, neighborYIndex, neighborZIndex);
@@ -157,7 +157,7 @@ void LinkedCellContainer::populateCells() {
         size_t cellIndexX = static_cast<size_t>(position[0] / cellSize);
         size_t cellIndexY = static_cast<size_t>(position[1] / cellSize);
         size_t cellIndexZ = static_cast<size_t>(position[2] / cellSize);
-        cells[cellIndexX][cellIndexY][cellIndexZ].addParticle(std::make_shared<Particle>(particle));
+        cells[cellIndexX][cellIndexY][cellIndexZ].addParticle(&particle);
     }
     /**
     for (auto &row: cells) {

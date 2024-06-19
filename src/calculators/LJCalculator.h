@@ -18,7 +18,6 @@ namespace calculators {
     private:
         const double threshold;
 
-
     public:
         /**
          * Default constructor for the SVCalculator class.
@@ -26,7 +25,6 @@ namespace calculators {
          * Initializes the SVCalculator object.
          */
         LJCalculator(double threshold) : threshold(threshold) {}
-
 
         /**
              * Calculates the force between two particles considering the third Newton's law.

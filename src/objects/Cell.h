@@ -4,7 +4,6 @@
 
 #include <unordered_set>
 #include <vector>
-#include <memory>
 
 class Cell {
 public:
