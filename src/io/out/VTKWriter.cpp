@@ -114,7 +114,7 @@ namespace outputWriters {
         outputWriters::VTKWriter writer;
         writer.initializeOutput(linkedCellContainer.getSize());
 
-        for (auto p = linkedCellContainer.begin(); p != linkedCellContainer.end(); ++p) {
+        for (auto &p : linkedCellContainer) {
             writer.plotParticle(*p);
         }
 

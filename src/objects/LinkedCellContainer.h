@@ -13,12 +13,12 @@ private:
     /**
     * A vector to store the particles.
     */
-    std::vector<Particle> particles;
+    std::vector<std::shared_ptr<Particle>> particles;
 
     /**
     * A 3D vector to store the cells.
     */
-    std::vector<std::vector<std::vector<Cell>>> cells;
+    std::vector<std::vector<std::vector<std::shared_ptr<Cell>>>> cells;
 
     /**
     * The dimensions of the simulation
@@ -47,31 +47,31 @@ public:
     * Method to add a particle to the container.
     * @param particle the particle to add
     */
-    void addParticle(const Particle &particle);
+    void addParticle(const std::shared_ptr<Particle> &particle);
 
     /**
      * Begin iterator for the particles.
      * @return an iterator to the beginning of the particles
      */
-    std::vector<Particle>::iterator begin();
+    std::vector<std::shared_ptr<Particle>>::iterator begin();
 
     /**
      * End iterator for the particles.
      * @return an iterator to the end of the particles
      */
-    std::vector<Particle>::iterator end();
+    std::vector<std::shared_ptr<Particle>>::iterator end();
 
     /**
     * Get the particles in the container.
     * @return a vector of all the particles
     */
-    std::vector<Particle> getParticles() const;
+    std::vector<std::shared_ptr<Particle>> getParticles() const;
 
     /**
     * Get the particles in the container.
     * @return a vector of all the particles
     */
-    std::vector<std::vector<std::vector<Cell>>> getCells();
+    std::vector<std::vector<std::vector<std::shared_ptr<Cell>>>> getCells();
 
     /**
     * Get the number of particles in the container.
@@ -87,7 +87,7 @@ public:
 
     void populateCells();
 
-    std::vector<Cell*>& getNeighboringCellsIncludingSelf(const Particle &particle);
+    std::vector<std::shared_ptr<Cell>>& getNeighboringCellsIncludingSelf(const Particle &particle);
 
     /**
     * Method to add a cell to cells.
@@ -100,6 +100,6 @@ public:
     void update();
 
 
-    std::array<size_t, 3> getIndex(Particle *particle);
+    std::array<size_t, 3> getIndex(const std::shared_ptr<Particle> &particle);
 
 };

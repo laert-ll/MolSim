@@ -252,6 +252,7 @@ public:
                 iteration++;
                 if (iteration % writerFrequency == 0) {
                     outputWriter->plotParticlesLC(iteration, linkedCellContainer, baseName);
+                    SPDLOG_INFO("Printed output file at iteration {}", iteration);
                 }
 
                 if (iteration % 100 == 0) {

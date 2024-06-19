@@ -11,29 +11,27 @@ namespace calculators {
 
     void LC_LJCalculator::calculateLC_F(LinkedCellContainer &linkedCellContainer) {
         for (auto &p: linkedCellContainer) {
-            p.setOldF(p.getF());  // Update oldF with currentF
-            p.setF({0, 0, 0});     // Reset F to zeros
+            p->setOldF(p->getF());  // Update oldF with currentF
+            p->setF({0, 0, 0});     // Reset F to zeros
         }
 
-        for (Particle &particle1: linkedCellContainer) {
-            std::array<double, 3> x1 = particle1.getX();
+        for (auto &particle1: linkedCellContainer) {
+            std::array<double, 3> x1 = particle1->getX();
             // SPDLOG_INFO("Processing Particle at position ({}, {}, {})", x1[0], x1[1], x1[2]);
-            std::vector<Cell *> &neighboringCells = linkedCellContainer.getNeighboringCellsIncludingSelf(particle1);
+            std::vector<std::shared_ptr<Cell>> &neighboringCells = linkedCellContainer.getNeighboringCellsIncludingSelf(*particle1);
             for (auto &cell : neighboringCells) {
                 // SPDLOG_INFO("Processing Cell at index ({}, {}, {})", cell->getIndex()[0], cell->getIndex()[1],
                 //           cell->getIndex()[2]);
-                for (Particle* p2 : cell->getParticles()) {
-                    auto &particle2 = *p2;
-
+                for (auto &particle2 : cell->getParticles()) {
                     // LJ force calculation
-                    const std::array<double, 3> x2 = particle2.getX();
+                    const std::array<double, 3> x2 = particle2->getX();
 
                     // Calculate the distance vector and its norm
                     const std::array<double, 3> dx = ArrayUtils::elementWisePairOp(x1, x2, std::minus<>());
                     const double distance = ArrayUtils::L2Norm(dx);
 
-                    double epsilon = pow((particle1.getEpsilon() * particle2.getEpsilon()), 0.5);
-                    double sigma = 0.5 * (particle1.getSigma() + particle2.getSigma());
+                    double epsilon = pow((particle1->getEpsilon() * particle2->getEpsilon()), 0.5);
+                    double sigma = 0.5 * (particle1->getSigma() + particle2->getSigma());
                     // Calculate the force between the two particles
                     const double forceMagnitude = -(24 * epsilon / (distance * distance)) *
                                                 ((pow(sigma / distance, 6) - 2 * pow(sigma / distance, 12)));
@@ -41,12 +39,12 @@ namespace calculators {
                     std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(forceMagnitude, dx, std::multiplies<>());
 
                     // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
-                    const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(particle1.getF(), force,
+                    const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(particle1->getF(), force,
                                                                                     std::plus<>());
-                    const std::array<double, 3> newF2 = ArrayUtils::elementWisePairOp(particle2.getF(), force,
+                    const std::array<double, 3> newF2 = ArrayUtils::elementWisePairOp(particle2->getF(), force,
                                                                                     std::minus<>());
-                    particle1.setF(newF1);
-                    particle2.setF(newF2);
+                    particle1->setF(newF1);
+                    particle2->setF(newF2);
                 }
             }
         }
@@ -55,11 +53,11 @@ namespace calculators {
     void LC_LJCalculator::calculateLC_X(LinkedCellContainer &linkedCellContainer, double delta_t) {
             for (auto &p: linkedCellContainer) {
                 // Get the current position, velocity, force and mass of the particle
-                std::array<double, 3> x = p.getX();
-                const std::array<double, 3> v = p.getV();
-                const std::array<double, 3> f = p.getF();
+                std::array<double, 3> x = p->getX();
+                const std::array<double, 3> v = p->getV();
+                const std::array<double, 3> f = p->getF();
 
-                const double m = p.getM();
+                const double m = p->getM();
 
                 // Calculate the acceleration
                 const std::array<double, 3> a = ArrayUtils::elementWiseScalarOp(1.0 / m, f, std::multiplies<>());
@@ -76,17 +74,17 @@ namespace calculators {
 
                 x = ArrayUtils::elementWisePairOp(x, summand, std::plus<>());
 
-                p.setX(x);
+                p->setX(x);
             }
     }
 
     void LC_LJCalculator::calculateLC_V(LinkedCellContainer &linkedCellContainer, double delta_t) {
         for (auto &p: linkedCellContainer) {
             // Get the current position, velocity, force and mass of the particle
-            std::array<double, 3> v = p.getV();
-            const std::array<double, 3> f = p.getF();
-            const std::array<double, 3> old_f = p.getOldF();
-            const double m = p.getM();
+            std::array<double, 3> v = p->getV();
+            const std::array<double, 3> f = p->getF();
+            const std::array<double, 3> old_f = p->getOldF();
+            const double m = p->getM();
 
             // Calculate the average force
             std::array<double, 3> avg_f = ArrayUtils::elementWisePairOp(
@@ -99,7 +97,7 @@ namespace calculators {
                                                                                     std::multiplies<>());
             v = ArrayUtils::elementWisePairOp(v, delta_v, std::plus<>());
 
-            p.setV(v);
+            p->setV(v);
         }
     }
 }

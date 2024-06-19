@@ -16,23 +16,23 @@ LinkedCellContainer::LinkedCellContainer(std::array<double, 3> &domain, std::vec
     populateCells();
 }
 
-void LinkedCellContainer::addParticle(const Particle &particle) {
+void LinkedCellContainer::addParticle(const std::shared_ptr<Particle> &particle) {
     particles.push_back(particle);
 }
 
-std::vector<Particle>::iterator LinkedCellContainer::begin() {
+std::vector<std::shared_ptr<Particle>>::iterator LinkedCellContainer::begin() {
     return particles.begin();
 }
 
-std::vector<Particle>::iterator LinkedCellContainer::end() {
+std::vector<std::shared_ptr<Particle>>::iterator LinkedCellContainer::end() {
     return particles.end();
 }
 
-std::vector<Particle> LinkedCellContainer::getParticles() const {
+std::vector<std::shared_ptr<Particle>> LinkedCellContainer::getParticles() const {
     return particles;
 }
 
-std::vector<std::vector<std::vector<Cell>>> LinkedCellContainer::getCells() {
+std::vector<std::vector<std::vector<std::shared_ptr<Cell>>>> LinkedCellContainer::getCells() {
     return cells;
 }
 
@@ -58,7 +58,7 @@ void LinkedCellContainer::initializeCells() {
                 const double cellSizeX = (x == numCellsX - 1) ? lastCellSizeX : cellSize;
                 const double cellSizeY = (y == numCellsY - 1) ? lastCellSizeY : cellSize;
                 const double cellSizeZ = (z == numCellsZ - 1) ? lastCellSizeZ : cellSize;
-                cells[x][y][z] = Cell(x, y, z, cellSizeX, cellSizeY, cellSizeZ);
+                cells[x][y][z] = std::make_shared<Cell>(x, y, z, cellSizeX, cellSizeY, cellSizeZ);
                 SPDLOG_INFO("Created Cell at index ({}, {}, {}) with dimensions: {} x {} x {}",
                             x, y, z, cellSizeX, cellSizeY, cellSizeZ);
             }
@@ -78,16 +78,16 @@ void LinkedCellContainer::initializeNeighbors() {
                 for (int x = -cutoffRadiusIndex; x <= cutoffRadiusIndex; ++x) {
                     for (int y = -cutoffRadiusIndex; y <= cutoffRadiusIndex; ++y) {
                         for (int z = -cutoffRadiusIndex; z <= cutoffRadiusIndex; ++z) {
-                            const int neighborXIndex = x + cell.getIndex()[0];
-                            const int neighborYIndex = y + cell.getIndex()[1];
-                            const int neighborZIndex = z + cell.getIndex()[2];
+                            const int neighborXIndex = x + cell->getIndex()[0];
+                            const int neighborYIndex = y + cell->getIndex()[1];
+                            const int neighborZIndex = z + cell->getIndex()[2];
 
                             if (neighborXIndex >= 0 && neighborXIndex < cells.size() &&
                                 neighborYIndex >= 0 && neighborYIndex < cells[0].size() &&
                                 neighborZIndex >= 0 && neighborZIndex < cells[0][0].size()) {
-                                cell.addNeighbor(&cells[neighborXIndex][neighborYIndex][neighborZIndex]);
+                                cell->addNeighbor(cells[neighborXIndex][neighborYIndex][neighborZIndex]);
                                 SPDLOG_INFO("Cell at index ({}, {}, {}) has neighbor at index ({}, {}, {})",
-                                            cell.getIndex()[0], cell.getIndex()[1], cell.getIndex()[2],
+                                            cell->getIndex()[0], cell->getIndex()[1], cell->getIndex()[2],
                                             neighborXIndex, neighborYIndex, neighborZIndex);
                             }
                         }
@@ -129,7 +129,7 @@ void LinkedCellContainer::generateCuboids(std::vector<CuboidParameters> &cuboidP
                     const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 2);
                     const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<>());
 
-                    Particle newParticle(x, v, m, 0, 0);
+                    auto newParticle = std::make_shared<Particle>(x, v, m, 0, 0);
                     addParticle(newParticle);
                 }
             }
@@ -146,7 +146,7 @@ void LinkedCellContainer::generateCuboids(std::vector<CuboidParameters> &cuboidP
 
 void LinkedCellContainer::populateCells() {
     for (auto &particle: particles) {
-        auto position = particle.getX();
+        auto position = particle->getX();
         SPDLOG_INFO("Particle at position ({}, {}, {})", position[0], position[1], position[2]);
         if (position[0] >= domain[0] || position[0] < 0 || position[1] >= domain[1] || position[1] < 0 ||
             position[2] >= domain[2] || position[2] < 0) {
@@ -157,7 +157,7 @@ void LinkedCellContainer::populateCells() {
         size_t cellIndexX = static_cast<size_t>(position[0] / cellSize);
         size_t cellIndexY = static_cast<size_t>(position[1] / cellSize);
         size_t cellIndexZ = static_cast<size_t>(position[2] / cellSize);
-        cells[cellIndexX][cellIndexY][cellIndexZ].addParticle(&particle);
+        cells[cellIndexX][cellIndexY][cellIndexZ]->addParticle(particle);
     }
     /**
     for (auto &row: cells) {
@@ -171,21 +171,21 @@ void LinkedCellContainer::populateCells() {
      **/
 }
 
-std::vector<Cell *> &LinkedCellContainer::getNeighboringCellsIncludingSelf(const Particle &particle) {
+std::vector<std::shared_ptr<Cell>> &LinkedCellContainer::getNeighboringCellsIncludingSelf(const Particle &particle) {
     size_t cellIndexX = static_cast<size_t>(particle.getX()[0] / cellSize);
     size_t cellIndexY = static_cast<size_t>(particle.getX()[1] / cellSize);
     size_t cellIndexZ = static_cast<size_t>(particle.getX()[2] / cellSize);
-    return cells[cellIndexX][cellIndexY][cellIndexZ].getNeighboringCells();
+    return cells[cellIndexX][cellIndexY][cellIndexZ]->getNeighboringCells();
 }
 
 void LinkedCellContainer::update() {
     for (auto &row: cells) {
         for (auto &col: row) {
             for (auto &cell: col) {
-                for (auto &particle: cell.getParticles()) {
+                for (auto &particle: cell->getParticles()) {
                     auto particleIndex = getIndex(particle);
-                    if (!(cell.getIndex() == particleIndex)) {
-                        cells[particleIndex[0]][particleIndex[1]][particleIndex[2]].addParticle(particle);
+                    if (!(cell->getIndex() == particleIndex)) {
+                        cells[particleIndex[0]][particleIndex[1]][particleIndex[2]]->addParticle(particle);
                     }
                 }
             }
@@ -193,7 +193,7 @@ void LinkedCellContainer::update() {
     }
 }
 
-std::array<size_t, 3> LinkedCellContainer::getIndex(Particle *particle) {
+std::array<size_t, 3> LinkedCellContainer::getIndex(const std::shared_ptr<Particle> &particle) {
     size_t cellIndexX = static_cast<size_t>(particle->getX()[0] / cellSize);
     size_t cellIndexY = static_cast<size_t>(particle->getX()[1] / cellSize);
     size_t cellIndexZ = static_cast<size_t>(particle->getX()[2] / cellSize);
