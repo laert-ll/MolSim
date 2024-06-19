@@ -87,7 +87,7 @@ public:
 
     void populateCells();
 
-    std::vector<Cell*>& getNeighboringCellsIncludingSelf(const Particle &particle);
+    std::vector<std::shared_ptr<Cell>>& getNeighboringCellsIncludingSelf(const Particle &particle);
 
     /**
     * Method to add a cell to cells.
@@ -100,6 +100,6 @@ public:
     void update();
 
 
-    std::array<size_t, 3> getIndex(Particle *particle);
+    std::array<size_t, 3> getIndex(std::shared_ptr<Particle> particle);
 
 };
