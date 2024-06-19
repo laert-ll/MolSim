@@ -23,6 +23,10 @@ namespace calculators {
                  SPDLOG_INFO("Processing Cell at index ({}, {}, {})", cell->getIndex()[0], cell->getIndex()[1],
                            cell->getIndex()[2]);
                 for (auto &particle2 : cell->getParticles()) {
+                    if (particle1 == particle2) {
+                        continue; // Skip the force calculation for the same particle
+                    }
+
                     // LJ force calculation
                     const std::array<double, 3> x2 = particle2->getX();
 
