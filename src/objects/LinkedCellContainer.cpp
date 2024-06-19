@@ -80,7 +80,8 @@ void LinkedCellContainer::initializeCells() {
     }
     cells[numCellsX - 1][numCellsY - 1][numCellsZ - 1] = Cell(numCellsX - 1, numCellsY - 1, numCellsZ - 1,
                                                               lastCellSizeX, lastCellSizeY, lastCellSizeZ);
-    SPDLOG_INFO("Created LinkedCellContainer with (cell) dimensions: {} x {} x {}", numCellsX, numCellsY, numCellsZ);
+    SPDLOG_INFO("Created LinkedCellContainer with dimensions: {} x {} x {} and cell grid: {} x {} x {}", 
+                domain[0], domain[1], domain[2], numCellsX, numCellsY, numCellsZ);
 }
 
 void LinkedCellContainer::initializeNeighbors() {
@@ -93,8 +94,6 @@ void LinkedCellContainer::initializeNeighbors() {
     for (int row = 0; row < x_size; row++) {
         for (int col = 0; col < y_size; col++) {
             for (int cell = 0; cell < z_size; cell++) {
-                SPDLOG_INFO("");
-                SPDLOG_INFO("Adding neighbors of cell with coordinates: ({},{},{})", row, col, cell);
                 for (int x = -cutoffRadiusIndex; x <= cutoffRadiusIndex; x++) {
                     for (int y = -cutoffRadiusIndex; y <= cutoffRadiusIndex; y++) {
                         for (int z = -cutoffRadiusIndex; z <= cutoffRadiusIndex; z++) {
@@ -102,7 +101,6 @@ void LinkedCellContainer::initializeNeighbors() {
                                 (col+y >= 0 && col+y < y_size) &&
                                 (cell+z >= 0 && cell+z < z_size)) {
                                 cells[row][col][cell].addNeighbor(&cells[row+x][col+y][cell+z]);
-                                SPDLOG_INFO("Added cell with coordinates: ({},{},{})", row+x, col+y, cell+z);
                             }
                         }
                     }
@@ -152,14 +150,6 @@ void LinkedCellContainer::populateCells() {
         int cellIndexY = static_cast<int>(position[1] / cellSize);
         int cellIndexZ = static_cast<int>(position[2] / cellSize);
         cells[cellIndexX][cellIndexY][cellIndexZ].addParticle(&particle);
-    }
-    for (auto &row: cells) {
-        for (auto &col: row) {
-            for (auto &cell: col) {
-                SPDLOG_INFO("Cell at index ({}, {}, {}) has {} particles", cell.getIndex()[0], cell.getIndex()[1],
-                            cell.getIndex()[2], cell.getParticles().size());
-            }
-        }
     }
 }
 
