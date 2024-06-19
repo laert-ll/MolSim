@@ -58,6 +58,8 @@ endif ()
 file(GLOB_RECURSE MY_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/*.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/io/in/input_schema.cxx"
 )

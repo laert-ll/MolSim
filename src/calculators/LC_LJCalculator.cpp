@@ -7,6 +7,7 @@ namespace calculators {
         calculateLC_F(linkedCellContainer);
         calculateLC_X(linkedCellContainer, delta_t);
         calculateLC_V(linkedCellContainer, delta_t);
+        linkedCellContainer.updateCells();
     }
 
     void LC_LJCalculator::calculateLC_F(LinkedCellContainer &linkedCellContainer) {
