@@ -236,13 +236,13 @@ public:
             return;
         }
 
-        ParticleContainer& particleContainer = *simulationDataContainer.getParticleContainer();
-        LinkedCellContainer& linkedCellContainer = *simulationDataContainer.getLinkedCellContainer();
-        FileWriterParameters& fileWriterParameters = *simulationDataContainer.getFileWriterParameters();
-        SimulationParameters& simulationParameters = *simulationDataContainer.getSimulationParameters();
-        ThermostatParameters& thermostatParameters = *simulationDataContainer.getThermostatParameters();
-        LinkedCellsParameters& linkedCellsParameters = *simulationDataContainer.getLinkedCellsParameters();
-        BoundaryParameters& boundaryParameters = *simulationDataContainer.getBoundaryParameters();
+        ParticleContainer &particleContainer = *simulationDataContainer.getParticleContainer();
+        LinkedCellContainer &linkedCellContainer = *simulationDataContainer.getLinkedCellContainer();
+        FileWriterParameters &fileWriterParameters = *simulationDataContainer.getFileWriterParameters();
+        SimulationParameters &simulationParameters = *simulationDataContainer.getSimulationParameters();
+        ThermostatParameters &thermostatParameters = *simulationDataContainer.getThermostatParameters();
+        LinkedCellsParameters &linkedCellsParameters = *simulationDataContainer.getLinkedCellsParameters();
+        BoundaryParameters &boundaryParameters = *simulationDataContainer.getBoundaryParameters();
 
         const double delta_t = simulationParameters.getDelta_t();
         const double end_time = simulationParameters.getEnd_t();
@@ -251,56 +251,87 @@ public:
         Thermostat thermostat(thermostatParameters.getStartTemp(), thermostatParameters.getTargetTemp(),
                               thermostatParameters.getApplyFrequency(), thermostatParameters.getMaxDeltaTemp(),
                               thermostatParameters.getDimension());
-        SPDLOG_INFO("Thermostat initialized with start_temp: {}, target_temp: {}, apply_frequency: {}, max_delta_temp: {}, dimension: {}.",
-                    thermostatParameters.getStartTemp(), thermostatParameters.getTargetTemp(),
-                    thermostatParameters.getApplyFrequency(), thermostatParameters.getMaxDeltaTemp(),
-                    thermostatParameters.getDimension());
-        const auto& boundaryMap = boundaryParameters.getBoundaryMap();
+        SPDLOG_INFO(
+                "Thermostat initialized with start_temp: {}, target_temp: {}, apply_frequency: {}, max_delta_temp: {}, dimension: {}.",
+                thermostatParameters.getStartTemp(), thermostatParameters.getTargetTemp(),
+                thermostatParameters.getApplyFrequency(), thermostatParameters.getMaxDeltaTemp(),
+                thermostatParameters.getDimension());
+        const auto &boundaryMap = boundaryParameters.getBoundaryMap();
         SPDLOG_INFO("Boundary conditions initialized.");
 
+        // retrieve required parameters
         double current_time = 0.0; // start_time
         int iteration = 0;
         const int thermostatApplyFrequency = thermostat.getApplyFrequency();
-
-        std::array<double, 2> domain = {63.0, 36.0};
-
+        const std::array<double, 3> domain = boundaryParameters.getDomain();
         const boundaries::BoundaryProperties properties{domain, boundaryMap};
         const boundaries::BoundaryHandler handler{properties, calculator};
-
-        thermostat.initializeTemp(particleContainer);
-
-        calculator->setGravity(-12.9);
-
+        const bool linkedCellsUsed = linkedCellsParameters.isLinkedCellsUsed();
         const std::string &filename = fileWriterParameters.getBaseName();
+
+        calculator->setGravity(-12.9); // TODO: edit
 
         auto start = std::chrono::high_resolution_clock::now();
 
-        while (current_time < end_time) {
-            SPDLOG_TRACE("Starting iteration {} with time {}.", iteration, current_time);
-            handler.preProcessBoundaries(particleContainer);
-            calculator->calculate(particleContainer, delta_t);
-            handler.postProcessBoundaries(particleContainer);
+        if (linkedCellsUsed) {
+            SPDLOG_INFO("Linked cells used in this simulation.");
+            thermostat.initializeTemp(linkedCellContainer);
 
-            iteration++;
-            if (iteration % thermostatApplyFrequency == 0) {
-                thermostat.setTempGradually(particleContainer);
-                SPDLOG_DEBUG("Thermostat applied at iteration {}.", iteration);
-            }
+            while (current_time < end_time) {
+                SPDLOG_TRACE("Starting iteration {} with time {}.", iteration, current_time);
+                // handler.preProcessBoundaries(linkedCellContainer); TODO: connect Boundaries with linkedCellContainer
+                calculator->calculateLC(linkedCellContainer, delta_t);
+                // handler.postProcessBoundaries(linkedCellContainer);
 
-            if (iteration % 10 == 0) {
-                outputWriter->plotParticles(iteration, particleContainer, filename);
-                SPDLOG_DEBUG("Output written for iteration {}.", iteration);
-            }
+                iteration++;
+                if (iteration % thermostatApplyFrequency == 0) {
+                    thermostat.setTempGradually(linkedCellContainer);
+                    SPDLOG_DEBUG("Thermostat applied at iteration {}.", iteration);
+                }
 
-            if (iteration % 100 == 0) {
-//                SPDLOG_INFO("Iteration {} finished.", iteration);
+                if (iteration % 10 == 0) {
+                    outputWriter->plotParticlesLC(iteration, linkedCellContainer, filename);
+                    SPDLOG_DEBUG("Output written for iteration {}.", iteration);
+                }
+
+                if (iteration % 100 == 0) {
+                    SPDLOG_INFO("Iteration {} finished.", iteration);
+                }
+                current_time += delta_t;
             }
-            current_time += delta_t;
+        } else {
+            SPDLOG_INFO("Linked cells not used in this simulation.");
+            thermostat.initializeTemp(particleContainer);
+
+            while (current_time < end_time) {
+                SPDLOG_TRACE("Starting iteration {} with time {}.", iteration, current_time);
+                handler.preProcessBoundaries(particleContainer);
+                calculator->calculate(particleContainer, delta_t);
+                handler.postProcessBoundaries(particleContainer);
+
+                iteration++;
+                if (iteration % thermostatApplyFrequency == 0) {
+                    thermostat.setTempGradually(particleContainer);
+                    SPDLOG_DEBUG("Thermostat applied at iteration {}.", iteration);
+                }
+
+                if (iteration % 10 == 0) {
+                    outputWriter->plotParticles(iteration, particleContainer, filename);
+                    SPDLOG_DEBUG("Output written for iteration {}.", iteration);
+                }
+
+                if (iteration % 100 == 0) {
+                    SPDLOG_INFO("Iteration {} finished.", iteration);
+                }
+                current_time += delta_t;
+            }
         }
+
 
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = end - start;
-        double totalMolecules = particleContainer.getSize() * iteration;
+        size_t totalMolecules = linkedCellsUsed ? linkedCellContainer.getSize() * iteration :
+                                particleContainer.getSize() * iteration;
         double MUPS = totalMolecules / elapsed.count();
 
         SPDLOG_INFO("Simulation completed in {} seconds.", elapsed.count());

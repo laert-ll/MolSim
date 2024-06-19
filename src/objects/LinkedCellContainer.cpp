@@ -111,8 +111,8 @@ void LinkedCellContainer::populateCells() {
         SPDLOG_DEBUG("Particle at position ({}, {}, {})", position[0], position[1], position[2]);
         if (position[0] >= domain[0] || position[0] < 0 || position[1] >= domain[1] || position[1] < 0 ||
             position[2] >= domain[2] || position[2] < 0) {
-            SPDLOG_ERROR("Particle at position ({}, {}, {}) is outside the domain", position[0], position[1],
-                         position[2]);
+            SPDLOG_ERROR("Particle at position ({}, {}, {}) is outside the domain ({},{})", position[0], position[1],
+                         position[2], domain[0], domain[1]);
             exit(-1);
         }
         size_t cellIndexX = static_cast<size_t>(position[0] / cellSize);
@@ -161,12 +161,14 @@ std::array<size_t, 3> LinkedCellContainer::getIndex(const std::shared_ptr<Partic
     return std::array<size_t, 3>{{cellIndexX, cellIndexY, cellIndexZ}};
 }
 
-void LinkedCellContainer::setCutOffRadius(double &cutoffRadius) {
+void LinkedCellContainer::setCutOffRadius(const double &cutoffRadius) {
     this->cutoffRadius = cutoffRadius;
+    SPDLOG_INFO("Set cutoff radius to {}", this->cutoffRadius);
 }
 
-void LinkedCellContainer::setCellSize(double &cellSize) {
+void LinkedCellContainer::setCellSize(const double &cellSize) {
     this->cellSize = cellSize;
+    SPDLOG_INFO("Set cell size to {}", this->cellSize);
 }
 
 bool LinkedCellContainer::hasZeroVelocities() {
@@ -177,4 +179,9 @@ bool LinkedCellContainer::hasZeroVelocities() {
         }
     }
     return true;
+}
+
+void LinkedCellContainer::setDomain(const std::array<double, 3> &domain) {
+    this->domain = domain;
+    SPDLOG_INFO("Set domain to ({}, {}, {})", domain[0], domain[1], domain[2]);
 }

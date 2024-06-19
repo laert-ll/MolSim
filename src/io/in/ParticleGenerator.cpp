@@ -86,8 +86,7 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Linke
             }
         }
     }
-    SPDLOG_INFO(
-            "Finished generating cuboid with LLF [{}, {}, {}], NumParticles [{}, {}, {}], Distance {}, Mass {}, StartV [{}, {}, {}], MeanV {}",
+    SPDLOG_INFO("Finished generating cuboid with LLF [{}, {}, {}], NumParticles [{}, {}, {}], Distance {}, Mass {}, StartV [{}, {}, {}], MeanV {}",
             lowerLeftFrontCorner[0], lowerLeftFrontCorner[1], lowerLeftFrontCorner[2], numParticlesPerDimension[0],
             numParticlesPerDimension[1],
             numParticlesPerDimension[2], distance, m, startV[0], startV[1], startV[2], meanV);

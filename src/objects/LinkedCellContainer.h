@@ -45,9 +45,11 @@ public:
 
     void initializeAndPopulateCells();
 
-    void setCutOffRadius(double &cutoffRadius);
+    void setCutOffRadius(const double &cutoffRadius);
 
-    void setCellSize(double &cellSize);
+    void setCellSize(const double &cellSize);
+
+    void setDomain(const std::array<double, 3> &domain);
 
     /**
     * Method to add a particle to the container.

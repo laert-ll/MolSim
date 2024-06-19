@@ -23,12 +23,17 @@ namespace fileReaders {
         std::unique_ptr<ParticleContainer> particleContainer = std::make_unique<ParticleContainer>();
         std::unique_ptr<LinkedCellContainer> linkedCellContainer = std::make_unique<LinkedCellContainer>();
         if (linkedCellParameters->isLinkedCellsUsed()) {
+            const double cutoffRadius = linkedCellParameters->getCutOffRadius();
+            linkedCellContainer->setCellSize(cutoffRadius);
+            linkedCellContainer->setCutOffRadius(cutoffRadius);
+            linkedCellContainer->setDomain(boundaryParameters->getDomain());
             loadCuboids(*simulation, *linkedCellContainer);
         } else {
             loadCuboids(*simulation, *particleContainer);
         }
 
         SimulationDataContainer simulationDataContainer(std::move(particleContainer),
+                                                        std::move(linkedCellContainer),
                                                         std::move(fileWriterParameters),
                                                         std::move(simulationParameters),
                                                         std::move(thermostatParameters),
@@ -72,7 +77,7 @@ namespace fileReaders {
         boundaryMap[boundaries::BoundaryDirection::FRONT] = stringToBoundaryType(boundaryParametersParsed.FRONT());
         boundaryMap[boundaries::BoundaryDirection::BACK] = stringToBoundaryType(boundaryParametersParsed.BACK());
 
-        std::array<double, 2> domain{};
+        std::array<double, 3> domain{};
         std::istringstream domainStream(boundaryParametersParsed.Domain());
         for (auto &value: domain) domainStream >> value;
 
