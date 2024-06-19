@@ -7,12 +7,19 @@
 
 #include <cmath>
 
+/**
 LinkedCellContainer::LinkedCellContainer(std::array<double, 3> &domain, std::vector<CuboidParameters> &cuboidParameters,
                                          double &cutoffRadius, double &cellSize)
         : domain(domain), cutoffRadius(cutoffRadius), cellSize(cellSize) {
     initializeCells();
     initializeNeighbors();
-    generateCuboids(cuboidParameters);
+    populateCells();
+}
+**/
+
+void LinkedCellContainer::initializeAndPopulateCells() {
+    initializeCells();
+    initializeNeighbors();
     populateCells();
 }
 
@@ -98,42 +105,6 @@ void LinkedCellContainer::initializeNeighbors() {
     }
 }
 
-void LinkedCellContainer::generateCuboids(std::vector<CuboidParameters> &cuboidParameters) {
-    for (const auto &cuboid: cuboidParameters) {
-        const auto &lowerLeftFrontCorner = cuboid.lowerLeftFrontCorner;
-        const auto &numParticlesPerDimension = cuboid.numParticlesPerDimension;
-        const auto &distance = cuboid.distance;
-        const auto &m = cuboid.m;
-        const auto &startV = cuboid.startV;
-        const auto &meanV = cuboid.meanV;
-
-        for (std::size_t xIndex = 0; xIndex < numParticlesPerDimension[0]; ++xIndex) {
-            for (std::size_t yIndex = 0; yIndex < numParticlesPerDimension[1]; ++yIndex) {
-                for (std::size_t zIndex = 0; zIndex < numParticlesPerDimension[2]; ++zIndex) {
-                    const std::array<double, 3> x = {
-                            lowerLeftFrontCorner[0] + xIndex * distance,
-                            lowerLeftFrontCorner[1] + yIndex * distance,
-                            lowerLeftFrontCorner[2] + zIndex * distance
-                    };
-                    const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 2);
-                    const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<>());
-
-                    auto newParticle = std::make_shared<Particle>(x, v, m, 0, 0);
-                    SPDLOG_DEBUG("Generated particle at position ({}, {}, {})", x[0], x[1], x[2]);
-                    addParticle(newParticle);
-                }
-            }
-        }
-
-        SPDLOG_INFO(
-                "Finished generating cuboid with LLF [{}, {}, {}], NumParticles [{}, {}, {}], Distance {}, Mass {}, StartV [{}, {}, {}], MeanV {}",
-                lowerLeftFrontCorner[0], lowerLeftFrontCorner[1], lowerLeftFrontCorner[2], numParticlesPerDimension[0],
-                numParticlesPerDimension[1],
-                numParticlesPerDimension[2], distance, m, startV[0], startV[1], startV[2], meanV);
-    }
-    SPDLOG_INFO("Number of generated Particles: {}", particles.size());
-}
-
 void LinkedCellContainer::populateCells() {
     for (auto &particle: particles) {
         auto position = particle->getX();
@@ -188,4 +159,22 @@ std::array<size_t, 3> LinkedCellContainer::getIndex(const std::shared_ptr<Partic
     size_t cellIndexY = static_cast<size_t>(particle->getX()[1] / cellSize);
     size_t cellIndexZ = static_cast<size_t>(particle->getX()[2] / cellSize);
     return std::array<size_t, 3>{{cellIndexX, cellIndexY, cellIndexZ}};
+}
+
+void LinkedCellContainer::setCutOffRadius(double &cutoffRadius) {
+    this->cutoffRadius = cutoffRadius;
+}
+
+void LinkedCellContainer::setCellSize(double &cellSize) {
+    this->cellSize = cellSize;
+}
+
+bool LinkedCellContainer::hasZeroVelocities() {
+    auto particles = this->getParticles();
+    for (const auto& particle : this->particles) {
+        if (!particle->hasZeroVelocities()) {
+            return false;
+        }
+    }
+    return true;
 }

@@ -2,7 +2,7 @@
 
 #include "Particle.h"
 #include "Cell.h"
-#include "../io/in/CuboidParameters.h"
+#include "../io/in/parameters/CuboidParameters.h"
 
 #include <vector>
 
@@ -39,9 +39,15 @@ public:
 
     LinkedCellContainer() = default;
 
-    LinkedCellContainer(std::array<double, 3> &domain, std::vector<CuboidParameters> &cuboidParameters, double &cutoffRadius, double &cellSize);
+    //LinkedCellContainer(std::array<double, 3> &domain, std::vector<CuboidParameters> &cuboidParameters, double &cutoffRadius, double &cellSize);
 
     ~LinkedCellContainer() = default;
+
+    void initializeAndPopulateCells();
+
+    void setCutOffRadius(double &cutoffRadius);
+
+    void setCellSize(double &cellSize);
 
     /**
     * Method to add a particle to the container.
@@ -83,8 +89,6 @@ public:
 
     void initializeNeighbors();
 
-    void generateCuboids(std::vector<CuboidParameters> &cuboidParameters);
-
     void populateCells();
 
     std::vector<std::shared_ptr<Cell>>& getNeighboringCellsIncludingSelf(const Particle &particle);
@@ -102,4 +106,5 @@ public:
 
     std::array<size_t, 3> getIndex(const std::shared_ptr<Particle> &particle);
 
+    bool hasZeroVelocities();
 };

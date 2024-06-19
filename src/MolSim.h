@@ -226,18 +226,22 @@ public:
                                   std::unique_ptr<outputWriters::FileWriter> &outputWriter,
                                   std::shared_ptr<calculators::Calculator> &calculator) {
         if (!simulationDataContainer.getParticleContainer() ||
+            !simulationDataContainer.getLinkedCellContainer() ||
             !simulationDataContainer.getFileWriterParameters() ||
             !simulationDataContainer.getSimulationParameters() ||
             !simulationDataContainer.getThermostatParameters() ||
+            !simulationDataContainer.getLinkedCellsParameters() ||
             !simulationDataContainer.getBoundaryParameters()) {
             SPDLOG_ERROR("One or more required components are missing in the SimulationDataContainer");
             return;
         }
 
         ParticleContainer& particleContainer = *simulationDataContainer.getParticleContainer();
+        LinkedCellContainer& linkedCellContainer = *simulationDataContainer.getLinkedCellContainer();
         FileWriterParameters& fileWriterParameters = *simulationDataContainer.getFileWriterParameters();
         SimulationParameters& simulationParameters = *simulationDataContainer.getSimulationParameters();
         ThermostatParameters& thermostatParameters = *simulationDataContainer.getThermostatParameters();
+        LinkedCellsParameters& linkedCellsParameters = *simulationDataContainer.getLinkedCellsParameters();
         BoundaryParameters& boundaryParameters = *simulationDataContainer.getBoundaryParameters();
 
         const double delta_t = simulationParameters.getDelta_t();

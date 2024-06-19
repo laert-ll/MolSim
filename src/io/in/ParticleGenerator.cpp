@@ -61,6 +61,38 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Parti
     }
 }
 
+void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, LinkedCellContainer &linkedCellContainer) {
+    const auto &lowerLeftFrontCorner = parameters.getLowerLeftFrontCorner();
+    const auto &numParticlesPerDimension = parameters.getNumParticlesPerDimension();
+    const auto &distance = parameters.getDistance();
+    const auto &m = parameters.getMass();
+    const auto &startV = parameters.getStartV();
+    const auto &meanV = parameters.getMeanV();
+
+    for (std::size_t xIndex = 0; xIndex < numParticlesPerDimension[0]; ++xIndex) {
+        for (std::size_t yIndex = 0; yIndex < numParticlesPerDimension[1]; ++yIndex) {
+            for (std::size_t zIndex = 0; zIndex < numParticlesPerDimension[2]; ++zIndex) {
+                const std::array<double, 3> x = {
+                        lowerLeftFrontCorner[0] + xIndex * distance,
+                        lowerLeftFrontCorner[1] + yIndex * distance,
+                        lowerLeftFrontCorner[2] + zIndex * distance
+                };
+                const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 2);
+                const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<>());
+
+                auto newParticle = std::make_shared<Particle>(x, v, m, 0, 0);
+                SPDLOG_DEBUG("Generated particle at position ({}, {}, {})", x[0], x[1], x[2]);
+                linkedCellContainer.addParticle(newParticle);
+            }
+        }
+    }
+    SPDLOG_INFO(
+            "Finished generating cuboid with LLF [{}, {}, {}], NumParticles [{}, {}, {}], Distance {}, Mass {}, StartV [{}, {}, {}], MeanV {}",
+            lowerLeftFrontCorner[0], lowerLeftFrontCorner[1], lowerLeftFrontCorner[2], numParticlesPerDimension[0],
+            numParticlesPerDimension[1],
+            numParticlesPerDimension[2], distance, m, startV[0], startV[1], startV[2], meanV);
+}
+
 void ParticleGenerator::generateDisc(const DiscParameters &parameters, ParticleContainer &particleContainer) {
     // Extract parameters for easier access
     const auto &center = parameters.getCenter();
@@ -91,3 +123,36 @@ void ParticleGenerator::generateDisc(const DiscParameters &parameters, ParticleC
         }
     }
 }
+
+void ParticleGenerator::generateDisc(const DiscParameters &parameters, LinkedCellContainer &linkedCellContainer) {
+    // Extract parameters for easier access
+    const auto &center = parameters.getCenter();
+    const auto &startV = parameters.getStartV();
+    const int numParticlesAlongRadius = parameters.getNumParticlesAlongRadius();
+    const double distance = parameters.getDistance();
+    const double mass = parameters.getMass();
+
+    SPDLOG_DEBUG("Generating disc: Center {}, startV {}, numParticlesAlongRadius {}, Distance {}",
+                 ArrayUtils::to_string(center), ArrayUtils::to_string(startV), numParticlesAlongRadius, distance);
+
+    // Generate particles for the disc
+    for (int i = -numParticlesAlongRadius; i <= numParticlesAlongRadius; ++i) {
+        for (int j = -numParticlesAlongRadius; j <= numParticlesAlongRadius; ++j) {
+            if (i * i + j * j <=
+                numParticlesAlongRadius * numParticlesAlongRadius) { // Check if the position is inside the disc
+                // Calculate the position of the particle
+                const std::array<double, 3> x = {
+                        center[0] + i * distance,
+                        center[1] + j * distance,
+                        center[2]
+                };
+
+                // Create a new particle and add it to the container
+                auto newParticle = std::make_shared<Particle>(x, startV, mass, 0, 0);
+                linkedCellContainer.addParticle(newParticle);
+            }
+        }
+    }
+}
+
+
