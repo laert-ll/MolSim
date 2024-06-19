@@ -25,6 +25,6 @@ int Cell::getNeighboringCellsSize() {
     return neighboringCells.size();
 }
 
-std::array<int, 3> Cell::getIndex(){
+std::array<size_t, 3> Cell::getIndex(){
     return index;
 }

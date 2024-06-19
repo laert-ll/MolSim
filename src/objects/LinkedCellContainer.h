@@ -100,6 +100,6 @@ public:
     void update();
 
 
-    std::array<int, 3> getIndex(Particle *particle);
+    std::array<size_t, 3> getIndex(Particle *particle);
 
 };

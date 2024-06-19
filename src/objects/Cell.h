@@ -9,7 +9,7 @@ class Cell {
 public:
     Cell() = default;
 
-    Cell(int xIndex, int yIndex, int zIndex, double cellSizeX, double cellSizeY, double cellSizeZ)
+    Cell(size_t xIndex, size_t yIndex, size_t zIndex, double cellSizeX, double cellSizeY, double cellSizeZ)
             : index{xIndex, yIndex, zIndex}, dimensions{cellSizeX, cellSizeY, cellSizeZ} {}
 
     void addParticle(Particle* particle);
@@ -18,10 +18,10 @@ public:
     std::unordered_set<Particle*>& getParticles();
     std::vector<Cell*>& getNeighboringCells();
     int getNeighboringCellsSize();
-    std::array<int, 3> getIndex();
+    std::array<size_t, 3> getIndex();
 
 private:
-    std::array<int, 3> index;
+    std::array<size_t, 3> index;
     std::array<double, 3> dimensions;
     std::unordered_set<Particle*> particles;
     std::vector<Cell*> neighboringCells;

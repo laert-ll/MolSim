@@ -41,20 +41,20 @@ size_t LinkedCellContainer::getSize() const {
 }
 
 void LinkedCellContainer::initializeCells() {
-    int numCellsX = static_cast<int>(std::ceil(domain[0] / cellSize));
-    int numCellsY = static_cast<int>(std::ceil(domain[1] / cellSize));
-    int numCellsZ = static_cast<int>(std::ceil(domain[2] / cellSize));
+    size_t numCellsX = static_cast<size_t>(std::ceil(domain[0] / cellSize));
+    size_t numCellsY = static_cast<size_t>(std::ceil(domain[1] / cellSize));
+    size_t numCellsZ = static_cast<size_t>(std::ceil(domain[2] / cellSize));
 
     const double lastCellSizeX = domain[0] - (cellSize * (numCellsX - 1));
     const double lastCellSizeY = domain[1] - (cellSize * (numCellsY - 1));
     const double lastCellSizeZ = domain[2] - (cellSize * (numCellsZ - 1));
 
     cells.resize(numCellsX);
-    for (int x = 0; x < numCellsX; ++x) {
+    for (size_t x = 0; x < numCellsX; ++x) {
         cells[x].resize(numCellsY);
-        for (int y = 0; y < numCellsY; ++y) {
+        for (size_t y = 0; y < numCellsY; ++y) {
             cells[x][y].resize(numCellsZ);
-            for (int z = 0; z < numCellsZ; ++z) {
+            for (size_t z = 0; z < numCellsZ; ++z) {
                 const double cellSizeX = (x == numCellsX - 1) ? lastCellSizeX : cellSize;
                 const double cellSizeY = (y == numCellsY - 1) ? lastCellSizeY : cellSize;
                 const double cellSizeZ = (z == numCellsZ - 1) ? lastCellSizeZ : cellSize;
@@ -86,6 +86,9 @@ void LinkedCellContainer::initializeNeighbors() {
                                 neighborYIndex >= 0 && neighborYIndex < cells[0].size() &&
                                 neighborZIndex >= 0 && neighborZIndex < cells[0][0].size()) {
                                 cell.addNeighbor(&cells[neighborXIndex][neighborYIndex][neighborZIndex]);
+                                SPDLOG_INFO("Cell at index ({}, {}, {}) has neighbor at index ({}, {}, {})",
+                                            cell.getIndex()[0], cell.getIndex()[1], cell.getIndex()[2],
+                                            neighborXIndex, neighborYIndex, neighborZIndex);
                             }
                         }
                     }
@@ -93,7 +96,7 @@ void LinkedCellContainer::initializeNeighbors() {
             }
         }
     }
-
+    /**
     for (auto &row: cells) {
         for (auto &col: row) {
             for (auto &cell: col) {
@@ -102,6 +105,7 @@ void LinkedCellContainer::initializeNeighbors() {
             }
         }
     }
+     **/
 
 }
 
@@ -144,11 +148,18 @@ void LinkedCellContainer::populateCells() {
     for (auto &particle: particles) {
         auto position = particle.getX();
         SPDLOG_INFO("Particle at position ({}, {}, {})", position[0], position[1], position[2]);
-        int cellIndexX = static_cast<int>(position[0] / cellSize);
-        int cellIndexY = static_cast<int>(position[1] / cellSize);
-        int cellIndexZ = static_cast<int>(position[2] / cellSize);
+        if (position[0] >= domain[0] || position[0] < 0 || position[1] >= domain[1] || position[1] < 0 ||
+            position[2] >= domain[2] || position[2] < 0) {
+            SPDLOG_ERROR("Particle at position ({}, {}, {}) is outside the domain", position[0], position[1],
+                         position[2]);
+            exit(-1);
+        }
+        size_t cellIndexX = static_cast<size_t>(position[0] / cellSize);
+        size_t cellIndexY = static_cast<size_t>(position[1] / cellSize);
+        size_t cellIndexZ = static_cast<size_t>(position[2] / cellSize);
         cells[cellIndexX][cellIndexY][cellIndexZ].addParticle(&particle);
     }
+    /**
     for (auto &row: cells) {
         for (auto &col: row) {
             for (auto &cell: col) {
@@ -157,12 +168,13 @@ void LinkedCellContainer::populateCells() {
             }
         }
     }
+     **/
 }
 
 std::vector<Cell *> &LinkedCellContainer::getNeighboringCellsIncludingSelf(const Particle &particle) {
-    int cellIndexX = static_cast<int>(particle.getX()[0] / cellSize);
-    int cellIndexY = static_cast<int>(particle.getX()[1] / cellSize);
-    int cellIndexZ = static_cast<int>(particle.getX()[2] / cellSize);
+    size_t cellIndexX = static_cast<size_t>(particle.getX()[0] / cellSize);
+    size_t cellIndexY = static_cast<size_t>(particle.getX()[1] / cellSize);
+    size_t cellIndexZ = static_cast<size_t>(particle.getX()[2] / cellSize);
     return cells[cellIndexX][cellIndexY][cellIndexZ].getNeighboringCells();
 }
 
@@ -181,9 +193,9 @@ void LinkedCellContainer::update() {
     }
 }
 
-std::array<int, 3> LinkedCellContainer::getIndex(Particle *particle) {
-    int cellIndexX = static_cast<int>(particle->getX()[0] / cellSize);
-    int cellIndexY = static_cast<int>(particle->getX()[1] / cellSize);
-    int cellIndexZ = static_cast<int>(particle->getX()[2] / cellSize);
-    return std::array<int, 3>{{cellIndexX, cellIndexY, cellIndexZ}};
+std::array<size_t, 3> LinkedCellContainer::getIndex(Particle *particle) {
+    size_t cellIndexX = static_cast<size_t>(particle->getX()[0] / cellSize);
+    size_t cellIndexY = static_cast<size_t>(particle->getX()[1] / cellSize);
+    size_t cellIndexZ = static_cast<size_t>(particle->getX()[2] / cellSize);
+    return std::array<size_t, 3>{{cellIndexX, cellIndexY, cellIndexZ}};
 }
