@@ -241,12 +241,12 @@ public:
                                   std::unique_ptr<outputWriters::FileWriter> &outputWriter, std::unique_ptr<calculators::Calculator> &calculator,
                                   std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> &boundaryMap, int &simulationType) {
         if (simulationType == 0) {
-
+            SPDLOG_INFO("Starting simulation with linked cells.");
             double current_time = 0.0; // start_time
             int iteration = 0;
 
             while (current_time < end_time) {
-
+                SPDLOG_INFO("Starting iteration {}", iteration);
                 calculator->calculateLC(linkedCellContainer, delta_t);
 
                 iteration++;

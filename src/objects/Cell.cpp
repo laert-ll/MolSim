@@ -1,15 +1,15 @@
 #include "Cell.h"
 #include "Particle.h"
 
-void Cell::addParticle(std::shared_ptr<Particle> particle) {
+void Cell::addParticle(const std::shared_ptr<Particle>& particle) {
     particles.insert(particle);
 }
 
-void Cell::removeParticle(std::shared_ptr<Particle> particle) {
+void Cell::removeParticle(const std::shared_ptr<Particle>& particle) {
     particles.erase(particle);
 }
 
-void Cell::addNeighbor(std::shared_ptr<Cell> cell) {
+void Cell::addNeighbor(const std::shared_ptr<Cell>& cell) {
     neighboringCells.push_back(cell);
 }
 

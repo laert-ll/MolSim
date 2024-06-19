@@ -96,17 +96,6 @@ void LinkedCellContainer::initializeNeighbors() {
             }
         }
     }
-    /**
-    for (auto &row: cells) {
-        for (auto &col: row) {
-            for (auto &cell: col) {
-                SPDLOG_INFO("Cell at index ({}, {}, {}) has {} neighbors", cell.getIndex()[0], cell.getIndex()[1],
-                            cell.getIndex()[2], cell.getNeighboringCellsSize());
-            }
-        }
-    }
-     **/
-
 }
 
 void LinkedCellContainer::generateCuboids(std::vector<CuboidParameters> &cuboidParameters) {
@@ -130,6 +119,7 @@ void LinkedCellContainer::generateCuboids(std::vector<CuboidParameters> &cuboidP
                     const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<>());
 
                     auto newParticle = std::make_shared<Particle>(x, v, m, 0, 0);
+                    SPDLOG_INFO("Generated particle at position ({}, {}, {})", x[0], x[1], x[2]);
                     addParticle(newParticle);
                 }
             }
@@ -159,6 +149,7 @@ void LinkedCellContainer::populateCells() {
         size_t cellIndexZ = static_cast<size_t>(position[2] / cellSize);
         cells[cellIndexX][cellIndexY][cellIndexZ]->addParticle(particle);
     }
+    SPDLOG_INFO("Populated cells with particles");
     /**
     for (auto &row: cells) {
         for (auto &col: row) {
