@@ -5,6 +5,7 @@
 #pragma once
 
 #include "../objects/ParticleContainer.h"
+#include "objects/LinkedCellContainer.h"
 
 class Thermostat {
 public:
@@ -16,12 +17,16 @@ public:
             max_delta_temp(max_delta_temp), dimension(dimension) {}
 
     void setTempDirectly(ParticleContainer &particleContainer) const;
+    void setTempDirectly(LinkedCellContainer &linkedCellContainer) const;
 
     void setTempGradually(ParticleContainer &particleContainer) const;
+    void setTempGradually(LinkedCellContainer &linkedCellContainer) const;
 
     void initializeTemp(ParticleContainer &particleContainer) const;
+    void initializeTemp(LinkedCellContainer &linkedCellContainer) const;
 
     double calculateCurrentTemp(ParticleContainer &particleContainer) const;
+    double calculateCurrentTemp(LinkedCellContainer &linkedCellContainer) const;
 
     [[nodiscard]] double getStartTemp() const {
         return start_temp;
@@ -51,8 +56,11 @@ private:
     int dimension;
 
     double calculateKinEnergy(ParticleContainer &particleContainer) const;
+    double calculateKinEnergy(LinkedCellContainer &linkedCellContainer) const;
 
     void scaleV(double beta, ParticleContainer &particleContainer) const;
+    void scaleV(double beta, LinkedCellContainer &linkedCellContainer) const;
 
     void setTemp(ParticleContainer &particleContainer, double newTemp) const;
+    void setTemp(LinkedCellContainer &linkedCellContainer, double newTemp) const;
 };

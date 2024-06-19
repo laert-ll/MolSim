@@ -4,6 +4,7 @@
 #include "io/in/TXTReader.h"
 #include "io/in/XMLReader.h"
 #include "objects/ParticleContainer.h"
+#include "objects/LinkedCellContainer.h"
 #include "io/out/FileWriter.h"
 #include "io/out/VTKWriter.h"
 #include "io/out/XYZWriter.h"
@@ -37,7 +38,6 @@ int main(int argc, char *argsv[]) {
     std::unique_ptr<fileReaders::FileReader> fileReader;
     std::unique_ptr<outputWriters::FileWriter> outputWriter;
     std::shared_ptr<calculators::Calculator> calculator;
-    // std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
     std::unique_ptr<Thermostat> thermostat = std::make_unique<Thermostat>(10, 20, 5, 1, 3);
 
     if (!MolSim::processArguments(argc, argsv, inputFilePath, delta_t, end_time, outputWriter, calculator)) {

@@ -7,6 +7,7 @@
 #include "io/in/parameters/CuboidParameters.h"
 #include "io/in/parameters/ParticleParameters.h"
 #include "io/in/parameters/DiscParameters.h"
+#include "objects/LinkedCellContainer.h"
 
 class ParticleGenerator {
 
@@ -19,5 +20,9 @@ public:
 
     static void generateCuboid(const CuboidParameters &parameters, ParticleContainer& particleContainer);
 
+    static void generateCuboid(const CuboidParameters &parameters, LinkedCellContainer& linkedCellContainer);
+
     static void generateDisc(const DiscParameters &parameters, ParticleContainer& particleContainer);
+
+    static void generateDisc(const DiscParameters &parameters, LinkedCellContainer& linkedCellContainer);
 };

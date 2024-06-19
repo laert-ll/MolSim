@@ -13,6 +13,8 @@ namespace calculators {
     private:
 //        void calculateF(ParticleContainer &particleContainer) override {};
         void calculateFPairwise(Particle &particle1, Particle &particle2) const override{};
+
+        void calculateLC(LinkedCellContainer &linkedCellContainer, double delta_t) override {};
     };
 }
 

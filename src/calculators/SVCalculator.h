@@ -38,5 +38,9 @@ namespace calculators {
 
 //        void calculateReflection(Particle &p, Particle &ghost) override;
         void calculateFPairwise(Particle &particle1, Particle &particle2) const override;
+
+        void calculateLC(LinkedCellContainer &linkedCellContainer, double delta_t) override {
+        // Implementation of the calculateLC function
+        }
     };
 }

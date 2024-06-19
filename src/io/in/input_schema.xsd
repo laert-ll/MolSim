@@ -5,6 +5,7 @@
         <xs:element name="FileWriterParameters" type="FileWriterParametersType" maxOccurs="1"/>
         <xs:element name="SimulationParameters" type="SimulationParametersType" maxOccurs="1"/>
         <xs:element name="ThermostatParameters" type="ThermostatParametersType" maxOccurs="1"/>
+        <xs:element name="LinkedCellsParameters" type="LinkedCellsParametersType" maxOccurs="1"/>
         <xs:element name="BoundaryParameters" type="BoundaryParametersType" maxOccurs="1"/>
         <xs:element name="Cuboid" type="CuboidType" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -35,17 +36,16 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:simpleType name="BoundaryType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="REFLECTING"/>
-      <xs:enumeration value="OUTFLOW"/>
-      <xs:enumeration value="PERIODIC"/>
-      <xs:enumeration value="OFF"/>
-    </xs:restriction>
-  </xs:simpleType>
+  <xs:complexType name="LinkedCellsParametersType">
+    <xs:sequence>
+      <xs:element name="LinkedCellsUsed" type="xs:boolean"/>
+      <xs:element name="CutoffRadius" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
 
   <xs:complexType name="BoundaryParametersType">
     <xs:sequence>
+      <xs:element name="Domain" type="xs:string"/>
       <xs:element name="TOP" type="BoundaryType"/>
       <xs:element name="RIGHT" type="BoundaryType"/>
       <xs:element name="BOTTOM" type="BoundaryType"/>
@@ -65,4 +65,13 @@
       <xs:element name="MeanVelocity" type="xs:double"/>
     </xs:sequence>
   </xs:complexType>
+
+  <xs:simpleType name="BoundaryType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="REFLECTING"/>
+      <xs:enumeration value="OUTFLOW"/>
+      <xs:enumeration value="PERIODIC"/>
+      <xs:enumeration value="OFF"/>
+    </xs:restriction>
+  </xs:simpleType>
 </xs:schema>

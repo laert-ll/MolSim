@@ -40,5 +40,18 @@ namespace outputWriters {
          * @note The XYZ file will be written to the current working directory.
          */
         void plotParticles(int iteration, ParticleContainer &particleContainer, const std::string &filename);
+
+        /**
+         * @brief Writes the particles' positions to an XYZ file.
+         *
+         * This method writes the positions of all particles in the provided particle container to an XYZ file.
+         *
+         * @param iteration The current iteration number, which is used to generate a unique filename for the output file.
+         * @param particleContainer The container of particles whose positions will be written to the file.
+         * @param filename The base name of the file to be written. The iteration number will be appended to this name to create a unique filename for each output file.
+         *
+         * @note The XYZ file will be written to the current working directory.
+         */
+        void plotParticlesLC(int iteration, LinkedCellContainer &linkedCellContainer, const std::string &filename);
     };
 }// namespace outputWriters

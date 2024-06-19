@@ -15,7 +15,12 @@
         <MaxDeltaTemperature>10.0</MaxDeltaTemperature>
         <Dimension>3</Dimension>
     </ThermostatParameters>
+    <LinkedCellsParameters>
+        <LinkedCellsUsed>true</LinkedCellsUsed>
+        <CutoffRadius>3.0</CutoffRadius>
+    </LinkedCellsParameters>
     <BoundaryParameters>
+        <Domain>180.0 90.0 3.0</Domain>
         <TOP>REFLECTING</TOP>
         <RIGHT>REFLECTING</RIGHT>
         <BOTTOM>REFLECTING</BOTTOM>

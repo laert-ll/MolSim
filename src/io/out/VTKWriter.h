@@ -41,6 +41,14 @@ namespace outputWriters {
          */
         void plotParticles(int iteration, ParticleContainer &particleContainer, const std::string &filename);
 
+        /**
+         * Method to plot the particles.
+         * @param iteration the current iteration
+         * @param linkedCellContainer the container of particles
+         * @param filename the filename to write the plot to
+         */
+        void plotParticlesLC(int iteration, LinkedCellContainer& linkedCellContainer, const std::string& filename);
+
     private:
 
         VTKFile_t *vtkFile;

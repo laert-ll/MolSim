@@ -9,42 +9,61 @@
 #include "SimulationParameters.h"
 #include "ThermostatParameters.h"
 #include "BoundaryParameters.h"
+#include "LinkedCellsParameters.h"
 
 #include <memory>
 
 class SimulationDataContainer {
 public:
-    SimulationDataContainer(std::unique_ptr<ParticleContainer> particleContainer, std::unique_ptr<FileWriterParameters> fileWriterParameters,
-                            std::unique_ptr<SimulationParameters> simulationParameters, std::unique_ptr<ThermostatParameters> thermostatParameters,
+    SimulationDataContainer(std::unique_ptr<ParticleContainer> particleContainer,
+                            std::unique_ptr<LinkedCellContainer> linkedCellContainer,
+                            std::unique_ptr<FileWriterParameters> fileWriterParameters,
+                            std::unique_ptr<SimulationParameters> simulationParameters,
+                            std::unique_ptr<ThermostatParameters> thermostatParameters,
+                            std::unique_ptr<LinkedCellsParameters> linkedCellsParameters,
                             std::unique_ptr<BoundaryParameters> boundaryParameters)
-            : particleContainer(std::move(particleContainer)), fileWriterParameters(std::move(fileWriterParameters)),
-              simulationParameters(std::move(simulationParameters)), thermostatParameters(std::move(thermostatParameters)),
-              boundaryParameters(std::move(boundaryParameters)){}
+            : particleContainer(std::move(particleContainer)),
+              linkedCellContainer(std::move(linkedCellContainer)),
+              fileWriterParameters(std::move(fileWriterParameters)),
+              simulationParameters(std::move(simulationParameters)),
+              thermostatParameters(std::move(thermostatParameters)),
+              linkedCellsParameters(std::move(linkedCellsParameters)),
+              boundaryParameters(std::move(boundaryParameters)) {}
 
-    [[nodiscard]] ParticleContainer* getParticleContainer() const {
+    [[nodiscard]] ParticleContainer *getParticleContainer() const {
         return particleContainer.get();
     }
 
-    [[nodiscard]] FileWriterParameters* getFileWriterParameters() const {
+    [[nodiscard]] LinkedCellContainer *getLinkedCellContainer() const {
+        return linkedCellContainer.get();
+    }
+
+    [[nodiscard]] FileWriterParameters *getFileWriterParameters() const {
         return fileWriterParameters.get();
     }
 
-    [[nodiscard]] SimulationParameters* getSimulationParameters() const {
+    [[nodiscard]] SimulationParameters *getSimulationParameters() const {
         return simulationParameters.get();
     }
 
-    [[nodiscard]] ThermostatParameters* getThermostatParameters() const {
+    [[nodiscard]] ThermostatParameters *getThermostatParameters() const {
         return thermostatParameters.get();
     }
 
-    [[nodiscard]] BoundaryParameters* getBoundaryParameters() const {
+    [[nodiscard]] LinkedCellsParameters *getLinkedCellsParameters() const {
+        return linkedCellsParameters.get();
+    }
+
+    [[nodiscard]] BoundaryParameters *getBoundaryParameters() const {
         return boundaryParameters.get();
     }
 
 private:
     std::unique_ptr<ParticleContainer> particleContainer;
+    std::unique_ptr<LinkedCellContainer> linkedCellContainer;
     std::unique_ptr<FileWriterParameters> fileWriterParameters;
     std::unique_ptr<SimulationParameters> simulationParameters;
     std::unique_ptr<ThermostatParameters> thermostatParameters;
+    std::unique_ptr<LinkedCellsParameters> linkedCellsParameters;
     std::unique_ptr<BoundaryParameters> boundaryParameters;
 };

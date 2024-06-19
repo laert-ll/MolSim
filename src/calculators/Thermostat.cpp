@@ -34,8 +34,38 @@ void Thermostat::initializeTemp(ParticleContainer &particleContainer) const {
     SPDLOG_INFO("Scaled velocities to initial temperature");
 }
 
+void Thermostat::initializeTemp(LinkedCellContainer &linkedCellContainer) const {
+    if (linkedCellContainer.hasZeroVelocities()) { // Check if all velocities are zero
+        // Initialize velocities by applying Brownian motion
+        double maxwellBoltzmannFactor;
+
+        for (auto &particle : linkedCellContainer) {
+            maxwellBoltzmannFactor = sqrt(start_temp / particle->getM());
+
+            std::array<double, 3> v = particle->getV();
+            const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(maxwellBoltzmannFactor, 3);
+
+            for (int i = 0; i < dimension; ++i) {
+                v[i] += deltaV[i];
+            }
+
+            particle->setV(v);
+        }
+        SPDLOG_INFO("Initialized velocities with Brownian motion");
+    }
+
+    // Velocity scaling to initial temperature
+    setTemp(linkedCellContainer, start_temp);
+    SPDLOG_INFO("Scaled velocities to initial temperature");
+}
+
 void Thermostat::setTempDirectly(ParticleContainer &particleContainer) const {
     setTemp(particleContainer, target_temp);
+}
+
+
+void Thermostat::setTempDirectly(LinkedCellContainer &linkedCellContainer) const {
+    setTemp(linkedCellContainer, target_temp);
 }
 
 void Thermostat::setTempGradually(ParticleContainer &particleContainer) const {
@@ -45,9 +75,21 @@ void Thermostat::setTempGradually(ParticleContainer &particleContainer) const {
     setTemp(particleContainer, updatedTemp);
 }
 
+void Thermostat::setTempGradually(LinkedCellContainer &linkedCellContainer) const {
+    const double currentTemp = calculateCurrentTemp(linkedCellContainer);
+    const double delta_temp = std::min(std::abs(target_temp - currentTemp), this->max_delta_temp);
+    const double updatedTemp = this->target_temp > currentTemp ? currentTemp + delta_temp : currentTemp - delta_temp;
+    setTemp(linkedCellContainer, updatedTemp);
+}
+
 double Thermostat::calculateCurrentTemp(ParticleContainer &particleContainer) const {
     double kinEnergy = calculateKinEnergy(particleContainer);
     return 2.0 / (this->dimension * particleContainer.getSize()) * kinEnergy;
+}
+
+double Thermostat::calculateCurrentTemp(LinkedCellContainer &linkedCellContainer) const {
+    double kinEnergy = calculateKinEnergy(linkedCellContainer);
+    return 2.0 / (this->dimension * linkedCellContainer.getSize()) * kinEnergy;
 }
 
 //----------------------------------------Helper functions----------------------------------------------------
@@ -61,11 +103,27 @@ double Thermostat::calculateKinEnergy(ParticleContainer &particleContainer) cons
     return kinEnergy;
 }
 
+double Thermostat::calculateKinEnergy(LinkedCellContainer &linkedCellContainer) const {
+    double kinEnergy = 0.0;
+    for (auto &particle : linkedCellContainer) {
+        kinEnergy += 0.5 * particle->getM() * ArrayUtils::dotProduct(particle->getV(), particle->getV());
+    }
+    return kinEnergy;
+}
+
 void Thermostat::scaleV(double beta, ParticleContainer &particleContainer) const {
     for (auto &particle : particleContainer) {
         std::array<double, 3> v = particle.getV();
         v = beta * v;
         particle.setV(v);
+    }
+}
+
+void Thermostat::scaleV(double beta, LinkedCellContainer &linkedCellContainer) const {
+    for (auto &particle : linkedCellContainer) {
+        std::array<double, 3> v = particle->getV();
+        v = beta * v;
+        particle->setV(v);
     }
 }
 
@@ -78,4 +136,15 @@ void Thermostat::setTemp(ParticleContainer &particleContainer, double newTemp) c
         beta = sqrt(newTemp / currentTemp);
     }
     scaleV(beta, particleContainer);
+}
+
+void Thermostat::setTemp(LinkedCellContainer &linkedCellContainer, double newTemp) const {
+    const double currentTemp = calculateCurrentTemp(linkedCellContainer);
+    double beta;
+    if (std::abs(currentTemp) < COMPARISON_TOLERANCE) { // Check if currentTemp is zero
+        beta = sqrt(newTemp / COMPARISON_TOLERANCE); // or some default value
+    } else {
+        beta = sqrt(newTemp / currentTemp);
+    }
+    scaleV(beta, linkedCellContainer);
 }
