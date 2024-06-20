@@ -101,6 +101,12 @@ public:
         if (result.count("input")) {
             inputFilePath = result["input"].as<std::string>();
             SPDLOG_INFO("Input file path: {}", inputFilePath);
+
+            if (inputFilePath.length() >= 4 && inputFilePath.substr(inputFilePath.length() - 4) == ".xml") {
+                calculator = std::make_unique<calculators::LC_LJCalculator>();
+                outputWriter = std::make_unique<outputWriters::VTKWriter>();
+                return true;
+            }
         }
 
         delta_t = result["delta_t"].as<double>();
