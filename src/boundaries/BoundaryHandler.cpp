@@ -18,8 +18,10 @@ namespace boundaries {
     }
 
     void BoundaryHandler::preProcessBoundaries(LinkedCellContainer &linkedCellContainer) const {
+        SPDLOG_INFO("preprocessing LinkedCell");
         for (auto it : properties.getBoundaryMap()) {
             if (it.second == BoundaryType::REFLECTING) {
+                SPDLOG_INFO("Calling handleReflection");
                 handleReflection(linkedCellContainer, it.first);
             }
         }

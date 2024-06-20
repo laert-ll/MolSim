@@ -334,6 +334,7 @@ namespace boundaries {
         std::array<double, 3> zero{0.0, 0.0, 0.0};
         for (const auto &p: container)  {
             ASSERT_EQ(p->getF(), zero);
+            SPDLOG_INFO("Particle with coordinates ({}, {}, {})", p.get()->getX()[0],p.get()->getX()[1],p.get()->getX()[2]);
         }
         std::vector<std::array<double, 3>> expectedReflectedForces{{0.0,    120.0,  0.0},
                                                                    {0.0,    -120.0, 0.0},
