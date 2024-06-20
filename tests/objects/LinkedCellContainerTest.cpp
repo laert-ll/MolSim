@@ -76,7 +76,7 @@ TEST(LinkedCellContainerTest, CheckParticlePositionInCells) {
     lc.initializeNeighbors();
     lc.populateCells();
 
-    auto cellIndex = lc.getIndex(p1->getX());
+    auto cellIndex = lc.getCellIndex(p1->getX());
     auto cell = lc.getCells()[cellIndex[0]][cellIndex[1]][cellIndex[2]];
     auto particlesInCell = cell->getParticles();
 
