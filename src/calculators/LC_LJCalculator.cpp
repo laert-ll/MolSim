@@ -5,9 +5,21 @@ namespace calculators {
 
     void LC_LJCalculator::calculateLC(LinkedCellContainer &linkedCellContainer, double delta_t) {
         calculateLC_F(linkedCellContainer);
+        if (std::abs(this->g_grav) > COMPARISON_TOLERANCE) // If gravity is not zero, calculate gravity
+            calculateGravityLC(linkedCellContainer);
         calculateLC_X(linkedCellContainer, delta_t);
         calculateLC_V(linkedCellContainer, delta_t);
         linkedCellContainer.updateCells();
+    }
+
+    void LC_LJCalculator::calculateGravityLC(LinkedCellContainer &linkedCellContainer) {
+        for (auto &p: linkedCellContainer) {
+            const double grav_force = p->getM() * this->g_grav;
+            const std::array<double, 3> newForce{p->getF()[0], p->getF()[1] + grav_force, p->getF()[2]};
+            SPDLOG_DEBUG("Updating particle's force {} with new force including gravity {}, gravity for this particle is {}",
+                         ArrayUtils::to_string(p->getF()), ArrayUtils::to_string(newForce), grav_force);
+            p->setF(newForce);
+        }
     }
 
     void LC_LJCalculator::calculateLC_F(LinkedCellContainer &linkedCellContainer) {
@@ -152,7 +164,7 @@ namespace calculators {
         }
     }
 
-    void LC_LJCalculator::calculateLC_FPairwise(Particle &particle1, Particle &particle2) {
+    void LC_LJCalculator::calculateFPairwise(Particle &particle1, Particle &particle2) {
         // Get the positions and masses of the two particles
         const std::array<double, 3> x1 = particle1.getX();
         const std::array<double, 3> x2 = particle2.getX();
