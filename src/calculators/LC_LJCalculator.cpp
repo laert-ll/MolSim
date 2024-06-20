@@ -24,15 +24,6 @@ namespace calculators {
             SPDLOG_DEBUG("Updated F of Particle at {} to ({}, {}, {})",
                          ArrayUtils::to_string(p->getX()),
                          p->getF()[0], p->getF()[1], p->getF()[2]);
-            SPDLOG_DEBUG("Applying gravity {}. Current old F of Particle at {} is ({}, {}, {})",
-                         grav_force,
-                         ArrayUtils::to_string(p->getX()),
-                         p->getOldF()[0], p->getOldF()[1], p->getOldF()[2]);
-            const std::array<double, 3> newOldForce{p->getOldF()[0], p->getOldF()[1] + grav_force, p->getOldF()[2]};
-            p->setOldF(newOldForce);
-            SPDLOG_DEBUG("Updated old F of Particle at {} to ({}, {}, {})",
-                         ArrayUtils::to_string(p->getX()),
-                         p->getOldF()[0], p->getOldF()[1], p->getOldF()[2]);
         }
     }
 
