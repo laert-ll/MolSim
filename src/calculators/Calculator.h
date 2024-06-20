@@ -50,9 +50,11 @@ namespace calculators {
          * @param particleContainer The container of particles to perform the calculations on.
          */
         void calculateGravity(ParticleContainer &particleContainer) {
-            for (Particle &p : particleContainer) {
+            for (Particle &p: particleContainer) {
                 double grav_force = p.getM() * g_grav;
-                const std::array<double, 3> newForce {p.getF()[0], p.getF()[1] + grav_force, p.getF()[2]};
+                const std::array<double, 3> newForce{p.getF()[0], p.getF()[1] + grav_force, p.getF()[2]};
+                SPDLOG_DEBUG("Updating particle's force {} with new force including gravity {}",
+                             ArrayUtils::to_string(p.getF()), ArrayUtils::to_string(newForce));
                 p.setF(newForce);
             }
         }

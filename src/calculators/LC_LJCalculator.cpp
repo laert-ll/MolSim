@@ -14,6 +14,10 @@ namespace calculators {
         for (auto &p: linkedCellContainer) {
             p->setOldF(p->getF());  // Update oldF with currentF
             p->setF({0, 0, 0});     // Reset F to zeros
+            SPDLOG_DEBUG("Reset force of Particle at {} to ({}, {}, {})", ArrayUtils::to_string(p->getX()), 0, 0, 0);
+            SPDLOG_DEBUG("Updated old force of Particle at {} to {}",
+                         ArrayUtils::to_string(p->getX()),
+                         ArrayUtils::to_string(p->getOldF()));
         }
 
         for (auto &particle1: linkedCellContainer) {
@@ -39,9 +43,10 @@ namespace calculators {
                     double sigma = 0.5 * (particle1->getSigma() + particle2->getSigma());
                     // Calculate the force between the two particles
                     const double forceMagnitude = -(24 * epsilon / (distance * distance)) *
-                                                ((pow(sigma / distance, 6) - 2 * pow(sigma / distance, 12)));
+                                                  ((pow(sigma / distance, 6) - 2 * pow(sigma / distance, 12)));
 
-                    std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(forceMagnitude, dx, std::multiplies<>());
+                    std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(forceMagnitude, dx,
+                                                                                  std::multiplies<>());
 
                     // Check if force is NaN
                     if (std::isnan(force[0]) || std::isnan(force[1]) || std::isnan(force[2])) {
@@ -51,10 +56,18 @@ namespace calculators {
 
                     // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
                     const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(particle1->getF(), force,
-                                                                                    std::plus<>());
+                                                                                      std::plus<>());
                     const std::array<double, 3> newF2 = ArrayUtils::elementWisePairOp(particle2->getF(), force,
-                                                                                    std::minus<>());
+                                                                                      std::minus<>());
+                    SPDLOG_DEBUG("Updating force of P1 at {} from {} to {}",
+                                 ArrayUtils::to_string(particle1->getX()),
+                                 ArrayUtils::to_string(particle1->getF()),
+                                 ArrayUtils::to_string(newF1));
                     particle1->setF(newF1);
+                    SPDLOG_DEBUG("Updating force of P2 at {} from {} to {}",
+                                 ArrayUtils::to_string(particle2->getX()),
+                                 ArrayUtils::to_string(particle2->getF()),
+                                 ArrayUtils::to_string(newF2));
                     particle2->setF(newF2);
                 }
             }
@@ -62,39 +75,43 @@ namespace calculators {
     }
 
     void LC_LJCalculator::calculateLC_X(LinkedCellContainer &linkedCellContainer, double delta_t) {
-            for (auto &p: linkedCellContainer) {
-                // Get the current position, velocity, force and mass of the particle
-                std::array<double, 3> x = p->getX();
-                const std::array<double, 3> v = p->getV();
-                const std::array<double, 3> f = p->getF();
+        for (auto &p: linkedCellContainer) {
+            // Get the current position, velocity, force and mass of the particle
+            std::array<double, 3> x = p->getX();
+            const std::array<double, 3> v = p->getV();
+            const std::array<double, 3> f = p->getF();
 
-                const double m = p->getM();
+            const double m = p->getM();
 
-                // Calculate the acceleration
-                const std::array<double, 3> a = ArrayUtils::elementWiseScalarOp(1.0 / m, f, std::multiplies<>());
+            // Calculate the acceleration
+            const std::array<double, 3> a = ArrayUtils::elementWiseScalarOp(1.0 / m, f, std::multiplies<>());
 
-                if (std::isnan(a[0]) || std::isnan(a[1]) || std::isnan(a[2])) {
-                    SPDLOG_ERROR("NaN acceleration detected! f: ({}, {}, {}), m: {}", f[0], f[1], f[2], m);
-                }
-
-                // Update the particles new position using the Velocity-Störmer-Verlet method
-                const std::array<double, 3> v_summand = ArrayUtils::elementWiseScalarOp(delta_t, v,
-                                                                                        std::multiplies<>());
-                const std::array<double, 3> a_summand = ArrayUtils::elementWiseScalarOp((delta_t * delta_t / 2), a,
-                                                                                        std::multiplies<>());
-                // Combine v_summand and a_summand into a single summand
-                const std::array<double, 3> summand = ArrayUtils::elementWisePairOp(v_summand, a_summand,
-                                                                                    std::plus<>());
-
-                x = ArrayUtils::elementWisePairOp(x, summand, std::plus<>());
-
-                if (std::isnan(x[0]) || std::isnan(x[1]) || std::isnan(x[2])) {
-                    SPDLOG_ERROR("NaN position detected! x: ({}, {}, {}), summand: ({}, {}, {})", x[0], x[1], x[2],
-                                 summand[0], summand[1], summand[2]);
-                }
-
-                p->setX(x);
+            if (std::isnan(a[0]) || std::isnan(a[1]) || std::isnan(a[2])) {
+                SPDLOG_ERROR("NaN acceleration detected! f: ({}, {}, {}), m: {}", f[0], f[1], f[2], m);
             }
+
+            // Update the particles new position using the Velocity-Störmer-Verlet method
+            const std::array<double, 3> v_summand = ArrayUtils::elementWiseScalarOp(delta_t, v,
+                                                                                    std::multiplies<>());
+            const std::array<double, 3> a_summand = ArrayUtils::elementWiseScalarOp((delta_t * delta_t / 2), a,
+                                                                                    std::multiplies<>());
+            // Combine v_summand and a_summand into a single summand
+            const std::array<double, 3> summand = ArrayUtils::elementWisePairOp(v_summand, a_summand,
+                                                                                std::plus<>());
+
+            x = ArrayUtils::elementWisePairOp(x, summand, std::plus<>());
+
+            if (std::isnan(x[0]) || std::isnan(x[1]) || std::isnan(x[2])) {
+                SPDLOG_ERROR("NaN position detected! x: ({}, {}, {}), summand: ({}, {}, {})", x[0], x[1], x[2],
+                             summand[0], summand[1], summand[2]);
+            }
+            SPDLOG_DEBUG("Updating position of Particle at {} with velocities {} and force{} to new position {}",
+                         ArrayUtils::to_string(p->getX()),
+                         ArrayUtils::to_string(v),
+                         ArrayUtils::to_string(f),
+                         ArrayUtils::to_string(x));
+            p->setX(x);
+        }
     }
 
     void LC_LJCalculator::calculateLC_V(LinkedCellContainer &linkedCellContainer, double delta_t) {
@@ -118,7 +135,7 @@ namespace calculators {
 
             // Update the particles new velocity using the Velocity-Störmer-Verlet method
             const std::array<double, 3> delta_v = ArrayUtils::elementWiseScalarOp(delta_t / m, avg_f,
-                                                                                    std::multiplies<>());
+                                                                                  std::multiplies<>());
             v = ArrayUtils::elementWisePairOp(v, delta_v, std::plus<>());
 
             if (std::isnan(v[0]) || std::isnan(v[1]) || std::isnan(v[2])) {
@@ -126,6 +143,11 @@ namespace calculators {
                              delta_v[0], delta_v[1], delta_v[2]);
             }
 
+            SPDLOG_DEBUG("Updating velocity of Particle at {} with current force {} and old force{} to new velocity {}",
+                         ArrayUtils::to_string(p->getX()),
+                         ArrayUtils::to_string(f),
+                         ArrayUtils::to_string(old_f),
+                         ArrayUtils::to_string(v));
             p->setV(v);
         }
     }
@@ -135,7 +157,8 @@ namespace calculators {
         const std::array<double, 3> x1 = particle1.getX();
         const std::array<double, 3> x2 = particle2.getX();
 
-        SPDLOG_DEBUG("Calculating pairwise force between particles at positions P1 {} and P2 {}", ArrayUtils::to_string(x1),
+        SPDLOG_DEBUG("Calculating pairwise force between particles at positions P1 {} and P2 {}",
+                     ArrayUtils::to_string(x1),
                      ArrayUtils::to_string(x2));
 
         // Calculate the distance vector and its norm
@@ -164,9 +187,11 @@ namespace calculators {
                                                                           std::plus<>());
         const std::array<double, 3> newF2 = ArrayUtils::elementWisePairOp(particle2.getF(), force,
                                                                           std::minus<>());
-        SPDLOG_DEBUG("Updating force of P1 from {} to {}", ArrayUtils::to_string(particle1.getF()), ArrayUtils::to_string(newF1));
+        SPDLOG_DEBUG("Updating force of P1 from {} to {}", ArrayUtils::to_string(particle1.getF()),
+                     ArrayUtils::to_string(newF1));
         particle1.setF(newF1);
-        SPDLOG_DEBUG("Updating force of P2 from {} to {}", ArrayUtils::to_string(particle2.getF()), ArrayUtils::to_string(newF2));
+        SPDLOG_DEBUG("Updating force of P2 from {} to {}", ArrayUtils::to_string(particle2.getF()),
+                     ArrayUtils::to_string(newF2));
         particle2.setF(newF2);
     }
 }

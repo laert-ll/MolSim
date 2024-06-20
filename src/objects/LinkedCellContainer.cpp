@@ -3,6 +3,7 @@
 #include "Cell.h"
 #include "../utils/MaxwellBoltzmannDistribution.h"
 #include "spdlog/spdlog.h"
+#include "utils/ArrayUtils.h"
 
 #include <cmath>
 
@@ -126,12 +127,21 @@ void LinkedCellContainer::updateCells() {
                     auto particleIndex = getCellIndex(*it);
                     if (!(cell->getIndex() == particleIndex)) {
                         cells[particleIndex[0]][particleIndex[1]][particleIndex[2]]->addParticle(*it);
-                        SPDLOG_DEBUG("Moved particle to cell at index ({}, {}, {})", particleIndex[0], particleIndex[1],
+                        SPDLOG_DEBUG("Moved particle at {} from cell at index {} to cell at index ({}, {}, {})",
+                                     ArrayUtils::to_string((*it)->getX()),
+                                     ArrayUtils::to_string(cell->getIndex()),
+                                     particleIndex[0],
+                                     particleIndex[1],
                                      particleIndex[2]);
+                        SPDLOG_DEBUG("Removed particle at {} from cell at index {} cell at index ({}, {}, {})",
+                                     ArrayUtils::to_string((*it)->getX()),
+                                     ArrayUtils::to_string(cell->getIndex()),
+                                     cell->getIndex()[0],
+                                     cell->getIndex()[1],
+                                     cell->getIndex()[2]);
                         cell->removeParticle(*it);
-                        SPDLOG_DEBUG("Removed particle from cell at index ({}, {}, {})", cell->getIndex()[0],
-                                     cell->getIndex()[1], cell->getIndex()[2]);
                         it = cell->getParticles().begin(); // Reset the iterator as the set has been modified
+
                     } else {
                         ++it;
                     }

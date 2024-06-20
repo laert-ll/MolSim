@@ -298,12 +298,12 @@ public:
                 iteration++;
                 if (iteration % thermostatApplyFrequency == 0) {
                     thermostat.setTempGradually(linkedCellContainer);
-                    SPDLOG_DEBUG("Thermostat applied at iteration {}.", iteration);
+                    SPDLOG_INFO("Thermostat applied at iteration {}.", iteration);
                 }
 
                 if (iteration % 10 == 0) {
                     outputWriter->plotParticlesLC(iteration, linkedCellContainer, filename);
-                    SPDLOG_DEBUG("Output written for iteration {}.", iteration);
+                    SPDLOG_INFO("Output written for iteration {}.", iteration);
                 }
 
                 if (iteration % 100 == 0) {
