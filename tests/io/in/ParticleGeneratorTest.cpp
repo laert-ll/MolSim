@@ -12,7 +12,7 @@ TEST(ParticleContainerTest, GenerateCuboid) {
     double pDistance = 1.0;
     double pMass = 1.0;
     int dimension = 2;
-    CuboidParameters parameters{{0.0, 0.0, 0.0}, {2, 2, 1}, pDistance, pMass, {0.0, 0.0, 0.0}, 0.1, dimension};
+    CuboidParameters parameters{{0.0, 0.0, 0.0}, {2, 2, 1}, pDistance, pMass, {0.0, 0.0, 0.0}, 0.1, dimension, 1.0, 1.0};
     ParticleContainer container{};
     ParticleGenerator::generateCuboid(parameters, container);
     EXPECT_EQ(container.getSize(), 4);
@@ -47,7 +47,7 @@ TEST(ParticleContainerTest, GenerateDisc) {
     double distanceBetweenParticles = 1.0;
     double mass = 1.0;
     int dimension = 2;
-    DiscParameters parameters(center, startV, numParticlesAlongRadius, distanceBetweenParticles, mass, dimension);
+    DiscParameters parameters(center, startV, numParticlesAlongRadius, distanceBetweenParticles, mass, dimension, 1.0, 1.0);
     ParticleContainer container{};
     ParticleGenerator::generateDisc(parameters, container);
     EXPECT_EQ(container.getSize(), 13); // 13 particles for a disc with radius 2 in 2D

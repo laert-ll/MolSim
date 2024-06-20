@@ -78,6 +78,8 @@ TEST(XMLReaderTest, ReadCuboidFileLCTest) {
 
     EXPECT_EQ(data.getParticleContainer()->getSize(), 0);
     EXPECT_EQ(data.getLinkedCellContainer()->getSize(), 25);
+    EXPECT_NEAR(data.getLinkedCellContainer()->getParticles()[0]->getSigma(), 1.0, COMPARISON_TOLERANCE);
+    EXPECT_NEAR(data.getLinkedCellContainer()->getParticles()[0]->getEpsilon(), 1.0, COMPARISON_TOLERANCE);
 }
 
 TEST(XMLReaderTest, ReadDiscFileLCTest) {
@@ -114,4 +116,6 @@ TEST(XMLReaderTest, ReadDiscFileLCTest) {
 
     EXPECT_EQ(data.getParticleContainer()->getSize(), 0);
     EXPECT_EQ(data.getLinkedCellContainer()->getSize(), 709);
+    EXPECT_NEAR(data.getLinkedCellContainer()->getParticles()[0]->getSigma(), 1.0, COMPARISON_TOLERANCE);
+    EXPECT_NEAR(data.getLinkedCellContainer()->getParticles()[0]->getEpsilon(), 1.0, COMPARISON_TOLERANCE);
 }

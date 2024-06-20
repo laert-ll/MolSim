@@ -126,9 +126,11 @@ namespace fileReaders {
             std::array<double, 3> llf{};
             std::array<size_t, 3> numParticles{};
             std::array<double, 3> startV{};
-            double distance = cuboid.Distance();
-            double mass = cuboid.Mass();
-            double meanV = cuboid.MeanVelocity();
+            const double distance = cuboid.Distance();
+            const double mass = cuboid.Mass();
+            const double meanV = cuboid.MeanVelocity();
+            const double sigma = cuboid.Sigma();
+            const double epsilon = cuboid.Epsilon();
 
             std::istringstream coordStream(cuboid.Coordinates());
             std::istringstream partDimStream(cuboid.ParticlesPerDimension());
@@ -138,7 +140,7 @@ namespace fileReaders {
             for (auto &value: numParticles) partDimStream >> value;
             for (auto &value: startV) initVelStream >> value;
 
-            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, 3);
+            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, 3, sigma, epsilon);
             ParticleGenerator::generateCuboid(cuboidParams, particleContainer);
         }
         particleContainer.initializePairs();
@@ -154,9 +156,11 @@ namespace fileReaders {
             std::array<double, 3> llf{};
             std::array<size_t, 3> numParticles{};
             std::array<double, 3> startV{};
-            double distance = cuboid.Distance();
-            double mass = cuboid.Mass();
-            double meanV = cuboid.MeanVelocity();
+            const double distance = cuboid.Distance();
+            const double mass = cuboid.Mass();
+            const double meanV = cuboid.MeanVelocity();
+            const double sigma = cuboid.Sigma();
+            const double epsilon = cuboid.Epsilon();
 
             std::istringstream coordStream(cuboid.Coordinates());
             std::istringstream partDimStream(cuboid.ParticlesPerDimension());
@@ -166,7 +170,7 @@ namespace fileReaders {
             for (auto &value: numParticles) partDimStream >> value;
             for (auto &value: startV) initVelStream >> value;
 
-            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, 3);
+            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, 3, sigma, epsilon);
             SPDLOG_INFO("Read cuboid parameters: llf: {}, numParticles: {} , distance: {}, mass: {}, startV: {}, meanV: {}",
                         ArrayUtils::to_string(cuboidParams.getLowerLeftFrontCorner()),
                         ArrayUtils::to_string(cuboidParams.getNumParticlesPerDimension()), cuboidParams.getDistance(),
@@ -185,9 +189,11 @@ namespace fileReaders {
         for (const auto &disc: discs) {
             std::array<double, 3> center{};
             std::array<double, 3> startV{};
-            int numParticlesAlongRadius = disc.NumberOfParticlesAlongRadius();
-            double distance = disc.Distance();
-            double mass = disc.Mass();
+            const int numParticlesAlongRadius = disc.NumberOfParticlesAlongRadius();
+            const double distance = disc.Distance();
+            const double mass = disc.Mass();
+            const double sigma = disc.Sigma();
+            const double epsilon = disc.Epsilon();
 
             std::istringstream centerStream(disc.CenterCoordinates());
             std::istringstream startVStream(disc.InitialVelocities());
@@ -196,7 +202,7 @@ namespace fileReaders {
             for (auto &value: startV) startVStream >> value;
 
             const int dimension = simulation.SimulationParameters().Dimension();
-            DiscParameters discParams(center, startV, numParticlesAlongRadius, distance, mass, dimension);
+            DiscParameters discParams(center, startV, numParticlesAlongRadius, distance, mass, dimension, sigma, epsilon);
             ParticleGenerator::generateDisc(discParams, particleContainer);
         }
         particleContainer.initializePairs();
@@ -207,12 +213,15 @@ namespace fileReaders {
         SPDLOG_INFO("Starting to load discs into a linked-cell container...");
         const auto &discs = simulation.Disc();
 
+        size_t id_arg = 0;
         for (const auto &disc: discs) {
             std::array<double, 3> center{};
             std::array<double, 3> startV{};
-            int numParticlesAlongRadius = disc.NumberOfParticlesAlongRadius();
-            double distance = disc.Distance();
-            double mass = disc.Mass();
+            const int numParticlesAlongRadius = disc.NumberOfParticlesAlongRadius();
+            const double distance = disc.Distance();
+            const double mass = disc.Mass();
+            const double sigma = disc.Sigma();
+            const double epsilon = disc.Epsilon();
 
             std::istringstream centerStream(disc.CenterCoordinates());
             std::istringstream startVStream(disc.InitialVelocities());
@@ -221,8 +230,8 @@ namespace fileReaders {
             for (auto &value: startV) startVStream >> value;
 
             const int dimension = simulation.SimulationParameters().Dimension();
-            DiscParameters discParams(center, startV, numParticlesAlongRadius, distance, mass, dimension);
-            ParticleGenerator::generateDisc(discParams, linkedCellContainer);
+            DiscParameters discParams(center, startV, numParticlesAlongRadius, distance, mass, dimension, sigma, epsilon);
+            ParticleGenerator::generateDisc(discParams, linkedCellContainer, id_arg);
         }
         linkedCellContainer.initializeAndPopulateCells();
         SPDLOG_INFO("Finished loading {} discs into a linked-cell container!", discs.size());

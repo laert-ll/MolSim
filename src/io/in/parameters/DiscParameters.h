@@ -22,9 +22,9 @@ public:
      * @param dimension Dimension of the simulation
      */
     DiscParameters(const std::array<double, 3> &center, const std::array<double, 3> &startV,
-                   int numParticlesAlongRadius, double distance, double mass, int dimension)
+                   int numParticlesAlongRadius, double distance, double mass, int dimension, double sigma, double epsilon)
             : center(center), startV(startV), numParticlesAlongRadius(numParticlesAlongRadius), distance(distance),
-              mass(mass), dimension(dimension) {}
+              mass(mass), dimension(dimension), sigma(sigma), epsilon(epsilon) {}
 
     /**
      * @brief Get the Center coordinates of the disc
@@ -68,6 +68,9 @@ public:
      */
     [[nodiscard]] int getDimension() const { return dimension; }
 
+    double getSigma() const { return sigma; }
+    double getEpsilon() const { return epsilon; }
+
 private:
     const std::array<double, 3> center;
     const std::array<double, 3> startV;
@@ -75,4 +78,6 @@ private:
     const double distance;
     const double mass;
     const int dimension;
+    const double sigma;
+    const double epsilon;
 };

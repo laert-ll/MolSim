@@ -603,6 +603,42 @@ MeanVelocity (const MeanVelocity_type& x)
   this->MeanVelocity_.set (x);
 }
 
+const CuboidType::Sigma_type& CuboidType::
+Sigma () const
+{
+  return this->Sigma_.get ();
+}
+
+CuboidType::Sigma_type& CuboidType::
+Sigma ()
+{
+  return this->Sigma_.get ();
+}
+
+void CuboidType::
+Sigma (const Sigma_type& x)
+{
+  this->Sigma_.set (x);
+}
+
+const CuboidType::Epsilon_type& CuboidType::
+Epsilon () const
+{
+  return this->Epsilon_.get ();
+}
+
+CuboidType::Epsilon_type& CuboidType::
+Epsilon ()
+{
+  return this->Epsilon_.get ();
+}
+
+void CuboidType::
+Epsilon (const Epsilon_type& x)
+{
+  this->Epsilon_.set (x);
+}
+
 
 // DiscType
 //
@@ -707,6 +743,42 @@ void DiscType::
 Mass (const Mass_type& x)
 {
   this->Mass_.set (x);
+}
+
+const DiscType::Sigma_type& DiscType::
+Sigma () const
+{
+  return this->Sigma_.get ();
+}
+
+DiscType::Sigma_type& DiscType::
+Sigma ()
+{
+  return this->Sigma_.get ();
+}
+
+void DiscType::
+Sigma (const Sigma_type& x)
+{
+  this->Sigma_.set (x);
+}
+
+const DiscType::Epsilon_type& DiscType::
+Epsilon () const
+{
+  return this->Epsilon_.get ();
+}
+
+DiscType::Epsilon_type& DiscType::
+Epsilon ()
+{
+  return this->Epsilon_.get ();
+}
+
+void DiscType::
+Epsilon (const Epsilon_type& x)
+{
+  this->Epsilon_.set (x);
 }
 
 
@@ -1732,14 +1804,18 @@ CuboidType (const Coordinates_type& Coordinates,
             const Distance_type& Distance,
             const Mass_type& Mass,
             const InitialVelocities_type& InitialVelocities,
-            const MeanVelocity_type& MeanVelocity)
+            const MeanVelocity_type& MeanVelocity,
+            const Sigma_type& Sigma,
+            const Epsilon_type& Epsilon)
 : ::xml_schema::type (),
   Coordinates_ (Coordinates, this),
   ParticlesPerDimension_ (ParticlesPerDimension, this),
   Distance_ (Distance, this),
   Mass_ (Mass, this),
   InitialVelocities_ (InitialVelocities, this),
-  MeanVelocity_ (MeanVelocity, this)
+  MeanVelocity_ (MeanVelocity, this),
+  Sigma_ (Sigma, this),
+  Epsilon_ (Epsilon, this)
 {
 }
 
@@ -1753,7 +1829,9 @@ CuboidType (const CuboidType& x,
   Distance_ (x.Distance_, f, this),
   Mass_ (x.Mass_, f, this),
   InitialVelocities_ (x.InitialVelocities_, f, this),
-  MeanVelocity_ (x.MeanVelocity_, f, this)
+  MeanVelocity_ (x.MeanVelocity_, f, this),
+  Sigma_ (x.Sigma_, f, this),
+  Epsilon_ (x.Epsilon_, f, this)
 {
 }
 
@@ -1767,7 +1845,9 @@ CuboidType (const ::xercesc::DOMElement& e,
   Distance_ (this),
   Mass_ (this),
   InitialVelocities_ (this),
-  MeanVelocity_ (this)
+  MeanVelocity_ (this),
+  Sigma_ (this),
+  Epsilon_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1861,6 +1941,28 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // Sigma
+    //
+    if (n.name () == "Sigma" && n.namespace_ ().empty ())
+    {
+      if (!Sigma_.present ())
+      {
+        this->Sigma_.set (Sigma_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // Epsilon
+    //
+    if (n.name () == "Epsilon" && n.namespace_ ().empty ())
+    {
+      if (!Epsilon_.present ())
+      {
+        this->Epsilon_.set (Epsilon_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -1905,6 +2007,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "MeanVelocity",
       "");
   }
+
+  if (!Sigma_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Sigma",
+      "");
+  }
+
+  if (!Epsilon_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Epsilon",
+      "");
+  }
 }
 
 CuboidType* CuboidType::
@@ -1926,6 +2042,8 @@ operator= (const CuboidType& x)
     this->Mass_ = x.Mass_;
     this->InitialVelocities_ = x.InitialVelocities_;
     this->MeanVelocity_ = x.MeanVelocity_;
+    this->Sigma_ = x.Sigma_;
+    this->Epsilon_ = x.Epsilon_;
   }
 
   return *this;
@@ -1944,13 +2062,17 @@ DiscType (const CenterCoordinates_type& CenterCoordinates,
           const InitialVelocities_type& InitialVelocities,
           const NumberOfParticlesAlongRadius_type& NumberOfParticlesAlongRadius,
           const Distance_type& Distance,
-          const Mass_type& Mass)
+          const Mass_type& Mass,
+          const Sigma_type& Sigma,
+          const Epsilon_type& Epsilon)
 : ::xml_schema::type (),
   CenterCoordinates_ (CenterCoordinates, this),
   InitialVelocities_ (InitialVelocities, this),
   NumberOfParticlesAlongRadius_ (NumberOfParticlesAlongRadius, this),
   Distance_ (Distance, this),
-  Mass_ (Mass, this)
+  Mass_ (Mass, this),
+  Sigma_ (Sigma, this),
+  Epsilon_ (Epsilon, this)
 {
 }
 
@@ -1963,7 +2085,9 @@ DiscType (const DiscType& x,
   InitialVelocities_ (x.InitialVelocities_, f, this),
   NumberOfParticlesAlongRadius_ (x.NumberOfParticlesAlongRadius_, f, this),
   Distance_ (x.Distance_, f, this),
-  Mass_ (x.Mass_, f, this)
+  Mass_ (x.Mass_, f, this),
+  Sigma_ (x.Sigma_, f, this),
+  Epsilon_ (x.Epsilon_, f, this)
 {
 }
 
@@ -1976,7 +2100,9 @@ DiscType (const ::xercesc::DOMElement& e,
   InitialVelocities_ (this),
   NumberOfParticlesAlongRadius_ (this),
   Distance_ (this),
-  Mass_ (this)
+  Mass_ (this),
+  Sigma_ (this),
+  Epsilon_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2056,6 +2182,28 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // Sigma
+    //
+    if (n.name () == "Sigma" && n.namespace_ ().empty ())
+    {
+      if (!Sigma_.present ())
+      {
+        this->Sigma_.set (Sigma_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // Epsilon
+    //
+    if (n.name () == "Epsilon" && n.namespace_ ().empty ())
+    {
+      if (!Epsilon_.present ())
+      {
+        this->Epsilon_.set (Epsilon_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -2093,6 +2241,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "Mass",
       "");
   }
+
+  if (!Sigma_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Sigma",
+      "");
+  }
+
+  if (!Epsilon_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Epsilon",
+      "");
+  }
 }
 
 DiscType* DiscType::
@@ -2113,6 +2275,8 @@ operator= (const DiscType& x)
     this->NumberOfParticlesAlongRadius_ = x.NumberOfParticlesAlongRadius_;
     this->Distance_ = x.Distance_;
     this->Mass_ = x.Mass_;
+    this->Sigma_ = x.Sigma_;
+    this->Epsilon_ = x.Epsilon_;
   }
 
   return *this;

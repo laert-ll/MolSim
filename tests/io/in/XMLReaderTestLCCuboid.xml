@@ -37,5 +37,7 @@
         <Mass>1.0</Mass>
         <InitialVelocities>0.0 0.0 0.0</InitialVelocities>
         <MeanVelocity>0.0</MeanVelocity>
+        <Sigma>1.0</Sigma>
+        <Epsilon>1.0</Epsilon>
     </Cuboid>
 </Simulation>

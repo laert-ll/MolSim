@@ -25,9 +25,9 @@ public:
      * @param dimension Dimension of the cuboid.
      */
     CuboidParameters(std::array<double, 3> llfCorner, std::array<std::size_t, 3> numParticles, double pDistance,
-                     double pMass, std::array<double, 3> startV, double meanV, int dimension)
+                     double pMass, std::array<double, 3> startV, double meanV, int dimension, double sigma, double epsilon)
             : lowerLeftFrontCorner(llfCorner), numParticlesPerDimension(numParticles), distance(pDistance),
-              m(pMass), startV(startV), meanV(meanV), dimension(dimension){}
+              m(pMass), startV(startV), meanV(meanV), dimension(dimension), sigma(sigma), epsilon(epsilon){}
 
     /**
      * @brief Get the lower left front corner of the cuboid.
@@ -85,6 +85,14 @@ public:
         return dimension;
     }
 
+    double getSigma() const {
+        return sigma;
+    }
+
+    double getEpsilon() const {
+        return epsilon;
+    }
+
 private:
     /**
      * @brief Lower left front corner of the cuboid.
@@ -120,4 +128,7 @@ private:
      * @brief Dimension of the cuboid.
      */
     const int dimension;
+
+    const double sigma;
+    const double epsilon;
 };

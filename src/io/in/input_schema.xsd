@@ -66,6 +66,8 @@
       <xs:element name="Mass" type="xs:double"/>
       <xs:element name="InitialVelocities" type="xs:string"/>
       <xs:element name="MeanVelocity" type="xs:double"/>
+      <xs:element name="Sigma" type="xs:double"/>
+      <xs:element name="Epsilon" type="xs:double"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -76,6 +78,8 @@
       <xs:element name="NumberOfParticlesAlongRadius" type="xs:int"/>
       <xs:element name="Distance" type="xs:double"/>
       <xs:element name="Mass" type="xs:double"/>
+      <xs:element name="Sigma" type="xs:double"/>
+      <xs:element name="Epsilon" type="xs:double"/>
     </xs:sequence>
   </xs:complexType>
 

@@ -863,6 +863,34 @@ class CuboidType: public ::xml_schema::type
   void
   MeanVelocity (const MeanVelocity_type& x);
 
+  // Sigma
+  //
+  typedef ::xml_schema::double_ Sigma_type;
+  typedef ::xsd::cxx::tree::traits< Sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > Sigma_traits;
+
+  const Sigma_type&
+  Sigma () const;
+
+  Sigma_type&
+  Sigma ();
+
+  void
+  Sigma (const Sigma_type& x);
+
+  // Epsilon
+  //
+  typedef ::xml_schema::double_ Epsilon_type;
+  typedef ::xsd::cxx::tree::traits< Epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > Epsilon_traits;
+
+  const Epsilon_type&
+  Epsilon () const;
+
+  Epsilon_type&
+  Epsilon ();
+
+  void
+  Epsilon (const Epsilon_type& x);
+
   // Constructors.
   //
   CuboidType (const Coordinates_type&,
@@ -870,7 +898,9 @@ class CuboidType: public ::xml_schema::type
               const Distance_type&,
               const Mass_type&,
               const InitialVelocities_type&,
-              const MeanVelocity_type&);
+              const MeanVelocity_type&,
+              const Sigma_type&,
+              const Epsilon_type&);
 
   CuboidType (const ::xercesc::DOMElement& e,
               ::xml_schema::flags f = 0,
@@ -904,6 +934,8 @@ class CuboidType: public ::xml_schema::type
   ::xsd::cxx::tree::one< Mass_type > Mass_;
   ::xsd::cxx::tree::one< InitialVelocities_type > InitialVelocities_;
   ::xsd::cxx::tree::one< MeanVelocity_type > MeanVelocity_;
+  ::xsd::cxx::tree::one< Sigma_type > Sigma_;
+  ::xsd::cxx::tree::one< Epsilon_type > Epsilon_;
 };
 
 class DiscType: public ::xml_schema::type
@@ -985,13 +1017,43 @@ class DiscType: public ::xml_schema::type
   void
   Mass (const Mass_type& x);
 
+  // Sigma
+  //
+  typedef ::xml_schema::double_ Sigma_type;
+  typedef ::xsd::cxx::tree::traits< Sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > Sigma_traits;
+
+  const Sigma_type&
+  Sigma () const;
+
+  Sigma_type&
+  Sigma ();
+
+  void
+  Sigma (const Sigma_type& x);
+
+  // Epsilon
+  //
+  typedef ::xml_schema::double_ Epsilon_type;
+  typedef ::xsd::cxx::tree::traits< Epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > Epsilon_traits;
+
+  const Epsilon_type&
+  Epsilon () const;
+
+  Epsilon_type&
+  Epsilon ();
+
+  void
+  Epsilon (const Epsilon_type& x);
+
   // Constructors.
   //
   DiscType (const CenterCoordinates_type&,
             const InitialVelocities_type&,
             const NumberOfParticlesAlongRadius_type&,
             const Distance_type&,
-            const Mass_type&);
+            const Mass_type&,
+            const Sigma_type&,
+            const Epsilon_type&);
 
   DiscType (const ::xercesc::DOMElement& e,
             ::xml_schema::flags f = 0,
@@ -1024,6 +1086,8 @@ class DiscType: public ::xml_schema::type
   ::xsd::cxx::tree::one< NumberOfParticlesAlongRadius_type > NumberOfParticlesAlongRadius_;
   ::xsd::cxx::tree::one< Distance_type > Distance_;
   ::xsd::cxx::tree::one< Mass_type > Mass_;
+  ::xsd::cxx::tree::one< Sigma_type > Sigma_;
+  ::xsd::cxx::tree::one< Epsilon_type > Epsilon_;
 };
 
 class BoundaryType: public ::xml_schema::string

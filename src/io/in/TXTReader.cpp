@@ -117,7 +117,7 @@ namespace fileReaders {
                 exit(-1);
             }
 
-            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, dimension);
+            CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, dimension, 1.0, 1.0);
             ParticleGenerator::generateCuboid(cuboidParams, particles);
             SPDLOG_DEBUG("Completed generating cuboid {}", i);
         }
@@ -148,7 +148,7 @@ namespace fileReaders {
                 exit(-1);
             }
 
-            DiscParameters discParams(center, startV, numParticlesAlongRadius, distance, mass, dimension);
+            DiscParameters discParams(center, startV, numParticlesAlongRadius, distance, mass, dimension, 1.0, 1.0);
             ParticleGenerator::generateDisc(discParams, particles);
             SPDLOG_DEBUG("Completed generating disc {}", i);
             particles.initializePairs();

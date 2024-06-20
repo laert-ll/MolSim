@@ -84,6 +84,9 @@ public:
 
     // New constructor with sigma and epsilon as new parameters
     Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
+             double m_arg, double volume_arg, int type_arg, double sig_arg, double eps_arg, size_t id);
+
+    Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
              double m_arg, double volume_arg, int type_arg, double sig_arg, double eps_arg);
 
     virtual ~Particle();

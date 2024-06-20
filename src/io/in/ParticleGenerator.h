@@ -24,5 +24,5 @@ public:
 
     static void generateDisc(const DiscParameters &parameters, ParticleContainer& particleContainer);
 
-    static void generateDisc(const DiscParameters &parameters, LinkedCellContainer& linkedCellContainer);
+    static void generateDisc(const DiscParameters &parameters, LinkedCellContainer& linkedCellContainer, size_t &id_arg);
 };

@@ -68,6 +68,8 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Linke
     const auto &m = parameters.getMass();
     const auto &startV = parameters.getStartV();
     const auto &meanV = parameters.getMeanV();
+    const auto &sigma = parameters.getSigma();
+    const auto &epsilon = parameters.getEpsilon();
 
     for (std::size_t xIndex = 0; xIndex < numParticlesPerDimension[0]; ++xIndex) {
         for (std::size_t yIndex = 0; yIndex < numParticlesPerDimension[1]; ++yIndex) {
@@ -80,7 +82,7 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Linke
                 const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 2);
                 const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<>());
 
-                auto newParticle = std::make_shared<Particle>(x, v, m, 0, 0, id_arg);
+                auto newParticle = std::make_shared<Particle>(x, v, m, 0, 0, sigma, epsilon, id_arg);
                 SPDLOG_DEBUG("Generated particle at position {} with velocities {}",
                              ArrayUtils::to_string(x),
                              ArrayUtils::to_string(v));
@@ -127,13 +129,15 @@ void ParticleGenerator::generateDisc(const DiscParameters &parameters, ParticleC
     }
 }
 
-void ParticleGenerator::generateDisc(const DiscParameters &parameters, LinkedCellContainer &linkedCellContainer) {
+void ParticleGenerator::generateDisc(const DiscParameters &parameters, LinkedCellContainer &linkedCellContainer, size_t &id_arg) {
     // Extract parameters for easier access
     const auto &center = parameters.getCenter();
     const auto &startV = parameters.getStartV();
     const int numParticlesAlongRadius = parameters.getNumParticlesAlongRadius();
     const double distance = parameters.getDistance();
     const double mass = parameters.getMass();
+    const double sigma = parameters.getSigma();
+    const double epsilon = parameters.getEpsilon();
 
     SPDLOG_DEBUG("Generating disc: Center {}, startV {}, numParticlesAlongRadius {}, Distance {}",
                  ArrayUtils::to_string(center), ArrayUtils::to_string(startV), numParticlesAlongRadius, distance);
@@ -151,8 +155,9 @@ void ParticleGenerator::generateDisc(const DiscParameters &parameters, LinkedCel
                 };
 
                 // Create a new particle and add it to the container
-                auto newParticle = std::make_shared<Particle>(x, startV, mass, 0, 0);
+                auto newParticle = std::make_shared<Particle>(x, startV, mass, 0, 0, sigma, epsilon, id_arg);
                 linkedCellContainer.addParticle(newParticle);
+                id_arg++;
             }
         }
     }
