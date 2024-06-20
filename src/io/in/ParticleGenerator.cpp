@@ -61,7 +61,7 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Parti
     }
 }
 
-void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, LinkedCellContainer &linkedCellContainer) {
+void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, LinkedCellContainer &linkedCellContainer, size_t &id_arg) {
     const auto &lowerLeftFrontCorner = parameters.getLowerLeftFrontCorner();
     const auto &numParticlesPerDimension = parameters.getNumParticlesPerDimension();
     const auto &distance = parameters.getDistance();
@@ -85,6 +85,7 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Linke
                              ArrayUtils::to_string(x),
                              ArrayUtils::to_string(v));
                 linkedCellContainer.addParticle(newParticle);
+                id_arg++;
             }
         }
     }

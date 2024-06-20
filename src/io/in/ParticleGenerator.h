@@ -20,7 +20,7 @@ public:
 
     static void generateCuboid(const CuboidParameters &parameters, ParticleContainer& particleContainer);
 
-    static void generateCuboid(const CuboidParameters &parameters, LinkedCellContainer& linkedCellContainer);
+    static void generateCuboid(const CuboidParameters &parameters, LinkedCellContainer& linkedCellContainer, size_t &id_arg);
 
     static void generateDisc(const DiscParameters &parameters, ParticleContainer& particleContainer);
 

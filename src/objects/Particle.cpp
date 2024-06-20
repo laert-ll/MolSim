@@ -41,6 +41,13 @@ Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
 }
 
 Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
+                   double m_arg, double volume_arg, int type_arg, size_t id_arg)
+        : x(x_arg), v(v_arg), f({0., 0., 0.}), old_f({0., 0., 0.}),
+          m(m_arg), volume(volume_arg), type(type_arg), id(id_arg), sigma(1.0), epsilon(5.0) {
+    SPDLOG_TRACE("Particle generated!");
+}
+
+Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
                    double m_arg, double volume_arg, int type_arg, double sig_arg, double eps_arg)
         : x(x_arg), v(v_arg), f({0., 0., 0.}), old_f({0., 0., 0.}),
           m(m_arg), volume(volume_arg), type(type_arg), sigma(sig_arg), epsilon(eps_arg) {
@@ -63,6 +70,8 @@ const double Particle::getM() const { return m; }
 const double Particle::getVolume() const { return volume; }
 
 const int Particle::getType() const { return type; }
+
+const size_t Particle::getID() const { return id; }
 
 void Particle::setX(const std::array<double, 3> &newX) {
     x = newX;

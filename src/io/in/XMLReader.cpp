@@ -149,6 +149,7 @@ namespace fileReaders {
         SPDLOG_INFO("Starting to load cuboids into a linked-cell container...");
         const auto &cuboids = simulation.Cuboid();
 
+        size_t id_arg = 0;
         for (const auto &cuboid: cuboids) {
             std::array<double, 3> llf{};
             std::array<size_t, 3> numParticles{};
@@ -171,7 +172,7 @@ namespace fileReaders {
                         ArrayUtils::to_string(cuboidParams.getNumParticlesPerDimension()), cuboidParams.getDistance(),
                         cuboidParams.getMass(),
                         ArrayUtils::to_string(cuboidParams.getStartV()), cuboidParams.getMeanV());
-            ParticleGenerator::generateCuboid(cuboidParams, linkedCellContainer);
+            ParticleGenerator::generateCuboid(cuboidParams, linkedCellContainer, id_arg);
         }
         linkedCellContainer.initializeAndPopulateCells();
         SPDLOG_INFO("Finished loading {} cuboids into a linked-cell container!", cuboids.size());

@@ -24,8 +24,8 @@ namespace calculators {
                  SPDLOG_DEBUG("Processing Cell at index ({}, {}, {})", cell->getIndex()[0], cell->getIndex()[1],
                            cell->getIndex()[2]);
                 for (auto &particle2 : cell->getParticles()) {
-                    if (particle1 == particle2) {
-                        continue; // Skip the force calculation for the same particle
+                    if (particle1 == particle2 || particle1->getID() > particle2->getID()) {
+                        continue; // Skip the force calculation for the same particle or duplicate pair
                     }
 
                     // LJ force calculation

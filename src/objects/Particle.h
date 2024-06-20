@@ -59,6 +59,12 @@ private:
      */
     int type;
 
+    /**
+     * Type of the particle. Use it for whatever you want (e.g. to separate
+     * molecules belonging to different bodies, matters, and so on)
+     */
+    size_t id;
+
 public:
     explicit Particle(int type = 0);
 
@@ -69,6 +75,12 @@ public:
             // -> in case of 2d, we use only the first and the second
             std::array<double, 3> x_arg, std::array<double, 3> v_arg,
             double m_arg, double volume_arg, int type = 0);
+
+    Particle(
+            // for visualization, we need always 3 coordinates
+            // -> in case of 2d, we use only the first and the second
+            std::array<double, 3> x_arg, std::array<double, 3> v_arg,
+            double m_arg, double volume_arg, int type, size_t id);
 
     // New constructor with sigma and epsilon as new parameters
     Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
@@ -89,6 +101,8 @@ public:
     const double getVolume() const;
 
     const int getType() const;
+
+    const size_t getID() const;
 
     void setX(const std::array<double, 3> &newX);
 
