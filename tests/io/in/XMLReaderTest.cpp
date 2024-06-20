@@ -9,7 +9,7 @@ const double COMPARISON_TOLERANCE = 1e-6;
 
 TEST(XMLReaderTest, ReadCuboidFileTest) {
     const auto fileReader = std::make_unique<fileReaders::XMLReader>();
-    SimulationDataContainer data = fileReader->readFile("./tests/io/in/XMLReaderTestCuboid.xml");
+    SimulationDataContainer data = fileReader->readFile(".././tests/io/in/XMLReaderTestCuboid.xml");
 
     EXPECT_EQ(data.getFileWriterParameters()->getBaseName(), "testCuboid");
     EXPECT_EQ(data.getFileWriterParameters()->getWriteFrequency(), 10);
@@ -44,7 +44,7 @@ TEST(XMLReaderTest, ReadCuboidFileTest) {
 
 TEST(XMLReaderTest, ReadCuboidFileLCTest) {
     const auto fileReader = std::make_unique<fileReaders::XMLReader>();
-    SimulationDataContainer data = fileReader->readFile("./tests/io/in/XMLReaderTestLCCuboid.xml");
+    SimulationDataContainer data = fileReader->readFile(".././tests/io/in/XMLReaderTestLCCuboid.xml");
 
     EXPECT_EQ(data.getFileWriterParameters()->getBaseName(), "testCuboid");
     EXPECT_EQ(data.getFileWriterParameters()->getWriteFrequency(), 10);
@@ -79,7 +79,7 @@ TEST(XMLReaderTest, ReadCuboidFileLCTest) {
 
 TEST(XMLReaderTest, ReadDiscFileLCTest) {
     const auto fileReader = std::make_unique<fileReaders::XMLReader>();
-    SimulationDataContainer data = fileReader->readFile("./tests/io/in/XMLReaderTestLCDisc.xml");
+    SimulationDataContainer data = fileReader->readFile(".././tests/io/in/XMLReaderTestLCDisc.xml");
 
     EXPECT_EQ(data.getFileWriterParameters()->getBaseName(), "testDisc");
     EXPECT_EQ(data.getFileWriterParameters()->getWriteFrequency(), 10);
