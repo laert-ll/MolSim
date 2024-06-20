@@ -170,6 +170,9 @@ namespace calculators {
         virtual void calculateFPairwise(Particle &particle1, Particle &particle2) const {};
 
     protected:
+        constexpr static const double COMPARISON_TOLERANCE = 10e-6;
+        double g_grav = 0.0;
+
         /**
          * @brief Determines if two points are far apart based on a given threshold.
          *
@@ -194,7 +197,5 @@ namespace calculators {
 
     private:
         bool warned = false;
-        double g_grav = 0.0;
-        constexpr static const double COMPARISON_TOLERANCE = 10e-6;
     };
 };
