@@ -102,3 +102,35 @@ TEST(LinkedCellContainerTest, CheckParticlePositionInCells) {
     EXPECT_EQ(particlesInCell.size(), 1);
     EXPECT_EQ(particlesInCell.begin()->get()->getType(), 1);
 }
+
+TEST(LinkedCellContainerTest, GetBoundaryCellsTest) {
+    std::array<double, 3> domain = {4.0, 4.0, 1.0};
+    double cutoffRadius = 1.0;
+    double cellSize = 1.0;
+
+    LinkedCellContainer lc;
+    lc.setCellSize(cellSize);
+    lc.setCutOffRadius(cutoffRadius);
+    lc.setDomain(domain);
+    lc.initializeCells();
+    lc.initializeNeighbors();
+    lc.populateCells();
+
+    size_t boundaryWidthInNumCells = 1;
+    auto boundaryCells = lc.getBoundaryCells(boundaryWidthInNumCells);
+
+    size_t expectedSize = 12;
+    EXPECT_EQ(boundaryCells.size(), expectedSize);
+
+    std::set<std::array<size_t, 3>> expectedIndexes = {
+            {0, 0, 0}, {0, 1, 0}, {0, 2, 0}, {0, 3, 0},
+            {1, 0, 0}, {1, 3, 0},
+            {2, 0, 0}, {2, 3, 0},
+            {3, 0, 0}, {3, 1, 0}, {3, 2, 0}, {3, 3, 0}
+    };
+
+    for (const auto& cell : boundaryCells) {
+        auto cellIndex = cell->getIndex();
+        ASSERT_TRUE(expectedIndexes.count(cellIndex) > 0); // cellIndex is present in the expectedIndexes
+    }
+}

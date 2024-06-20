@@ -188,12 +188,16 @@ LinkedCellContainer::getBoundaryCells(const size_t &boundaryWidthInNumCells) {
     const size_t numCellsY = cells[0].size();
     const size_t numCellsZ = cells[0][0].size();
 
+    const bool is3D = numCellsZ > 1;
+
     for (size_t i = 0; i < numCellsX; ++i) {
         for (size_t j = 0; j < numCellsY; ++j) {
             for (size_t k = 0; k < numCellsZ; ++k) {
-                if (i < boundaryWidthInNumCells || i >= numCellsX - boundaryWidthInNumCells ||
-                    j < boundaryWidthInNumCells || j >= numCellsY - boundaryWidthInNumCells ||
-                    k < boundaryWidthInNumCells || k >= numCellsZ - boundaryWidthInNumCells) {
+                bool isBoundaryX = i < boundaryWidthInNumCells || i >= numCellsX - boundaryWidthInNumCells;
+                bool isBoundaryY = j < boundaryWidthInNumCells || j >= numCellsY - boundaryWidthInNumCells;
+                bool isBoundaryZ = is3D && (k < boundaryWidthInNumCells || k >= numCellsZ - boundaryWidthInNumCells);
+
+                if (isBoundaryX || isBoundaryY || isBoundaryZ) {
                     boundaryCells.push_back(cells[i][j][k]);
                 }
             }
