@@ -11,41 +11,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Dependencies
-      run:  sudo apt install libxerces-c-dev
+      - name: Install Dependencies
+        run: sudo apt install libxerces-c-dev
 
-    - name: Create build directory
-      run: mkdir -p ${{github.workspace}}/build
+      - name: Create build directory
+        run: mkdir -p ${{github.workspace}}/build
 
-    - name: CMake Configure
-      run: cmake -D CMAKE_CXX_FLAGS="-fsanitize=address" -B ${{github.workspace}}/build ${{github.workspace}}
+      - name: CMake Configure
+        run: cmake -D CMAKE_CXX_FLAGS="-fsanitize=address" -B ${{github.workspace}}/build ${{github.workspace}}
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build
-
-    - name: Save build environment
-      uses: actions/upload-artifact@v4
-      with:
-        name: built
-        path: ${{github.workspace}}/build
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build
 
   test:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Reload build environment
-        uses: actions/download-artifact@v4
-        with:
-          name: built
-          path: ${{ github.workspace }}/build
+      - name: Create build directory
+        run: mkdir -p ${{github.workspace}}/build
 
-      - name: Install libxerces-c-dev
-        run: sudo apt install libxerces-c-dev
+      - name: CMake Configure
+        run: cmake -D CMAKE_CXX_FLAGS="-fsanitize=address" -B ${{github.workspace}}/build ${{github.workspace}}
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build
 
       - name: Set execute permissions for tests
         run: chmod +x ${{ github.workspace }}/build/MolSimTests ${{ github.workspace }}/build/MolSimBenchmark
