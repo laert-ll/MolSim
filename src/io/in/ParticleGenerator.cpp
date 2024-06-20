@@ -80,7 +80,7 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Linke
                 const std::array<double, 3> deltaV = maxwellBoltzmannDistributedVelocity(meanV, 2);
                 const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<>());
 
-                auto newParticle = std::make_shared<Particle>(x, v, m, 0, 0, id_arg));
+                auto newParticle = std::make_shared<Particle>(x, v, m, 0, 0, id_arg);
                 SPDLOG_DEBUG("Generated particle at position {} with velocities {}",
                              ArrayUtils::to_string(x),
                              ArrayUtils::to_string(v));
