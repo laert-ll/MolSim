@@ -3,6 +3,7 @@
 //
 
 #include "BoundaryHandler.h"
+#include "calculators/LC_LJCalculator.h"
 #include <omp.h>
 
 namespace boundaries {
@@ -118,7 +119,15 @@ namespace boundaries {
                     else
                         ghost.setX({p->getX().at(0), p->getX().at(1), ghostPosition});
                     SPDLOG_DEBUG("Ghost particle created at position {}", ArrayUtils::to_string(ghost.getX()));
-                    calculator->calculateFPairwise(*p, ghost);
+                    // Downcast from Calculator to LC_LJCalculator
+                    auto lc_calculator = std::dynamic_pointer_cast<calculators::LC_LJCalculator>(calculator);
+                    if (lc_calculator) {
+                        // If the downcast is successful, call the method
+                        lc_calculator->calculateFPairwise(*p, ghost);
+                    } else {
+                        // Handle the error case where the downcast fails
+                        SPDLOG_ERROR("Failed to downcast from Calculator to LC_LJCalculator");
+                    }
                 }
             }
         }
