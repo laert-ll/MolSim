@@ -15,5 +15,6 @@ namespace calculators {
         void calculateLC_X(LinkedCellContainer &linkedCellContainer, double delta_t);
         void calculateLC_V(LinkedCellContainer &linkedCellContainer, double delta_t);
         void calculateLC_F(LinkedCellContainer &linkedCellContainer);
+        void calculateLC_FPairwise(Particle &particle1, Particle &particle2);
     };
 }

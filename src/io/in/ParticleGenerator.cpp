@@ -81,12 +81,15 @@ void ParticleGenerator::generateCuboid(const CuboidParameters &parameters, Linke
                 const std::array<double, 3> v = ArrayUtils::elementWisePairOp(startV, deltaV, std::plus<>());
 
                 auto newParticle = std::make_shared<Particle>(x, v, m, 0, 0);
-                SPDLOG_DEBUG("Generated particle at position ({}, {}, {})", x[0], x[1], x[2]);
+                SPDLOG_DEBUG("Generated particle at position {} with velocities {}",
+                             ArrayUtils::to_string(x),
+                             ArrayUtils::to_string(v));
                 linkedCellContainer.addParticle(newParticle);
             }
         }
     }
-    SPDLOG_INFO("Finished generating cuboid with LLF [{}, {}, {}], NumParticles [{}, {}, {}], Distance {}, Mass {}, StartV [{}, {}, {}], MeanV {}",
+    SPDLOG_INFO(
+            "Finished generating cuboid with LLF [{}, {}, {}], NumParticles [{}, {}, {}], Distance {}, Mass {}, StartV [{}, {}, {}], MeanV {}",
             lowerLeftFrontCorner[0], lowerLeftFrontCorner[1], lowerLeftFrontCorner[2], numParticlesPerDimension[0],
             numParticlesPerDimension[1],
             numParticlesPerDimension[2], distance, m, startV[0], startV[1], startV[2], meanV);

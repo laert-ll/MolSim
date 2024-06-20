@@ -208,9 +208,11 @@ public:
                                            double &delta_t, double &end_time) {
         if (std::abs(delta_t - (-1.0)) > COMPARISON_TOLERANCE) {
             simulationDataContainer.getSimulationParameters()->setDelta_t(delta_t);
+            SPDLOG_INFO("Delta_t set to {}.", delta_t);
         }
         if (std::abs(end_time - (-1.0)) > COMPARISON_TOLERANCE) {
             simulationDataContainer.getSimulationParameters()->setEnd_t(end_time);
+            SPDLOG_INFO("End time set to {}.", end_time);
         }
     }
 
@@ -269,13 +271,17 @@ public:
         double current_time = 0.0; // start_time
         int iteration = 0;
         const int thermostatApplyFrequency = thermostat.getApplyFrequency();
+        SPDLOG_INFO("Thermostat apply frequency set to {}.", thermostatApplyFrequency);
         const std::array<double, 3> domain = boundaryParameters.getDomain();
+        SPDLOG_INFO("Domain set to {}.", ArrayUtils::to_string(domain));
         const boundaries::BoundaryProperties properties{domain, boundaryMap};
         const boundaries::BoundaryHandler handler{properties, calculator};
         const bool linkedCellsUsed = linkedCellsParameters.isLinkedCellsUsed();
         const std::string &filename = fileWriterParameters.getBaseName();
+        SPDLOG_INFO("Output filename set to {}.", filename);
         const double gravity = simulationParameters.getGravity();
         calculator->setGravity(gravity);
+        SPDLOG_INFO("Gravity set to {}.", gravity);
 
         auto start = std::chrono::high_resolution_clock::now();
 

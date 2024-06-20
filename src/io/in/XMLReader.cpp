@@ -2,6 +2,7 @@
 #include "input_schema.hxx"
 #include "spdlog/spdlog.h"
 #include "objects/LinkedCellContainer.h"
+#include "utils/ArrayUtils.h"
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -14,11 +15,16 @@ namespace fileReaders {
         std::unique_ptr<Simulation> simulation = Simulation_(filepath);
 
 
-        std::unique_ptr<FileWriterParameters> fileWriterParameters = std::make_unique<FileWriterParameters>(loadFileWriterParameters(*simulation));
-        std::unique_ptr<SimulationParameters> simulationParameters = std::make_unique<SimulationParameters>(loadSimulationParameters(*simulation));
-        std::unique_ptr<ThermostatParameters> thermostatParameters = std::make_unique<ThermostatParameters>(loadThermostatParameters(*simulation));
-        std::unique_ptr<LinkedCellsParameters> linkedCellParameters = std::make_unique<LinkedCellsParameters>(loadLinkedCellsParameters(*simulation));
-        std::unique_ptr<BoundaryParameters> boundaryParameters = std::make_unique<BoundaryParameters>(loadBoundaryParameters(*simulation));
+        std::unique_ptr<FileWriterParameters> fileWriterParameters = std::make_unique<FileWriterParameters>(
+                loadFileWriterParameters(*simulation));
+        std::unique_ptr<SimulationParameters> simulationParameters = std::make_unique<SimulationParameters>(
+                loadSimulationParameters(*simulation));
+        std::unique_ptr<ThermostatParameters> thermostatParameters = std::make_unique<ThermostatParameters>(
+                loadThermostatParameters(*simulation));
+        std::unique_ptr<LinkedCellsParameters> linkedCellParameters = std::make_unique<LinkedCellsParameters>(
+                loadLinkedCellsParameters(*simulation));
+        std::unique_ptr<BoundaryParameters> boundaryParameters = std::make_unique<BoundaryParameters>(
+                loadBoundaryParameters(*simulation));
 
         std::unique_ptr<ParticleContainer> particleContainer = std::make_unique<ParticleContainer>();
         std::unique_ptr<LinkedCellContainer> linkedCellContainer = std::make_unique<LinkedCellContainer>();
@@ -98,7 +104,7 @@ namespace fileReaders {
         return {boundaryMap, domain};
     }
 
-    boundaries::BoundaryType XMLReader::stringToBoundaryType(const std::string& boundaryTypeStr) {
+    boundaries::BoundaryType XMLReader::stringToBoundaryType(const std::string &boundaryTypeStr) {
         if (boundaryTypeStr == "REFLECTING") {
             return boundaries::BoundaryType::REFLECTING;
         } else if (boundaryTypeStr == "OUTFLOW") {
@@ -160,6 +166,11 @@ namespace fileReaders {
             for (auto &value: startV) initVelStream >> value;
 
             CuboidParameters cuboidParams(llf, numParticles, distance, mass, startV, meanV, 3);
+            SPDLOG_INFO("Read cuboid parameters: llf: {}, numParticles: {} , distance: {}, mass: {}, startV: {}, meanV: {}",
+                        ArrayUtils::to_string(cuboidParams.getLowerLeftFrontCorner()),
+                        ArrayUtils::to_string(cuboidParams.getNumParticlesPerDimension()), cuboidParams.getDistance(),
+                        cuboidParams.getMass(),
+                        ArrayUtils::to_string(cuboidParams.getStartV()), cuboidParams.getMeanV());
             ParticleGenerator::generateCuboid(cuboidParams, linkedCellContainer);
         }
         linkedCellContainer.initializeAndPopulateCells();

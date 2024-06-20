@@ -14,7 +14,7 @@ void Thermostat::initializeTemp(ParticleContainer &particleContainer) const {
         // Initialize velocities by applying Brownian motion
         double maxwellBoltzmannFactor;
 
-        for (auto &particle : particleContainer) {
+        for (auto &particle: particleContainer) {
             maxwellBoltzmannFactor = sqrt(start_temp / particle.getM());
 
             std::array<double, 3> v = particle.getV();
@@ -36,10 +36,11 @@ void Thermostat::initializeTemp(ParticleContainer &particleContainer) const {
 
 void Thermostat::initializeTemp(LinkedCellContainer &linkedCellContainer) const {
     if (linkedCellContainer.hasZeroVelocities()) { // Check if all velocities are zero
+        SPDLOG_INFO("All particles have zero velocities, initializing velocities with Brownian motion");
         // Initialize velocities by applying Brownian motion
         double maxwellBoltzmannFactor;
 
-        for (auto &particle : linkedCellContainer) {
+        for (auto &particle: linkedCellContainer) {
             maxwellBoltzmannFactor = sqrt(start_temp / particle->getM());
 
             std::array<double, 3> v = particle->getV();
@@ -50,13 +51,16 @@ void Thermostat::initializeTemp(LinkedCellContainer &linkedCellContainer) const 
             }
 
             particle->setV(v);
+            SPDLOG_DEBUG("Updated particle at position {} to new velocities {} (brownian motion)",
+                         ArrayUtils::to_string(particle->getX()), ArrayUtils::to_string(particle->getV()));
+
         }
         SPDLOG_INFO("Initialized velocities with Brownian motion");
     }
 
     // Velocity scaling to initial temperature
     setTemp(linkedCellContainer, start_temp);
-    SPDLOG_INFO("Scaled velocities to initial temperature");
+    SPDLOG_INFO("Scaled velocities to initial temperature {}", start_temp);
 }
 
 void Thermostat::setTempDirectly(ParticleContainer &particleContainer) const {
@@ -97,7 +101,7 @@ double Thermostat::calculateCurrentTemp(LinkedCellContainer &linkedCellContainer
 
 double Thermostat::calculateKinEnergy(ParticleContainer &particleContainer) const {
     double kinEnergy = 0.0;
-    for (auto &particle : particleContainer) {
+    for (auto &particle: particleContainer) {
         kinEnergy += 0.5 * particle.getM() * ArrayUtils::dotProduct(particle.getV(), particle.getV());
     }
     return kinEnergy;
@@ -105,14 +109,14 @@ double Thermostat::calculateKinEnergy(ParticleContainer &particleContainer) cons
 
 double Thermostat::calculateKinEnergy(LinkedCellContainer &linkedCellContainer) const {
     double kinEnergy = 0.0;
-    for (auto &particle : linkedCellContainer) {
+    for (auto &particle: linkedCellContainer) {
         kinEnergy += 0.5 * particle->getM() * ArrayUtils::dotProduct(particle->getV(), particle->getV());
     }
     return kinEnergy;
 }
 
 void Thermostat::scaleV(double beta, ParticleContainer &particleContainer) const {
-    for (auto &particle : particleContainer) {
+    for (auto &particle: particleContainer) {
         std::array<double, 3> v = particle.getV();
         v = beta * v;
         particle.setV(v);
@@ -120,7 +124,7 @@ void Thermostat::scaleV(double beta, ParticleContainer &particleContainer) const
 }
 
 void Thermostat::scaleV(double beta, LinkedCellContainer &linkedCellContainer) const {
-    for (auto &particle : linkedCellContainer) {
+    for (auto &particle: linkedCellContainer) {
         std::array<double, 3> v = particle->getV();
         v = beta * v;
         particle->setV(v);

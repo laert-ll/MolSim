@@ -105,6 +105,7 @@ namespace boundaries {
                 double tolerance = pow(2, 1 / 6) * p->getSigma();
                 // only calculate reflection if near boundary
                 if (distanceToBoundary < tolerance) {
+                    SPDLOG_DEBUG("Particle at position {} is near boundary", ArrayUtils::to_string(p->getX()));
                     Particle ghost{*p};
                     const double ghostPosition = isLowerBound ? -distanceToBoundary : boundaryPosition +
                                                                                       distanceToBoundary;
@@ -114,6 +115,7 @@ namespace boundaries {
                         ghost.setX({p->getX().at(0), ghostPosition, p->getX().at(2)});
                     else
                         ghost.setX({p->getX().at(0), p->getX().at(1), ghostPosition});
+                    SPDLOG_DEBUG("Ghost particle created at position {}", ArrayUtils::to_string(ghost.getX()));
                     calculator->calculateFPairwise(*p, ghost);
                 }
             }

@@ -129,4 +129,44 @@ namespace calculators {
             p->setV(v);
         }
     }
+
+    void LC_LJCalculator::calculateLC_FPairwise(Particle &particle1, Particle &particle2) {
+        // Get the positions and masses of the two particles
+        const std::array<double, 3> x1 = particle1.getX();
+        const std::array<double, 3> x2 = particle2.getX();
+
+        SPDLOG_DEBUG("Calculating pairwise force between particles at positions P1 {} and P2 {}", ArrayUtils::to_string(x1),
+                     ArrayUtils::to_string(x2));
+
+        // Calculate the distance vector and its norm
+        const std::array<double, 3> dx = ArrayUtils::elementWisePairOp(x1, x2, std::minus<>());
+        const double distance = ArrayUtils::L2Norm(dx);
+        if (distance == 0.0)
+            return;
+
+        double epsilon = pow((particle1.getEpsilon() * particle2.getEpsilon()), 0.5);
+        double sigma = 0.5 * (particle1.getSigma() + particle2.getSigma());
+        // Calculate the force between the two particles
+        const double forceMagnitude = -(24 * epsilon / (distance * distance)) *
+                                      ((pow(sigma / distance, 6) - 2 * pow(sigma / distance, 12)));
+        std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(forceMagnitude, dx,
+                                                                      std::multiplies<>());
+        // Limitation of Force so they don't move too quickly
+        for (int i = 0; i < 3; i++) {
+            double f = force[i];
+            if (f > 20000)
+                force[i] = 20000;
+            if (f < -20000)
+                force[i] = -20000;
+        }
+        // Add the force to the first particle and subtract it from the second particle (Newton's Third Law)
+        const std::array<double, 3> newF1 = ArrayUtils::elementWisePairOp(particle1.getF(), force,
+                                                                          std::plus<>());
+        const std::array<double, 3> newF2 = ArrayUtils::elementWisePairOp(particle2.getF(), force,
+                                                                          std::minus<>());
+        SPDLOG_DEBUG("Updating force of P1 from {} to {}", ArrayUtils::to_string(particle1.getF()), ArrayUtils::to_string(newF1));
+        particle1.setF(newF1);
+        SPDLOG_DEBUG("Updating force of P2 from {} to {}", ArrayUtils::to_string(particle2.getF()), ArrayUtils::to_string(newF2));
+        particle2.setF(newF2);
+    }
 }
