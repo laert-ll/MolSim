@@ -207,11 +207,12 @@ void LinkedCellContainer::removeParticle(const std::shared_ptr<Particle> &partic
     auto it = particles.begin();
     while (it != particles.end()) {
         if (*it == particle) {
-            particles.erase(it);
             const std::array<size_t, 3> cellIndex = getCellIndex(particle);
             cells[cellIndex[0]][cellIndex[1]][cellIndex[2]]->removeParticle(particle);
+            particles.erase(it);
             return;
+        } else {
+            ++it;
         }
-        ++it;
     }
 }
