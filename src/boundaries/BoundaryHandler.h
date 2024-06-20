@@ -42,6 +42,11 @@ namespace boundaries {
          */
         void postProcessBoundaries(ParticleContainer &container) const;
 
+        void preProcessBoundaries(LinkedCellContainer &linkedCellContainer) const;
+
+        void postProcessBoundaries(LinkedCellContainer &linkedCellContainer) const;
+
+
     private:
         const BoundaryProperties properties;
         std::shared_ptr<calculators::Calculator> calculator;
@@ -68,6 +73,18 @@ namespace boundaries {
          * @param direction The boundary direction to process.
          */
         void handlePeriodic(ParticleContainer &container, BoundaryDirection direction) const;
+
+        void handleReflection(LinkedCellContainer &linkedCellContainer, BoundaryDirection direction) const;
+
+        void handleOutflow(LinkedCellContainer &linkedCellContainer, BoundaryDirection direction) const;
+
+        void handlePeriodic(LinkedCellContainer &linkedCellContainer, BoundaryDirection direction) const;
+
+
+        //---------------------------------------Helper methods---------------------------------------
+        int retrieveRelevantPositionIndex(const BoundaryDirection &direction) const;
+
+        bool retrieveIsLowerBound(const BoundaryDirection &direction) const;
 
 /**
  * Class section end

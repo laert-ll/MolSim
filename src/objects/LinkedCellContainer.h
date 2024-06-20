@@ -112,9 +112,11 @@ public:
     void updateCells();
 
 
-    std::array<size_t, 3> getIndex(const std::shared_ptr<Particle> &particle);
+    std::array<size_t, 3> getCellIndex(const std::shared_ptr<Particle> &particle);
 
     bool hasZeroVelocities();
 
-    std::array<size_t, 3> getIndex(const std::array<double, 3> positions);
+    std::array<size_t, 3> getCellIndex(const std::array<double, 3> &positions);
+
+    std::vector<std::shared_ptr<Cell>> getBoundaryCells(const size_t &boundaryWidthInNumCells);
 };

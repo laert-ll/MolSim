@@ -279,9 +279,9 @@ public:
 
             while (current_time < end_time) {
                 SPDLOG_TRACE("Starting iteration {} with time {}.", iteration, current_time);
-                // handler.preProcessBoundaries(linkedCellContainer); TODO: connect Boundaries with linkedCellContainer
+                handler.preProcessBoundaries(linkedCellContainer);
                 calculator->calculateLC(linkedCellContainer, delta_t);
-                // handler.postProcessBoundaries(linkedCellContainer);
+                handler.postProcessBoundaries(linkedCellContainer);
 
                 iteration++;
                 if (iteration % thermostatApplyFrequency == 0) {

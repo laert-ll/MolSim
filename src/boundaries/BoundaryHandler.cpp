@@ -6,63 +6,61 @@
 #include <omp.h>
 
 namespace boundaries {
+    constexpr int boundaryWidthInNumCells = 2;
+
 
     void BoundaryHandler::preProcessBoundaries(ParticleContainer &container) const {
-        for (auto it = properties.getBoundaryMap().begin(); it != properties.getBoundaryMap().end(); ++it) {
-            if (it->second == BoundaryType::REFLECTING) {
-                handleReflection(container, it->first);
+        for (auto it : properties.getBoundaryMap()) {
+            if (it.second == BoundaryType::REFLECTING) {
+                handleReflection(container, it.first);
+            }
+        }
+    }
+
+    void BoundaryHandler::preProcessBoundaries(LinkedCellContainer &linkedCellContainer) const {
+        for (auto it : properties.getBoundaryMap()) {
+            if (it.second == BoundaryType::REFLECTING) {
+                handleReflection(linkedCellContainer, it.first);
             }
         }
     }
 
     void BoundaryHandler::postProcessBoundaries(ParticleContainer &container) const {
-        for (auto it = properties.getBoundaryMap().begin(); it != properties.getBoundaryMap().end(); ++it) {
-            if (it->second == BoundaryType::OUTFLOW)
-                handleOutflow(container, it->first);
-            if (it->second == BoundaryType::PERIODIC)
-                handlePeriodic(container, it->first);
+        for (auto it : properties.getBoundaryMap()) {
+            if (it.second == BoundaryType::OUTFLOW)
+                handleOutflow(container, it.first);
+            else if (it.second == BoundaryType::PERIODIC)
+                handlePeriodic(container, it.first);
         }
     }
-    void BoundaryHandler::handleReflection(ParticleContainer &container, BoundaryDirection direction) const {
-        bool checkLowerBound = false;
-        int index = 0;
-        switch (direction) {
-            case BoundaryDirection::LEFT:
-                index = 0;
-                checkLowerBound = true;
-                break;
-            case BoundaryDirection::RIGHT:
-                index = 0;
-                break;
-            case BoundaryDirection::BOTTOM:
-                index = 1;
-                checkLowerBound = true;
-                break;
-            case BoundaryDirection::TOP:
-                index = 1;
-                break;
-            case BoundaryDirection::FRONT:
-                index = 2;
-                checkLowerBound = true;
-                break;
-            case BoundaryDirection::BACK:
-                index = 2;
-                break;
+
+    void BoundaryHandler::postProcessBoundaries(LinkedCellContainer &linkedCellContainer) const {
+        for (auto it : properties.getBoundaryMap()) {
+            if (it.second == BoundaryType::OUTFLOW)
+                handleOutflow(linkedCellContainer, it.first);
+            else if (it.second == BoundaryType::PERIODIC)
+                handlePeriodic(linkedCellContainer, it.first);
         }
-        double boundary = properties.getDomain()[index];
+    }
+
+    void BoundaryHandler::handleReflection(ParticleContainer &container, BoundaryDirection direction) const {
+        const int relevantIndex = retrieveRelevantPositionIndex(direction);
+        const bool isLowerBound = retrieveIsLowerBound(direction);
+
+        double boundary = properties.getDomain()[relevantIndex];
         // If selected index is lower boundary (lowerX, lowerY, lowerZ)
-        if (checkLowerBound) {
+        if (isLowerBound) {
             // for indexing x, y, z coordinate
 //#pragma omp parallel for
             for (auto &p: container) {
-                double distanceToBoundary = p.getX().at(index);
-                double tolerance = pow(2, 1/6) * p.getSigma();
+                double distanceToBoundary = p.getX().at(relevantIndex);
+                double tolerance = pow(2, 1 / 6) * p.getSigma();
                 // only calculate reflection if near boundary
                 if (distanceToBoundary < tolerance) {
                     Particle ghost{p};
-                    if (index == 0)
+                    if (relevantIndex == 0)
                         ghost.setX({-distanceToBoundary, p.getX().at(1), p.getX().at(2)});
-                    else if (index == 1)
+                    else if (relevantIndex == 1)
                         ghost.setX({p.getX().at(0), -distanceToBoundary, p.getX().at(2)});
                     else
                         ghost.setX({p.getX().at(0), p.getX().at(1), -distanceToBoundary});
@@ -73,14 +71,14 @@ namespace boundaries {
         }
 //#pragma omp parallel for
         for (auto &p: container) {
-            double distanceToBoundary = boundary - p.getX().at(index);
+            double distanceToBoundary = boundary - p.getX().at(relevantIndex);
             // only calculate reflection if near boundary
-            double tolerance = pow(2, 1/6) * p.getSigma();
+            double tolerance = pow(2, 1 / 6) * p.getSigma();
             if (distanceToBoundary < tolerance) {
                 Particle ghost{p};
-                if (index == 0)
+                if (relevantIndex == 0)
                     ghost.setX({boundary + distanceToBoundary, p.getX().at(1), p.getX().at(2)});
-                else if (index == 1)
+                else if (relevantIndex == 1)
                     ghost.setX({p.getX().at(0), boundary + distanceToBoundary, p.getX().at(2)});
                 else
                     ghost.setX({p.getX().at(0), p.getX().at(1), boundary + distanceToBoundary});
@@ -89,77 +87,84 @@ namespace boundaries {
         }
     }
 
-    void BoundaryHandler::handleOutflow(ParticleContainer &container, BoundaryDirection direction) const {
-        int index;
-        bool checkLowerBound = false;
-        switch (direction) {
-            case BoundaryDirection::LEFT:
-                index = 0;
-                checkLowerBound = true;
-                break;
-            case BoundaryDirection::RIGHT:
-                index = 0;
-                break;
-            case BoundaryDirection::BOTTOM:
-                index = 1;
-                checkLowerBound = true;
-                break;
-            case BoundaryDirection::TOP:
-                index = 1;
-                break;
-            case BoundaryDirection::FRONT:
-                index = 2;
-                checkLowerBound = true;
-                break;
-            case BoundaryDirection::BACK:
-                index = 2;
-                break;
+    void
+    BoundaryHandler::handleReflection(LinkedCellContainer &linkedCellContainer, BoundaryDirection direction) const {
+        const int relevantIndex = retrieveRelevantPositionIndex(direction);
+        const bool isLowerBound = retrieveIsLowerBound(direction);
+        std::vector<std::shared_ptr<Cell>> boundaryCells = linkedCellContainer.getBoundaryCells(
+                boundaryWidthInNumCells);
+
+        double boundaryPosition = properties.getDomain()[relevantIndex];
+        // If selected index is lower boundary (lowerX, lowerY, lowerZ)
+        // for indexing x, y, z coordinate
+        //#pragma omp parallel for
+        for (const auto &cell: boundaryCells) {
+            for (auto &p: cell->getParticles()) {
+                double distanceToBoundary = isLowerBound ? p->getX().at(relevantIndex) : boundaryPosition -
+                                                                                         p->getX().at(relevantIndex);
+                double tolerance = pow(2, 1 / 6) * p->getSigma();
+                // only calculate reflection if near boundary
+                if (distanceToBoundary < tolerance) {
+                    Particle ghost{*p};
+                    const double ghostPosition = isLowerBound ? -distanceToBoundary : boundaryPosition +
+                                                                                      distanceToBoundary;
+                    if (relevantIndex == 0)
+                        ghost.setX({ghostPosition, p->getX().at(1), p->getX().at(2)});
+                    else if (relevantIndex == 1)
+                        ghost.setX({p->getX().at(0), ghostPosition, p->getX().at(2)});
+                    else
+                        ghost.setX({p->getX().at(0), p->getX().at(1), ghostPosition});
+                    calculator->calculateFPairwise(*p, ghost);
+                }
+            }
         }
+    }
+
+    void BoundaryHandler::handleOutflow(ParticleContainer &container, BoundaryDirection direction) const {
+        const int relevantIndex = retrieveRelevantPositionIndex(direction);
+        const bool isLowerBound = retrieveIsLowerBound(direction);
+
         for (auto &p: container) {
-            auto &el = p.getX().at(index);
-            if ((checkLowerBound && el <= 0) || (!checkLowerBound && el >= properties.getDomain()[index])) {
+            auto &relevantParticlePositionValue = p.getX().at(relevantIndex);
+            if ((isLowerBound && relevantParticlePositionValue <= 0) ||
+                (!isLowerBound && relevantParticlePositionValue >= properties.getDomain()[relevantIndex])) {
                 container.deleteParticle(p);
             }
         }
     }
 
-    void BoundaryHandler::handlePeriodic(ParticleContainer &container, BoundaryDirection direction) const {
-        bool checkLowerBound = false;
-        int index = 0;
-        switch (direction) {
-            case BoundaryDirection::LEFT:
-                index = 0;
-                checkLowerBound = true;
-                break;
-            case BoundaryDirection::RIGHT:
-                index = 0;
-                break;
-            case BoundaryDirection::BOTTOM:
-                index = 1;
-                checkLowerBound = true;
-                break;
-            case BoundaryDirection::TOP:
-                index = 1;
-                break;
-            case BoundaryDirection::FRONT:
-                index = 2;
-                checkLowerBound = true;
-                break;
-            case BoundaryDirection::BACK:
-                index = 2;
-                break;
+    void BoundaryHandler::handleOutflow(LinkedCellContainer &linkedCellContainer, BoundaryDirection direction) const {
+        const int relevantIndex = retrieveRelevantPositionIndex(direction);
+        const bool isLowerBound = retrieveIsLowerBound(direction);
+        std::vector<std::shared_ptr<Cell>> boundaryCells = linkedCellContainer.getBoundaryCells(
+                boundaryWidthInNumCells);
+
+        for (const auto &cell: boundaryCells) {
+            for (auto &p: cell->getParticles()) {
+                auto &relevantParticlePositionValue = p->getX().at(relevantIndex);
+                if ((isLowerBound && relevantParticlePositionValue <= 0) ||
+                    (!isLowerBound && relevantParticlePositionValue >= properties.getDomain()[relevantIndex])) {
+                    linkedCellContainer.removeParticle(p);
+                }
+            }
         }
-        double boundary = properties.getDomain()[index];
+    }
+
+    void BoundaryHandler::handlePeriodic(ParticleContainer &container, BoundaryDirection direction) const {
+        const int relevantIndex = retrieveRelevantPositionIndex(direction);
+        const bool isLowerBound = retrieveIsLowerBound(direction);
+
+        double boundary = properties.getDomain()[relevantIndex];
         // If selected index is lower boundary (lowerX, lowerY, lowerZ)
-        if (checkLowerBound) {
+        if (isLowerBound) {
 //#pragma omp parallel for
             for (auto &p: container) {
-                if (p.getX().at(index) < 0) {
-                    if(index == 0)
+                if (p.getX().at(relevantIndex) < 0) {
+                    if (relevantIndex == 0)
                         p.setX({boundary + p.getX().at(0), p.getX().at(1), p.getX().at(2)});
-                    if(index == 1)
+                    if (relevantIndex == 1)
                         p.setX({p.getX().at(0), boundary + p.getX().at(1), p.getX().at(2)});
-                    if(index == 2)
+                    if (relevantIndex == 2)
                         p.setX({p.getX().at(0), p.getX().at(1), boundary + p.getX().at(2)});
                 }
             }
@@ -167,14 +172,69 @@ namespace boundaries {
         }
 //#pragma omp parallel for
         for (auto &p: container) {
-            if (p.getX().at(index) >= boundary) {
-                if(index == 0)
+            if (p.getX().at(relevantIndex) >= boundary) {
+                if (relevantIndex == 0)
                     p.setX({p.getX().at(0) - boundary, p.getX().at(1), p.getX().at(2)});
-                if(index == 1)
+                if (relevantIndex == 1)
                     p.setX({p.getX().at(0), p.getX().at(1) - boundary, p.getX().at(2)});
-                if(index == 2)
+                if (relevantIndex == 2)
                     p.setX({p.getX().at(0), p.getX().at(1), p.getX().at(2) - boundary});
             }
+        }
+    }
+
+    void BoundaryHandler::handlePeriodic(LinkedCellContainer &linkedCellContainer, BoundaryDirection direction) const {
+        const int relevantIndex = retrieveRelevantPositionIndex(direction);
+        const bool isLowerBound = retrieveIsLowerBound(direction);
+        std::vector<std::shared_ptr<Cell>> boundaryCells = linkedCellContainer.getBoundaryCells(
+                boundaryWidthInNumCells);
+
+        const double boundary = properties.getDomain()[relevantIndex];
+        // If selected index is lower boundary (lowerX, lowerY, lowerZ)
+        for (const auto &cell: boundaryCells) {
+            for (auto &p: cell->getParticles()) {
+                const double newParticlePosition = isLowerBound ? boundary + p->getX().at(relevantIndex) :
+                                                   p->getX().at(relevantIndex) - boundary;
+                if (p->getX().at(relevantIndex) < 0) {
+                    if (relevantIndex == 0)
+                        p->setX({newParticlePosition, p->getX().at(1), p->getX().at(2)});
+                    if (relevantIndex == 1)
+                        p->setX({p->getX().at(0), newParticlePosition, p->getX().at(2)});
+                    if (relevantIndex == 2)
+                        p->setX({p->getX().at(0), p->getX().at(1), newParticlePosition});
+                }
+            }
+        }
+    }
+
+    bool BoundaryHandler::retrieveIsLowerBound(const BoundaryDirection &direction) const {
+        switch (direction) {
+            case BoundaryDirection::LEFT:
+            case BoundaryDirection::BOTTOM:
+            case BoundaryDirection::FRONT:
+                return true;
+            case BoundaryDirection::RIGHT:
+            case BoundaryDirection::TOP:
+            case BoundaryDirection::BACK:
+                return false;
+            default:
+                throw std::invalid_argument("Invalid direction " + std::to_string(static_cast<int>(direction)));
+        }
+    }
+
+    int BoundaryHandler::retrieveRelevantPositionIndex(const BoundaryDirection &direction) const {
+        switch (direction) {
+            case BoundaryDirection::LEFT:
+            case BoundaryDirection::RIGHT:
+                return 0;
+            case BoundaryDirection::BOTTOM:
+            case BoundaryDirection::TOP:
+                return 1;
+            case BoundaryDirection::FRONT:
+            case BoundaryDirection::BACK:
+                return 2;
+            default:
+                throw std::invalid_argument("Invalid direction " + std::to_string(static_cast<int>(direction)));
         }
     }
 }
