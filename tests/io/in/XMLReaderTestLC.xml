@@ -16,7 +16,7 @@
         <Dimension>3</Dimension>
     </ThermostatParameters>
     <LinkedCellsParameters>
-        <LinkedCellsUsed>false</LinkedCellsUsed>
+        <LinkedCellsUsed>true</LinkedCellsUsed>
         <CutoffRadius>3.0</CutoffRadius>
     </LinkedCellsParameters>
     <BoundaryParameters>
@@ -30,7 +30,7 @@
     </BoundaryParameters>
     <Cuboid>
         <Coordinates>0.0 0.0 0.0</Coordinates>
-        <ParticlesPerDimension>5 5 5</ParticlesPerDimension>
+        <ParticlesPerDimension>5 5 1</ParticlesPerDimension>
         <Distance>1.0</Distance>
         <Mass>1.0</Mass>
         <InitialVelocities>0.0 0.0 0.0</InitialVelocities>
