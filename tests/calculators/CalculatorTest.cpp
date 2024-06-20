@@ -89,3 +89,34 @@ TEST(CalculatorTest, CalculateVTest) {
         EXPECT_NEAR(expectedV[2], actualV[2], 1e-3);
     }
 }
+//Testing Gravity with different Masses
+TEST(CalculatorTest, GravityTest) {
+    calculator->setGravity(-10.0);
+    ParticleContainer container{};
+//    Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
+//            double m_arg, double volume_arg, int type_arg)
+    Particle p1{{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}, 0.5, 1.0, 1};
+    Particle p2{{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}, 1.0, 1.0, 1};
+    Particle p3{{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}, 2.0, 1.0, 1};
+    Particle p4{{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}, 5.0, 1.0, 1};
+
+    container.addParticle(p1);
+    container.addParticle(p2);
+    container.addParticle(p3);
+    container.addParticle(p4);
+
+    calculator->calculateGravity(container);
+    std::vector<Particle> particles = container.getParticles();
+
+    std::vector<std::array<double, 3>> expectedForces = {{0.0, -5.0, 0.0},
+                                                         {0.0, -10.0, 0.0},
+                                                         {0.0, -20.0, 0.0},
+                                                         {0.0, -50.0, 0.0}};
+    // Iteration through vector
+    for (int i = 0; i < 4; i++) {
+        // Iteration through vector elements
+        for (int j = 0; j < 3; j++){
+            ASSERT_NEAR(particles[i].getF()[j], expectedForces[i][j], 1e-6);
+        }
+    }
+}
