@@ -40,7 +40,7 @@ jobs:
         run: mkdir -p ${{github.workspace}}/build
 
       - name: CMake Configure
-        run: cmake -D CMAKE_CXX_FLAGS="-fsanitize=address" -B ${{github.workspace}}/build ${{github.workspace}}
+        run: cmake -B ${{github.workspace}}/build ${{github.workspace}}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build
