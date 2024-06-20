@@ -36,8 +36,9 @@ namespace calculators {
          */
         virtual void calculate(ParticleContainer &particleContainer, double delta_t) {
             calculateF(particleContainer);
-            if (g_grav != 0.0)
+            if (std::abs(g_grav) > COMPARISON_TOLERANCE) {
                 calculateGravity(particleContainer);
+            }
             calculateX(particleContainer, delta_t);
             calculateV(particleContainer, delta_t);
         }
@@ -192,5 +193,6 @@ namespace calculators {
     private:
         bool warned = false;
         double g_grav = 0.0;
+        constexpr static const double COMPARISON_TOLERANCE = 10e-6;
     };
 };

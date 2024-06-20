@@ -268,8 +268,8 @@ public:
         const boundaries::BoundaryHandler handler{properties, calculator};
         const bool linkedCellsUsed = linkedCellsParameters.isLinkedCellsUsed();
         const std::string &filename = fileWriterParameters.getBaseName();
-
-        calculator->setGravity(-12.9); // TODO: edit
+        const double gravity = simulationParameters.getGravity();
+        calculator->setGravity(gravity);
 
         auto start = std::chrono::high_resolution_clock::now();
 

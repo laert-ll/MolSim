@@ -7,6 +7,7 @@
     <SimulationParameters>
         <EndT>100.0</EndT>
         <DeltaT>0.001</DeltaT>
+        <Gravity>-9.81</Gravity>
     </SimulationParameters>
     <ThermostatParameters>
         <StartTemperature>0.0</StartTemperature>

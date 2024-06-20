@@ -5,9 +5,9 @@
 #pragma once
 class SimulationParameters {
 public:
-    SimulationParameters() : end_t(-1), delta_t(-1) {} // default constructor
+    SimulationParameters() : end_t(-1), delta_t(-1), gravity(-1) {} // default constructor
 
-    SimulationParameters(double end_t, double delta_t) : end_t(end_t), delta_t(delta_t) {}
+    SimulationParameters(double end_t, double delta_t, double gravity) : end_t(end_t), delta_t(delta_t), gravity(gravity) {}
 
     [[nodiscard]] double getEnd_t() const {
         return end_t;
@@ -15,6 +15,10 @@ public:
 
     [[nodiscard]] double getDelta_t() const {
         return delta_t;
+    }
+
+    [[nodiscard]] double getGravity() const {
+        return gravity;
     }
 
     void setEnd_t(double newEnd_t) {
@@ -25,7 +29,12 @@ public:
         delta_t = newDelta_t;
     }
 
+    void setGravity(double newGravity) {
+        gravity = newGravity;
+    }
+
 private:
     double end_t;
     double delta_t;
+    double gravity;
 };

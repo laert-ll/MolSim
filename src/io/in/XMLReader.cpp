@@ -55,7 +55,14 @@ namespace fileReaders {
 
     SimulationParameters XMLReader::loadSimulationParameters(const Simulation &simulation) {
         const auto &simulationParametersParsed = simulation.SimulationParameters();
-        return {simulationParametersParsed.EndT(), simulationParametersParsed.DeltaT()};
+
+        double gravity = 0.0; // default value
+
+        if (simulationParametersParsed.Gravity().present()) {
+            gravity = simulationParametersParsed.Gravity().get();
+        }
+
+        return {simulationParametersParsed.EndT(), simulationParametersParsed.DeltaT(), gravity};
     }
 
     ThermostatParameters XMLReader::loadThermostatParameters(const Simulation &simulation) {

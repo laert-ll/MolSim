@@ -53,7 +53,7 @@
 
 #include <xsd/cxx/config.hxx>
 
-#if (XSD_INT_VERSION != 4000000L)
+#if (XSD_INT_VERSION!=4000000L)
 #error XSD runtime version mismatch
 #endif
 
@@ -349,6 +349,24 @@ class SimulationParametersType: public ::xml_schema::type
   void
   DeltaT (const DeltaT_type& x);
 
+  // Gravity
+  //
+  typedef ::xml_schema::double_ Gravity_type;
+  typedef ::xsd::cxx::tree::optional< Gravity_type > Gravity_optional;
+  typedef ::xsd::cxx::tree::traits< Gravity_type, char, ::xsd::cxx::tree::schema_type::double_ > Gravity_traits;
+
+  const Gravity_optional&
+  Gravity () const;
+
+  Gravity_optional&
+  Gravity ();
+
+  void
+  Gravity (const Gravity_type& x);
+
+  void
+  Gravity (const Gravity_optional& x);
+
   // Constructors.
   //
   SimulationParametersType (const EndT_type&,
@@ -382,6 +400,7 @@ class SimulationParametersType: public ::xml_schema::type
   protected:
   ::xsd::cxx::tree::one< EndT_type > EndT_;
   ::xsd::cxx::tree::one< DeltaT_type > DeltaT_;
+  Gravity_optional Gravity_;
 };
 
 class ThermostatParametersType: public ::xml_schema::type

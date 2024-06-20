@@ -125,6 +125,30 @@ DeltaT (const DeltaT_type& x)
   this->DeltaT_.set (x);
 }
 
+const SimulationParametersType::Gravity_optional& SimulationParametersType::
+Gravity () const
+{
+  return this->Gravity_;
+}
+
+SimulationParametersType::Gravity_optional& SimulationParametersType::
+Gravity ()
+{
+  return this->Gravity_;
+}
+
+void SimulationParametersType::
+Gravity (const Gravity_type& x)
+{
+  this->Gravity_.set (x);
+}
+
+void SimulationParametersType::
+Gravity (const Gravity_optional& x)
+{
+  this->Gravity_ = x;
+}
+
 
 // ThermostatParametersType
 //
@@ -874,7 +898,8 @@ SimulationParametersType (const EndT_type& EndT,
                           const DeltaT_type& DeltaT)
 : ::xml_schema::type (),
   EndT_ (EndT, this),
-  DeltaT_ (DeltaT, this)
+  DeltaT_ (DeltaT, this),
+  Gravity_ (this)
 {
 }
 
@@ -884,7 +909,8 @@ SimulationParametersType (const SimulationParametersType& x,
                           ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
   EndT_ (x.EndT_, f, this),
-  DeltaT_ (x.DeltaT_, f, this)
+  DeltaT_ (x.DeltaT_, f, this),
+  Gravity_ (x.Gravity_, f, this)
 {
 }
 
@@ -894,7 +920,8 @@ SimulationParametersType (const ::xercesc::DOMElement& e,
                           ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   EndT_ (this),
-  DeltaT_ (this)
+  DeltaT_ (this),
+  Gravity_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -935,6 +962,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // Gravity
+    //
+    if (n.name () == "Gravity" && n.namespace_ ().empty ())
+    {
+      if (!this->Gravity_)
+      {
+        this->Gravity_.set (Gravity_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -968,6 +1006,7 @@ operator= (const SimulationParametersType& x)
     static_cast< ::xml_schema::type& > (*this) = x;
     this->EndT_ = x.EndT_;
     this->DeltaT_ = x.DeltaT_;
+    this->Gravity_ = x.Gravity_;
   }
 
   return *this;

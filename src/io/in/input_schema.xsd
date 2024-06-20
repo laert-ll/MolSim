@@ -23,6 +23,7 @@
     <xs:sequence>
       <xs:element name="EndT" type="xs:double"/>
       <xs:element name="DeltaT" type="xs:double"/>
+      <xs:element name="Gravity" type="xs:double" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 

@@ -13,8 +13,11 @@ TEST(XMLReaderTest, ReadFileTest) {
 
     EXPECT_EQ(data.getFileWriterParameters()->getBaseName(), "test");
     EXPECT_EQ(data.getFileWriterParameters()->getWriteFrequency(), 10);
+
     EXPECT_NEAR(data.getSimulationParameters()->getEnd_t(), 100.0, COMPARISON_TOLERANCE);
     EXPECT_NEAR(data.getSimulationParameters()->getDelta_t(), 0.1, COMPARISON_TOLERANCE);
+    EXPECT_NEAR(data.getSimulationParameters()->getGravity(), 0.0, COMPARISON_TOLERANCE);
+
     EXPECT_NEAR(data.getThermostatParameters()->getStartTemp(), 300.0, COMPARISON_TOLERANCE);
     EXPECT_NEAR(data.getThermostatParameters()->getTargetTemp(), 300.0, COMPARISON_TOLERANCE);
     EXPECT_NEAR(data.getThermostatParameters()->getMaxDeltaTemp(), 10.0, COMPARISON_TOLERANCE);
@@ -44,8 +47,11 @@ TEST(XMLReaderTest, ReadFileLCTest) {
 
     EXPECT_EQ(data.getFileWriterParameters()->getBaseName(), "test");
     EXPECT_EQ(data.getFileWriterParameters()->getWriteFrequency(), 10);
+
     EXPECT_NEAR(data.getSimulationParameters()->getEnd_t(), 100.0, COMPARISON_TOLERANCE);
     EXPECT_NEAR(data.getSimulationParameters()->getDelta_t(), 0.1, COMPARISON_TOLERANCE);
+    EXPECT_NEAR(data.getSimulationParameters()->getGravity(), -9.81, COMPARISON_TOLERANCE);
+
     EXPECT_NEAR(data.getThermostatParameters()->getStartTemp(), 300.0, COMPARISON_TOLERANCE);
     EXPECT_NEAR(data.getThermostatParameters()->getTargetTemp(), 300.0, COMPARISON_TOLERANCE);
     EXPECT_NEAR(data.getThermostatParameters()->getMaxDeltaTemp(), 10.0, COMPARISON_TOLERANCE);
