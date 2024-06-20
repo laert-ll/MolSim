@@ -107,6 +107,8 @@ namespace boundaries {
                 if (distanceToBoundary < tolerance) {
                     SPDLOG_DEBUG("Particle at position {} is near boundary", ArrayUtils::to_string(p->getX()));
                     Particle ghost{*p};
+                    ghost.setV({0, 0, 0});
+                    ghost.setF({0, 0, 0});
                     const double ghostPosition = isLowerBound ? -distanceToBoundary : boundaryPosition +
                                                                                       distanceToBoundary;
                     if (relevantIndex == 0)
