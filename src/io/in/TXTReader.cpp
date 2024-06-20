@@ -9,6 +9,7 @@
 #include "TXTReader.h"
 #include "spdlog/spdlog.h"
 #include "io/in/parameters/DiscParameters.h"
+#include "objects/LinkedCellContainer.h"
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -52,12 +53,19 @@ namespace fileReaders {
                         "Invalid data code in file '" + filepath + "': Only data codes 0 and 1 are supported.");
         }
 
+        std::unique_ptr<LinkedCellContainer> linkedCellContainer = std::make_unique<LinkedCellContainer>();
         std::unique_ptr<FileWriterParameters> fileWriterParameters = std::make_unique<FileWriterParameters>();
         std::unique_ptr<SimulationParameters> simulationParameters = std::make_unique<SimulationParameters>();
         std::unique_ptr<ThermostatParameters> thermostatParameters = std::make_unique<ThermostatParameters>();
+        std::unique_ptr<LinkedCellsParameters> linkedCellsParameters = std::make_unique<LinkedCellsParameters>();
         std::unique_ptr<BoundaryParameters> boundaryParameters = std::make_unique<BoundaryParameters>();
-        SimulationDataContainer simulationDataContainer(std::move(particleContainer), std::move(fileWriterParameters), std::move(simulationParameters),
-                                                        std::move(thermostatParameters), std::move(boundaryParameters));
+        SimulationDataContainer simulationDataContainer(std::move(particleContainer),
+                                                        std::move(linkedCellContainer),
+                                                        std::move(fileWriterParameters),
+                                                        std::move(simulationParameters),
+                                                        std::move(thermostatParameters),
+                                                        std::move(linkedCellsParameters),
+                                                        std::move(boundaryParameters));
         return simulationDataContainer;
     }
 

@@ -229,9 +229,11 @@ namespace xml_schema
 class FileWriterParametersType;
 class SimulationParametersType;
 class ThermostatParametersType;
-class BoundaryType;
+class LinkedCellsParametersType;
 class BoundaryParametersType;
 class CuboidType;
+class DiscType;
+class BoundaryType;
 class Simulation;
 
 #include <memory>    // ::std::unique_ptr
@@ -348,10 +350,43 @@ class SimulationParametersType: public ::xml_schema::type
   void
   DeltaT (const DeltaT_type& x);
 
+  // Gravity
+  //
+  typedef ::xml_schema::double_ Gravity_type;
+  typedef ::xsd::cxx::tree::optional< Gravity_type > Gravity_optional;
+  typedef ::xsd::cxx::tree::traits< Gravity_type, char, ::xsd::cxx::tree::schema_type::double_ > Gravity_traits;
+
+  const Gravity_optional&
+  Gravity () const;
+
+  Gravity_optional&
+  Gravity ();
+
+  void
+  Gravity (const Gravity_type& x);
+
+  void
+  Gravity (const Gravity_optional& x);
+
+  // Dimension
+  //
+  typedef ::xml_schema::int_ Dimension_type;
+  typedef ::xsd::cxx::tree::traits< Dimension_type, char > Dimension_traits;
+
+  const Dimension_type&
+  Dimension () const;
+
+  Dimension_type&
+  Dimension ();
+
+  void
+  Dimension (const Dimension_type& x);
+
   // Constructors.
   //
   SimulationParametersType (const EndT_type&,
-                            const DeltaT_type&);
+                            const DeltaT_type&,
+                            const Dimension_type&);
 
   SimulationParametersType (const ::xercesc::DOMElement& e,
                             ::xml_schema::flags f = 0,
@@ -381,6 +416,8 @@ class SimulationParametersType: public ::xml_schema::type
   protected:
   ::xsd::cxx::tree::one< EndT_type > EndT_;
   ::xsd::cxx::tree::one< DeltaT_type > DeltaT_;
+  Gravity_optional Gravity_;
+  ::xsd::cxx::tree::one< Dimension_type > Dimension_;
 };
 
 class ThermostatParametersType: public ::xml_schema::type
@@ -497,72 +534,92 @@ class ThermostatParametersType: public ::xml_schema::type
   ::xsd::cxx::tree::one< Dimension_type > Dimension_;
 };
 
-class BoundaryType: public ::xml_schema::string
+class LinkedCellsParametersType: public ::xml_schema::type
 {
   public:
-  enum value
-  {
-    REFLECTING,
-    OUTFLOW,
-    PERIODIC,
-    OFF
-  };
+  // LinkedCellsUsed
+  //
+  typedef ::xml_schema::boolean LinkedCellsUsed_type;
+  typedef ::xsd::cxx::tree::traits< LinkedCellsUsed_type, char > LinkedCellsUsed_traits;
 
-  BoundaryType (value v);
+  const LinkedCellsUsed_type&
+  LinkedCellsUsed () const;
 
-  BoundaryType (const char* v);
+  LinkedCellsUsed_type&
+  LinkedCellsUsed ();
 
-  BoundaryType (const ::std::string& v);
+  void
+  LinkedCellsUsed (const LinkedCellsUsed_type& x);
 
-  BoundaryType (const ::xml_schema::string& v);
+  // CutoffRadius
+  //
+  typedef ::xml_schema::double_ CutoffRadius_type;
+  typedef ::xsd::cxx::tree::traits< CutoffRadius_type, char, ::xsd::cxx::tree::schema_type::double_ > CutoffRadius_traits;
 
-  BoundaryType (const ::xercesc::DOMElement& e,
-                ::xml_schema::flags f = 0,
-                ::xml_schema::container* c = 0);
+  const CutoffRadius_type&
+  CutoffRadius () const;
 
-  BoundaryType (const ::xercesc::DOMAttr& a,
-                ::xml_schema::flags f = 0,
-                ::xml_schema::container* c = 0);
+  CutoffRadius_type&
+  CutoffRadius ();
 
-  BoundaryType (const ::std::string& s,
-                const ::xercesc::DOMElement* e,
-                ::xml_schema::flags f = 0,
-                ::xml_schema::container* c = 0);
+  void
+  CutoffRadius (const CutoffRadius_type& x);
 
-  BoundaryType (const BoundaryType& x,
-                ::xml_schema::flags f = 0,
-                ::xml_schema::container* c = 0);
+  // Constructors.
+  //
+  LinkedCellsParametersType (const LinkedCellsUsed_type&,
+                             const CutoffRadius_type&);
 
-#ifdef XSD_CXX11
-  BoundaryType&
-  operator= (const BoundaryType&) = default;
-#endif
+  LinkedCellsParametersType (const ::xercesc::DOMElement& e,
+                             ::xml_schema::flags f = 0,
+                             ::xml_schema::container* c = 0);
 
-  virtual BoundaryType*
+  LinkedCellsParametersType (const LinkedCellsParametersType& x,
+                             ::xml_schema::flags f = 0,
+                             ::xml_schema::container* c = 0);
+
+  virtual LinkedCellsParametersType*
   _clone (::xml_schema::flags f = 0,
           ::xml_schema::container* c = 0) const;
 
-  BoundaryType&
-  operator= (value v);
+  LinkedCellsParametersType&
+  operator= (const LinkedCellsParametersType& x);
 
-  virtual
-  operator value () const
-  {
-    return _xsd_BoundaryType_convert ();
-  }
+  virtual 
+  ~LinkedCellsParametersType ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
 
   protected:
-  value
-  _xsd_BoundaryType_convert () const;
-
-  public:
-  static const char* const _xsd_BoundaryType_literals_[4];
-  static const value _xsd_BoundaryType_indexes_[4];
+  ::xsd::cxx::tree::one< LinkedCellsUsed_type > LinkedCellsUsed_;
+  ::xsd::cxx::tree::one< CutoffRadius_type > CutoffRadius_;
 };
 
 class BoundaryParametersType: public ::xml_schema::type
 {
   public:
+  // Domain
+  //
+  typedef ::xml_schema::string Domain_type;
+  typedef ::xsd::cxx::tree::traits< Domain_type, char > Domain_traits;
+
+  const Domain_type&
+  Domain () const;
+
+  Domain_type&
+  Domain ();
+
+  void
+  Domain (const Domain_type& x);
+
+  void
+  Domain (::std::unique_ptr< Domain_type > p);
+
   // TOP
   //
   typedef ::BoundaryType TOP_type;
@@ -667,7 +724,8 @@ class BoundaryParametersType: public ::xml_schema::type
 
   // Constructors.
   //
-  BoundaryParametersType (const TOP_type&,
+  BoundaryParametersType (const Domain_type&,
+                          const TOP_type&,
                           const RIGHT_type&,
                           const BOTTOM_type&,
                           const LEFT_type&,
@@ -700,6 +758,7 @@ class BoundaryParametersType: public ::xml_schema::type
          ::xml_schema::flags);
 
   protected:
+  ::xsd::cxx::tree::one< Domain_type > Domain_;
   ::xsd::cxx::tree::one< TOP_type > TOP_;
   ::xsd::cxx::tree::one< RIGHT_type > RIGHT_;
   ::xsd::cxx::tree::one< BOTTOM_type > BOTTOM_;
@@ -847,6 +906,189 @@ class CuboidType: public ::xml_schema::type
   ::xsd::cxx::tree::one< MeanVelocity_type > MeanVelocity_;
 };
 
+class DiscType: public ::xml_schema::type
+{
+  public:
+  // CenterCoordinates
+  //
+  typedef ::xml_schema::string CenterCoordinates_type;
+  typedef ::xsd::cxx::tree::traits< CenterCoordinates_type, char > CenterCoordinates_traits;
+
+  const CenterCoordinates_type&
+  CenterCoordinates () const;
+
+  CenterCoordinates_type&
+  CenterCoordinates ();
+
+  void
+  CenterCoordinates (const CenterCoordinates_type& x);
+
+  void
+  CenterCoordinates (::std::unique_ptr< CenterCoordinates_type > p);
+
+  // InitialVelocities
+  //
+  typedef ::xml_schema::string InitialVelocities_type;
+  typedef ::xsd::cxx::tree::traits< InitialVelocities_type, char > InitialVelocities_traits;
+
+  const InitialVelocities_type&
+  InitialVelocities () const;
+
+  InitialVelocities_type&
+  InitialVelocities ();
+
+  void
+  InitialVelocities (const InitialVelocities_type& x);
+
+  void
+  InitialVelocities (::std::unique_ptr< InitialVelocities_type > p);
+
+  // NumberOfParticlesAlongRadius
+  //
+  typedef ::xml_schema::int_ NumberOfParticlesAlongRadius_type;
+  typedef ::xsd::cxx::tree::traits< NumberOfParticlesAlongRadius_type, char > NumberOfParticlesAlongRadius_traits;
+
+  const NumberOfParticlesAlongRadius_type&
+  NumberOfParticlesAlongRadius () const;
+
+  NumberOfParticlesAlongRadius_type&
+  NumberOfParticlesAlongRadius ();
+
+  void
+  NumberOfParticlesAlongRadius (const NumberOfParticlesAlongRadius_type& x);
+
+  // Distance
+  //
+  typedef ::xml_schema::double_ Distance_type;
+  typedef ::xsd::cxx::tree::traits< Distance_type, char, ::xsd::cxx::tree::schema_type::double_ > Distance_traits;
+
+  const Distance_type&
+  Distance () const;
+
+  Distance_type&
+  Distance ();
+
+  void
+  Distance (const Distance_type& x);
+
+  // Mass
+  //
+  typedef ::xml_schema::double_ Mass_type;
+  typedef ::xsd::cxx::tree::traits< Mass_type, char, ::xsd::cxx::tree::schema_type::double_ > Mass_traits;
+
+  const Mass_type&
+  Mass () const;
+
+  Mass_type&
+  Mass ();
+
+  void
+  Mass (const Mass_type& x);
+
+  // Constructors.
+  //
+  DiscType (const CenterCoordinates_type&,
+            const InitialVelocities_type&,
+            const NumberOfParticlesAlongRadius_type&,
+            const Distance_type&,
+            const Mass_type&);
+
+  DiscType (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
+
+  DiscType (const DiscType& x,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
+
+  virtual DiscType*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  DiscType&
+  operator= (const DiscType& x);
+
+  virtual 
+  ~DiscType ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< CenterCoordinates_type > CenterCoordinates_;
+  ::xsd::cxx::tree::one< InitialVelocities_type > InitialVelocities_;
+  ::xsd::cxx::tree::one< NumberOfParticlesAlongRadius_type > NumberOfParticlesAlongRadius_;
+  ::xsd::cxx::tree::one< Distance_type > Distance_;
+  ::xsd::cxx::tree::one< Mass_type > Mass_;
+};
+
+class BoundaryType: public ::xml_schema::string
+{
+  public:
+  enum value
+  {
+    REFLECTING,
+    OUTFLOW,
+    PERIODIC,
+    OFF
+  };
+
+  BoundaryType (value v);
+
+  BoundaryType (const char* v);
+
+  BoundaryType (const ::std::string& v);
+
+  BoundaryType (const ::xml_schema::string& v);
+
+  BoundaryType (const ::xercesc::DOMElement& e,
+                ::xml_schema::flags f = 0,
+                ::xml_schema::container* c = 0);
+
+  BoundaryType (const ::xercesc::DOMAttr& a,
+                ::xml_schema::flags f = 0,
+                ::xml_schema::container* c = 0);
+
+  BoundaryType (const ::std::string& s,
+                const ::xercesc::DOMElement* e,
+                ::xml_schema::flags f = 0,
+                ::xml_schema::container* c = 0);
+
+  BoundaryType (const BoundaryType& x,
+                ::xml_schema::flags f = 0,
+                ::xml_schema::container* c = 0);
+
+#ifdef XSD_CXX11
+  BoundaryType&
+  operator= (const BoundaryType&) = default;
+#endif
+
+  virtual BoundaryType*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  BoundaryType&
+  operator= (value v);
+
+  virtual
+  operator value () const
+  {
+    return _xsd_BoundaryType_convert ();
+  }
+
+  protected:
+  value
+  _xsd_BoundaryType_convert () const;
+
+  public:
+  static const char* const _xsd_BoundaryType_literals_[4];
+  static const value _xsd_BoundaryType_indexes_[4];
+};
+
 class Simulation: public ::xml_schema::type
 {
   public:
@@ -901,6 +1143,23 @@ class Simulation: public ::xml_schema::type
   void
   ThermostatParameters (::std::unique_ptr< ThermostatParameters_type > p);
 
+  // LinkedCellsParameters
+  //
+  typedef ::LinkedCellsParametersType LinkedCellsParameters_type;
+  typedef ::xsd::cxx::tree::traits< LinkedCellsParameters_type, char > LinkedCellsParameters_traits;
+
+  const LinkedCellsParameters_type&
+  LinkedCellsParameters () const;
+
+  LinkedCellsParameters_type&
+  LinkedCellsParameters ();
+
+  void
+  LinkedCellsParameters (const LinkedCellsParameters_type& x);
+
+  void
+  LinkedCellsParameters (::std::unique_ptr< LinkedCellsParameters_type > p);
+
   // BoundaryParameters
   //
   typedef ::BoundaryParametersType BoundaryParameters_type;
@@ -935,16 +1194,35 @@ class Simulation: public ::xml_schema::type
   void
   Cuboid (const Cuboid_sequence& s);
 
+  // Disc
+  //
+  typedef ::DiscType Disc_type;
+  typedef ::xsd::cxx::tree::sequence< Disc_type > Disc_sequence;
+  typedef Disc_sequence::iterator Disc_iterator;
+  typedef Disc_sequence::const_iterator Disc_const_iterator;
+  typedef ::xsd::cxx::tree::traits< Disc_type, char > Disc_traits;
+
+  const Disc_sequence&
+  Disc () const;
+
+  Disc_sequence&
+  Disc ();
+
+  void
+  Disc (const Disc_sequence& s);
+
   // Constructors.
   //
   Simulation (const FileWriterParameters_type&,
               const SimulationParameters_type&,
               const ThermostatParameters_type&,
+              const LinkedCellsParameters_type&,
               const BoundaryParameters_type&);
 
   Simulation (::std::unique_ptr< FileWriterParameters_type >,
               ::std::unique_ptr< SimulationParameters_type >,
               ::std::unique_ptr< ThermostatParameters_type >,
+              ::std::unique_ptr< LinkedCellsParameters_type >,
               ::std::unique_ptr< BoundaryParameters_type >);
 
   Simulation (const ::xercesc::DOMElement& e,
@@ -976,8 +1254,10 @@ class Simulation: public ::xml_schema::type
   ::xsd::cxx::tree::one< FileWriterParameters_type > FileWriterParameters_;
   ::xsd::cxx::tree::one< SimulationParameters_type > SimulationParameters_;
   ::xsd::cxx::tree::one< ThermostatParameters_type > ThermostatParameters_;
+  ::xsd::cxx::tree::one< LinkedCellsParameters_type > LinkedCellsParameters_;
   ::xsd::cxx::tree::one< BoundaryParameters_type > BoundaryParameters_;
   Cuboid_sequence Cuboid_;
+  Disc_sequence Disc_;
 };
 
 #include <iosfwd>

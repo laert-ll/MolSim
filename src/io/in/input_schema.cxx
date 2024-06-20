@@ -125,6 +125,48 @@ DeltaT (const DeltaT_type& x)
   this->DeltaT_.set (x);
 }
 
+const SimulationParametersType::Gravity_optional& SimulationParametersType::
+Gravity () const
+{
+  return this->Gravity_;
+}
+
+SimulationParametersType::Gravity_optional& SimulationParametersType::
+Gravity ()
+{
+  return this->Gravity_;
+}
+
+void SimulationParametersType::
+Gravity (const Gravity_type& x)
+{
+  this->Gravity_.set (x);
+}
+
+void SimulationParametersType::
+Gravity (const Gravity_optional& x)
+{
+  this->Gravity_ = x;
+}
+
+const SimulationParametersType::Dimension_type& SimulationParametersType::
+Dimension () const
+{
+  return this->Dimension_.get ();
+}
+
+SimulationParametersType::Dimension_type& SimulationParametersType::
+Dimension ()
+{
+  return this->Dimension_.get ();
+}
+
+void SimulationParametersType::
+Dimension (const Dimension_type& x)
+{
+  this->Dimension_.set (x);
+}
+
 
 // ThermostatParametersType
 //
@@ -220,53 +262,72 @@ Dimension (const Dimension_type& x)
 }
 
 
-// BoundaryType
+// LinkedCellsParametersType
 //
 
-BoundaryType::
-BoundaryType (value v)
-: ::xml_schema::string (_xsd_BoundaryType_literals_[v])
+const LinkedCellsParametersType::LinkedCellsUsed_type& LinkedCellsParametersType::
+LinkedCellsUsed () const
 {
+  return this->LinkedCellsUsed_.get ();
 }
 
-BoundaryType::
-BoundaryType (const char* v)
-: ::xml_schema::string (v)
+LinkedCellsParametersType::LinkedCellsUsed_type& LinkedCellsParametersType::
+LinkedCellsUsed ()
 {
+  return this->LinkedCellsUsed_.get ();
 }
 
-BoundaryType::
-BoundaryType (const ::std::string& v)
-: ::xml_schema::string (v)
+void LinkedCellsParametersType::
+LinkedCellsUsed (const LinkedCellsUsed_type& x)
 {
+  this->LinkedCellsUsed_.set (x);
 }
 
-BoundaryType::
-BoundaryType (const ::xml_schema::string& v)
-: ::xml_schema::string (v)
+const LinkedCellsParametersType::CutoffRadius_type& LinkedCellsParametersType::
+CutoffRadius () const
 {
+  return this->CutoffRadius_.get ();
 }
 
-BoundaryType::
-BoundaryType (const BoundaryType& v,
-              ::xml_schema::flags f,
-              ::xml_schema::container* c)
-: ::xml_schema::string (v, f, c)
+LinkedCellsParametersType::CutoffRadius_type& LinkedCellsParametersType::
+CutoffRadius ()
 {
+  return this->CutoffRadius_.get ();
 }
 
-BoundaryType& BoundaryType::
-operator= (value v)
+void LinkedCellsParametersType::
+CutoffRadius (const CutoffRadius_type& x)
 {
-  static_cast< ::xml_schema::string& > (*this) = 
-  ::xml_schema::string (_xsd_BoundaryType_literals_[v]);
-
-  return *this;
+  this->CutoffRadius_.set (x);
 }
 
 
 // BoundaryParametersType
 //
+
+const BoundaryParametersType::Domain_type& BoundaryParametersType::
+Domain () const
+{
+  return this->Domain_.get ();
+}
+
+BoundaryParametersType::Domain_type& BoundaryParametersType::
+Domain ()
+{
+  return this->Domain_.get ();
+}
+
+void BoundaryParametersType::
+Domain (const Domain_type& x)
+{
+  this->Domain_.set (x);
+}
+
+void BoundaryParametersType::
+Domain (::std::unique_ptr< Domain_type > x)
+{
+  this->Domain_.set (std::move (x));
+}
 
 const BoundaryParametersType::TOP_type& BoundaryParametersType::
 TOP () const
@@ -543,6 +604,157 @@ MeanVelocity (const MeanVelocity_type& x)
 }
 
 
+// DiscType
+//
+
+const DiscType::CenterCoordinates_type& DiscType::
+CenterCoordinates () const
+{
+  return this->CenterCoordinates_.get ();
+}
+
+DiscType::CenterCoordinates_type& DiscType::
+CenterCoordinates ()
+{
+  return this->CenterCoordinates_.get ();
+}
+
+void DiscType::
+CenterCoordinates (const CenterCoordinates_type& x)
+{
+  this->CenterCoordinates_.set (x);
+}
+
+void DiscType::
+CenterCoordinates (::std::unique_ptr< CenterCoordinates_type > x)
+{
+  this->CenterCoordinates_.set (std::move (x));
+}
+
+const DiscType::InitialVelocities_type& DiscType::
+InitialVelocities () const
+{
+  return this->InitialVelocities_.get ();
+}
+
+DiscType::InitialVelocities_type& DiscType::
+InitialVelocities ()
+{
+  return this->InitialVelocities_.get ();
+}
+
+void DiscType::
+InitialVelocities (const InitialVelocities_type& x)
+{
+  this->InitialVelocities_.set (x);
+}
+
+void DiscType::
+InitialVelocities (::std::unique_ptr< InitialVelocities_type > x)
+{
+  this->InitialVelocities_.set (std::move (x));
+}
+
+const DiscType::NumberOfParticlesAlongRadius_type& DiscType::
+NumberOfParticlesAlongRadius () const
+{
+  return this->NumberOfParticlesAlongRadius_.get ();
+}
+
+DiscType::NumberOfParticlesAlongRadius_type& DiscType::
+NumberOfParticlesAlongRadius ()
+{
+  return this->NumberOfParticlesAlongRadius_.get ();
+}
+
+void DiscType::
+NumberOfParticlesAlongRadius (const NumberOfParticlesAlongRadius_type& x)
+{
+  this->NumberOfParticlesAlongRadius_.set (x);
+}
+
+const DiscType::Distance_type& DiscType::
+Distance () const
+{
+  return this->Distance_.get ();
+}
+
+DiscType::Distance_type& DiscType::
+Distance ()
+{
+  return this->Distance_.get ();
+}
+
+void DiscType::
+Distance (const Distance_type& x)
+{
+  this->Distance_.set (x);
+}
+
+const DiscType::Mass_type& DiscType::
+Mass () const
+{
+  return this->Mass_.get ();
+}
+
+DiscType::Mass_type& DiscType::
+Mass ()
+{
+  return this->Mass_.get ();
+}
+
+void DiscType::
+Mass (const Mass_type& x)
+{
+  this->Mass_.set (x);
+}
+
+
+// BoundaryType
+//
+
+BoundaryType::
+BoundaryType (value v)
+: ::xml_schema::string (_xsd_BoundaryType_literals_[v])
+{
+}
+
+BoundaryType::
+BoundaryType (const char* v)
+: ::xml_schema::string (v)
+{
+}
+
+BoundaryType::
+BoundaryType (const ::std::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+BoundaryType::
+BoundaryType (const ::xml_schema::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+BoundaryType::
+BoundaryType (const BoundaryType& v,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (v, f, c)
+{
+}
+
+BoundaryType& BoundaryType::
+operator= (value v)
+{
+  static_cast< ::xml_schema::string& > (*this) = 
+  ::xml_schema::string (_xsd_BoundaryType_literals_[v]);
+
+  return *this;
+}
+
+
 // Simulation
 //
 
@@ -618,6 +830,30 @@ ThermostatParameters (::std::unique_ptr< ThermostatParameters_type > x)
   this->ThermostatParameters_.set (std::move (x));
 }
 
+const Simulation::LinkedCellsParameters_type& Simulation::
+LinkedCellsParameters () const
+{
+  return this->LinkedCellsParameters_.get ();
+}
+
+Simulation::LinkedCellsParameters_type& Simulation::
+LinkedCellsParameters ()
+{
+  return this->LinkedCellsParameters_.get ();
+}
+
+void Simulation::
+LinkedCellsParameters (const LinkedCellsParameters_type& x)
+{
+  this->LinkedCellsParameters_.set (x);
+}
+
+void Simulation::
+LinkedCellsParameters (::std::unique_ptr< LinkedCellsParameters_type > x)
+{
+  this->LinkedCellsParameters_.set (std::move (x));
+}
+
 const Simulation::BoundaryParameters_type& Simulation::
 BoundaryParameters () const
 {
@@ -658,6 +894,24 @@ void Simulation::
 Cuboid (const Cuboid_sequence& s)
 {
   this->Cuboid_ = s;
+}
+
+const Simulation::Disc_sequence& Simulation::
+Disc () const
+{
+  return this->Disc_;
+}
+
+Simulation::Disc_sequence& Simulation::
+Disc ()
+{
+  return this->Disc_;
+}
+
+void Simulation::
+Disc (const Disc_sequence& s)
+{
+  this->Disc_ = s;
 }
 
 
@@ -783,10 +1037,13 @@ FileWriterParametersType::
 
 SimulationParametersType::
 SimulationParametersType (const EndT_type& EndT,
-                          const DeltaT_type& DeltaT)
+                          const DeltaT_type& DeltaT,
+                          const Dimension_type& Dimension)
 : ::xml_schema::type (),
   EndT_ (EndT, this),
-  DeltaT_ (DeltaT, this)
+  DeltaT_ (DeltaT, this),
+  Gravity_ (this),
+  Dimension_ (Dimension, this)
 {
 }
 
@@ -796,7 +1053,9 @@ SimulationParametersType (const SimulationParametersType& x,
                           ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
   EndT_ (x.EndT_, f, this),
-  DeltaT_ (x.DeltaT_, f, this)
+  DeltaT_ (x.DeltaT_, f, this),
+  Gravity_ (x.Gravity_, f, this),
+  Dimension_ (x.Dimension_, f, this)
 {
 }
 
@@ -806,7 +1065,9 @@ SimulationParametersType (const ::xercesc::DOMElement& e,
                           ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   EndT_ (this),
-  DeltaT_ (this)
+  DeltaT_ (this),
+  Gravity_ (this),
+  Dimension_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -847,6 +1108,28 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // Gravity
+    //
+    if (n.name () == "Gravity" && n.namespace_ ().empty ())
+    {
+      if (!this->Gravity_)
+      {
+        this->Gravity_.set (Gravity_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // Dimension
+    //
+    if (n.name () == "Dimension" && n.namespace_ ().empty ())
+    {
+      if (!Dimension_.present ())
+      {
+        this->Dimension_.set (Dimension_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -861,6 +1144,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   {
     throw ::xsd::cxx::tree::expected_element< char > (
       "DeltaT",
+      "");
+  }
+
+  if (!Dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Dimension",
       "");
   }
 }
@@ -880,6 +1170,8 @@ operator= (const SimulationParametersType& x)
     static_cast< ::xml_schema::type& > (*this) = x;
     this->EndT_ = x.EndT_;
     this->DeltaT_ = x.DeltaT_;
+    this->Gravity_ = x.Gravity_;
+    this->Dimension_ = x.Dimension_;
   }
 
   return *this;
@@ -1071,91 +1363,131 @@ ThermostatParametersType::
 {
 }
 
-// BoundaryType
+// LinkedCellsParametersType
 //
 
-BoundaryType::
-BoundaryType (const ::xercesc::DOMElement& e,
-              ::xml_schema::flags f,
-              ::xml_schema::container* c)
-: ::xml_schema::string (e, f, c)
+LinkedCellsParametersType::
+LinkedCellsParametersType (const LinkedCellsUsed_type& LinkedCellsUsed,
+                           const CutoffRadius_type& CutoffRadius)
+: ::xml_schema::type (),
+  LinkedCellsUsed_ (LinkedCellsUsed, this),
+  CutoffRadius_ (CutoffRadius, this)
 {
-  _xsd_BoundaryType_convert ();
 }
 
-BoundaryType::
-BoundaryType (const ::xercesc::DOMAttr& a,
-              ::xml_schema::flags f,
-              ::xml_schema::container* c)
-: ::xml_schema::string (a, f, c)
+LinkedCellsParametersType::
+LinkedCellsParametersType (const LinkedCellsParametersType& x,
+                           ::xml_schema::flags f,
+                           ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  LinkedCellsUsed_ (x.LinkedCellsUsed_, f, this),
+  CutoffRadius_ (x.CutoffRadius_, f, this)
 {
-  _xsd_BoundaryType_convert ();
 }
 
-BoundaryType::
-BoundaryType (const ::std::string& s,
-              const ::xercesc::DOMElement* e,
-              ::xml_schema::flags f,
-              ::xml_schema::container* c)
-: ::xml_schema::string (s, e, f, c)
+LinkedCellsParametersType::
+LinkedCellsParametersType (const ::xercesc::DOMElement& e,
+                           ::xml_schema::flags f,
+                           ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  LinkedCellsUsed_ (this),
+  CutoffRadius_ (this)
 {
-  _xsd_BoundaryType_convert ();
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
 }
 
-BoundaryType* BoundaryType::
+void LinkedCellsParametersType::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // LinkedCellsUsed
+    //
+    if (n.name () == "LinkedCellsUsed" && n.namespace_ ().empty ())
+    {
+      if (!LinkedCellsUsed_.present ())
+      {
+        this->LinkedCellsUsed_.set (LinkedCellsUsed_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // CutoffRadius
+    //
+    if (n.name () == "CutoffRadius" && n.namespace_ ().empty ())
+    {
+      if (!CutoffRadius_.present ())
+      {
+        this->CutoffRadius_.set (CutoffRadius_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!LinkedCellsUsed_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "LinkedCellsUsed",
+      "");
+  }
+
+  if (!CutoffRadius_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "CutoffRadius",
+      "");
+  }
+}
+
+LinkedCellsParametersType* LinkedCellsParametersType::
 _clone (::xml_schema::flags f,
         ::xml_schema::container* c) const
 {
-  return new class BoundaryType (*this, f, c);
+  return new class LinkedCellsParametersType (*this, f, c);
 }
 
-BoundaryType::value BoundaryType::
-_xsd_BoundaryType_convert () const
+LinkedCellsParametersType& LinkedCellsParametersType::
+operator= (const LinkedCellsParametersType& x)
 {
-  ::xsd::cxx::tree::enum_comparator< char > c (_xsd_BoundaryType_literals_);
-  const value* i (::std::lower_bound (
-                    _xsd_BoundaryType_indexes_,
-                    _xsd_BoundaryType_indexes_ + 4,
-                    *this,
-                    c));
-
-  if (i == _xsd_BoundaryType_indexes_ + 4 || _xsd_BoundaryType_literals_[*i] != *this)
+  if (this != &x)
   {
-    throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->LinkedCellsUsed_ = x.LinkedCellsUsed_;
+    this->CutoffRadius_ = x.CutoffRadius_;
   }
 
-  return *i;
+  return *this;
 }
 
-const char* const BoundaryType::
-_xsd_BoundaryType_literals_[4] =
+LinkedCellsParametersType::
+~LinkedCellsParametersType ()
 {
-  "REFLECTING",
-  "OUTFLOW",
-  "PERIODIC",
-  "OFF"
-};
-
-const BoundaryType::value BoundaryType::
-_xsd_BoundaryType_indexes_[4] =
-{
-  ::BoundaryType::OFF,
-  ::BoundaryType::OUTFLOW,
-  ::BoundaryType::PERIODIC,
-  ::BoundaryType::REFLECTING
-};
+}
 
 // BoundaryParametersType
 //
 
 BoundaryParametersType::
-BoundaryParametersType (const TOP_type& TOP,
+BoundaryParametersType (const Domain_type& Domain,
+                        const TOP_type& TOP,
                         const RIGHT_type& RIGHT,
                         const BOTTOM_type& BOTTOM,
                         const LEFT_type& LEFT,
                         const FRONT_type& FRONT,
                         const BACK_type& BACK)
 : ::xml_schema::type (),
+  Domain_ (Domain, this),
   TOP_ (TOP, this),
   RIGHT_ (RIGHT, this),
   BOTTOM_ (BOTTOM, this),
@@ -1170,6 +1502,7 @@ BoundaryParametersType (const BoundaryParametersType& x,
                         ::xml_schema::flags f,
                         ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
+  Domain_ (x.Domain_, f, this),
   TOP_ (x.TOP_, f, this),
   RIGHT_ (x.RIGHT_, f, this),
   BOTTOM_ (x.BOTTOM_, f, this),
@@ -1184,6 +1517,7 @@ BoundaryParametersType (const ::xercesc::DOMElement& e,
                         ::xml_schema::flags f,
                         ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  Domain_ (this),
   TOP_ (this),
   RIGHT_ (this),
   BOTTOM_ (this),
@@ -1207,6 +1541,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     const ::xercesc::DOMElement& i (p.cur_element ());
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (i));
+
+    // Domain
+    //
+    if (n.name () == "Domain" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< Domain_type > r (
+        Domain_traits::create (i, f, this));
+
+      if (!Domain_.present ())
+      {
+        this->Domain_.set (::std::move (r));
+        continue;
+      }
+    }
 
     // TOP
     //
@@ -1295,6 +1643,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     break;
   }
 
+  if (!Domain_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Domain",
+      "");
+  }
+
   if (!TOP_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
@@ -1351,6 +1706,7 @@ operator= (const BoundaryParametersType& x)
   if (this != &x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
+    this->Domain_ = x.Domain_;
     this->TOP_ = x.TOP_;
     this->RIGHT_ = x.RIGHT_;
     this->BOTTOM_ = x.BOTTOM_;
@@ -1580,6 +1936,267 @@ CuboidType::
 {
 }
 
+// DiscType
+//
+
+DiscType::
+DiscType (const CenterCoordinates_type& CenterCoordinates,
+          const InitialVelocities_type& InitialVelocities,
+          const NumberOfParticlesAlongRadius_type& NumberOfParticlesAlongRadius,
+          const Distance_type& Distance,
+          const Mass_type& Mass)
+: ::xml_schema::type (),
+  CenterCoordinates_ (CenterCoordinates, this),
+  InitialVelocities_ (InitialVelocities, this),
+  NumberOfParticlesAlongRadius_ (NumberOfParticlesAlongRadius, this),
+  Distance_ (Distance, this),
+  Mass_ (Mass, this)
+{
+}
+
+DiscType::
+DiscType (const DiscType& x,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  CenterCoordinates_ (x.CenterCoordinates_, f, this),
+  InitialVelocities_ (x.InitialVelocities_, f, this),
+  NumberOfParticlesAlongRadius_ (x.NumberOfParticlesAlongRadius_, f, this),
+  Distance_ (x.Distance_, f, this),
+  Mass_ (x.Mass_, f, this)
+{
+}
+
+DiscType::
+DiscType (const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  CenterCoordinates_ (this),
+  InitialVelocities_ (this),
+  NumberOfParticlesAlongRadius_ (this),
+  Distance_ (this),
+  Mass_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void DiscType::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // CenterCoordinates
+    //
+    if (n.name () == "CenterCoordinates" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< CenterCoordinates_type > r (
+        CenterCoordinates_traits::create (i, f, this));
+
+      if (!CenterCoordinates_.present ())
+      {
+        this->CenterCoordinates_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // InitialVelocities
+    //
+    if (n.name () == "InitialVelocities" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< InitialVelocities_type > r (
+        InitialVelocities_traits::create (i, f, this));
+
+      if (!InitialVelocities_.present ())
+      {
+        this->InitialVelocities_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // NumberOfParticlesAlongRadius
+    //
+    if (n.name () == "NumberOfParticlesAlongRadius" && n.namespace_ ().empty ())
+    {
+      if (!NumberOfParticlesAlongRadius_.present ())
+      {
+        this->NumberOfParticlesAlongRadius_.set (NumberOfParticlesAlongRadius_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // Distance
+    //
+    if (n.name () == "Distance" && n.namespace_ ().empty ())
+    {
+      if (!Distance_.present ())
+      {
+        this->Distance_.set (Distance_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // Mass
+    //
+    if (n.name () == "Mass" && n.namespace_ ().empty ())
+    {
+      if (!Mass_.present ())
+      {
+        this->Mass_.set (Mass_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!CenterCoordinates_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "CenterCoordinates",
+      "");
+  }
+
+  if (!InitialVelocities_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "InitialVelocities",
+      "");
+  }
+
+  if (!NumberOfParticlesAlongRadius_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "NumberOfParticlesAlongRadius",
+      "");
+  }
+
+  if (!Distance_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Distance",
+      "");
+  }
+
+  if (!Mass_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Mass",
+      "");
+  }
+}
+
+DiscType* DiscType::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class DiscType (*this, f, c);
+}
+
+DiscType& DiscType::
+operator= (const DiscType& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->CenterCoordinates_ = x.CenterCoordinates_;
+    this->InitialVelocities_ = x.InitialVelocities_;
+    this->NumberOfParticlesAlongRadius_ = x.NumberOfParticlesAlongRadius_;
+    this->Distance_ = x.Distance_;
+    this->Mass_ = x.Mass_;
+  }
+
+  return *this;
+}
+
+DiscType::
+~DiscType ()
+{
+}
+
+// BoundaryType
+//
+
+BoundaryType::
+BoundaryType (const ::xercesc::DOMElement& e,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (e, f, c)
+{
+  _xsd_BoundaryType_convert ();
+}
+
+BoundaryType::
+BoundaryType (const ::xercesc::DOMAttr& a,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (a, f, c)
+{
+  _xsd_BoundaryType_convert ();
+}
+
+BoundaryType::
+BoundaryType (const ::std::string& s,
+              const ::xercesc::DOMElement* e,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::string (s, e, f, c)
+{
+  _xsd_BoundaryType_convert ();
+}
+
+BoundaryType* BoundaryType::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class BoundaryType (*this, f, c);
+}
+
+BoundaryType::value BoundaryType::
+_xsd_BoundaryType_convert () const
+{
+  ::xsd::cxx::tree::enum_comparator< char > c (_xsd_BoundaryType_literals_);
+  const value* i (::std::lower_bound (
+                    _xsd_BoundaryType_indexes_,
+                    _xsd_BoundaryType_indexes_ + 4,
+                    *this,
+                    c));
+
+  if (i == _xsd_BoundaryType_indexes_ + 4 || _xsd_BoundaryType_literals_[*i] != *this)
+  {
+    throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
+  }
+
+  return *i;
+}
+
+const char* const BoundaryType::
+_xsd_BoundaryType_literals_[4] =
+{
+  "REFLECTING",
+  "OUTFLOW",
+  "PERIODIC",
+  "OFF"
+};
+
+const BoundaryType::value BoundaryType::
+_xsd_BoundaryType_indexes_[4] =
+{
+  ::BoundaryType::OFF,
+  ::BoundaryType::OUTFLOW,
+  ::BoundaryType::PERIODIC,
+  ::BoundaryType::REFLECTING
+};
+
 // Simulation
 //
 
@@ -1587,13 +2204,16 @@ Simulation::
 Simulation (const FileWriterParameters_type& FileWriterParameters,
             const SimulationParameters_type& SimulationParameters,
             const ThermostatParameters_type& ThermostatParameters,
+            const LinkedCellsParameters_type& LinkedCellsParameters,
             const BoundaryParameters_type& BoundaryParameters)
 : ::xml_schema::type (),
   FileWriterParameters_ (FileWriterParameters, this),
   SimulationParameters_ (SimulationParameters, this),
   ThermostatParameters_ (ThermostatParameters, this),
+  LinkedCellsParameters_ (LinkedCellsParameters, this),
   BoundaryParameters_ (BoundaryParameters, this),
-  Cuboid_ (this)
+  Cuboid_ (this),
+  Disc_ (this)
 {
 }
 
@@ -1601,13 +2221,16 @@ Simulation::
 Simulation (::std::unique_ptr< FileWriterParameters_type > FileWriterParameters,
             ::std::unique_ptr< SimulationParameters_type > SimulationParameters,
             ::std::unique_ptr< ThermostatParameters_type > ThermostatParameters,
+            ::std::unique_ptr< LinkedCellsParameters_type > LinkedCellsParameters,
             ::std::unique_ptr< BoundaryParameters_type > BoundaryParameters)
 : ::xml_schema::type (),
   FileWriterParameters_ (std::move (FileWriterParameters), this),
   SimulationParameters_ (std::move (SimulationParameters), this),
   ThermostatParameters_ (std::move (ThermostatParameters), this),
+  LinkedCellsParameters_ (std::move (LinkedCellsParameters), this),
   BoundaryParameters_ (std::move (BoundaryParameters), this),
-  Cuboid_ (this)
+  Cuboid_ (this),
+  Disc_ (this)
 {
 }
 
@@ -1619,8 +2242,10 @@ Simulation (const Simulation& x,
   FileWriterParameters_ (x.FileWriterParameters_, f, this),
   SimulationParameters_ (x.SimulationParameters_, f, this),
   ThermostatParameters_ (x.ThermostatParameters_, f, this),
+  LinkedCellsParameters_ (x.LinkedCellsParameters_, f, this),
   BoundaryParameters_ (x.BoundaryParameters_, f, this),
-  Cuboid_ (x.Cuboid_, f, this)
+  Cuboid_ (x.Cuboid_, f, this),
+  Disc_ (x.Disc_, f, this)
 {
 }
 
@@ -1632,8 +2257,10 @@ Simulation (const ::xercesc::DOMElement& e,
   FileWriterParameters_ (this),
   SimulationParameters_ (this),
   ThermostatParameters_ (this),
+  LinkedCellsParameters_ (this),
   BoundaryParameters_ (this),
-  Cuboid_ (this)
+  Cuboid_ (this),
+  Disc_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1694,6 +2321,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // LinkedCellsParameters
+    //
+    if (n.name () == "LinkedCellsParameters" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< LinkedCellsParameters_type > r (
+        LinkedCellsParameters_traits::create (i, f, this));
+
+      if (!LinkedCellsParameters_.present ())
+      {
+        this->LinkedCellsParameters_.set (::std::move (r));
+        continue;
+      }
+    }
+
     // BoundaryParameters
     //
     if (n.name () == "BoundaryParameters" && n.namespace_ ().empty ())
@@ -1716,6 +2357,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
         Cuboid_traits::create (i, f, this));
 
       this->Cuboid_.push_back (::std::move (r));
+      continue;
+    }
+
+    // Disc
+    //
+    if (n.name () == "Disc" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< Disc_type > r (
+        Disc_traits::create (i, f, this));
+
+      this->Disc_.push_back (::std::move (r));
       continue;
     }
 
@@ -1743,6 +2395,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
+  if (!LinkedCellsParameters_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "LinkedCellsParameters",
+      "");
+  }
+
   if (!BoundaryParameters_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
@@ -1767,8 +2426,10 @@ operator= (const Simulation& x)
     this->FileWriterParameters_ = x.FileWriterParameters_;
     this->SimulationParameters_ = x.SimulationParameters_;
     this->ThermostatParameters_ = x.ThermostatParameters_;
+    this->LinkedCellsParameters_ = x.LinkedCellsParameters_;
     this->BoundaryParameters_ = x.BoundaryParameters_;
     this->Cuboid_ = x.Cuboid_;
+    this->Disc_ = x.Disc_;
   }
 
   return *this;

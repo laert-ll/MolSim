@@ -9,6 +9,8 @@
 #
 # The second line indicates the number of data sets (e.g. number of particles or cuboids).
 #
+# The third line indicates the dimension of the simulation.
+#
 # Cuboid data consists of
 # * coordinates of lower left front corner (3 double values)
 # * number of particles per dimension (3 size_t values)
@@ -17,9 +19,13 @@
 # * initial velocities of particles per dimension (3 double value)
 # * mean velocity of the Brownian Motion (1 double value)
 #
-# llf-coord      numParticles     distance       mass        startV          meanV
+# Data type
 1
+# Number of data sets
 2
+# Dimension
 2
-0.5 0.5 0.0      40 8 1           1.1225         1.0         0.0 0.0 0.0     0.1
-15.0 15.0 0.0    8 8 1            1.1225         1.0         0.0 -10.0 0.0   0.1
+# llf-coord      numParticles     distance       mass        startV          meanV
+ 0.5 0.5 0.0      40 8 1           1.1225         1.0         0.0 0.0 0.0     0.1
+ 15.0 15.0 0.0    8 8 1            1.1225         1.0         0.0 -10.0 0.0   0.1
+#  43 0.0 0.0      2 2 1            1              1.0         0.0 0.0 0.0     0.1

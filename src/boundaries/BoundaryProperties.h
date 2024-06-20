@@ -19,8 +19,8 @@ namespace boundaries {
          * @param domain The domain size.
          * @param boundaryMap A map defining the boundary types for each direction.
          */
-        BoundaryProperties(std::array<double, 2> domain, const std::map<BoundaryDirection, BoundaryType>& boundaryMap)
-                : domain({domain[0], domain[1], 1}), boundaryMap(getBoundaryMapWithDefaults(boundaryMap)) {}
+        BoundaryProperties(std::array<double, 3> domain, const std::map<BoundaryDirection, BoundaryType>& boundaryMap)
+                : domain({domain[0], domain[1], domain[2]}), boundaryMap(getBoundaryMapWithDefaults(boundaryMap)) {}
 
         /**
          * @brief Gets the domain size.

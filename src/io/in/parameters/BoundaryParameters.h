@@ -9,14 +9,19 @@
 struct BoundaryParameters {
 private:
     std::map<boundaries::BoundaryDirection, boundaries::BoundaryType> boundaryMap;
+    std::array<double, 3> domain;
 
 public:
     BoundaryParameters() = default;
 
-    explicit BoundaryParameters(const std::map<boundaries::BoundaryDirection, boundaries::BoundaryType>& boundaryMap)
-            : boundaryMap(boundaryMap) {}
+    BoundaryParameters(const std::map<boundaries::BoundaryDirection, boundaries::BoundaryType>& boundaryMap, const std::array<double, 3>& domain)
+            : boundaryMap(boundaryMap), domain(domain) {}
 
     [[nodiscard]] const std::map<boundaries::BoundaryDirection, boundaries::BoundaryType>& getBoundaryMap() const {
         return boundaryMap;
+    }
+
+    [[nodiscard]] const std::array<double, 3>& getDomain() const {
+        return domain;
     }
 };

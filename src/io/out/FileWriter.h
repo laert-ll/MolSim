@@ -5,6 +5,7 @@
 #pragma once
 
 #include "objects/ParticleContainer.h"
+#include "objects/LinkedCellContainer.h"
 
 namespace outputWriters {
 
@@ -24,5 +25,13 @@ namespace outputWriters {
          * @param filename the filename to write the plot to
          */
         virtual void plotParticles(int iteration, ParticleContainer& particleContainer, const std::string& filename) = 0;
+
+        /**
+         * Method to plot the particles.
+         * @param iteration the current iteration
+         * @param particleContainer the container of particles
+         * @param filename the filename to write the plot to
+         */
+        virtual void plotParticlesLC(int iteration, LinkedCellContainer& linkedCellContainer, const std::string& filename) = 0;
     };
 }
