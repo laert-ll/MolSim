@@ -1,12 +1,13 @@
 <Simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="../../../src/io/in/input_schema.xsd">
     <FileWriterParameters>
-        <BaseName>test</BaseName>
+        <BaseName>testCuboid</BaseName>
         <WriteFrequency>10</WriteFrequency>
     </FileWriterParameters>
     <SimulationParameters>
         <EndT>100.0</EndT>
         <DeltaT>0.1</DeltaT>
+        <Dimension>2</Dimension>
     </SimulationParameters>
     <ThermostatParameters>
         <StartTemperature>300.0</StartTemperature>

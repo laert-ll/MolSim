@@ -232,6 +232,7 @@ class ThermostatParametersType;
 class LinkedCellsParametersType;
 class BoundaryParametersType;
 class CuboidType;
+class DiscType;
 class BoundaryType;
 class Simulation;
 
@@ -367,10 +368,25 @@ class SimulationParametersType: public ::xml_schema::type
   void
   Gravity (const Gravity_optional& x);
 
+  // Dimension
+  //
+  typedef ::xml_schema::int_ Dimension_type;
+  typedef ::xsd::cxx::tree::traits< Dimension_type, char > Dimension_traits;
+
+  const Dimension_type&
+  Dimension () const;
+
+  Dimension_type&
+  Dimension ();
+
+  void
+  Dimension (const Dimension_type& x);
+
   // Constructors.
   //
   SimulationParametersType (const EndT_type&,
-                            const DeltaT_type&);
+                            const DeltaT_type&,
+                            const Dimension_type&);
 
   SimulationParametersType (const ::xercesc::DOMElement& e,
                             ::xml_schema::flags f = 0,
@@ -401,6 +417,7 @@ class SimulationParametersType: public ::xml_schema::type
   ::xsd::cxx::tree::one< EndT_type > EndT_;
   ::xsd::cxx::tree::one< DeltaT_type > DeltaT_;
   Gravity_optional Gravity_;
+  ::xsd::cxx::tree::one< Dimension_type > Dimension_;
 };
 
 class ThermostatParametersType: public ::xml_schema::type
@@ -889,6 +906,126 @@ class CuboidType: public ::xml_schema::type
   ::xsd::cxx::tree::one< MeanVelocity_type > MeanVelocity_;
 };
 
+class DiscType: public ::xml_schema::type
+{
+  public:
+  // CenterCoordinates
+  //
+  typedef ::xml_schema::string CenterCoordinates_type;
+  typedef ::xsd::cxx::tree::traits< CenterCoordinates_type, char > CenterCoordinates_traits;
+
+  const CenterCoordinates_type&
+  CenterCoordinates () const;
+
+  CenterCoordinates_type&
+  CenterCoordinates ();
+
+  void
+  CenterCoordinates (const CenterCoordinates_type& x);
+
+  void
+  CenterCoordinates (::std::unique_ptr< CenterCoordinates_type > p);
+
+  // InitialVelocities
+  //
+  typedef ::xml_schema::string InitialVelocities_type;
+  typedef ::xsd::cxx::tree::traits< InitialVelocities_type, char > InitialVelocities_traits;
+
+  const InitialVelocities_type&
+  InitialVelocities () const;
+
+  InitialVelocities_type&
+  InitialVelocities ();
+
+  void
+  InitialVelocities (const InitialVelocities_type& x);
+
+  void
+  InitialVelocities (::std::unique_ptr< InitialVelocities_type > p);
+
+  // NumberOfParticlesAlongRadius
+  //
+  typedef ::xml_schema::int_ NumberOfParticlesAlongRadius_type;
+  typedef ::xsd::cxx::tree::traits< NumberOfParticlesAlongRadius_type, char > NumberOfParticlesAlongRadius_traits;
+
+  const NumberOfParticlesAlongRadius_type&
+  NumberOfParticlesAlongRadius () const;
+
+  NumberOfParticlesAlongRadius_type&
+  NumberOfParticlesAlongRadius ();
+
+  void
+  NumberOfParticlesAlongRadius (const NumberOfParticlesAlongRadius_type& x);
+
+  // Distance
+  //
+  typedef ::xml_schema::double_ Distance_type;
+  typedef ::xsd::cxx::tree::traits< Distance_type, char, ::xsd::cxx::tree::schema_type::double_ > Distance_traits;
+
+  const Distance_type&
+  Distance () const;
+
+  Distance_type&
+  Distance ();
+
+  void
+  Distance (const Distance_type& x);
+
+  // Mass
+  //
+  typedef ::xml_schema::double_ Mass_type;
+  typedef ::xsd::cxx::tree::traits< Mass_type, char, ::xsd::cxx::tree::schema_type::double_ > Mass_traits;
+
+  const Mass_type&
+  Mass () const;
+
+  Mass_type&
+  Mass ();
+
+  void
+  Mass (const Mass_type& x);
+
+  // Constructors.
+  //
+  DiscType (const CenterCoordinates_type&,
+            const InitialVelocities_type&,
+            const NumberOfParticlesAlongRadius_type&,
+            const Distance_type&,
+            const Mass_type&);
+
+  DiscType (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
+
+  DiscType (const DiscType& x,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
+
+  virtual DiscType*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  DiscType&
+  operator= (const DiscType& x);
+
+  virtual 
+  ~DiscType ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< CenterCoordinates_type > CenterCoordinates_;
+  ::xsd::cxx::tree::one< InitialVelocities_type > InitialVelocities_;
+  ::xsd::cxx::tree::one< NumberOfParticlesAlongRadius_type > NumberOfParticlesAlongRadius_;
+  ::xsd::cxx::tree::one< Distance_type > Distance_;
+  ::xsd::cxx::tree::one< Mass_type > Mass_;
+};
+
 class BoundaryType: public ::xml_schema::string
 {
   public:
@@ -1057,6 +1194,23 @@ class Simulation: public ::xml_schema::type
   void
   Cuboid (const Cuboid_sequence& s);
 
+  // Disc
+  //
+  typedef ::DiscType Disc_type;
+  typedef ::xsd::cxx::tree::sequence< Disc_type > Disc_sequence;
+  typedef Disc_sequence::iterator Disc_iterator;
+  typedef Disc_sequence::const_iterator Disc_const_iterator;
+  typedef ::xsd::cxx::tree::traits< Disc_type, char > Disc_traits;
+
+  const Disc_sequence&
+  Disc () const;
+
+  Disc_sequence&
+  Disc ();
+
+  void
+  Disc (const Disc_sequence& s);
+
   // Constructors.
   //
   Simulation (const FileWriterParameters_type&,
@@ -1103,6 +1257,7 @@ class Simulation: public ::xml_schema::type
   ::xsd::cxx::tree::one< LinkedCellsParameters_type > LinkedCellsParameters_;
   ::xsd::cxx::tree::one< BoundaryParameters_type > BoundaryParameters_;
   Cuboid_sequence Cuboid_;
+  Disc_sequence Disc_;
 };
 
 #include <iosfwd>

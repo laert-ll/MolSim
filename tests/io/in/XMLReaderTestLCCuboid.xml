@@ -1,18 +1,18 @@
 <Simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:noNamespaceSchemaLocation="../src/io/in/input_schema.xsd">
+            xsi:noNamespaceSchemaLocation="../../../src/io/in/input_schema.xsd">
     <FileWriterParameters>
-        <BaseName>Simulation1</BaseName>
+        <BaseName>testCuboid</BaseName>
         <WriteFrequency>10</WriteFrequency>
     </FileWriterParameters>
     <SimulationParameters>
         <EndT>100.0</EndT>
-        <DeltaT>0.001</DeltaT>
+        <DeltaT>0.1</DeltaT>
         <Gravity>-9.81</Gravity>
         <Dimension>2</Dimension>
     </SimulationParameters>
     <ThermostatParameters>
-        <StartTemperature>0.0</StartTemperature>
-        <TargetTemperature>0.0</TargetTemperature>
+        <StartTemperature>300.0</StartTemperature>
+        <TargetTemperature>300.0</TargetTemperature>
         <ApplyFrequency>100</ApplyFrequency>
         <MaxDeltaTemperature>10.0</MaxDeltaTemperature>
         <Dimension>3</Dimension>
@@ -24,26 +24,18 @@
     <BoundaryParameters>
         <Domain>180.0 90.0 3.0</Domain>
         <TOP>REFLECTING</TOP>
-        <RIGHT>REFLECTING</RIGHT>
+        <RIGHT>OUTFLOW</RIGHT>
         <BOTTOM>REFLECTING</BOTTOM>
-        <LEFT>REFLECTING</LEFT>
-        <FRONT>REFLECTING</FRONT>
-        <BACK>REFLECTING</BACK>
+        <LEFT>PERIODIC</LEFT>
+        <FRONT>OFF</FRONT>
+        <BACK>OFF</BACK>
     </BoundaryParameters>
     <Cuboid>
-        <Coordinates>0.5 0.5 0.0</Coordinates>
-        <ParticlesPerDimension>40 8 1</ParticlesPerDimension>
-        <Distance>1.1225</Distance>
+        <Coordinates>0.0 0.0 0.0</Coordinates>
+        <ParticlesPerDimension>5 5 1</ParticlesPerDimension>
+        <Distance>1.0</Distance>
         <Mass>1.0</Mass>
         <InitialVelocities>0.0 0.0 0.0</InitialVelocities>
-        <MeanVelocity>0.1</MeanVelocity>
-    </Cuboid>
-    <Cuboid>
-        <Coordinates>15.0 15.0 0.0</Coordinates>
-        <ParticlesPerDimension>8 8 1</ParticlesPerDimension>
-        <Distance>1.1225</Distance>
-        <Mass>1.0</Mass>
-        <InitialVelocities>0.0 -10.0 0.0</InitialVelocities>
-        <MeanVelocity>0.1</MeanVelocity>
+        <MeanVelocity>0.0</MeanVelocity>
     </Cuboid>
 </Simulation>

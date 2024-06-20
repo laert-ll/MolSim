@@ -28,8 +28,10 @@ namespace fileReaders {
             linkedCellContainer->setCutOffRadius(cutoffRadius);
             linkedCellContainer->setDomain(boundaryParameters->getDomain());
             loadCuboids(*simulation, *linkedCellContainer);
+            loadDiscs(*simulation, *linkedCellContainer);
         } else {
             loadCuboids(*simulation, *particleContainer);
+            loadDiscs(*simulation, *particleContainer);
         }
 
         SimulationDataContainer simulationDataContainer(std::move(particleContainer),
@@ -62,7 +64,12 @@ namespace fileReaders {
             gravity = simulationParametersParsed.Gravity().get();
         }
 
-        return {simulationParametersParsed.EndT(), simulationParametersParsed.DeltaT(), gravity};
+        int dimension = simulationParametersParsed.Dimension();
+        if (dimension != 2 && dimension != 3) {
+            throw std::invalid_argument("Invalid dimension: " + std::to_string(dimension) + " (must be 2 or 3)");
+        }
+
+        return {simulationParametersParsed.EndT(), simulationParametersParsed.DeltaT(), gravity, dimension};
     }
 
     ThermostatParameters XMLReader::loadThermostatParameters(const Simulation &simulation) {
@@ -129,7 +136,7 @@ namespace fileReaders {
             ParticleGenerator::generateCuboid(cuboidParams, particleContainer);
         }
         particleContainer.initializePairs();
-        SPDLOG_INFO("Finished loading cuboids into a particle container!");
+        SPDLOG_INFO("Finished loading {} cuboids into a particle container!", cuboids.size());
     }
 
     void XMLReader::loadCuboids(const Simulation &simulation, LinkedCellContainer &linkedCellContainer) {
@@ -156,7 +163,57 @@ namespace fileReaders {
             ParticleGenerator::generateCuboid(cuboidParams, linkedCellContainer);
         }
         linkedCellContainer.initializeAndPopulateCells();
-        SPDLOG_INFO("Finished loading cuboids into a linked-cell container!");
+        SPDLOG_INFO("Finished loading {} cuboids into a linked-cell container!", cuboids.size());
+    }
+
+    void XMLReader::loadDiscs(const Simulation &simulation, ParticleContainer &particleContainer) {
+        SPDLOG_INFO("Starting to load discs into a particle container...");
+        const auto &discs = simulation.Disc();
+
+        for (const auto &disc: discs) {
+            std::array<double, 3> center{};
+            std::array<double, 3> startV{};
+            int numParticlesAlongRadius = disc.NumberOfParticlesAlongRadius();
+            double distance = disc.Distance();
+            double mass = disc.Mass();
+
+            std::istringstream centerStream(disc.CenterCoordinates());
+            std::istringstream startVStream(disc.InitialVelocities());
+
+            for (auto &value: center) centerStream >> value;
+            for (auto &value: startV) startVStream >> value;
+
+            const int dimension = simulation.SimulationParameters().Dimension();
+            DiscParameters discParams(center, startV, numParticlesAlongRadius, distance, mass, dimension);
+            ParticleGenerator::generateDisc(discParams, particleContainer);
+        }
+        particleContainer.initializePairs();
+        SPDLOG_INFO("Finished loading {} discs into a particle container!", discs.size());
+    }
+
+    void XMLReader::loadDiscs(const Simulation &simulation, LinkedCellContainer &linkedCellContainer) {
+        SPDLOG_INFO("Starting to load discs into a linked-cell container...");
+        const auto &discs = simulation.Disc();
+
+        for (const auto &disc: discs) {
+            std::array<double, 3> center{};
+            std::array<double, 3> startV{};
+            int numParticlesAlongRadius = disc.NumberOfParticlesAlongRadius();
+            double distance = disc.Distance();
+            double mass = disc.Mass();
+
+            std::istringstream centerStream(disc.CenterCoordinates());
+            std::istringstream startVStream(disc.InitialVelocities());
+
+            for (auto &value: center) centerStream >> value;
+            for (auto &value: startV) startVStream >> value;
+
+            const int dimension = simulation.SimulationParameters().Dimension();
+            DiscParameters discParams(center, startV, numParticlesAlongRadius, distance, mass, dimension);
+            ParticleGenerator::generateDisc(discParams, linkedCellContainer);
+        }
+        linkedCellContainer.initializeAndPopulateCells();
+        SPDLOG_INFO("Finished loading {} discs into a linked-cell container!", discs.size());
     }
 
 }  // namespace fileReaders

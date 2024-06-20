@@ -7,7 +7,8 @@
         <xs:element name="ThermostatParameters" type="ThermostatParametersType" maxOccurs="1"/>
         <xs:element name="LinkedCellsParameters" type="LinkedCellsParametersType" maxOccurs="1"/>
         <xs:element name="BoundaryParameters" type="BoundaryParametersType" maxOccurs="1"/>
-        <xs:element name="Cuboid" type="CuboidType" maxOccurs="unbounded"/>
+        <xs:element name="Cuboid" type="CuboidType" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="Disc" type="DiscType" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -24,6 +25,7 @@
       <xs:element name="EndT" type="xs:double"/>
       <xs:element name="DeltaT" type="xs:double"/>
       <xs:element name="Gravity" type="xs:double" minOccurs="0"/>
+      <xs:element name="Dimension" type="xs:int"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -64,6 +66,16 @@
       <xs:element name="Mass" type="xs:double"/>
       <xs:element name="InitialVelocities" type="xs:string"/>
       <xs:element name="MeanVelocity" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="DiscType">
+    <xs:sequence>
+      <xs:element name="CenterCoordinates" type="xs:string"/>
+      <xs:element name="InitialVelocities" type="xs:string"/>
+      <xs:element name="NumberOfParticlesAlongRadius" type="xs:int"/>
+      <xs:element name="Distance" type="xs:double"/>
+      <xs:element name="Mass" type="xs:double"/>
     </xs:sequence>
   </xs:complexType>
 

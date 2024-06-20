@@ -17,6 +17,10 @@ namespace fileReaders {
 
         void loadCuboids(const Simulation& simulation, LinkedCellContainer& linkedCellContainer);
 
+        void loadDiscs(const Simulation& simulation, ParticleContainer& particleContainer);
+
+        void loadDiscs(const Simulation& simulation, LinkedCellContainer& linkedCellContainer);
+
         FileWriterParameters loadFileWriterParameters(const Simulation &simulation);
 
         SimulationParameters loadSimulationParameters(const Simulation &simulation);

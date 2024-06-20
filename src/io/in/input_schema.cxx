@@ -149,6 +149,24 @@ Gravity (const Gravity_optional& x)
   this->Gravity_ = x;
 }
 
+const SimulationParametersType::Dimension_type& SimulationParametersType::
+Dimension () const
+{
+  return this->Dimension_.get ();
+}
+
+SimulationParametersType::Dimension_type& SimulationParametersType::
+Dimension ()
+{
+  return this->Dimension_.get ();
+}
+
+void SimulationParametersType::
+Dimension (const Dimension_type& x)
+{
+  this->Dimension_.set (x);
+}
+
 
 // ThermostatParametersType
 //
@@ -586,6 +604,112 @@ MeanVelocity (const MeanVelocity_type& x)
 }
 
 
+// DiscType
+//
+
+const DiscType::CenterCoordinates_type& DiscType::
+CenterCoordinates () const
+{
+  return this->CenterCoordinates_.get ();
+}
+
+DiscType::CenterCoordinates_type& DiscType::
+CenterCoordinates ()
+{
+  return this->CenterCoordinates_.get ();
+}
+
+void DiscType::
+CenterCoordinates (const CenterCoordinates_type& x)
+{
+  this->CenterCoordinates_.set (x);
+}
+
+void DiscType::
+CenterCoordinates (::std::unique_ptr< CenterCoordinates_type > x)
+{
+  this->CenterCoordinates_.set (std::move (x));
+}
+
+const DiscType::InitialVelocities_type& DiscType::
+InitialVelocities () const
+{
+  return this->InitialVelocities_.get ();
+}
+
+DiscType::InitialVelocities_type& DiscType::
+InitialVelocities ()
+{
+  return this->InitialVelocities_.get ();
+}
+
+void DiscType::
+InitialVelocities (const InitialVelocities_type& x)
+{
+  this->InitialVelocities_.set (x);
+}
+
+void DiscType::
+InitialVelocities (::std::unique_ptr< InitialVelocities_type > x)
+{
+  this->InitialVelocities_.set (std::move (x));
+}
+
+const DiscType::NumberOfParticlesAlongRadius_type& DiscType::
+NumberOfParticlesAlongRadius () const
+{
+  return this->NumberOfParticlesAlongRadius_.get ();
+}
+
+DiscType::NumberOfParticlesAlongRadius_type& DiscType::
+NumberOfParticlesAlongRadius ()
+{
+  return this->NumberOfParticlesAlongRadius_.get ();
+}
+
+void DiscType::
+NumberOfParticlesAlongRadius (const NumberOfParticlesAlongRadius_type& x)
+{
+  this->NumberOfParticlesAlongRadius_.set (x);
+}
+
+const DiscType::Distance_type& DiscType::
+Distance () const
+{
+  return this->Distance_.get ();
+}
+
+DiscType::Distance_type& DiscType::
+Distance ()
+{
+  return this->Distance_.get ();
+}
+
+void DiscType::
+Distance (const Distance_type& x)
+{
+  this->Distance_.set (x);
+}
+
+const DiscType::Mass_type& DiscType::
+Mass () const
+{
+  return this->Mass_.get ();
+}
+
+DiscType::Mass_type& DiscType::
+Mass ()
+{
+  return this->Mass_.get ();
+}
+
+void DiscType::
+Mass (const Mass_type& x)
+{
+  this->Mass_.set (x);
+}
+
+
 // BoundaryType
 //
 
@@ -772,6 +896,24 @@ Cuboid (const Cuboid_sequence& s)
   this->Cuboid_ = s;
 }
 
+const Simulation::Disc_sequence& Simulation::
+Disc () const
+{
+  return this->Disc_;
+}
+
+Simulation::Disc_sequence& Simulation::
+Disc ()
+{
+  return this->Disc_;
+}
+
+void Simulation::
+Disc (const Disc_sequence& s)
+{
+  this->Disc_ = s;
+}
+
 
 #include <xsd/cxx/xml/dom/parsing-source.hxx>
 
@@ -895,11 +1037,13 @@ FileWriterParametersType::
 
 SimulationParametersType::
 SimulationParametersType (const EndT_type& EndT,
-                          const DeltaT_type& DeltaT)
+                          const DeltaT_type& DeltaT,
+                          const Dimension_type& Dimension)
 : ::xml_schema::type (),
   EndT_ (EndT, this),
   DeltaT_ (DeltaT, this),
-  Gravity_ (this)
+  Gravity_ (this),
+  Dimension_ (Dimension, this)
 {
 }
 
@@ -910,7 +1054,8 @@ SimulationParametersType (const SimulationParametersType& x,
 : ::xml_schema::type (x, f, c),
   EndT_ (x.EndT_, f, this),
   DeltaT_ (x.DeltaT_, f, this),
-  Gravity_ (x.Gravity_, f, this)
+  Gravity_ (x.Gravity_, f, this),
+  Dimension_ (x.Dimension_, f, this)
 {
 }
 
@@ -921,7 +1066,8 @@ SimulationParametersType (const ::xercesc::DOMElement& e,
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   EndT_ (this),
   DeltaT_ (this),
-  Gravity_ (this)
+  Gravity_ (this),
+  Dimension_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -973,6 +1119,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // Dimension
+    //
+    if (n.name () == "Dimension" && n.namespace_ ().empty ())
+    {
+      if (!Dimension_.present ())
+      {
+        this->Dimension_.set (Dimension_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -987,6 +1144,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   {
     throw ::xsd::cxx::tree::expected_element< char > (
       "DeltaT",
+      "");
+  }
+
+  if (!Dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Dimension",
       "");
   }
 }
@@ -1007,6 +1171,7 @@ operator= (const SimulationParametersType& x)
     this->EndT_ = x.EndT_;
     this->DeltaT_ = x.DeltaT_;
     this->Gravity_ = x.Gravity_;
+    this->Dimension_ = x.Dimension_;
   }
 
   return *this;
@@ -1771,6 +1936,193 @@ CuboidType::
 {
 }
 
+// DiscType
+//
+
+DiscType::
+DiscType (const CenterCoordinates_type& CenterCoordinates,
+          const InitialVelocities_type& InitialVelocities,
+          const NumberOfParticlesAlongRadius_type& NumberOfParticlesAlongRadius,
+          const Distance_type& Distance,
+          const Mass_type& Mass)
+: ::xml_schema::type (),
+  CenterCoordinates_ (CenterCoordinates, this),
+  InitialVelocities_ (InitialVelocities, this),
+  NumberOfParticlesAlongRadius_ (NumberOfParticlesAlongRadius, this),
+  Distance_ (Distance, this),
+  Mass_ (Mass, this)
+{
+}
+
+DiscType::
+DiscType (const DiscType& x,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  CenterCoordinates_ (x.CenterCoordinates_, f, this),
+  InitialVelocities_ (x.InitialVelocities_, f, this),
+  NumberOfParticlesAlongRadius_ (x.NumberOfParticlesAlongRadius_, f, this),
+  Distance_ (x.Distance_, f, this),
+  Mass_ (x.Mass_, f, this)
+{
+}
+
+DiscType::
+DiscType (const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  CenterCoordinates_ (this),
+  InitialVelocities_ (this),
+  NumberOfParticlesAlongRadius_ (this),
+  Distance_ (this),
+  Mass_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void DiscType::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // CenterCoordinates
+    //
+    if (n.name () == "CenterCoordinates" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< CenterCoordinates_type > r (
+        CenterCoordinates_traits::create (i, f, this));
+
+      if (!CenterCoordinates_.present ())
+      {
+        this->CenterCoordinates_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // InitialVelocities
+    //
+    if (n.name () == "InitialVelocities" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< InitialVelocities_type > r (
+        InitialVelocities_traits::create (i, f, this));
+
+      if (!InitialVelocities_.present ())
+      {
+        this->InitialVelocities_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // NumberOfParticlesAlongRadius
+    //
+    if (n.name () == "NumberOfParticlesAlongRadius" && n.namespace_ ().empty ())
+    {
+      if (!NumberOfParticlesAlongRadius_.present ())
+      {
+        this->NumberOfParticlesAlongRadius_.set (NumberOfParticlesAlongRadius_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // Distance
+    //
+    if (n.name () == "Distance" && n.namespace_ ().empty ())
+    {
+      if (!Distance_.present ())
+      {
+        this->Distance_.set (Distance_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // Mass
+    //
+    if (n.name () == "Mass" && n.namespace_ ().empty ())
+    {
+      if (!Mass_.present ())
+      {
+        this->Mass_.set (Mass_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!CenterCoordinates_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "CenterCoordinates",
+      "");
+  }
+
+  if (!InitialVelocities_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "InitialVelocities",
+      "");
+  }
+
+  if (!NumberOfParticlesAlongRadius_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "NumberOfParticlesAlongRadius",
+      "");
+  }
+
+  if (!Distance_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Distance",
+      "");
+  }
+
+  if (!Mass_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Mass",
+      "");
+  }
+}
+
+DiscType* DiscType::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class DiscType (*this, f, c);
+}
+
+DiscType& DiscType::
+operator= (const DiscType& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->CenterCoordinates_ = x.CenterCoordinates_;
+    this->InitialVelocities_ = x.InitialVelocities_;
+    this->NumberOfParticlesAlongRadius_ = x.NumberOfParticlesAlongRadius_;
+    this->Distance_ = x.Distance_;
+    this->Mass_ = x.Mass_;
+  }
+
+  return *this;
+}
+
+DiscType::
+~DiscType ()
+{
+}
+
 // BoundaryType
 //
 
@@ -1860,7 +2212,8 @@ Simulation (const FileWriterParameters_type& FileWriterParameters,
   ThermostatParameters_ (ThermostatParameters, this),
   LinkedCellsParameters_ (LinkedCellsParameters, this),
   BoundaryParameters_ (BoundaryParameters, this),
-  Cuboid_ (this)
+  Cuboid_ (this),
+  Disc_ (this)
 {
 }
 
@@ -1876,7 +2229,8 @@ Simulation (::std::unique_ptr< FileWriterParameters_type > FileWriterParameters,
   ThermostatParameters_ (std::move (ThermostatParameters), this),
   LinkedCellsParameters_ (std::move (LinkedCellsParameters), this),
   BoundaryParameters_ (std::move (BoundaryParameters), this),
-  Cuboid_ (this)
+  Cuboid_ (this),
+  Disc_ (this)
 {
 }
 
@@ -1890,7 +2244,8 @@ Simulation (const Simulation& x,
   ThermostatParameters_ (x.ThermostatParameters_, f, this),
   LinkedCellsParameters_ (x.LinkedCellsParameters_, f, this),
   BoundaryParameters_ (x.BoundaryParameters_, f, this),
-  Cuboid_ (x.Cuboid_, f, this)
+  Cuboid_ (x.Cuboid_, f, this),
+  Disc_ (x.Disc_, f, this)
 {
 }
 
@@ -1904,7 +2259,8 @@ Simulation (const ::xercesc::DOMElement& e,
   ThermostatParameters_ (this),
   LinkedCellsParameters_ (this),
   BoundaryParameters_ (this),
-  Cuboid_ (this)
+  Cuboid_ (this),
+  Disc_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2004,6 +2360,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       continue;
     }
 
+    // Disc
+    //
+    if (n.name () == "Disc" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< Disc_type > r (
+        Disc_traits::create (i, f, this));
+
+      this->Disc_.push_back (::std::move (r));
+      continue;
+    }
+
     break;
   }
 
@@ -2062,6 +2429,7 @@ operator= (const Simulation& x)
     this->LinkedCellsParameters_ = x.LinkedCellsParameters_;
     this->BoundaryParameters_ = x.BoundaryParameters_;
     this->Cuboid_ = x.Cuboid_;
+    this->Disc_ = x.Disc_;
   }
 
   return *this;
