@@ -109,4 +109,6 @@ public:
     std::array<size_t, 3> getIndex(const std::shared_ptr<Particle> &particle);
 
     bool hasZeroVelocities();
+
+    std::array<size_t, 3> getIndex(const std::array<double, 3> positions);
 };
