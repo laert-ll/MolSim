@@ -43,7 +43,7 @@ TEST(LinkedCellContainerTest, IterateThroughParticles) {
 }
 
 TEST(LinkedCellContainerTest, RemoveParticleGetSize) {
-    std::array<double, 3> domain = {5.0, 5.0, 5.0};
+    std::array<double, 3> domain = {12.0, 9.0, 3.0};
     double cutoffRadius = 3.0;
     double cellSize = 3.0;
 
@@ -79,7 +79,7 @@ TEST(LinkedCellContainerTest, RemoveParticleGetSize) {
 }
 
 TEST(LinkedCellContainerTest, CheckParticlePositionInCells) {
-    std::array<double, 3> domain = {120.0, 90.0, 3.0};
+    std::array<double, 3> domain = {12.0, 9.0, 3.0};
     double cutoffRadius = 3.0;
     double cellSize = 3.0;
 
