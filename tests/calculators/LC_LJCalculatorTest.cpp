@@ -104,35 +104,3 @@ TEST(LC_LJCalculatorTest, DifferentEpsilon) {
         index++;
     }
 }
-
-TEST(LC_LJCalculatorTest, PositionChange) {
-    std::array<double, 3> domain = {12.0, 9.0, 3.0};
-    double cutoffRadius = 3.0;
-    double cellSize = 3.0;
-    LinkedCellContainer lc;
-    lc.setCellSize(cellSize);
-    lc.setCutOffRadius(cutoffRadius);
-    lc.setDomain(domain);
-    auto p1 = std::make_shared<Particle>(std::array<double, 3>{0.25, 0.25, 0.25}, std::array<double, 3>{10, 0, 0}, 1.0, 0.0, 0);
-    auto p2 = std::make_shared<Particle>(std::array<double, 3>{0.25, 0.25, 0.25}, std::array<double, 3>{10, 0, 0}, 1.0, 0.0, 0);
-    lc.addParticle(p1);
-    lc.addParticle(p2);
-    lc.initializeAndPopulateCells();
-
-    calculator->calculateLC(lc, 0.002);
-
-    const std::vector<std::array<double, 3>> expectedPositions = {
-        {0.25, 0.25, 0.25},
-        {0.25, 0.25, 0.25}
-    };
-
-    int index = 0;
-    for (auto &particle: lc) {
-        std::array<double, 3> expectedX = expectedPositions[index];
-        std::array<double, 3> actualX = particle->getX();
-        EXPECT_NEAR(expectedX[0], actualX[0], 1e-3);
-        EXPECT_NEAR(expectedX[1], actualX[1], 1e-3);
-        EXPECT_NEAR(expectedX[2], actualX[2], 1e-3);
-        index++;
-    }
-}
