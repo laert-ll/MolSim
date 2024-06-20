@@ -27,6 +27,14 @@ void LinkedCellContainer::addParticle(const std::shared_ptr<Particle> &particle)
     particles.push_back(particle);
 }
 
+void LinkedCellContainer::removeParticle(const std::shared_ptr<Particle> &particle) {
+    auto it = std::remove_if(particles.begin(), particles.end(),
+                             [&particle](const std::shared_ptr<Particle> &p) {
+                                 return *p == *particle;
+                             });
+    particles.erase(it, particles.end());
+}
+
 std::vector<std::shared_ptr<Particle>>::iterator LinkedCellContainer::begin() {
     return particles.begin();
 }

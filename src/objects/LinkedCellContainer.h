@@ -58,6 +58,12 @@ public:
     void addParticle(const std::shared_ptr<Particle> &particle);
 
     /**
+    * Method to remove a particle from the container.
+    * @param particle the particle to be removed
+    */
+    void removeParticle(const std::shared_ptr<Particle> &particle);
+
+    /**
      * Begin iterator for the particles.
      * @return an iterator to the beginning of the particles
      */
