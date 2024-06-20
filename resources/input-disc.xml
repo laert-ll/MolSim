@@ -8,6 +8,7 @@
         <EndT>100.0</EndT>
         <DeltaT>0.001</DeltaT>
         <Gravity>-9.81</Gravity>
+        <Dimension>2</Dimension>
     </SimulationParameters>
     <ThermostatParameters>
         <StartTemperature>0.0</StartTemperature>
@@ -35,5 +36,7 @@
         <NumberOfParticlesAlongRadius>15</NumberOfParticlesAlongRadius>
         <Distance>1.1225</Distance>
         <Mass>1.0</Mass>
+        <Sigma>1.0</Sigma>
+        <Epsilon>1.0</Epsilon>
     </Disc>
 </Simulation>
