@@ -103,7 +103,7 @@ namespace boundaries {
             for (auto &p: cell->getParticles()) {
                 double distanceToBoundary = isLowerBound ? p->getX().at(relevantIndex) : boundaryPosition -
                                                                                          p->getX().at(relevantIndex);
-                double tolerance = pow(2, 1 / 6) * p->getSigma();
+                double tolerance = pow(2, 1.0 / 6) * p->getSigma();
                 // only calculate reflection if near boundary
                 if (distanceToBoundary < tolerance) {
                     SPDLOG_DEBUG("Particle at position {} is near boundary", ArrayUtils::to_string(p->getX()));
